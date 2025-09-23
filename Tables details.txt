@@ -1,0 +1,175 @@
+546 ++ SELECT sales_order_no FROM (     SELECT sales_order_no , MAX(priority) AS max_priority, MAX(delay) AS max_delay     FROM com_long_term_simulation
+
+SELECT sales_order_no FROM (     SELECT sales_order_no , MAX(priority) AS max_priority, MAX(delay) AS max_delay     FROM com_long_term_simulation WHERE 1=1 AND ccd LIKE :ccd
+
+SELECT sales_order_no FROM (     SELECT sales_order_no , MAX(priority) AS max_priority, MAX(delay) AS max_delay     FROM com_long_term_simulation WHERE 1=1 AND ccd LIKE ? GROUP BY sales_order_no ) AS distinct_orders ORDER BY max_priority DESC, max_delay DESC 
+
+SELECT sales_order_no FROM (     SELECT sales_order_no , MAX(priority) AS max_priority, MAX(delay) AS max_delay     FROM com_long_term_simulation WHERE 1=1 AND ccd LIKE :ccd GROUP BY sales_order_no ) AS distinct_orders ORDER BY max_priority DESC, max_delay DESC
+
+
+
+application.yml:136 :for setting the time stamp for cron job 
+
+==================================================================================================
+
+Details of these table : 
+
+SELECT id, committed_date, confirmation_date, control_key, created_by, created_date, customer_code, freeze, modified_by, modified_date, operation_no, order_change_date, order_created_date, order_quantity, order_type, plant, production_order_no, rdd, route_no, sales_item_no, sales_order_no, schedule_end_date, scrap_quantity, sku_no, stm_1_in_min, stm_1_uom, stm_2_in_min, stm_2_uom, total_confirmed_quantity, total_stm, work_center, schedule_start_date
+FROM `sjdb-24july`.com_prod_route_stm;
+
+com_prod_route_stm table ka use Sunjewels production routing and scheduling system me hota hai. Ye table production orders ke step-by-step process (yaani routing steps) ko define karta hai — kab, kaha, kaunsa operation perform hoga, aur kitna time lagega.
+
+✅ Key Purpose of com_prod_route_stm table
+Production order ka step-wise schedule manage karna.
+
+Work center-level routing banana.
+
+STMs (Standard Time in Minutes) ko store karna har operation ke liye.
+
+Sales order aur SKU ke hisaab se operation timing and confirmation track karna.
+
+| Column                    | Description                                                            |
+|---------------------------|------------------------------------------------------------------------|
+| id                        | Unique identifier for each operation step                              |
+| committed_date            | Committed date for operation completion                                |
+| confirmation_date         | Date when operation was confirmed as completed                         |
+| control_key               | SAP/ERP control key (manual, automatic, etc.)                          |
+| created_by                | User who created this step                                              |
+| created_date              | Date when the step was created                                          |
+| customer_code             | Customer identifier (linked to sales order)                            |
+| freeze                    | Freeze flag – prevents changes if set                                  |
+| modified_by               | User who last modified the step                                         |
+| modified_date             | Date when the step was last modified                                   |
+| operation_no              | Operation number in routing (e.g., 10, 20, 30...)                      |
+| order_change_date         | Date when order was last changed                                       |
+| order_created_date        | Date when production order was created                                 |
+| order_quantity            | Total quantity to produce                                               |
+| order_type                | Production order type (e.g., planned, rework)                          |
+| plant                     | Plant code (manufacturing location)                                    |
+| production_order_no       | Reference number of the production order                               |
+| rdd                       | Requested Delivery Date                                                 |
+| route_no                  | Routing number to link with routing master                             |
+| sales_item_no             | Sales order line item number                                            |
+| sales_order_no            | Sales order number                                                      |
+| schedule_end_date         | End date of this operation                                              |
+| schedule_start_date       | Start date of this operation                                            |
+| scrap_quantity            | Quantity lost due to scrap                                              |
+| sku_no                    | SKU being manufactured                                                  |
+| stm_1_in_min              | Standard time in minutes (e.g., machine time)                           |
+| stm_1_uom                 | Unit of measure for stm_1 (usually MIN)                                 |
+| stm_2_in_min              | Standard time in minutes (e.g., labor time)                             |
+| stm_2_uom                 | Unit of measure for stm_2 (usually MIN)                                 |
+| total_confirmed_quantity  | Quantity confirmed as completed                                         |
+| total_stm                 | Total standard time (stm_1 + stm_2)                                     |
+| work_center               | Machine or department doing the work                                   |
+
+
+🛠 Example Use Case:
+Suppose a ring has to go through 3 operations:
+
+Wax setting
+
+Casting
+
+Polishing
+
+For each of these, com_prod_route_stm will have:
+
+A row with operation number (10, 20, 30),
+
+Related work center (e.g., WAX, CASTING),
+
+Scheduled start/end,
+
+STM time to estimate duration,
+
+Confirmation details when done.
+-----------------------------------------------------------------------------------------------
+The `com_wiw_data` table is a **core production tracking and work-in-work (WIW) monitoring table** in the Sunjewels system. It is used to track **in-progress production orders** across different **work centers and factories**, capturing **design, material, status, and scheduling** information.
+
+---
+
+### ✅ **Main Purpose of `com_wiw_data` Table:**
+
+* Monitor **live production progress** (Work-in-Work).
+* Track orders by **sales, SKU, and production order**.
+* Used in planning, simulation, and reporting to know:
+
+  * Which orders are pending?
+  * Where they are stuck?
+  * Which factory/work center they are in?
+* Useful for **delay analysis**, **capacity planning**, and **status tracking**.
+
+---
+
+### 🔍 Column-wise Explanation (Text Table Format):
+
+```
+| Column               | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| id                   | Unique identifier                                                           |
+| prod_cat             | Product category (e.g., RING, BANGLE)                                       |
+| actual_release_date  | Actual date when WIW was released for production                            |
+| added_date           | When the record was added                                                   |
+| collection           | Product collection name                                                     |
+| complex_product_type | Whether the product is complex (e.g., combo, set)                           |
+| customer             | Customer code/name                                                          |
+| customer_po_number   | Customer PO number (reference to sales order)                               |
+| cymm                 | Current year-month (e.g., 202508)                                            |
+| design_size          | Design size (if applicable)                                                 |
+| exim_type            | Export/Import indicator                                                     |
+| fg_sku               | Finished goods SKU                                                          |
+| lead_order           | Is this a lead order (Y/N)?                                                 |
+| line_created_date    | When the sales order line was created                                       |
+| manf_type            | Manufacturing type (e.g., Made-to-Stock, Made-to-Order)                     |
+| material_number      | Raw material or FG code                                                     |
+| metal_category       | Metal category (e.g., GOLD, SILVER)                                         |
+| modified_date        | Last modified date                                                          |
+| no_of_days           | No. of days in WIW (duration)                                               |
+| old_material         | Previous material code (if any)                                             |
+| plant                | Plant/factory where WIW is happening                                        |
+| production_order_no  | Production order number                                                     |
+| rev_ccd              | Revised CCD (Committed Completion Date)                                     |
+| rev_sed              | Revised SED (Scheduled End Date)                                            |
+| ryymm                | Revised year-month (e.g., 202509)                                           |
+| sales_item_no        | Sales order line item number                                                |
+| sales_order_no       | Sales order number                                                          |
+| sch_end_date         | Scheduled end date for this WIW stage                                       |
+| so_qty               | Sales order quantity                                                        |
+| so_release_date      | Sales order release date                                                    |
+| so_type              | Sales order type (e.g., EXPORT, DOMESTIC)                                   |
+| special_line         | Indicator if line is special (e.g., Sample, Urgent)                         |
+| syymm                | Sales year-month (original order)                                           |
+| unit                 | Unit of measurement (e.g., PCS, GMS)                                        |
+| wiw_status           | Current status of WIW (e.g., Released, In-progress, Completed)              |
+| wkct_qty             | Quantity at current work center                                             |
+| work_center          | Work center where the WIW is currently being processed                      |
+| work_center_type     | Type of work center (e.g., SETTING, POLISHING)                              |
+| work_ctr_detail      | Additional detail about the work center                                     |
+| post_cast_factory    | Indicates if the WIW is at post-casting stage factory                       |
+```
+
+---
+
+### 🛠 Example Use Case:
+
+Suppose an order is going through polishing at a Jaipur plant:
+
+* `work_center = POLISHING`, `plant = JPR`
+* `wiw_status = In-Progress`
+* You can use this to:
+
+  * Track how long it's been stuck (`no_of_days`)
+  * Match with `production_order_no` or `sales_order_no`
+  * See expected vs actual completion dates (`rev_sed`, `sch_end_date`)
+
+---
+
+### 📌 Summary:
+
+* `com_wiw_data` table helps **track WIW movement and delays** across plants/work centers.
+* Used in **daily dashboards**, **exception reports**, and **production simulations**.
+* Critical for **monitoring bottlenecks** in the Sunjewels production flow.
+
+Let me know if you want a visual flow or link with other tables like `com_long_term_simulation` or `com_prod_route_stm`.
+

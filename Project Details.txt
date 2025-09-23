@@ -1,0 +1,126 @@
+
+Bit bucket password : 
+Name : Vishnudas Mankar
+password : Vishnu@19031996
+
+Ensurence Policy passoword : Vishnu@123
+----------------------------------------------
+
+Repository Name : sj-scheduling
+
+Main Branch : backward_planning
+
+Development Branch :  Management dashboard 19 jun
+
+Deployment Process : 
+
+Deployment Steps for Frontend Application
+✅ Step 1: Update Frontend Version Before Merge
+Before merging changes, update the version of the frontend application.
+
+## versioning releases
+npm version 1.x.x --no-git-tag-version
+git add .
+git commit -am "Release v1.x.x"
+git tag -a v1.x.x -m "..." 
+git push origin v1.x.x
+
+Follow the version update command mentioned in the README.md file.
+
+✅ Step 2: Merge Changes to main Branch
+Merge the changes from the deployment branch into the main branch.
+
+✅ Step 3: Backup Main Branch Source Code
+Download the source code from the main branch as a ZIP file.
+
+Store it in a separate folder for backup purposes.
+
+✅ Step 4: Update Client Repository with Main Branch Files
+Open the client repository locally.
+
+Copy the src folder from the downloaded ZIP file and replace the existing src folder in the client repository.
+
+✅ Step 5: Update frontend Folder
+Similarly, copy and replace the frontend folder from the downloaded ZIP into the client repository.
+src directory if changes present.
+
+✅ Step 6: Update the CHANGELOG File
+In the client repository, open the CHANGELOG file.
+
+Add a clear summary of:
+
+The changes made in this version.
+
+Any new requirements or features introduced in this commit.
+
+✅ Step 7: Push Version Changes
+Follow the version update instructions from the README.md.
+
+Push the changes to the client repository.
+
+=============================================================================
+
+below is the step for Example : 
+
+Pratiti_User@DESKTOP-6RRV00E MINGW64 ~/Desktop/Project/source code/dynamicplanning (Release-v1.0.0)
+$ git status
+On branch Release-v1.0.0
+Your branch is up to date with 'origin/Release-v1.0.0'.
+ 
+nothing to commit, working tree clean
+ 
+Pratiti_User@DESKTOP-6RRV00E MINGW64 ~/Desktop/Project/source code/dynamicplanning (Release-v1.0.0)
+$ git pull
+Already up to date.
+ 
+ 
+ 
+Pratiti_User@DESKTOP-6RRV00E MINGW64 ~/Desktop/Project/source code/dynamicplanning (Release-v1.0.0)
+$ cd frontend/
+ 
+Pratiti_User@DESKTOP-6RRV00E MINGW64 ~/Desktop/Project/source code/dynamicplanning/frontend (Release-v1.0.0)
+$ npm version 1.0.8 --no-git-tag-version
+ 
+> postversion
+> node update-version.js
+ 
+✔ Updated src/environments/version.ts to 1.0.8
+v1.0.8
+ 
+Pratiti_User@DESKTOP-6RRV00E MINGW64 ~/Desktop/Project/source code/dynamicplanning/frontend (Release-v1.0.0)
+$ cd ..
+ 
+Pratiti_User@DESKTOP-6RRV00E MINGW64 ~/Desktop/Project/source code/dynamicplanning (Release-v1.0.0)
+$ git add .
+warning: in the working copy of 'backend/algorithms/com_longterm_planning/data_processor.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/algorithms/npd_longterm_planning/data_processor.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/main/java/com/sunjewels/repository/LongtermPublishUtilizationCommercialRepository.java', LF will be replaced by CRLF the next time Git touches it      
+warning: in the working copy of 'backend/src/main/java/com/sunjewels/repository/NPDLongtermPublishUtilizationRepository.java', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/CHANGELOG.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/package-lock.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/environments/version.ts', LF will be replaced by CRLF the next time Git touches it
+Pratiti_User@DESKTOP-6RRV00E MINGW64 ~/Desktop/Project/source code/dynamicplanning (Release-v1.0.0)
+$ git commit -am "Release v1.0.8"
+ 
+Pratiti_User@DESKTOP-6RRV00E MINGW64 ~/Desktop/Project/source code/dynamicplanning (Release-v1.0.0)
+$ git tag -a v1.0.8 -m "fix: revised date columns null value fixed"
+ 
+ 
+Pratiti_User@DESKTOP-6RRV00E MINGW64 ~/Desktop/Project/source code/dynamicplanning (Release-v1.0.0)
+$ git push origin v1.0.8
+Enumerating objects: 1, done.
+Counting objects: 100% (1/1), done.
+Writing objects: 100% (1/1), 193 bytes | 193.00 KiB/s, done.
+Total 1 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Analyzing objects... (1/1) (9 ms)
+remote: Validating commits...  done (0 ms)
+remote: Storing packfile... done (28 ms)
+remote: Storing index... done (39 ms)
+remote: Updating refs... done (164 ms)
+To https://dev.azure.com/sunjewelsit/dynamicplanning/_git/dynamicplanning
+* [new tag]         v1.0.8 -> v1.0.8
+ 
+Pratiti_User@DESKTOP-6RRV00E MINGW64 ~/Desktop/Project/source code/dynamicplanning (Release-v1.0.0)
+$
+=====================================================================================================

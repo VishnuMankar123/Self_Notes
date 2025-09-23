@@ -1,0 +1,11 @@
+
+download the ollama : https://ollama.com/
+client is installed with ollama : ollama run codellama
+
+check ollama version : ollama -v
+
+how to check ollama is running or not default port is : 
+
+spring.ai.ollama.base-url=http://localhost:11434
+
+

@@ -1,0 +1,190 @@
+To start the zookeeper : 
+to go floder : 
+C:\Users\Pratiti_Users\Documents\Application\Apache Kafka\kafka_2.13-4.1.0\bin\windows>
+
+open terminal : 
+zookeeper-server-start.bat .\config\zookeeper.properties
+
+Step 3: Kafka Start Karo (naya CMD me)
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+
+wget https://archive.apache.org/dist/kafka/3.5.0/kafka_2.13-3.5.0.tgz
+tar -xvzf kafka_2.13-3.5.0.tgz
+cd kafka_2.13-3.5.0
+================================================================================
+Got it 👍. Since you’ve extracted Kafka **3.5.0**, you can start **Zookeeper** and **Kafka broker** like this:
+
+---
+
+### Step 1: Start Zookeeper
+
+Kafka comes bundled with a basic Zookeeper server (used before KRaft mode). Run:
+
+```bash
+bin/zookeeper-server-start.sh config/zookeeper.properties
+```
+
+This will start Zookeeper on the default port **2181**. Keep this terminal running.
+
+---
+
+### Step 2: Start Kafka Broker
+
+Open another terminal, go into the same Kafka directory, and run:
+
+```bash
+bin/kafka-server-start.sh config/server.properties
+```
+
+This will start the Kafka broker on port **9092** (default).
+
+---
+
+✅ Now Zookeeper + Kafka are running.
+From here, you can:
+
+* **Create a topic**:
+
+  ```bash
+  bin/kafka-topics.sh --create --topic test-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+  ```
+
+* **List topics**:
+
+  ```bash
+  bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+  ```
+
+* **Start a producer** (send messages):
+
+  ```bash
+  bin/kafka-console-producer.sh --topic test-topic --bootstrap-server localhost:9092
+  ```
+
+* **Start a consumer** (receive messages):
+
+  ```bash
+  bin/kafka-console-consumer.sh --topic test-topic --from-beginning --bootstrap-server localhost:9092
+  ```
+
+---
+
+👉 Do you want to run **Zookeeper + Kafka in separate terminals**, or should I show you how to run both together in the background?
+
+
+
+=================================================================================
+Bahut badhiya Vishnudas 🚀
+Aapka **Zookeeper + Kafka (3.5.0)** chal gaya to ab topic create karna, producer aur consumer run karna kaafi simple hai. Main aapko **step by step console example** deta hoon.
+
+---
+
+# 🔹 Step 1: Zookeeper start karo
+
+CMD-1:
+
+```sh
+cd C:\kafka_2.13-3.5.0
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+```
+
+---
+
+# 🔹 Step 2: Kafka broker start karo
+
+Naya CMD-2:
+
+```sh
+cd C:\kafka_2.13-3.5.0
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+```
+
+---
+
+# 🔹 Step 3: Topic create karo
+
+Naya CMD-3 (new terminal):
+
+```sh
+cd C:\kafka_2.13-3.5.0
+.\bin\windows\kafka-topics.bat --create --topic my-first-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+```
+
+### Output:
+
+```
+Created topic my-first-topic.
+```
+
+👉 Yahaan:
+
+* `--topic my-first-topic` → topic ka naam
+* `--partitions 1` → ek partition banega
+* `--replication-factor 1` → ek hi broker hai to replication 1
+
+---
+
+# 🔹 Step 4: Producer (messages bhejna)
+
+Naya CMD-4:
+
+```sh
+cd C:\kafka_2.13-3.5.0
+.\bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic my-first-topic
+```
+
+Ab aapko ek prompt khulega jisme line type kar sakte ho:
+
+```
+> Hello Kafka
+> My first message
+> This is Vishnudas
+```
+
+Ye saare messages topic me produce ho gaye ✅
+
+---
+
+# 🔹 Step 5: Consumer (messages read karna)
+
+Naya CMD-5:
+
+```sh
+cd C:\kafka_2.13-3.5.0
+.\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic my-first-topic --from-beginning
+```
+
+### Output:
+
+```
+Hello Kafka
+My first message
+This is Vishnudas
+```
+
+👉 Yahaan:
+
+* `--from-beginning` ka matlab hai purane messages bhi read karega.
+* Agar aap without `--from-beginning` run karte ho to sirf naye messages dikhte hain jo consumer start ke baad produce hote hain.
+
+---
+
+# 🔹 Summary Flow:
+
+1. **Zookeeper start**
+2. **Kafka broker start**
+3. **Topic create**
+4. **Producer run** → messages bhejo
+5. **Consumer run** → messages read karo
+
+---
+
+⚡ Example real flow:
+
+* Flipkart me ek **order-service** producer ho sakta hai (topic: `orders`)
+* Aur ek **inventory-service** consumer ho sakta hai jo order aate hi stock update karta hai.
+
+---
+
+Vishnudas, kya main aapke liye **ek diagram (flow chart)** bana du jo Producer → Topic → Consumer ka data flow samjha sake?
+===============================================================================================

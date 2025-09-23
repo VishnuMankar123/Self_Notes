@@ -1,0 +1,187 @@
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+
+
+
+kubectl get pods
+kubectl get deployments
+kubectl get svc
+
+
+Port Forwarding : kubectl port-forward svc/filegenerator-service 8081:8082      - service port 
+
+=====================================================================================================
+
+Bahut badiya Vishnu bhai 🙌, ab mai aapko **Pods → Deployment → Service** ka **step-by-step flow with commands + explanation + use case** bataunga. Yeh hi ek **real-world project pipeline** hai jo har Kubernetes developer use karta hai 🚀.
+
+---
+
+# 🟢 Step 1: Pod
+
+### 👉 Pod = Ek single container (jaise ek running JVM with your Spring Boot app).
+
+📌 **YAML Example (pod.yaml)**
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: filegenerator-pod
+  labels:
+    app: filegenerator
+spec:
+  containers:
+    - name: filegenerator-container
+      image: vishnumankar123/filegenerator
+      ports:
+        - containerPort: 8080
+```
+
+📌 **Commands**
+
+```bash
+kubectl apply -f pod.yaml             # pod create
+kubectl get pods                      # list pods
+kubectl describe pod filegenerator-pod # details
+kubectl logs filegenerator-pod        # logs check
+kubectl exec -it filegenerator-pod -- sh  # andar jao
+```
+
+✅ **Use case:** Testing ke liye ek single container chalayenge. Lekin production me direct Pod use nahi karte (kyunki agar crash hua to restart nahi hoga).
+
+---
+
+# 🔵 Step 2: Deployment
+
+### 👉 Deployment = Controller jo multiple Pods ko manage karta hai (scaling, self-healing, rolling updates).
+
+📌 **YAML Example (deployment.yaml)**
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filegenerator
+spec:
+  replicas: 2              # kitne pods chahiye
+  selector:
+    matchLabels:
+      app: filegenerator
+  template:                # pod ka template
+    metadata:
+      labels:
+        app: filegenerator
+    spec:
+      containers:
+        - name: filegenerator-container
+          image: vishnumankar123/filegenerator
+          ports:
+            - containerPort: 8080
+```
+
+📌 **Commands**
+
+```bash
+kubectl apply -f deployment.yaml           # deployment create
+kubectl get deployments                    # list deployments
+kubectl get pods -o wide                   # deployment ke pods dekho
+kubectl scale deployment filegenerator --replicas=3   # scale to 3 pods
+kubectl rollout restart deployment filegenerator      # rolling restart
+kubectl delete deployment filegenerator               # delete deployment
+```
+
+✅ **Use case:**
+
+* Agar ek Pod crash ho jaye to Deployment automatically naya Pod bana dega.
+* Scaling ke liye replicas set karte hain (2, 3, 5 …).
+* CI/CD ke time rolling updates use karte hain.
+
+---
+
+# 🟣 Step 3: Service
+
+### 👉 Service = Stable endpoint jo Pods ke IPs ko expose karta hai (load balancer ki tarah).
+
+📌 **YAML Example (service.yaml)**
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: filegenerator-service
+spec:
+  type: NodePort              # bahar se access ke liye
+  selector:
+    app: filegenerator        # deployment ke pods ko target karega
+  ports:
+    - port: 8080              # Service port (stable endpoint)
+      targetPort: 8080        # Pod ka port
+      nodePort: 31439         # Optional: host machine port
+```
+
+📌 **Commands**
+
+```bash
+kubectl apply -f service.yaml             # service create
+kubectl get svc                           # list services
+kubectl describe svc filegenerator-service # details
+kubectl port-forward svc/filegenerator-service 8080:8080 # local access
+kubectl delete svc filegenerator-service   # delete service
+```
+
+✅ **Use case:**
+
+* Pods ka IP dynamic hota hai, Service ek **stable IP / DNS name** deti hai.
+* NodePort = development ke liye bahar expose karna.
+* ClusterIP = default, cluster ke andar hi accessible.
+* LoadBalancer = cloud provider pe external IP ke through access (AWS/GCP/Azure).
+
+---
+
+# 🔥 Real Workflow (Spring Boot App Example)
+
+1. **Build Docker Image**
+
+   ```bash
+   docker build -t vishnumankar123/filegenerator .
+   docker push vishnumankar123/filegenerator
+   ```
+
+2. **Create Deployment**
+
+   ```bash
+   kubectl apply -f deployment.yaml
+   ```
+
+3. **Create Service**
+
+   ```bash
+   kubectl apply -f service.yaml
+   ```
+
+4. **Access Application**
+
+   * Localhost port-forward:
+
+     ```bash
+     kubectl port-forward svc/filegenerator-service 8080:8080
+     ```
+
+     → `http://localhost:8080`
+   * Or NodePort:
+     → `http://localhost:31439`
+
+---
+
+👉 Is flow me:
+
+* Pod = ek unit
+* Deployment = pod ka manager (scaling, update, rollback)
+* Service = stable access point (load balancer)
+
+---
+
+⚡ Vishnu bhai, kya mai aapko ek **diagram bana kar visual flow** dikhaun (Pod → Deployment → Service → User)?
+
+==========================================================================================
+

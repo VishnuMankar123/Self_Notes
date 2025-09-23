@@ -1,0 +1,1736 @@
+ 
+ Tables Name : select * from com_wiw_data cwd
+				select * from com_prod_route_stm cprs 
+				select * from com_mrp_data cmd 
+ 
+
+=============================================================
+ Related Terms:
+ 
+Term	Meaning
+SSD	Scheduled Start Date (when production is planned to start)
+SED	Scheduled End Date (planned internal completion)
+CCD	Committed Completion Date (externally or officially committed deadline)
+
+🛠 Example Use in Planning:
+If a customer needs jewellery delivered by 10 August:
+
+📅 CCD = 10 Aug (hard deadline)
+
+🏭 Based on capacity, backward planning may schedule:
+
+SED = 8 Aug
+
+SSD = 2 Aug
+This ensures the production finishes before the CCD.
+
+===========================================================================
+Gantt Chart kya hai?
+Gantt Chart ek visual project scheduling tool hota hai jo dikhata hai:
+
+✅ Kaunsa task kab start hoga,
+✅ kitne din chalega,
+✅ kaunse task overlap ho rahe hain,
+✅ aur kis task ke baad kaunsa aayega.
+
+🧱 Structure of a Gantt Chart:
+Left Side	Right Side
+Task list (e.g., orders, operations)	Horizontal bars on a calendar/timeline
+
+🟦 Har task ke samne ek bar hota hai jo uska duration batata hai.
+
+📦 In Your Project (Sunjewels):
+Gantt chart ka use ho raha hai to show:
+
+🔄 Order-wise production timeline
+
+🏗 SSD (Scheduled Start Date) → 📅 SED (Scheduled End Date) → 📌 CCD (Committed Completion Date)
+
+🧱 Operations breakdown in Commercial, NPD, and Daily planning dashboards
+
+🧠 Example:
+Order ID	SSD	SED	CCD
+O-1001	24 July	27 July	29 July
+
+Gantt Chart:
+
+mathematica
+Copy
+Edit
+Order O-1001: ━━━━━━━━⏺
+               ↑      ↑
+             SSD    SED → CCD
+🎯 Why Gantt Chart is Useful:
+✅ Quickly see delays
+✅ Visualize overlaps
+✅ Plan OT, prioritize tasks
+✅ Adjust timelines if needed
+
+==================================================================== 
+ Installed Capacity kya hai?
+Installed Capacity ka matlab hai:
+
+🏭 Ek plant, machine, ya workcenter ki theoretical maximum production capacity — yani ki ek din, ek shift, ya ek week me wo kitna kaam kar sakta hai, assuming everything works perfectly.
+
+🧠 आसान शब्दों में:
+"Full power pe machine kitna kaam kar sakti hai?"
+👉 यही है Installed Capacity.
+
+🧱 Example:
+Machine	Daily Hours	Tasks per Hour	Installed Capacity
+Polishing Machine	8 hrs	10 items/hr	80 items/day
+
+Yani machine ideal condition me 80 items per day bana सकती है.
+======================================================================
+ Used Capacity kya hoti hai?
+Used Capacity ka matlab hai:
+
+🏭 Actual me aapne machine, plant, ya workcenter ka kitna use kiya kisi specific time period me (jaise 1 din, 1 shift, ya 1 week).
+
+🧠 आसान शब्दों में:
+"Aapne real me kitna kaam kiya?"
+👉 यही है Used Capacity.
+
+📦 Example:
+Workcenter	Installed Capacity	Work Assigned	Used Capacity
+Casting	1000 mins/day	850 mins	✅ 850 mins = Used Capacity
+
+🔁 Compare With:
+Term	Meaning
+Installed Capacity	Maximum possible work (ideal conditions)
+Available Capacity	Installed – breaks, holidays, downtime
+Used Capacity	Real kaam jo hua ya assign kiya gaya
+===============================================================
+
+🧾 Summary Table:
+Component	Server Used	How it's Run
+🟢 Java Backend	Embedded Tomcat	java -jar
+🧠 Julia Server	Custom Julia script	julia main.jl
+🐍 Python Service	Python script	python main.py
+🌐 Frontend	http-server or NGINX	http-server / static hosting
+🌍 Reverse Proxy	NGINX	systemctl restart nginx
+=================================================================
+Chaliye isko **simple aur clear way** me samajhte hain. Aapka jo architecture diya gaya hai, woh **enterprise-level planning system ke database layer** ka part hai — jisme multiple databases aur tools use ho rahe hain.
+
+---
+
+## 🧠 **Planning Application – Database Structure Samajhiye**
+
+Is system me 3 major database layers hain:
+
+| Layer | Database             | Use                                        |
+| ----- | -------------------- | ------------------------------------------ |
+| 🔵 1  | **MySQL (v8.4)**     | 🧠 **Main Planning App ka Database**       |
+| 🔵 2  | **MS SQL Server**    | 🏭 SAP ka Data fetch karne ke liye         |
+| 🔵 3  | **Chronos MySQL DB** | 📈 Long term analytics aur archive ke liye |
+
+---
+
+## 🔄 **Data Flow (ETL)** – Samjhiye Kaise Data Ghoomta Hai
+
+### ✅ **A. SAP (SQL Server) ➝ Planning App (MySQL)**
+
+Wax/WST (Wax Setting or Wax Tree)
+Explanation:
+
+Is stage me wax model banaye jate hain jinke upar molten metal cast hota hai.
+
+Multiple wax pieces ko ek "tree" jaisa structure banakar arrange kiya jata hai.
+
+Work Center Type: Casting preparation
+
+Importance: Initial step before metal casting.
+
+⚙️ 2. Grinding
+Explanation:
+
+Is process me rough edges, casting defects, ya extra metal ko remove kiya jata hai.
+
+Smooth surface banayi jati hai polishing ke liye.
+
+Work Center Type: Surface finishing
+
+Tools: Grinding wheels, burrs.
+
+🔩 3. Assembly
+Explanation:
+
+Jewelry ke multiple components ko joda jata hai (e.g., ring + stone setting base).
+
+Soldering, fitting parts together.
+
+Work Center Type: Pre-polish structure formation
+
+Skills Needed: Precision, craftsmanship
+
+💎 4. Metal Setting
+Explanation:
+
+Precious stones (diamonds, rubies, etc.) ko metal frame me secure kiya jata hai.
+
+Types: prong, bezel, channel setting, etc.
+
+Work Center Type: Skilled craftsmanship
+
+Output: Final product with stones.
+
+✨ 5. Polish
+Explanation:
+
+Product ko shine aur smooth finish diya jata hai.
+
+Final cosmetic step.
+
+Work Center Type: Finishing
+
+Techniques: Buffing, tumbling, ultrasonic cleaning.
+
+🔄 Workflow Example:
+Wax → Casting → Grinding → Assembly → Metal Setting → Polish → Quality Check
+
+
+====================================================================================
+> Planning system ko SAP se **production orders, MRP data, capacity info** chahiye.
+
+📌 **Process:**
+
+1. **ODBC Driver**: SQL Server se MySQL tak data lane ke liye "bridge" (driver) lagta hai
+2. **Linked Server Setup**: SQL Server ke andar MySQL ko connect kiya jata hai
+3. **Scheduled Jobs**: SQL queries run karte hain har din/hafta aur data MySQL me push kar dete hain
+
+📥 **Tables jo import hote hain:**
+
+* `WTW_Data`
+* `MRP_Data`
+* `Installed_Capacity`
+
+---
+
+### ✅ **B. Planning App DB (MySQL) ➝ Chronos MySQL DB**
+
+> Planning system ke result (published plans) ko **Chronos** system me bhejna hota hai analysis ke liye.
+
+📌 **Process:**
+
+1. **Apache NiFi v2.0.0**: Ek open-source ETL tool jo data ko sync karta hai
+2. **Daily NiFi Pipelines**: Har din automate karke specific tables ko Chronos me push karta hai
+
+📤 **Tables jo publish hote hain:**
+
+* `Published Long Term Plan Commercial`
+* `Published Daily Plan NPD`
+
+---
+
+## 🗺️ **Visual Diagram (Simplified)**
+
+```
+         [SAP / MSSQL Server]
+                  |
+        (ODBC + Linked Server)
+                  ↓
+     [Planning App MySQL DB v8.4]
+            ↑            ↓
+(NiFi fetch)       (NiFi publish)
+            ↓            ↑
+         [Chronos MySQL DB]
+```
+
+---
+
+## 📘 Real-World Example:
+
+1. SAP system se new **production orders** generate hote hain
+2. SQL Server me wo data update hota hai
+3. Linked server ke through daily job us data ko **MySQL Planning DB** me laata hai
+4. Planning team dashboard par plan banata hai
+5. Final plan **Chronos DB** me sync hota hai via Apache NiFi
+
+---
+
+## ✅ In Short:
+
+| Tool              | Role                                     |
+| ----------------- | ---------------------------------------- |
+| **ODBC**          | SQL Server se MySQL tak data transfer    |
+| **Linked Server** | SQL Server se remote DB ko connect karna |
+| **Apache NiFi**   | ETL pipeline for syncing MySQL ➝ Chronos |
+| **MySQL**         | Primary planning database                |
+| **Chronos**       | Reporting & long-term data storage       |
+
+---
+
+Aap chahein to:
+
+* Iska full **architecture diagram** bana sakta hoon
+* **SQL job example script**
+* **NiFi flowchart**
+
+Batayein kis form me chahiye?
+=========================================================================
+
+Zaroor! Aapka jo content hai, woh “Definitions and Abbreviations” section ke liye hai — jisme production planning aur order types se jude terms ka matlab diya gaya hai. Niche main sab terms Hindi me explain, use-case ke examples, aur kis department me use hota hai woh bhi bataya hoon:
+
+📘 Key Terms with Explanation and Examples
+🔤 Term	📖 Definition (in Hindi)	🎯 Explanation	💡 Example
+CCD	Customer Committed Date	Customer ko diya gaya final delivery date	Agar customer ko bola gaya hai ki order 10 Aug ko milega, toh 10 Aug = CCD
+RDD	Requested Delivery Date	Customer ne kis date pe delivery mangi hai	Customer ne 7 Aug ko delivery mangi, RDD = 7 Aug
+SSD	Schedule Start Date	Production start karne ki planned date	Machine pe kaam 5 Aug se start hona hai, toh SSD = 5 Aug
+SED	Schedule End Date	Production end hone ki planned date	Kaam 8 Aug ko khatam hona chahiye, toh SED = 8 Aug
+
++--------+------------------------------------------+-----------------------------------------------------------+----------------------------------------------------+
+| Term   | Full Form                                 | Meaning (Hindi Explanation)                               | Example                                             |
++--------+------------------------------------------+-----------------------------------------------------------+----------------------------------------------------+
+| CCD    | Customer Committed Date                  | Customer ko diya gaya delivery date                      | Customer ko bola gaya delivery 10 Aug ko milega    |
+| RDD    | Requested Delivery Date                  | Customer ki mangi hui delivery date                      | Customer ne 7 Aug ko delivery chahiye              |
+| SSD    | Schedule Start Date                      | Production start hone ki planned date                    | Machine pe kaam 5 Aug se start hoga                |
+| SED    | Schedule End Date                        | Production khatam hone ki planned date                   | Production 8 Aug tak complete hoga                 |
+| ZCOM   | Commercial Order                         | Regular sales order                                      | Retail ya wholesale ke liye diya gaya order        |
+| ZONL   | Online Orders                            | Online website ya app se diya gaya order                | Amazon/FK se aaya order                            |
+| ZREM   | Remaking Order                           | Wapas kiya gaya product dobara banana                   | Defective product remake                          |
+| ZFTS   | First Time Sample Order                  | Pehli baar ka sample order                              | New client ke liye first trial product             |
+| ZPD    | New Product Dev (CAD Design) Order       | Design team ke liye CAD based design order              | Engineering team ke liye CAD design               |
+| ZSMP   | Sample Creation Order                    | Naya product ka actual sample banana                    | NPD team physical sample create karti hai          |
+| ZQAS   | Quality Sample Order                     | Quality check ke liye sample                            | QA team test ke liye item sample mangti hai        |
+| ZFL1   | Loan Order                               | Temporary loan issue order                              | Ek plant se dusre ko temporary machine part dena   |
+| ZMTS   | Make to Stock                            | Stock ke liye product banana                            | Advance me products banana for inventory           |
+| ZSPL   | Special Sales Order                      | Custom ya special product order                         | Personalized product order                         |
+| API    | Application Programming Interface        | Do software ke beech ka connection                      | SAP system and Web App ke beech link               |
+| MRP    | Material Requirements Planning           | Material demand planning system                         | BOM ke hisab se raw material ka plan               |
++--------+------------------------------------------+-----------------------------------------------------------+----------------------------------------------------+
+
+
+🛠️ Other Technical Terms
+🔤 Term	📖 Definition	🧠 Hindi Meaning
+API	Application Programming Interface	Do software ke beech ka connection (e.g. SAP ↔ Sunjewels System)
+MRP	Material Requirements Planning	Material aur parts ki demand planning process
+
+🎯 Use Case (Practical Situation):
+💼 Suppose customer ne ek first-time sample mangi hai:
+
+Order Type: ZFTS
+
+RDD: 10 July
+
+SSD: 7 July
+
+SED: 9 July
+
+CCD: 10 July
+
+Ye planning team SAP me update karti hai, aur system usko daily dashboard, Gantt chart, OTIF calculation me use karta hai.
+=================================================================================================================
+Material ETA ka matlab hota hai:
+Estimated Time of Arrival of material.
+
+🔍 Simple Definition:
+Material ETA woh expected date and time hoti hai jab raw material, part, ya supply aapke plant, factory, ya warehouse tak pahunchne wali hai.
+
+✅ Kahan use hota hai?
+Production Planning me: Check karne ke liye ki material time pe aayega ya nahi.
+
+MRP (Material Requirement Planning) systems me: Ensure ki material delay na ho.
+
+Supply Chain Management me: For tracking in-transit items.
+
+📘 Example:
+Material	Order Date	ETA
+Steel Sheet	20 July	25 July
+Paint	18 July	21 July
+Motor	22 July	29 July
+
+👉 Yani 25 July tak Steel Sheet pahunch jana chahiye.
+
+🧠 Why is ETA Important?
+Agar ETA delay hoti hai, toh production hold ya reschedule karna padta hai.
+
+OTIF (On Time In Full) ko impact karta hai.
+
+Planning system (like Sunjewels) me automatic alerts generate ho sakte hain.
+==========================================================================================
+
+Aapka question hai: **"Yeh Python script ka kya use hai aur iska workflow kaise chalta hai?"**
+Main aapko **simple hindi explanation** ke sath full workflow samjhaata hoon:
+
+---
+
+## 🧠 **Purpose / Use (Iska kya kaam hai?)**
+
+Yeh script **Sunjewels Planning System** me use hoti hai:
+
+### ✅ To:
+
+1. **MySQL aur SQL Server** se data fetch karna (via NiFi ya direct SQL).
+2. **Production orders** ko validate aur enrich karna (MRP se).
+3. **Material ETA (Expected Time of Arrival)** calculate karna.
+4. **Simulation Table** me accurate aur clean data insert karna.
+5. **Stored Procedures** chalakar further processing karna.
+6. **Log banana** ki kya sahi chala, kya galti hui, aur kya missing hai.
+
+---
+
+## 🔄 **Workflow (Kaise kaam karta hai step-by-step)**
+
+### 1. **🔐 Configuration Load:**
+
+* `application.yml` se database info (username, password, host) load hota hai.
+
+---
+
+### 2. **🔌 Database Connection:**
+
+* `SQLAlchemy` se MySQL DB ke sath connection banta hai.
+
+---
+
+### 3. **📤 Data Fetch:**
+
+* `com_prod_route_stm` (Production order route info)
+* `com_wiw_data` (Work-in-workcenter data)
+* `com_mrp_data` (Material ETA, sourcing info)
+* `com_long_term_simulation` (Already simulated data)
+
+---
+
+### 4. **📊 Data Processing:**
+
+#### 🔁 Merge & Filter:
+
+* `prod_route` + `wiw_data` → join hota hai
+* `prod_route` + `mrp_data` → join hota hai
+* Already inserted production orders ko hata deta hai (via `zip` keys)
+
+---
+
+#### 🧮 Calculations:
+
+* **mrp\_date**: Based on WSE/MSE/FDGS workcenter logic
+* **good\_receipt\_date** / **revised\_eta\_date** / **sourcing\_eta\_date**
+* **setting\_type** detection based on `W`, `M`, `F` prefixes
+* **Date format standardization**
+
+---
+
+### 5. **📥 Data Insert:**
+
+* Cleaned data `com_long_term_simulation` table me batch-wise insert hota hai (`to_sql` with batch size)
+
+---
+
+### 6. **⚙️ Stored Procedure Calls:**
+
+#### ✅ SP1: `sp_handle_plain_jewellery()`
+
+* Plain jewellery data ke liye business logic apply karta hai
+
+#### ✅ SP2: `sp_remove_long_term_simulation_records()`
+
+* Invalid ya unwanted simulation data ko delete karta hai
+
+---
+
+### 7. **🔍 Validation & Reporting:**
+
+#### ❌ Missing Parent-Child Detection:
+
+* Agar child order hai but parent nahi hai, toh woh identify hota hai
+
+#### ❌ Duplicate Orders Check:
+
+* Duplicate production orders `com_long_term_simulation` aur `com_prod_route_stm` me detect hote hain
+
+#### ❌ MRP issues:
+
+* `setting_type` agar `NULL` hai toh woh bhi log hota hai
+
+---
+
+## 🔧 Technical Summary:
+
+| Module                | Description                                           |
+| --------------------- | ----------------------------------------------------- |
+| **pandas**            | Dataframes banane aur join/filter ke liye             |
+| **sqlalchemy**        | MySQL me connect hone aur query execute karne ke liye |
+| **yaml**              | Config file load karne ke liye                        |
+| **logger**            | Har step ka log save karne ke liye                    |
+| **Stored Procedures** | MySQL ke andar domain-specific cleaning ke liye       |
+
+---
+
+## ✅ Real Business Use-case:
+
+> Agar SAP se aaya hua production order ka data incomplete ho, ya WIW ke workcenter ke hisab se MRP ka material delay ho, toh ye script check karta hai ki kya woh order simulation me dalne layak hai ya nahi.
+
+---
+
+Agar aap chahein toh main iska **workflow diagram (flowchart)** ya **architecture diagram** bhi bana sakta hoon.
+
+Kya chahiye?
+
+* ✅ Flowchart
+* ✅ Sequence Diagram
+* ✅ Explanation video style
+* ✅ Airflow/DAG pipeline ke format me conversion
+
+Bataiye!
+
+==========================================================================================
+Chaliye simple Hindi me step-by-step samjhte hain ki **ye Python script kya karti hai**, **kyun use ki jati hai**, aur iska **workflow** kya hai:
+
+---
+
+## 📌 Purpose:
+
+Yeh script **MRP (Material Requirement Planning)** ke latest data ko use karke `com_long_term_simulation` table me update karti hai.
+
+---
+
+## 🧠 Layman Terms Me Sochiye:
+
+1. **MRP Data (कब सामान आएगा)** aata hai SAP ya dusre sources se.
+2. **Planning Table** me purane dates ya galat info hoti hai.
+3. Yeh script:
+
+   * Dono data compare karti hai.
+   * Agar naye date aaye to update karti hai.
+   * Aur agar koi change hota hai to us order ka **freeze flag reset** karti hai.
+
+---
+
+## 🔄 Full Workflow (Asaan Hindi Me):
+
+### ✅ Step 1: Config File Padho
+
+YAML file (`application.yml`) se **database connection ka config** read karta hai:
+
+* host
+* username
+* password
+* database ka naam
+
+---
+
+### ✅ Step 2: Database Se Connect Karo
+
+MySQL me **connection create karta hai** so that queries chala sake.
+
+---
+
+### ✅ Step 3: Do Data Table Load Karo
+
+#### 🔹 Table 1: `com_mrp_data` (Material ETA info)
+
+Yeh table batati hai:
+
+* Metal, Wax, Finding kis order me use ho raha hai
+* Kab receipt hoga, revised ETA kya hai, etc.
+
+#### 🔹 Table 2: `com_long_term_simulation` (Current planning)
+
+Isme already simulation data hai:
+
+* `sales_order_no`, `production_order_no`, `work_center`, etc.
+
+---
+
+### ✅ Step 4: Merge karo dono table
+
+`sales_order_no` + `sales_item_no` se dono tables join karte hain taaki match ho sake:
+
+* kaunsa order kis material ka wait kar raha hai
+
+---
+
+### ✅ Step 5: Naye column calculate karo
+
+Merged data me yeh columns calculate kiye jaate hain:
+
+| Column              | Kya karta hai                                         |
+| ------------------- | ----------------------------------------------------- |
+| `mrp_date`          | Material kab mil raha hai, based on work center logic |
+| `good_receipt_date` | Actual receipt date                                   |
+| `revised_eta_date`  | Agar delay hua to revised expected date               |
+| `sourcing_eta_date` | Supplier ne kab bhejne ka bola                        |
+| `setting_type`      | Metal, Wax, ya Finding                                |
+
+---
+
+### ✅ Step 6: Upload karo ek temp table me
+
+Temp table (`tmp_com_update`) banake merged data ko upload karta hai taaki:
+
+* comparison ho sake
+* aur bulk update ho sake
+
+---
+
+### ✅ Step 7: Update Simulation Table
+
+Compare karta hai `com_long_term_simulation` aur `tmp_com_update`:
+
+* Agar koi date ya `setting_type` badla hua hai to **update karta hai**
+
+---
+
+### ✅ Step 8: Freeze Flag Reset
+
+Jin `production_order_no` ka data update hua:
+
+* Unka **freeze flag = FALSE** set karta hai
+* Matlab: Ye order ab dobara re-simulate ho sakta hai
+
+---
+
+### ✅ Step 9: Stored Procedure Run
+
+Yeh clean-up karta hai inconsistent data ko:
+
+```sql
+CALL delete_mis_match_route_long_term_simulation();
+```
+
+---
+
+## 🎯 Final Output:
+
+* Planning table updated hoti hai with latest material info.
+* Related orders ka freeze hata diya jata hai.
+* Clean-up bhi ho jata hai.
+
+---
+
+## 📈 Use Case Example:
+
+👉 Suppose:
+
+* Order `SO123` ka material `Metal` 10 July ko aayega (MRP me update aaya)
+* Planning table me abhi bhi 5 July hai
+* Yeh script detect karegi → Update karegi `mrp_date` ko → Freeze hatayegi
+
+---
+
+Agar aap chaho to iska **diagram** bhi bana sakta hoon. Batayein?
+=============================================================================
+Yeh Script Kya Karti Hai?
+Ye script MySQL database se data uthakar use process karke com_long_term_simulation table me insert karti hai. Uske baad kuch stored procedures bhi chalaati hai.
+
+🔶 Step 1: Database Connection
+application.yml file se username, password, host, port waale configuration load karta hai.
+
+SQLAlchemy se database se connection banata hai.
+
+🔶 Step 2: Data Load (SQL Queries se)
+Ye teen main table ka data le raha hai:
+
+Table	Purpose
+com_prod_route_stm	Production orders and operations
+com_wiw_data	WIW (Work In Work) data, like work centers
+com_mrp_data	MRP ke date-related info like good_receipt_date, revised_eta_date
+
+🔶 Step 3: Data Merge
+prod_route_stm + wiw_data ko join karta hai.
+
+Fir mrp_data ke saath merge karta hai.
+
+Fir dekhta hai kaunse production_order_no pehle se com_long_term_simulation me hai aur kaunse naye hai.
+
+🔶 Step 4: Date Calculation Logic
+Har record ke liye:
+
+mrp_date
+
+good_receipt_date
+
+revised_eta_date
+
+sourcing_eta_date
+
+setting_type
+
+ye sab columns automatically calculate kiye jaate hain based on:
+
+work_center = WSE (Wax), MSE (Metal), FDGS (Finding)
+
+🔶 Step 5: Insert into Final Table
+Final data ko com_long_term_simulation table me 1000 records ke batch me insert karta hai.
+
+🔶 Step 6: Stored Procedures Call
+Ye 3 stored procedure call hote hain:
+
+sp_handle_plain_jewellery() → plain jewellery logic apply karta hai
+
+sp_remove_long_term_simulation_records() → unwanted records hataata hai
+
+com_remove_mismatch_parent_child_records() → agar parent-child order mismatch hai to hataata hai
+
+🔶 Step 7: Data Quality Checks
+Check karta hai:
+
+WIW aur prod_route_stm ke beech mein mismatch
+
+Duplicate production_order_no present hai ya nahi
+
+setting_type = NULL wale orders
+
+🔚 End Result
+com_long_term_simulation table me clean, enriched, and deduplicated data hota hai.
+
+Business rules apply ho jaate hain via stored procedures.
+
+=============================================================
+ 1. com_prod_route_stm JOIN com_wiw_data
+Yeh join query me kiya gaya hai — CTE (WITH RankedData AS) ke andar:
+
+sql
+Copy
+Edit
+FROM com_prod_route_stm p
+INNER JOIN com_wiw_data w
+    ON p.production_order_no = w.production_order_no
+🔍 Meaning:
+Ye join karta hai production_order_no column ke basis par.
+
+INNER JOIN ka matlab: dono tables me matching production_order_no ho tabhi record milega.
+
+Yeh data df_prod_wiw me load hota hai.
+================================================================================
+Bahut badhiya sawal! Aap poochh rahe ho:
+
+> **`FROM com_prod_route_stm p INNER JOIN com_wiw_data w`** ka jo join result hai, woh data Python me **kahaan store** hota hai?
+
+---
+
+### ✅ Answer:
+
+Ye SQL join result **Python ke DataFrame `df_prod_wiw`** me store hota hai.
+
+👇 Yeh raha code jo ye kaam karta hai:
+
+```python
+df_prod_wiw = pd.read_sql_query(text("""
+    WITH RankedData AS (
+        SELECT *,
+               ROW_NUMBER() OVER (PARTITION BY p.production_order_no ORDER BY p.operation_no ASC) AS row_num
+        FROM com_prod_route_stm p
+        INNER JOIN com_wiw_data w
+            ON p.production_order_no = w.production_order_no
+        WHERE p.operation_no >= (
+            SELECT MIN(sub_prs.operation_no)
+            FROM com_prod_route_stm sub_prs
+            WHERE sub_prs.production_order_no = w.production_order_no
+            AND sub_prs.work_center = w.work_center
+        )
+        OR w.work_center LIKE '%NOTSTART%'
+    )
+    SELECT * FROM RankedData
+"""), con)
+```
+
+---
+
+### 🔍 Breakdown:
+
+| Part                     | Meaning                                         |
+| ------------------------ | ----------------------------------------------- |
+| `pd.read_sql_query(...)` | SQL query run karta hai                         |
+| `con`                    | Database connection object                      |
+| **`df_prod_wiw`**        | Join ka result yahan store hota hai (DataFrame) |
+
+---
+
+### 📌 Final Result:
+
+* SQL join ke baad ka jo result set hai, woh **`df_prod_wiw`** naam ke pandas DataFrame me store hota hai.
+* Aap `print(df_prod_wiw.head())` karke check bhi kar sakte ho.
+
+---
+
+Agar aap chaho to main ye DataFrame ka sample output dikhane wala dummy example bhi bana sakta hoon. Batayein?
+==========================================================================================================
+ SKU ka matlab hai:
+Stock Keeping Unit
+
+📦 Definition:
+SKU ek unique identifier hota hai jo kisi specific product ko represent karta hai within a company's inventory system.
+
+Har product ya variant ka apna alag SKU hota hai.
+
+🧩 SKU Includes:
+Product type
+
+Size
+
+Color
+
+Design
+
+Material
+
+Any unique variation
+
+🛠️ Example (Sunjewels context):
+Product	Size	Stone	Metal	SKU
+Gold Ring	6	Ruby	22K	RING-6-RUBY-22
+Gold Ring	7	Ruby	22K	RING-7-RUBY-22
+Pendant	-	Emerald	18K	PEND-EME-18
+
+Each combination = different SKU
+=====================================================================================================
+BOM ka matlab hai:
+BOM = Bill of Materials
+
+📦 Definition:
+Bill of Materials ek structured list hoti hai jo batati hai ki ek final product banane ke liye kaun-kaun se raw materials, components, parts, aur sub-assemblies chahiye hote hain — kis quantity me.
+
+🏭 Manufacturing context (e.g., Sunjewels) me BOM batata hai:
+Kis product (SKU) ke liye
+
+Kaunse materials lagenge (e.g., metal, stones, findings)
+
+Kya-kya operations lagenge
+
+Kitni quantity me lagenge
+
+Kis sequence me process hoga
+
+📊 Example: Gold Ring BOM
+Component	Description	Quantity
+Metal	22K Gold	6 grams
+Stone	Ruby (1 carat)	1 piece
+Finding	Ring Base Setting	1 piece
+Operation	Casting, Polish	-
+
+
+Agar aap Sunjewels system me kaam kar rahe ho, to BOM data likely stored hota hai tables jaise:
+
+com_bom
+
+com_prod_route_stm
+
+com_mrp_data
+==============================================================================================
+
+बिलकुल! नीचे मैंने `com_prod_route_stm` टेबल का उद्देश्य और कॉलम विवरण **Hindi + English** में दिया है:
+
+---
+
+### ✅ **Purpose of `com_prod_route_stm` Table | इस टेबल का उद्देश्य**
+
+This table stores the **routing and standard time (STM)** details of each production order.
+यह टेबल हर प्रोडक्शन ऑर्डर के **रूटिंग और स्टैंडर्ड टाइम** (STM) की जानकारी रखती है।
+
+It helps in:
+
+* Planning operations in a production order
+  (उत्पादन आदेश में कौन-कौन से ऑपरेशन होंगे, यह तय करने में)
+* Calculating load on work centers
+  (वर्क सेंटर पर कितना काम आएगा, यह निकालने में)
+* Simulation and delay calculation
+  (Simulation और Delay निकालने में उपयोग होता है)
+
+---
+
+### 🔍 **Important Columns | महत्वपूर्ण कॉलम**
+
+| Column Name                     | Explanation (English)                   | Explanation (Hindi)                            |
+| ------------------------------- | --------------------------------------- | ---------------------------------------------- |
+| `production_order_no`           | Unique production order number          | उत्पादन आदेश नंबर                              |
+| `operation_no`                  | Step/Operation number in routing        | रूटिंग का ऑपरेशन नंबर                          |
+| `work_center`                   | Work center assigned for operation      | ऑपरेशन के लिए वर्क सेंटर                       |
+| `route_no`                      | Routing version or identifier           | रूटिंग का नंबर                                 |
+| `schedule_start_date`           | Scheduled start date of operation       | ऑपरेशन की निर्धारित शुरुआत तारीख               |
+| `schedule_end_date`             | Scheduled end date of operation         | ऑपरेशन की निर्धारित समाप्ति तारीख              |
+| `rdd`                           | Required Delivery Date                  | आवश्यक डिलीवरी तारीख                           |
+| `order_quantity`                | Total quantity in the production order  | ऑर्डर की कुल मात्रा                            |
+| `total_confirmed_quantity`      | Quantity already confirmed              | पहले से कन्फर्म की गई मात्रा                   |
+| `stm_1_in_min` / `stm_2_in_min` | Standard time in minutes                | ऑपरेशन में लगने वाला स्टैंडर्ड टाइम (मिनट में) |
+| `stm_1_uom` / `stm_2_uom`       | Unit of measure for STM                 | स्टैंडर्ड टाइम की यूनिट (जैसे मिनट)            |
+| `control_key`                   | Rules for execution (e.g., auto/manual) | ऑपरेशन के कंट्रोल रूल                          |
+| `customer_code`                 | Customer code                           | ग्राहक कोड                                     |
+| `sales_order_no`                | Linked sales order number               | संबंधित बिक्री आदेश                            |
+| `sales_item_no`                 | Line item in the sales order            | बिक्री आदेश की लाइन                            |
+| `scrap_quantity`                | Scrap quantity during operation         | ऑपरेशन के दौरान स्क्रैप                        |
+| `order_type`                    | Type of order (e.g., ZREM, ZFTS)        | ऑर्डर का प्रकार                                |
+| `plant`                         | Plant where order is processed          | वह प्लांट जहां उत्पादन हो रहा है               |
+| `freeze`                        | If record is frozen (no changes)        | यदि रिकॉर्ड लॉक है                             |
+
+---
+
+अगर आप इस टेबल से किसी खास production order का टाइम निकालना या वर्क लोड कैलकुलेट करना चाहते हैं, तो बताइए – मैं उसकी SQL भी बना दूंगा।
+============================================================================================================================
+
+`com_wiw_data` टेबल का उपयोग **Work-In-Progress (WIP)** ट्रैकिंग के लिए किया जाता है — यानी उत्पादन (production) के दौरान हर प्रोडक्शन ऑर्डर किस स्टेज पर है, कौन से वर्क सेंटर पर है, और क्या उसकी स्थिति (status) है — यह डेटा इसमें store होता है।
+
+---
+
+### 🔍 **Use / Purpose of `com_wiw_data` Table:**
+
+| 🔢 Column                                 | 📋 Meaning (Hindi + English)                                                 |
+| ----------------------------------------- | ---------------------------------------------------------------------------- |
+| `production_order_no`                     | कौन सा प्रोडक्शन ऑर्डर है — Unique Order ID                                  |
+| `sales_order_no`                          | ये प्रोडक्शन ऑर्डर किस Sales Order से जुड़ा है                               |
+| `sales_item_no`                           | उस Sales Order का कौन सा item है                                             |
+| `work_center`                             | यह काम किस वर्क सेंटर (machine / area) पर हो रहा है                          |
+| `work_center_type`                        | वर्क सेंटर का type (जैसे casting, polishing, etc.)                           |
+| `work_ctr_detail`                         | वर्क सेंटर से जुड़ी details — कभी-कभी employee या machine info भी हो सकता है |
+| `wkct_qty`                                | उस वर्क सेंटर पर कितनी quantity का काम हो रहा है                             |
+| `wiw_status`                              | काम की स्थिति: जैसे 'IN\_PROGRESS', 'COMPLETED', 'HOLD' आदि                  |
+| `sch_end_date`                            | उस task की अनुमानित समाप्ति तिथि                                             |
+| `added_date`, `modified_date`             | डेटा कब डाला और बदला गया                                                     |
+| `fg_sku`, `material_number`, `unit`, etc. | अन्य प्रोडक्ट से जुड़ी जानकारी                                               |
+
+---
+
+### 🧠 **Summary in Hindi + English:**
+
+> यह टेबल production tracking में use होती है — कौन सा item किस work center में है, किस status में है, कितनी quantity है — और यह सब किस production order से जुड़ा है।
+
+> **It helps track the real-time progress of production orders through various work centers.**
+
+---
+
+अगर आप जानना चाहें कि **कौन सा production order किस status में है या किस employee/machine पर है**, तो यही टेबल बहुत काम आती है।
+
+चाहो तो मैं इस पर specific queries भी बना सकता हूँ — जैसे:
+
+* किस वर्क सेंटर पर सबसे ज़्यादा pending है
+* कौन से orders अभी polishing में हैं
+* किस employee/machine पर क्या-क्या orders चल रहे हैं
+
+बस बताओ क्या चाहिए 🙂
+============================================================================================================
+`com_mrp_data` टेबल **MRP (Material Requirements Planning)** से जुड़ी जानकारी को स्टोर करती है — मतलब ये बताती है कि किसी **Sales Order** के लिए कौन-से **Materials** कब तक ज़रूरत हैं, कब पहुँचेंगे, और ETA (Expected Time of Arrival) में क्या बदलाव हुआ है।
+
+---
+
+### 🔍 **Purpose of `com_mrp_data` Table (in Hindi + English):**
+
+| 🔢 Column Name        | 📋 Meaning (Hindi + English)                                        |
+| --------------------- | ------------------------------------------------------------------- |
+| `sales_order_no`      | कौन-सा Sales Order है                                               |
+| `sales_order_line`    | उस Sales Order की कौन-सी Line Item है                               |
+| `material_no`         | किस Material की ज़रूरत है                                           |
+| `pr_plant`            | कौन-से Plant (Factory) के लिए है यह material                        |
+| `sum_of_so_quantity`  | उस Sales Order Line के लिए कितनी Quantity की ज़रूरत है              |
+| `setting_type`        | Planning या sourcing का प्रकार (जैसे: STO, PO, In-house)            |
+| `so_created_date`     | Sales Order कब बनाया गया                                            |
+| `sourcing_eta_date`   | Source से material के पहुँचने की Estimated Date                     |
+| `revised_eta_date`    | अगर ETA में change हुआ है तो revised ETA                            |
+| `rev_eta_change_time` | ETA कब change किया गया                                              |
+| `system_eta_date`     | System ने auto calculate करके जो ETA निकाला                         |
+| `good_receipt_date`   | Material की actual receipt date (कब पहुँचा)                         |
+| `date_diff`           | ETA और actual date के बीच का difference (delay/speed-up)            |
+| `stk_req_form`        | किस तरीके से material की requirement उठाई गई (form, transfer, etc.) |
+| `sales_order_type`    | Sales Order का type (जैसे Domestic, Export, etc.)                   |
+
+---
+
+### 🧠 Summary in Hindi + English:
+
+> यह टेबल बताती है कि किसी Sales Order के लिए कौन-कौन से **materials** कब तक आने चाहिए थे (ETA), वे actual में कब आए (Good Receipt), और **delay** कितना है।
+> साथ ही यह भी ट्रैक करती है कि ETA में कोई revision हुआ है या नहीं।
+
+> **It’s mainly used in delay analysis, procurement planning, and sourcing visibility.**
+
+---
+
+अगर चाहो तो मैं बता सकता हूँ:
+
+* कौन से materials delay में हैं
+* किन orders की sourcing ETA revise हुई
+* किसी material का actual vs system ETA
+
+बस बताओ क्या निकालना है 🙂
+========================================================================================
++----------------------------------------+------------------+----------------------------+
+|               Job Name                 |    Time (HH:MM)  |          When              |
++----------------------------------------+------------------+----------------------------+
+| comSimulationJob                       | 23:50 (11:50 PM) | हर दिन                     |
+| npdSimulationJob                       | 23:50 (11:50 PM) | हर दिन                     |
+| calculateOtif                          | 15:30 (3:30 PM)  | हर दिन                     |
+| calculateNPDOtif                       | 15:50 (3:50 PM)  | हर दिन                     |
+| dataInsertionJob                       | 14:59 (2:59 PM)  | हर दिन                     |
+| npddataInsertionJob                    | 16:26 (4:26 PM)  | हर दिन                     |
+| wiwJob                                 | 22:00 (10:00 PM) | हर दिन                     |
+| updateDateDiffsJob                     | 06:30 (6:30 AM)  | हर दिन                     |
+| updateGRDoneUtilization                | 00:00 (Midnight) | हर महीने के आखिरी दिन      |
+| dailyJob                               | 05:15 (5:15 AM)  | हर दिन                     |
+| npdDailyJob                            | 05:00 (5:00 AM)  | हर दिन                     |
+| comRemoveRecordsWiwStatus              | 05:00 (5:00 AM)  | हर साल 1 जनवरी को         |
+| npdRemoveRecordsWiwStatus              | 05:00 (5:00 AM)  | हर साल 1 जनवरी को         |
++----------------------------------------+------------------+----------------------------+
+
+============================================================================================================
+Location of the file where we can see the Logs of backend\algorithms\com_backward_planning\data_processor.py
+
+backend/algorithms/com_backward_planning/postprocessor.py
+
+these file and payload also
+===========================================================================================
+File Location : backend/algorithms/com_backward_planning/logger.py
+
+आपके द्वारा दिया गया यह स्क्रिप्ट एक **Commercial Backward Planning System** के लिए **logging mechanism** को तैयार करता है, ताकि logs को रोज़ाना सुरक्षित रूप से rotate और archive किया जा सके।
+
+---
+
+## ✅ **साधी भाषा में इसका उद्देश्य:**
+
+यह कोड यह सुनिश्चित करता है कि:
+
+1. **Daily log file** बने — हर दिन की अलग log file होगी।
+2. पुरानी log files को एक **archive folder** में automatically **move** कर दिया जाए।
+3. Console (terminal) में भी log दिखे।
+4. पुरानी files एक निश्चित संख्या तक **retain** रखी जाएं (जैसे 7 या 30 दिन तक)।
+
+---
+
+## 🔍 **कैसे काम करता है?**
+
+### 1. **Directories बनाना**
+
+```python
+if not os.path.exists(LOG.BACKWARD.COM.ARCHIVED_FOLDER):
+    os.makedirs(LOG.BACKWARD.COM.ARCHIVED_FOLDER)
+```
+
+* अगर archived folder नहीं है, तो बना देता है।
+* यही चीज़ `CSV.BACKWARD.COM` के लिए भी की जाती है।
+
+---
+
+### 2. **Log Format और Stream Console Handler**
+
+```python
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+stream_handler = logging.StreamHandler(sys.stdout)
+```
+
+* Log format set करता है — जैसे: `2025-08-04 10:30:00 - INFO - Job started`
+* Console (stdout) पर भी log दिखाता है।
+
+---
+
+### 3. **Daily Rotating File Handler**
+
+```python
+rotating_handler = TimedRotatingFileHandler(LOG_FILE_NAME, when="midnight", backupCount=...)
+```
+
+* Log file रोज़ midnight पर **rotate** हो जाती है।
+* `backupCount` से तय होता है कितने पुराने logs रखने हैं।
+
+---
+
+### 4. ✅ **Custom Rollover for Archiving**
+
+```python
+class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
+    def doRollover(self):
+        super().doRollover()
+        for filename in os.listdir("."):
+            if filename.startswith(LOG_FILE_NAME) and filename != LOG_FILE_NAME:
+                os.rename(old_log_path, new_log_path)
+```
+
+* जब भी rollover होता है (midnight पर),
+* यह पुराने log files को उठाकर **archive folder** में move कर देता है।
+
+---
+
+### 5. **Logger Attach & Level Set**
+
+```python
+logger.addHandler(custom_rotating_handler)
+logger.setLevel(logging.DEBUG)
+```
+
+* Custom handler को `logger` में जोड़ता है।
+* Log level `DEBUG` करता है, जिससे हर छोटी-बड़ी detail capture हो।
+
+---
+
+## 📁 यह किस काम में आएगा?
+
+* जब आप **commercial backward planning** चलाते हैं,
+* तब यह automatically log करता रहेगा कि:
+
+  * कौन-कौन सी jobs चलीं
+  * कौन सी errors या warnings आईं
+  * कब planning शुरू और खत्म हुई
+
+---
+
+## 🔄 आप इसमें क्या जोड़ सकते हैं?
+
+* Email alerts on error logs
+* Log compression in archive folder
+* Different log levels (INFO, WARNING, ERROR) ke separate files
+
+===============================================================================================================
+Location of these file : backend/algorithms/com_backward_planning/temp.py
+
+कोई बात नहीं, चलिए मैं एकदम **साधी भाषा में** समझाता हूँ कि यह Python कोड क्या करता है और किस काम में आता है।
+
+---
+
+## ✅ इस कोड का असली काम क्या है?
+
+यह कोड **हर दिन के लिए चेक करता है कि वह छुट्टी है या नहीं**, और अगर छुट्टी है तो उस दिन की **capacity को "0"** रखता है।
+
+इसे आप ऐसे समझो:
+
+> "मुझे एक लिस्ट बनानी है कि अगले 365 दिन में कौन-कौन से दिन छुट्टी हैं।"
+
+---
+
+## 🔧 कोड के हिस्से क्या करते हैं?
+
+```python
+def create_daily_cap(last_date, holidays_list, ot_dates, return_json=True):
+```
+
+### 📌 Parameters:
+
+| नाम             | मतलब                                           |
+| --------------- | ---------------------------------------------- |
+| `last_date`     | आखिरी दिन (जैसे आज की तारीख)                   |
+| `holidays_list` | छुट्टियों की लिस्ट                             |
+| `ot_dates`      | ओवरटाइम के दिन (जो छुट्टी होकर भी काम होता है) |
+| `return_json`   | क्या output JSON format में चाहिए?             |
+
+---
+
+### 🔁 क्या होता है loop में?
+
+```python
+for _ in range(365):
+    if pp.is_holiday(last_date, holidays_list, ot_dates):
+        cap_dict[last_date.strftime("%Y-%m-%d")] = "0"
+    last_date -= timedelta(days=1)
+```
+
+👉 ये 365 बार चलता है (यानि एक साल के लिए), हर दिन चेक करता है:
+
+* क्या वह दिन छुट्टी है?
+* अगर हाँ, तो उस तारीख के लिए dictionary में `"0"` डाल देता है।
+* फिर तारीख को एक दिन पीछे कर देता है।
+
+---
+
+## 📤 Output क्या आता है?
+
+* एक **dictionary** (या JSON string), जिसमें holidays के लिए `"0"` लिखा होता है।
+* बाकी दिनों को वो ignore कर देता है।
+
+### 🎯 Example Output:
+
+```json
+{
+  "2025-08-15": "0",
+  "2025-12-25": "0"
+}
+```
+
+---
+
+## 🔍 Real Use कहाँ होता है?
+
+ये प्लानिंग सिस्टम में इस्तेमाल होता है — जैसे:
+
+* किसी प्रोडक्शन सिस्टम में मशीन की रोज की क्षमता निकालनी हो
+* छुट्टी वाले दिन की capacity को 0 मानकर आगे की तारीख प्लान करनी हो
+
+=============================================================================================
+Samajh gaya 👍
+Chalo line ko tod ke samjhte hain:
+
+```julia
+job_dict[scheduler["jobs"][i]["operations"][1][6]] = scheduler["jobs"][i]["operations"][1][5]
+```
+
+---
+
+### 🔹 Breakdown:
+
+1. `scheduler["jobs"][i]`
+   → ek **job** dictionary hai (i-th job).
+
+2. `scheduler["jobs"][i]["operations"]`
+   → us job ki **operations list**.
+
+3. `scheduler["jobs"][i]["operations"][1]`
+   → us job ka **pehla operation** (assume ek array/tuple hai).
+
+4. `scheduler["jobs"][i]["operations"][1][6]`
+   → us operation ka **6th element** (key ban raha hai).
+
+5. `scheduler["jobs"][i]["operations"][1][5]`
+   → us operation ka **5th element** (value ban rahi hai).
+
+6. `job_dict[...] = ...`
+   → ek **dictionary entry create ho rahi hai**:
+
+   * **Key** = operation ke 6th field ka value
+   * **Value** = operation ke 5th field ka value
+
+---
+
+### 🔹 Example for clarity
+
+Suppose ek job aise dikh rahi hai:
+
+```julia
+scheduler = Dict(
+    "jobs" => [
+        Dict(
+            "operations" => [
+                [101, "Cutting", "Machine1", 2, "StartDate", "OpID-123"]
+            ]
+        )
+    ]
+)
+```
+
+* `scheduler["jobs"][1]["operations"][1][6]` → `"OpID-123"`
+* `scheduler["jobs"][1]["operations"][1][5]` → `"StartDate"`
+
+So dictionary banega:
+
+```julia
+job_dict["OpID-123"] = "StartDate"
+```
+
+---
+
+### ✅ Matlab
+
+Ye line **operation ke 6th element ko key** aur **5th element ko value** banake dictionary (`job_dict`) me store kar rahi hai.
+Basically ek **lookup table** create kar rahi hai between two fields of the first operation of each job.
+
+---
+
+👉 Kya aap chahte ho main isko ek readable form me convert kar du (jaise dictionary ban jaye with names instead of indices)?
+======================================================================================================================
+Good question 👍
+
+`heap = BinaryMinHeap(job_queue)`
+
+Julia me **`BinaryMinHeap`** (from `DataStructures.jl` package) ek **min-heap priority queue** banata hai.
+
+---
+
+### 🔹 Min-Heap kya hai?
+
+* Heap ek **tree-based data structure** hota hai.
+* **Min-Heap** ka rule: **parent node ≤ child nodes**.
+* Matlab, sabse **chhota element hamesha root (top) pe hoga**.
+
+---
+
+### 🔹 Is line ka matlab:
+
+```julia
+heap = BinaryMinHeap(job_queue)
+```
+
+* `job_queue` ek **collection (array / iterable)** hai.
+* Ye usse ek **Binary Min Heap** banata hai.
+* Heap banne ke baad, tum efficiently:
+
+  * **smallest element nikal sakte ho** (`pop!(heap)` → O(log n))
+  * **naya element daal sakte ho** (`push!(heap, x)` → O(log n))
+  * **minimum element dekh sakte ho bina nikaale** (`peek(heap)` → O(1))
+
+---
+
+### 🔹 Example:
+
+```julia
+using DataStructures
+
+job_queue = [50, 20, 40, 10, 30]
+heap = BinaryMinHeap(job_queue)
+
+println(peek(heap))   # 10 (sabse chhota element)
+push!(heap, 5)
+println(peek(heap))   # 5 (ab sabse chhota element)
+pop!(heap)            # removes 5
+println(peek(heap))   # 10
+```
+
+---
+
+👉 Simple shabdo me:
+`BinaryMinHeap(job_queue)` tumhare `job_queue` ko ek **priority queue (sorted by min element on top)** me convert karta hai.
+
+Kya tumhe chahiye mai iska ek **diagram bana du** (tree shape me heap ka structure dikhane ke liye)?
+======================================================================================================================
+Samajh gaya 👍 Tumhara `job` kuch aisa hai:
+
+```julia
+job = Any[3728.0, 36, 10, 160, "2025-08-19 08:00", "1002147409", "Parent", Any[], "1002147409"]
+```
+
+---
+
+### Step by step:
+
+1. `length(job)`
+   → is array ka size count karega.
+   Tumhare job me **9 elements** hai, so result = `9`.
+
+2. `job[length(job)]`
+   → iska matlab **job\[9]** (last element).
+   Yani `"1002147409"`.
+
+3. `p_id = job[length(job)]`
+   → `p_id` variable me `"1002147409"` store ho jayega.
+
+---
+
+### ✅ Output:
+
+```julia
+p_id = "1002147409"
+```
+
+---
+
+👉 Matlab tumhara code har ek `job` ka **last element** ko `p_id` treat kar raha hai.
+Is job structure me last element **Production Order No. ya Parent ID** jaisa lag raha hai.
+
+Kya tum chahte ho ki mai pura **job ka structure explain karu** (kaun sa field kya represent kar raha hai)?
+=============================================================================================================
+Good question 👍
+
+Line:
+
+```julia
+job_dict[job_id] = max(job_dict[job_id], child_finished_jobs)
+```
+
+### 🔎 Breakdown:
+
+* `job_dict` → ek **dictionary (Dict)** hai jisme `job_id` key aur uski value kuch number (jaise count ya time) store ho rahi hai.
+* `job_dict[job_id]` → us job ka **current stored value**.
+* `child_finished_jobs` → kisi child job se calculate hua **naya value**.
+* `max(a, b)` → Julia ka built-in function hai jo **a aur b me se bada value return** karta hai.
+
+### ⚡ Matlab:
+
+Ye line ensure kar rahi hai ki **`job_dict[job_id]` hamesha us job ke liye maximum value rakhe** between:
+
+1. jo pehle stored tha, aur
+2. abhi child se aaya naya value.
+
+---
+
+### ✅ Example:
+
+```julia
+job_dict = Dict(1 => 3, 2 => 5)
+
+job_id = 1
+child_finished_jobs = 7
+
+job_dict[job_id] = max(job_dict[job_id], child_finished_jobs)
+```
+
+* Pehle `job_dict[1] = 3`
+* `max(3, 7)` → 7
+* Ab `job_dict[1] = 7`
+
+---
+
+👉 Tumhare code me iska use **dependency tracking / scheduling** me ho raha hai — matlab agar ek job multiple child jobs par depend karti hai, to uska status ya completion count **sabse bada (max)** rakha jata hai, taaki koi information overwrite hokar chhota na reh jaye.
+
+Kya chaho to mai tumhe iska ek **mini toy example** bana kar dikha du scheduling context me?
+=========================================================================================================
+Achha, ab tum “**last\_allowed\_time**” ka actual meaning samajhna chahte ho example ke sath 👍
+
+---
+
+### 📌 Concept
+
+Manufacturing / scheduling system me **last\_allowed\_time** ka matlab hota hai:
+➡️ **Kisi machine ya work center pe ek job ko shuru karne ka aakhri valid waqt**.
+Agar tum uske baad shuru karte ho, to job same din me complete nahi ho paayegi (ya daily shift policy tod degi).
+
+---
+
+### 📊 Example
+
+Maan lo:
+
+* Machine shift timing: **08:00 – 20:00**
+* Job duration: **2 hours**
+* Relax time (machine cleanup/setup): **15 min**
+* Spill over allowance: **30 min**
+
+---
+
+#### Step 1: Calculate last allowed time
+
+* Machine 20:00 baje band hoti hai.
+* Job + relax time = `2:00 + 0:15 = 2:15 hrs`.
+* Iska matlab job ko latest **17:45** tak start karna hoga.
+  👉 So **last\_allowed\_time = 17:45**.
+
+---
+
+#### Step 2: Check condition
+
+Agar koi tumhari code line use kare:
+
+```julia
+if start_time > temp_df[1, :last_allowed_time]
+```
+
+Aur `start_time = 18:30` hai, to iska matlab:
+
+* Tum job ko **allowed cutoff 17:45 ke baad** start kar rahe ho.
+* System bolega: "Ye job next day ya spill over me dalni hogi".
+
+---
+
+### 🏭 Simple Example in Table
+
+| HeadCount | Date       | Duration | last\_available\_time | last\_allowed\_time |
+| --------- | ---------- | -------- | --------------------- | ------------------- |
+| HC\_1     | 2025-08-25 | 120 min  | 08:00                 | 17:45               |
+| HC\_2     | 2025-08-25 | 90 min   | 09:00                 | 18:30               |
+
+---
+
+👉 **last\_available\_time** = jab machine free hoti hai.
+👉 **last\_allowed\_time** = job shuru karne ka aakhri samay (warna shift ke andar complete nahi hoga).
+
+---
+
+Vishnu, kya tum chahte ho mai tumhari **code ke hisaab se exact formula nikal kar** dikhau kaise ye last\_allowed\_time calculate ho raha hai?
+
+=========================================================================================================
+Ye Julia ka statement hai 👇
+
+```julia
+if length(findall(x -> x == string(value[j][3]), op_ids)) == 1
+```
+
+### Breakdown:
+
+1. **`value[j][3]`**
+
+   * `value` ek array of arrays (nested array) hoga.
+   * Usme se `j`-th element liya → `value[j]`.
+   * Fir uska **3rd element** access kiya → `value[j][3]`.
+
+2. **`string(value[j][3])`**
+
+   * Us 3rd element ko **string me convert** kiya.
+
+3. **`findall(x -> x == string(value[j][3]), op_ids)`**
+
+   * `op_ids` ek collection (array/vector) hai.
+   * Ye function `findall` usme search karega aur **sabhi indexes return karega jaha element match karta hai**.
+   * Condition: `x == string(value[j][3])`.
+   * Matlab → `op_ids` me jitni jagah `value[j][3]` (string banake) present hai, unke indices ka array return hoga.
+
+4. **`length(...) == 1`**
+
+   * Matlab ye check karta hai ki `value[j][3]` **sirf ek hi baar exist karta hai** `op_ids` me.
+
+---
+
+### Simple Example:
+
+```julia
+op_ids = ["A", "B", "C", "B"]
+value = [["X", "Y", "B"]]
+
+j = 1
+
+# string(value[j][3]) = "B"
+findall(x -> x == "B", op_ids)  # returns [2, 4]
+length(...) == 2, not 1 → false
+```
+
+Agar `op_ids = ["A", "B", "C"]` hota → tab length == 1 hota. ✅
+
+---
+
+👉 Matlab tumhara code **ye ensure kar raha hai ki ek given element (`value[j][3]`) `op_ids` list me sirf ek hi baar ho**.
+
+Chahte ho mai isko aur readable form me likh kar dikhau?
+
+==========================================================================================================
+Ye line 👇
+
+```julia
+temp_date = string(eta_dates[findall(x -> x == string(value[j][3]), op_ids)][1]) * " 08:00"
+```
+
+thoda nested hai, mai breakdown karke samjhata hoon:
+
+---
+
+### Step by step:
+
+1. **`value[j][3]`**
+
+   * `value[j]` ek nested array/list ka element hai.
+   * Uska **3rd element** liya.
+
+2. **`string(value[j][3])`**
+
+   * Usko string me convert kiya.
+
+3. **`findall(x -> x == string(value[j][3]), op_ids)`**
+
+   * `op_ids` me search kar raha hai ki `value[j][3]` (string form) kaha-kaha present hai.
+   * Ye ek **array of indices** return karega.
+
+   Example:
+
+   ```julia
+   op_ids = ["A","B","C"]
+   value[j][3] = "B"
+   findall(x -> x == "B", op_ids)  # returns [2]
+   ```
+
+4. **`eta_dates[ ... ][1]`**
+
+   * `eta_dates` ek array hai jo `op_ids` ke saath aligned hoga (same index mapping).
+   * Matlab: `op_ids[i]` ka corresponding date `eta_dates[i]`.
+   * Pehle `findall` se index mila, fir us index ka **first match** liya (`[1]`).
+
+   Example:
+
+   ```julia
+   eta_dates = ["2025-08-27", "2025-08-28", "2025-08-29"]
+   # match index 2 mila, so eta_dates[2] = "2025-08-28"
+   ```
+
+5. **`string(eta_dates[...])`**
+
+   * Us date ko string me convert kiya.
+
+6. **`* " 08:00"`**
+
+   * String concatenation kiya, us date ke sath `" 08:00"` add kar diya.
+
+---
+
+### Final Meaning:
+
+➡️ Ye line **`op_ids` aur `eta_dates` mapping ke basis par ek date nikalti hai, aur us date ke sath `"08:00"` time jod kar ek datetime string banati hai.**
+
+---
+
+### Example:
+
+```julia
+op_ids     = ["A","B","C"]
+eta_dates  = ["2025-08-27","2025-08-28","2025-08-29"]
+value      = [["X","Y","B"]]
+
+j = 1
+
+# find index of "B" in op_ids → [2]
+# eta_dates[2] = "2025-08-28"
+# final:
+temp_date = "2025-08-28" * " 08:00"
+# => "2025-08-28 08:00"
+```
+
+---
+
+👉 Matlab tumhare case me ye har operation ka **start date fix 08:00 AM** pe set kar raha hai, bas date `eta_dates` se pick ho rahi hai.
+
+Chahte ho mai iska ek **mini demo Julia code** bana kar run karke dikhau?
+
+==========================================================================================================
+Achha 👍 tumhe specifically **`[1]`** part confusion de raha hai.
+Chalo simple example lete hain:
+
+---
+
+### Julia me `findall`
+
+```julia
+op_ids = ["A", "B", "B", "C"]
+target = "B"
+matches = findall(x -> x == target, op_ids)
+println(matches)
+```
+
+Output:
+
+```
+[2, 3]
+```
+
+➡️ Matlab `B` do jagah mila: index 2 aur 3 par.
+`findall` **always array return karta hai** (even agar ek hi match mila to bhi array me aata hai).
+
+---
+
+### Ab `[1]` ka matlab
+
+```julia
+matches[1]
+```
+
+iska matlab → `matches` array ka **first element** lo.
+
+* Agar ek hi match mila to wahi single index aa jayega.
+* Agar multiple matches mile to first wala choose hoga (baaki ignore).
+
+---
+
+### Tumhari line me:
+
+```julia
+eta_dates[findall(x -> x == string(value[j][3]), op_ids)][1]
+```
+
+1. `findall(...)` → `[2, 3]` (for example)
+2. `eta_dates[...]` → `eta_dates[[2, 3]]` return karega = ek array of dates
+   Example: `["2025-08-28", "2025-08-29"]`
+3. `[1]` → us array ka **pehla element** le lo
+   → `"2025-08-28"`
+
+---
+
+### Short bolu to:
+
+`[1]` ka use kiya gaya hai taki agar **multiple matches** ho, to **pehli matching date** use ho.
+
+---
+
+👉 Matlab:
+
+* Agar `op_ids` me `value[j][3]` ek hi baar hai → `[1]` bas usi ek ko pick karega.
+* Agar multiple baar hai → pehla wala hi lega.
+
+---
+
+Kya tumhe chahiye ki agar multiple matches ho to **sabhi dates consider kare** (sirf pehla nahi)?
+
+==========================================================================================================
+
+Bhai ye line
+
+```julia
+vcat([j + mf + flag], value[j])
+```
+
+ka breakdown karte hain 👇
+
+---
+
+### 1. `j + mf + flag`
+
+* Yeh ek **single number** banega (integer ya float, depend karta hai variables par).
+* Example: `j = 2, mf = 10, flag = 1` → result `13`.
+
+---
+
+### 2. `[j + mf + flag]`
+
+* Square brackets use karke us number ko ek **1-element array** bana diya.
+* Example: `[13]`.
+
+---
+
+### 3. `value[j]`
+
+* Ye assume hai ki `value` ek array-of-arrays (list of lists) hai.
+* Toh `value[j]` → ek array return karega.
+* Example: `value[j] = ["2025-08-28", "A123", "OP45"]`.
+
+---
+
+### 4. `vcat(...)`
+
+* Julia me `vcat` = **vertical concatenation**.
+* Matlab dono arrays ko **append** kar ke ek naya array banata hai.
+
+---
+
+### Final Example:
+
+```julia
+j = 2
+mf = 10
+flag = 1
+value = [
+    ["2025-08-27", "A122", "OP44"],
+    ["2025-08-28", "A123", "OP45"]
+]
+
+result = vcat([j + mf + flag], value[j])
+println(result)
+```
+
+Output:
+
+```
+Any[13, "2025-08-28", "A123", "OP45"]
+```
+
+---
+
+✅ Matlab:
+`vcat([j + mf + flag], value[j])` ek **naya array banata hai** jisme
+
+* sabse pehle calculated number (`j + mf + flag`) hota hai
+* uske baad `value[j]` ke saare elements aate hain.
+
+---
+
+Kya tumhe chahiye ki mai iska **equivalent in simple list append (without vcat)** bhi dikhau?
+
+=========================================================================================================
+Julia me
+
+```julia
+rows = size(temp_dff, 1)
+```
+
+ka matlab hai:
+
+* `size(temp_dff, 1)` → `temp_dff` ka **first dimension** ka size deta hai.
+* Agar `temp_dff` ek **matrix ya DataFrame** hai:
+
+  * `1` means **rows count**
+  * `2` means **columns count**
+
+So:
+
+* Agar `temp_dff` DataFrame hai → `rows` me number of rows aayega.
+* Agar `temp_dff` 2D Array hai → bhi number of rows return karega.
+
+Example:
+
+```julia
+using DataFrames
+
+df = DataFrame(A = [1,2,3], B = ["x","y","z"])
+
+println(size(df, 1))   # 3 (rows)
+println(size(df, 2))   # 2 (columns)
+
+rows = size(df, 1)     # rows = 3
+```
+
+---
+
+👉 Matlab tumhara `rows = size(temp_dff,1)` → **`temp_dff` me kitni rows hain wo count karta hai**.
+
+Chaahe DataFrame ho ya 2D Array.
+
+Chaahe mai tumhe `nrow(temp_dff)` ka simpler version dikhaun?
+
+=========================================================================================================
+
+

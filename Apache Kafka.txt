@@ -1,0 +1,13 @@
+
+bin/kafka-console-consumer.sh --topic location-updates-topic --from-beginning --bootstrap-server localhost:9092
+
+bin/kafka-console-consumer.sh --topic location-updates-topic --from-beginning --bootstrap-server localhost:9092
+
+
+produce: 
+bin/kafka-console-producer.sh --topic location-updates-topic --bootstrap-server localhost:9092
+
+how we can go inside the container :
+
+docker ps
+docker exec -it <container_name> /bin/bash

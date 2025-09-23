@@ -1,0 +1,135 @@
+
+TRUNCATE TABLE `withoutsim`.com_longterm_simulation_utilization;
+TRUNCATE TABLE `withoutsim`.com_long_term_plan;
+TRUNCATE TABLE `withoutsim`.com_longterm_publish_utilization;
+
+com_long_term_plan
+com_longterm_publish_utilization
+com_longterm_simulation_utilization
+
+to clear the simulation we need to trancute the table and
+
+and execute the query on datbase 
+
+update `withoutsim`.com_long_term_simulation
+set
+schedule_start_date = null,
+schedule_end_date = null,
+ccd = null,
+rev_ccd =null ,
+rev_sed =null ,
+rev_ssd = null,
+sed_status_color = null,
+ssd_status_color = null,
+ccd_status_color = null,
+freeze  = null,
+ccd_impact = null,
+mrp_impact = null,
+sed_impact = null
+;
+=======================================================================================
+
+Total order count is calculate in commercial LongTerm plant- simulation
+
+Total order count : 
+
+Query : 
+SELECT COUNT(DISTINCT production_order_no) AS total_orders
+FROM `09july`.com_long_term_simulation where lead_order is null
+=======================================================================================
+Screen : Commercial Management Dashboard
+
+Box : RDD Planned Date
+
+Query : SELECT MAX(rdd) FROM `09july`.com_long_term_simulation
+=========================================================================
+
+ठीक है 👍 तुम्हें चाहिए कि **हर sales\_order\_no (231748, 234515)** से सिर्फ **5-5 production orders** बचें, बाकी delete हो जाएं।
+
+उसके लिए MySQL में `ROW_NUMBER()` (window function) use कर सकते हैं 👇
+
+### Step 1: पहले check करने के लिए (show only 5 prod orders per sales order)
+
+```sql
+SELECT *
+FROM (
+    SELECT 
+        id,
+        sales_order_no,
+        production_order_no,
+        ROW_NUMBER() OVER (PARTITION BY sales_order_no ORDER BY rdd DESC) AS rn
+    FROM withoutsim.com_long_term_simulation
+    WHERE sales_order_no IN (231748, 234515)
+) t
+WHERE rn <= 5;
+```
+
+👉 इससे हर sales\_order\_no के लिए सिर्फ 5 records दिखेंगे (latest `rdd` के हिसाब से)।
+
+---
+
+### Step 2: अब delete query (बाकी records हटाने के लिए)
+
+```sql
+DELETE FROM withoutsim.com_long_term_simulation
+WHERE id NOT IN (
+    SELECT id FROM (
+        SELECT 
+            id
+        FROM (
+            SELECT 
+                id,
+                sales_order_no,
+                ROW_NUMBER() OVER (PARTITION BY sales_order_no ORDER BY rdd DESC) AS rn
+            FROM withoutsim.com_long_term_simulation
+            WHERE sales_order_no IN (231748, 234515)
+        ) x
+        WHERE rn <= 5
+    ) y
+)
+AND sales_order_no IN (231748, 234515);
+```
+
+---
+
+✅ Logic:
+
+* `ROW_NUMBER()` से हर sales\_order\_no के अंदर numbering की।
+* `rn <= 5` मतलब top 5 records रखे।
+* बाकी delete कर दिए।
+
+---
+
+क्या तुम चाहते हो मैं तुम्हें एक **safe version** दूँ जो पहले सिर्फ `SELECT` करके delete होने वाले records दिखा दे?
+
+
+
+
+
+
+
+
+
+
+Sales order No.230648
+Prod No.1002104647
+
+default Priority : Low 
+first unfrezze order 
+changes the priority : High
+
+
+com_long_term_history_table_gr_done
+ 
+ 
+ 1002061338
+ 
+ SELECT id, prod_cat, actual_release_date, balance_quantity, ccd, ccd_delays_date, ccd_impact, ccd_status_color, collection, complex_product_type, confirmation_date, control_key, counter_no, created_by, created_date, current_status, current_plan_date, customer_code, customer_po_number, cymm, delay, duration, exim_type, fg_sku, freeze, good_receipt_date, head_center, head_count_id, `hold`, lead_order, line_created_date, manf_type, metal_category, modified_by, modified_date, mrp_date, mrp_impact, no_of_days, old_material, operation_no, order_change_date, order_created_date, order_quantity, order_type, parent_id, per_pcs_quantity, plant, priority, priority_history, production_category, production_order_no, rdd, rdd_delays_date, rev_ccd, rev_sed, rev_ssd, revised_eta_date, route_no, sales_item_no, sales_order_no, scrap_quantity, schedule_end_date, sed_impact, sed_status_color, setting_type, simulation_plan_date, sku_no, so_qty, so_release_date, so_type, sourcing_eta_date, special_line, schedule_start_date, ssd_status_color, syymm, total_confirmed_quantity, total_stm, unit, wiw_status, wkct_qty, work_center, work_center_status, work_center_type, work_ctr_detail, post_cast_factory, material_number
+FROM `09july`.com_long_term_simulation;
+
+SELECT setting_type, mrp_date,sales_item_no,duration,exim_type
+FROM `09july`.com_long_term_simulation;
+
+
+set PYTHONPATH=C:\Users\Pratiti_Users\IdeaProjects\sj-scheduling\backend\algorithms
+python com_longterm_planning\demo.py
