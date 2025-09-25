@@ -151,3 +151,1893 @@ Agar chaho, mai ek **chhota example Spring Boot + Elasticsearch** me bana ke dik
 
 Kya mai wo bana du?
 =======================================================================================================
+http://localhost:5601/
+
+
+password for : Vishnu@123
+
+docker exec -it elasticsearch bin/elasticsearch-reset-password -u elastic
+
+
+
+Γä╣∩╕Å  Password for the elastic user (reset with `bin/elasticsearch-reset-password -u elastic`):
+  dG_40Dl+J4uTmqqR4n08
+
+Γä╣∩╕Å  HTTP CA certificate SHA-256 fingerprint:
+  fcac737867c0e1779994ea0a4499acb943f91cd46799550b1afffe78f2539b92
+
+Γä╣∩╕Å  Configure Kibana to use this cluster:
+ΓÇó Run Kibana and click the configuration link in the terminal when Kibana starts.
+ΓÇó Copy the following enrollment token and paste it into Kibana in your browser (valid for the next 30 minutes):
+  eyJ2ZXIiOiI4LjE0LjAiLCJhZHIiOlsiMTAwLjExNS4yNDYuNTQ6OTIwMCJdLCJmZ3IiOiJmY2FjNzM3ODY3YzBlMTc3OTk5NGVhMGE0NDk5YWNiOTQzZjkxY2Q0Njc5OTU1MGIxYWZmZmU3OGYyNTM5YjkyIiwia2V5IjoiY1RULWI1a0JGbXZ0MUdYSFcyanI6YjU1LURSQ1RXUnpJa0xyRENVdDkwUSJ9
+========================================================================================================================================================
+Elastic Stack (जिसे पहले **ELK Stack** कहा जाता था) एक ओपन-सोर्स टूल्स का सेट है जो **searching, analyzing और visualizing** data (logs, metrics, application data आदि) के लिए इस्तेमाल होता है। इसे **Elastic.co** ने develop किया है।
+
+इसमें 4 मुख्य components होते हैं:
+
+1. **Elasticsearch**
+
+   * Core search और analytics engine
+   * Data को store करता है और उसपर fast search और aggregations provide करता है
+   * JSON based REST APIs देता है
+
+2. **Logstash**
+
+   * Data processing pipeline tool
+   * अलग-अलग sources (files, databases, message queues आदि) से data collect करता है
+   * Data को transform और enrich करके Elasticsearch में भेजता है
+
+3. **Kibana**
+
+   * Visualization और dashboard tool
+   * Elasticsearch से data लेकर charts, graphs और dashboards create करता है
+   * Monitoring और alerting features भी देता है
+
+4. **Beats**
+
+   * Lightweight data shippers
+   * अलग-अलग प्रकार का data collect करने के लिए specialized agents (जैसे Filebeat logs के लिए, Metricbeat system metrics के लिए, Packetbeat network data के लिए आदि)
+   * ये data को सीधे Elasticsearch या Logstash को भेजते हैं
+
+---
+
+### Elastic Stack का इस्तेमाल कहाँ होता है?
+
+* **Log Monitoring** (server logs, application logs)
+* **Application Performance Monitoring (APM)**
+* **Security Information and Event Management (SIEM)**
+* **Business Analytics**
+* **Full-text search (जैसे search bar implement करना)**
+
+---
+
+👉 आसान शब्दों में: Elastic Stack आपको **data collect करने (Beats, Logstash) → store और search करने (Elasticsearch) → visualize करने (Kibana)** की पूरी capability देता है।
+
+क्या आप चाहेंगे कि मैं आपको इसका एक **real-life example** दूँ (जैसे किसी company में log monitoring या search feature बनाने का)?
+
+
+==========================================================================================================================================================
+अच्छा सवाल 👍
+
+**Elasticsearch** में data **JSON documents** के रूप में save होता है।
+
+थोड़ा detail में समझते हैं:
+
+---
+
+### 1. **Document Oriented Database**
+
+* Elasticsearch एक **document-oriented database** है।
+* इसका मतलब है कि हर record एक **JSON document** होता है।
+
+Example: मान लीजिए आप user data save कर रहे हैं 👇
+
+```json
+{
+  "id": 1,
+  "name": "Vishnudas Mankar",
+  "email": "vishnu@example.com",
+  "age": 25,
+  "skills": ["Java", "Spring Boot", "Docker"]
+}
+```
+
+---
+
+### 2. **Index**
+
+* Documents को **index** के अंदर save किया जाता है (index ≈ relational database में table जैसा)।
+* Example: `users` नाम का index हो सकता है जिसमें ऊपर वाला document save हो।
+
+---
+
+### 3. **Field & Data Types**
+
+* JSON document के अंदर के हर key-value को **field** कहते हैं।
+* Elasticsearch automatically type detect कर लेता है (text, keyword, integer, date etc.)
+* Example:
+
+  * `name` → text field
+  * `age` → integer
+  * `skills` → array of strings
+
+---
+
+### 4. **Internal Storage Format**
+
+* बाहर से हम JSON देखते हैं, लेकिन अंदर Elasticsearch **Apache Lucene** library का use करता है।
+* Lucene data को **inverted index** (search optimized structure) में store करता है, ताकि fast full-text search और aggregations हो सकें।
+
+---
+
+👉 **Summary**:
+
+* User के लिए data हमेशा **JSON documents** में दिखता है।
+* Internally Elasticsearch इन्हें **Lucene inverted index** में optimize करके रखता है।
+
+---
+
+क्या आप चाहेंगे मैं आपको एक छोटा सा **example query** दिखाऊँ (जैसे document insert और search कैसे करते हैं Elasticsearch में)?
+=============================================================================================================================================================
+बहुत अच्छा सवाल 👌
+
+Elasticsearch में **index** एक core concept है।
+इसे आसान शब्दों में समझें:
+
+---
+
+### 🔹 Index क्या है?
+
+* **Index = डेटा को organize और store करने का तरीका**
+* Relational Database (RDBMS) में जैसे **Table** होता है, वैसे ही Elasticsearch में **Index** होता है।
+* हर index के अंदर बहुत सारे **JSON documents** store होते हैं।
+
+---
+
+### 🔹 Example
+
+मान लीजिए आपके पास एक **employee management system** है।
+
+आप `employees` नाम का एक index बना सकते हैं:
+
+```json
+{
+  "id": 1,
+  "name": "Vishnudas",
+  "designation": "Software Engineer",
+  "skills": ["Java", "Spring Boot"]
+}
+```
+
+यह document `employees` index के अंदर save होगा।
+अगर आपके पास 10,000 employees हैं → तो 10,000 documents उसी index में होंगे।
+
+---
+
+### 🔹 Index की Internal Details
+
+1. **Documents** → JSON format में data
+2. **Fields** → document के अंदर के keys (जैसे `name`, `skills`)
+3. **Mappings** → index का schema (हर field का type: text, keyword, integer, date आदि)
+4. **Shards & Replicas**
+
+   * Index internally कई **shards** में split होता है ताकि data distributed हो सके।
+   * Replicas data की backup copy रखते हैं।
+
+---
+
+### 🔹 RDBMS vs Elasticsearch
+
+| RDBMS Concept | Elasticsearch Concept |
+| ------------- | --------------------- |
+| Database      | Cluster               |
+| Table         | Index                 |
+| Row           | Document              |
+| Column        | Field                 |
+
+---
+
+👉 **Summary**:
+Elasticsearch में **Index एक container है documents का**।
+ये documents JSON format में होते हैं और Elasticsearch इन्हें fast search के लिए internally inverted index में store करता है।
+
+---
+
+क्या आप चाहेंगे कि मैं आपको **index बनाने और document insert करने का curl/API example** भी दूँ?
+===========================================================================================================================================================
+बहुत अच्छा सवाल 👍
+
+Elasticsearch में **Node** एक और core concept है।
+
+---
+
+## 🔹 Node क्या होता है?
+
+* Elasticsearch cluster में **हर server (machine/VM/container) को Node कहते हैं**।
+* हर node Elasticsearch software चलाता है और data store करता है + cluster operations में हिस्सा लेता है।
+
+👉 आसान शब्दों में: **Node = एक Elasticsearch server instance**
+
+---
+
+## 🔹 Node और Cluster का Relation
+
+* **Cluster** = कई nodes का group (एक node भी cluster हो सकता है, लेकिन practical use में multiple nodes होते हैं)।
+* Data को छोटे हिस्सों (shards) में बाँटकर nodes पर distribute किया जाता है।
+* Cluster में nodes एक-दूसरे से communicate करते हैं।
+
+---
+
+## 🔹 Node के Types
+
+Elasticsearch में अलग-अलग roles वाले nodes होते हैं:
+
+1. **Master Node** 🧑‍✈️
+
+   * Cluster manage करता है (कौन-सा shard कहाँ रहेगा, indexing और search operations coordinate करना आदि)।
+   * Actual data store नहीं करता (by default कर सकता है, लेकिन production में dedicated master node रखना अच्छा होता है)।
+
+2. **Data Node** 💾
+
+   * Actual data (shards) को store करता है।
+   * Indexing, searching, aggregations आदि handle करता है।
+
+3. **Ingest Node** ⚙️
+
+   * Data आने से पहले उसे process/transform करता है (जैसे Logstash का छोटा version)।
+
+4. **Coordinating Node** 🕸
+
+   * Client requests को receive करता है, और उन्हें सही nodes/shards पर distribute करके results combine करता है।
+
+---
+
+## 🔹 Example
+
+मान लीजिए आपके पास 1 cluster है जिसमें 3 nodes हैं:
+
+* **Node 1 (Master Node)** → cluster manage करता है
+* **Node 2 (Data Node)** → employees index का shard रखता है
+* **Node 3 (Data Node)** → उसी index का दूसरा shard रखता है
+
+अगर Node 2 fail हो जाए → तो उसकी replica shard Node 3 से काम चल जाएगा।
+
+---
+
+## 🔹 Summary
+
+* **Node = Elasticsearch server instance**
+* Cluster = Nodes का group
+* Nodes अलग-अलग roles निभा सकते हैं → master, data, ingest, coordinating
+
+---
+
+क्या आप चाहेंगे कि मैं आपको एक **diagram बनाकर समझाऊँ कि cluster → nodes → shards → documents** कैसे जुड़े होते हैं?
+
+=============================================================================================================================================================
+बहुत बढ़िया प्रश्न 👌
+Elasticsearch में **shard** बहुत important concept है।
+
+---
+
+## 🔹 Shard क्या होता है?
+
+* Elasticsearch का data बहुत बड़ा हो सकता है (GB, TB या PB तक)।
+* एक single machine पर इतना data efficient तरीके से store और search करना मुश्किल है।
+* इसलिए **index को छोटे-छोटे हिस्सों (partitions) में तोड़ा जाता है**, जिन्हें **shards** कहते हैं।
+
+👉 **Shard = Index का छोटा हिस्सा**
+हर shard अपने आप में एक **independent Lucene index** होता है।
+
+---
+
+## 🔹 Shard के Types
+
+Elasticsearch में 2 प्रकार के shards होते हैं:
+
+1. **Primary Shard**
+
+   * Original data को रखता है।
+   * हर index में कम से कम 1 primary shard ज़रूरी है।
+
+2. **Replica Shard**
+
+   * Primary shard की copy होती है।
+   * Backup और high availability के लिए काम आती है।
+   * अगर primary shard down हो जाए, तो replica shard automatically उसका काम संभाल लेता है।
+
+---
+
+## 🔹 Example
+
+मान लीजिए आपने एक index बनाया `employees`:
+
+* Index size = **300 GB**
+* आपने इसे **3 primary shards** में divide किया → हर shard \~100 GB data रखेगा।
+* अगर आपने replication factor = 1 रखा → तो हर primary shard की **1 replica copy** भी बनेगी।
+
+तो कुल मिलाकर:
+
+* **3 primary shards + 3 replica shards = 6 shards**
+
+---
+
+## 🔹 Why Shards Important?
+
+1. **Scalability** → बड़े data को अलग-अलग machines (nodes) पर distribute किया जा सकता है।
+2. **High Availability** → Replica shards failure होने पर भी data loss नहीं होने देते।
+3. **Performance** → Queries parallel में सभी shards पर चलती हैं → search बहुत fast हो जाता है।
+
+---
+
+## 🔹 RDBMS से Comparison
+
+* RDBMS table → एक ही server पर store होता है।
+* Elasticsearch index → कई shards में split होकर multiple servers पर distributed होता है।
+
+---
+
+👉 **Summary**:
+**Shard = Index का partition (छोटा हिस्सा)**
+
+* Primary shard → main data
+* Replica shard → backup + high availability
+
+---
+
+क्या आप चाहेंगे कि मैं आपको **diagram बनाकर समझाऊँ** कि shards cluster में कैसे distribute होते हैं?
+
+=============================================================================================================================================================
+बहुत बढ़िया सवाल 👌 आपने बिलकुल सही comparison किया।
+
+👉 RDBMS (MySQL, Oracle, PostgreSQL) में हम data को **tables** में row–column format में देखते हैं।
+
+लेकिन **Elasticsearch** document-oriented है, तो इसमें data **JSON documents** के रूप में दिखता है।
+
+---
+
+## 🔹 Elasticsearch में Data कैसे देखते हैं?
+
+1. **Kibana (सबसे आसान तरीका)**
+
+   * Kibana एक web UI है जो Elastic Stack के साथ आता है।
+   * इसमें आप index चुनकर data को JSON format या **table-like view (Discover tab)** में देख सकते हैं।
+   * Kibana आपको filters, search, और visualization भी देता है।
+     👉 ये RDBMS के **query browser + charts** जैसा है।
+
+---
+
+2. **Elasticsearch REST API (cURL या Postman से)**
+   Example:
+
+   ```bash
+   # Index me document insert karna
+   POST employees/_doc/1
+   {
+     "name": "Vishnudas",
+     "designation": "Software Engineer",
+     "age": 25
+   }
+
+   # Data dekhna (search query se)
+   GET employees/_search
+   {
+     "query": {
+       "match_all": {}
+     }
+   }
+   ```
+
+   Output JSON format में आएगा:
+
+   ```json
+   {
+     "hits": {
+       "hits": [
+         {
+           "_id": "1",
+           "_source": {
+             "name": "Vishnudas",
+             "designation": "Software Engineer",
+             "age": 25
+           }
+         }
+       ]
+     }
+   }
+   ```
+
+---
+
+3. **Elasticsearch SQL Access (JDBC जैसा)**
+
+   * Elasticsearch SQL queries सपोर्ट करता है।
+     Example:
+
+   ```bash
+   POST /_sql?format=txt
+   {
+     "query": "SELECT name, age FROM employees WHERE age > 20"
+   }
+   ```
+
+   Output एक **table-like format** में आएगा (जैसे RDBMS में result set)।
+
+---
+
+## 🔹 Summary
+
+* **RDBMS** → Tables में rows/columns
+* **Elasticsearch** → JSON documents
+* Data देखने के तरीके:
+
+  1. **Kibana Discover tab** → सबसे user-friendly
+  2. **REST API (\_search)** → JSON में result
+  3. **SQL plugin** → Table-like output
+
+---
+
+क्या आप चाहेंगे कि मैं आपको एक **side-by-side comparison table बनाकर दिखाऊँ** कि RDBMS table और Elasticsearch index में data देखने का तरीका कैसा दिखता है?
+
+=============================================================================================================================================================
+बहुत बढ़िया सवाल 👌 आपने पहले **shard** समझा, अब **replication** समझना आसान होगा।
+
+---
+
+## 🔹 Replication in Elasticsearch
+
+**Replication** का मतलब है → **primary shard की एक या अधिक copies बनाना**।
+
+* Primary shard = actual/original data
+* Replica shard = उसकी copy
+
+👉 इससे data safe रहता है (backup) और search performance भी improve होती है।
+
+---
+
+## 🔹 Why Replication is Needed?
+
+1. **High Availability**
+
+   * अगर कोई node या primary shard fail हो जाए → उसकी जगह replica shard काम कर सकता है।
+   * मतलब cluster कभी down नहीं होता।
+
+2. **Fault Tolerance**
+
+   * Data loss का risk कम हो जाता है।
+
+3. **Performance Boost**
+
+   * Search queries replicas पर भी चलाई जा सकती हैं।
+   * इससे load balance होता है और queries fast चलती हैं।
+
+---
+
+## 🔹 Example
+
+मान लीजिए आपने एक index `employees` बनाया:
+
+* Primary shards = 2
+* Replicas = 1
+
+तो total shards होंगे:
+
+* **2 primary + 2 replicas = 4 shards**
+
+अगर एक node crash हो जाए → तो भी replica shard से data access हो सकता है।
+
+---
+
+## 🔹 Important Rules
+
+* Replica shard **कभी उसी node पर store नहीं होता** जिस पर उसका primary shard है।
+  (ताकि अगर node fail हो, तो backup किसी दूसरे node पर available रहे)।
+* Default में हर index का **replica count = 1** होता है।
+
+---
+
+## 🔹 Commands Example
+
+Index बनाते समय replicas सेट करना:
+
+```bash
+PUT /employees
+{
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 1
+  }
+}
+```
+
+बाद में replicas बदलना:
+
+```bash
+PUT /employees/_settings
+{
+  "number_of_replicas": 2
+}
+```
+
+---
+
+## 🔹 Summary
+
+* **Replication = Primary shard की copies बनाना**
+* फायदे → High Availability, Fault Tolerance, Fast Search
+* हर index में आप replicas configure कर सकते हैं।
+
+---
+
+क्या आप चाहेंगे कि मैं आपको एक **diagram बनाकर दिखाऊँ** कि primary और replica shards cluster में कैसे distribute होते हैं?
+
+=============================================================================================================================================================
+बहुत अच्छा सवाल 👌
+आपने **shards** और **replication** समझ लिया है, अब **replication group** आसानी से समझ में आएगा।
+
+---
+
+## 🔹 Replication Group क्या होता है?
+
+* Elasticsearch में **Replication Group = एक primary shard और उसकी सभी replica shards का group**।
+* मतलब एक primary shard + उसकी copies → **replication group**।
+* ये group cluster में अलग-अलग nodes पर distribute होता है।
+
+👉 इससे Elasticsearch ensure करता है कि **हर shard का data हमेशा safe और available रहे**।
+
+---
+
+## 🔹 Example
+
+मान लीजिए आपने एक index बनाया:
+
+* Number of primary shards = 2
+* Number of replicas = 1
+
+तो:
+
+* Primary Shard 1 → उसकी 1 Replica → **Replication Group 1**
+* Primary Shard 2 → उसकी 1 Replica → **Replication Group 2**
+
+कुल मिलाकर → 2 replication groups बनेंगे।
+
+---
+
+## 🔹 Why Replication Group is Important?
+
+1. **High Availability**
+
+   * अगर primary shard fail हो जाए, तो उसी group की replica को **नया primary** बना दिया जाता है।
+
+2. **Consistency**
+
+   * Group के अंदर data automatically sync रहता है।
+
+3. **Load Balancing**
+
+   * Search requests primary और replica दोनों पर जा सकती हैं।
+
+---
+
+## 🔹 Visual Understanding
+
+मान लीजिए index = `employees`
+
+* Primary Shards = 2
+* Replicas = 1
+
+Cluster में 3 nodes हैं:
+
+* **Replication Group 1** → P1 (Node1), R1 (Node2)
+* **Replication Group 2** → P2 (Node2), R2 (Node3)
+
+अगर Node1 crash हो जाए → R1 (Node2) automatically नया Primary बन जाएगा।
+
+---
+
+## 🔹 Summary
+
+* **Replication Group = Primary shard + उसकी replicas का सेट**
+* हर group data की safety और availability ensure करता है।
+* Cluster में जितने primary shards होंगे → उतने ही replication groups बनेंगे।
+
+---
+
+क्या आप चाहेंगे कि मैं आपको इसका एक **diagram बनाकर** दिखाऊँ जिससे replication group और भी clear हो जाए?
+
+=============================================================================================================================================================
+Good question 👍
+
+### 🔎 N-Gram kya hai?
+
+**N-Gram** ek **text processing technique** hai jo ek string ko chhote-chhote parts (substrings) me todta hai.
+Ye NLP (Natural Language Processing) aur Elasticsearch me **search, autocomplete, fuzzy matching** ke liye use hota hai.
+
+---
+
+### Formula:
+
+* **N = number of characters (ya words) ek group me.**
+
+Agar ek string `"Samsung"` hai:
+
+* **Unigram (1-gram):** `"S", "a", "m", "s", "u", "n", "g"`
+* **Bigram (2-gram):** `"Sa", "am", "ms", "su", "un", "ng"`
+* **Trigram (3-gram):** `"Sam", "ams", "msu", "sun", "ung"`
+
+---
+
+### 🔧 Elasticsearch me use
+
+Elasticsearch ke **analyzer** me `ngram` tokenizer hota hai.
+Ye help karta hai **autocomplete** aur **partial search** banane me.
+
+Example:
+
+```json
+PUT /products
+{
+  "settings": {
+    "analysis": {
+      "tokenizer": {
+        "my_ngram_tokenizer": {
+          "type": "ngram",
+          "min_gram": 2,
+          "max_gram": 3,
+          "token_chars": ["letter", "digit"]
+        }
+      },
+      "analyzer": {
+        "my_ngram_analyzer": {
+          "type": "custom",
+          "tokenizer": "my_ngram_tokenizer"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "text",
+        "analyzer": "my_ngram_analyzer",
+        "search_analyzer": "standard"
+      }
+    }
+  }
+}
+```
+
+👉 Agar tum `"Samsung Galaxy"` ko index karte ho to tokens banenge: `"Sa", "am", "ms", "su" ...`
+Isse user agar `"Sam"` ya `"Samsu"` type kare to bhi result mil jaayega (autocomplete/fuzzy search jaisa).
+
+---
+
+### 📘 Real-life Use Cases
+
+1. **Autocomplete / Suggestion box** – Jaise Flipkart me `"Sam"` type karte hi `"Samsung Galaxy..."` aata hai.
+2. **Fuzzy matching** – Spelling mistake handle karne ke liye (`Samsng` → `Samsung`).
+3. **Partial word search** – Agar sirf string ka ek tukda match kare to bhi result mile.
+
+---
+
+Vishnudas, kya tumhe iska **Java + Spring Boot example** bhi chahiye (jaise humne `match_all` aur `match` query implement ki thi) jisme n-gram based analyzer ke saath search ho?
+
+==============================================================================================================================================================
+Bahut acha sawaal hai Vishnudas 👌
+**N-gram** aur **Edge N-gram** Elasticsearch (aur NLP) me text ko todne ke do alag approaches hain. Dono mainly **autocomplete / partial search** ke liye use hote hain, but unka behavior alag hai.
+
+---
+
+## 🔎 1. **N-Gram**
+
+* Har possible substring banata hai ek word ke andar.
+* Matlab: **word ke beech ke parts bhi cover karta hai.**
+
+👉 Example: `"Samsung"`
+
+* **Bigram (2-gram):** `"Sa", "am", "ms", "su", "un", "ng"`
+* **Trigram (3-gram):** `"Sam", "ams", "msu", "sun", "ung"`
+
+⚡ Use case:
+
+* Jab tumhe **fuzzy search / spelling mistake tolerant search** chahiye.
+* User `"msu"` type kare to bhi `"Samsung"` mil jaata hai.
+
+---
+
+## 🔎 2. **Edge N-Gram**
+
+* Sirf **starting edge** (prefix) se tokens banata hai.
+* Matlab: Word ke shuru ke substrings hi banenge.
+
+👉 Example: `"Samsung"`
+
+* **min\_gram=2, max\_gram=4** →
+  `"Sa", "Sam", "Sams"`
+
+⚡ Use case:
+
+* Mostly **autocomplete** ke liye use hota hai.
+* User `"Sam"` type kare → `"Samsung Galaxy"` suggest ho jaata hai.
+* Beech me match allow nahi karta (agar user `"msu"` type kare to `"Samsung"` nahi milega).
+
+---
+
+## ⚖️ Comparison Table
+
+| Feature                   | N-Gram                                | Edge N-Gram                       |
+| ------------------------- | ------------------------------------- | --------------------------------- |
+| **Substrings banata hai** | Har jagah se (middle + start + end)   | Sirf word ke starting se (prefix) |
+| **Example (Samsung)**     | `"Sa","am","ms","su","un","ng"`       | `"Sa","Sam","Sams",...`           |
+| **Use case**              | Fuzzy search, spelling tolerance      | Autocomplete, prefix search       |
+| **Performance**           | Thoda heavy (zyada tokens bante hain) | Fast (kam tokens bante hain)      |
+
+---
+
+## 📘 Elasticsearch me Example
+
+### N-Gram Tokenizer
+
+```json
+"tokenizer": {
+  "my_ngram_tokenizer": {
+    "type": "ngram",
+    "min_gram": 2,
+    "max_gram": 3
+  }
+}
+```
+
+### Edge N-Gram Tokenizer
+
+```json
+"tokenizer": {
+  "my_edge_ngram_tokenizer": {
+    "type": "edge_ngram",
+    "min_gram": 2,
+    "max_gram": 3
+  }
+}
+```
+
+---
+
+👉 So,
+
+* Agar tum **"autocomplete like Google search bar"** banana chahte ho → **Edge N-Gram** use karo.
+* Agar tumhe **fuzzy / approximate search** banana hai jaha spelling galti bhi handle ho → **N-Gram** use karo.
+
+---
+
+Vishnudas, tumhe kya main iska **Java + Spring Boot implementation example** bhi bana kar dikhau (jaise `match` query ke saath N-Gram analyzer index par apply karke search karte hain)?
+
+===============================================================================================================================================================
+Bahut badiya question Vishnudas 👌
+
+Elasticsearch me **n-gram** kaam karta hai **analyzer** + **filter** ke combination ke saath.
+Chalo step by step dekhte hain ki tum ise **autocomplete / fuzzy search** ke liye kaise setup kar sakte ho.
+
+---
+
+## 🔹 1. Index banate waqt N-Gram analyzer define karna
+
+```json
+PUT /products
+{
+  "settings": {
+    "analysis": {
+      "tokenizer": {
+        "my_ngram_tokenizer": {
+          "type": "ngram",          // n-gram tokenizer
+          "min_gram": 2,            // minimum size of substring
+          "max_gram": 5,            // maximum size of substring
+          "token_chars": [ "letter", "digit" ] // characters allowed
+        }
+      },
+      "analyzer": {
+        "my_ngram_analyzer": {
+          "type": "custom",
+          "tokenizer": "my_ngram_tokenizer",   // upar banaya tokenizer use karo
+          "filter": [
+            "lowercase"   // lowercase filter apply kiya
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "text",
+        "analyzer": "my_ngram_analyzer",     // index ke time ye analyzer use hoga
+        "search_analyzer": "standard"        // search ke time standard analyzer
+      }
+    }
+  }
+}
+```
+
+---
+
+## 🔹 2. Example document insert karna
+
+```json
+POST /products/_doc
+{
+  "name": "Samsung Galaxy S24 Ultra"
+}
+```
+
+---
+
+## 🔹 3. Search karna (user ne sirf partial likha ho)
+
+```json
+GET /products/_search
+{
+  "query": {
+    "match": {
+      "name": "Samsu"
+    }
+  }
+}
+```
+
+👉 Result milega: `"Samsung Galaxy S24 Ultra"`
+
+---
+
+## 🔹 4. Explanation
+
+* **Tokenizer (n-gram)** → `"Samsung"` ko todta hai:
+  `"Sa", "Sam", "Sams", "Samsu", ...`
+* **Filter (lowercase)** → sab tokens ko lowercase bana deta hai, taaki `"samsung"` aur `"Samsung"` same treat ho.
+* **Analyzer** → tokenizer + filter ka combination hota hai.
+* **search\_analyzer** → search time pe tum normal analyzer (like `standard`) use karte ho, taaki user ke query ko tokenize karte waqt unnecessary fragments na ban jayein.
+
+---
+
+## 🔹 5. Why `filter` + `analyzer`?
+
+* **Filter** extra normalization ke liye (lowercase, stopwords removal, stemming).
+* **Analyzer** ek custom pipeline hai jo define karta hai → `"text input → tokenizer → filters → tokens"`.
+
+---
+
+👉 Simple soch lo:
+
+* **Tokenizer** → Text ko todta hai.
+* **Filter** → Todne ke baad tokens ko modify karta hai.
+* **Analyzer** → In dono ka combination hota hai.
+
+---
+
+Vishnudas, chaho to mai tumhe iska **Java + Spring Boot client code** bhi likh du, jisme hum n-gram based analyzer wale index banayein aur fir `match` query se search karein?
+
+===============================================================================================================================================================
+Bahut accha Vishnudas 👍
+Tum **auto-suggest / autocomplete** implement karna chahte ho **Elasticsearch + N-Gram** se.
+
+Main tumhe ek **end-to-end example** deta hoon (index creation → document insert → query for auto-suggest).
+
+---
+
+# 🔹 1. Index with N-Gram Analyzer (Autocomplete ke liye)
+
+```json
+PUT /products
+{
+  "settings": {
+    "analysis": {
+      "tokenizer": {
+        "autocomplete_ngram": {
+          "type": "ngram",
+          "min_gram": 2,
+          "max_gram": 20,
+          "token_chars": ["letter", "digit"]
+        }
+      },
+      "analyzer": {
+        "autocomplete_index": {
+          "type": "custom",
+          "tokenizer": "autocomplete_ngram",
+          "filter": ["lowercase"]
+        },
+        "autocomplete_search": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "text",
+        "analyzer": "autocomplete_index",
+        "search_analyzer": "autocomplete_search"
+      }
+    }
+  }
+}
+```
+
+---
+
+# 🔹 2. Insert Some Products
+
+```json
+POST /products/_doc
+{ "name": "Samsung Galaxy S24 Ultra" }
+
+POST /products/_doc
+{ "name": "Samsung Galaxy Buds" }
+
+POST /products/_doc
+{ "name": "Apple iPhone 16 Pro" }
+
+POST /products/_doc
+{ "name": "Apple AirPods Pro" }
+```
+
+---
+
+# 🔹 3. Search with Autocomplete
+
+User ne sirf `"Sam"` likha search box me 👇
+
+```json
+GET /products/_search
+{
+  "query": {
+    "match": {
+      "name": "Sam"
+    }
+  }
+}
+```
+
+👉 Result:
+
+* `"Samsung Galaxy S24 Ultra"`
+* `"Samsung Galaxy Buds"`
+
+---
+
+User ne `"App"` likha 👇
+
+```json
+GET /products/_search
+{
+  "query": {
+    "match": {
+      "name": "App"
+    }
+  }
+}
+```
+
+👉 Result:
+
+* `"Apple iPhone 16 Pro"`
+* `"Apple AirPods Pro"`
+
+---
+
+# 🔹 4. Why this works?
+
+* Index time: `"Samsung"` → `"Sa", "Sam", "Sams", "Samsu", ...` store hota hai.
+* Search time: `"Sam"` → standard analyzer ke through normal token banta hai.
+* Match ho jata hai → autocomplete jaise results milte hain.
+
+---
+
+# 🔹 5. Spring Boot Java Example (Search Service)
+
+```java
+@Service
+public class ElasticSearchService {
+
+    @Autowired
+    private ElasticsearchClient elasticsearchClient;
+
+    public List<String> autoSuggest(String userInput) throws IOException {
+        Query matchQuery = Query.of(q -> q
+            .match(m -> m
+                .field("name")
+                .query(userInput)
+            )
+        );
+
+        SearchResponse<Map> response = elasticsearchClient.search(
+            s -> s.index("products").query(matchQuery),
+            Map.class
+        );
+
+        return response.hits().hits().stream()
+                .map(hit -> (String) hit.source().get("name"))
+                .toList();
+    }
+}
+```
+
+---
+
+# 🔹 6. Example Controller
+
+```java
+@RestController
+@RequestMapping("/api/products")
+public class ProductController {
+
+    @Autowired
+    private ElasticSearchService elasticSearchService;
+
+    @GetMapping("/suggest")
+    public ResponseEntity<?> suggest(@RequestParam String q) {
+        try {
+            List<String> suggestions = elasticSearchService.autoSuggest(q);
+            return ResponseEntity.ok(suggestions);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+}
+```
+
+---
+
+# 🔹 7. Call API
+
+```http
+GET http://localhost:8080/api/products/suggest?q=Sam
+```
+
+👉 Output:
+
+```json
+[
+  "Samsung Galaxy S24 Ultra",
+  "Samsung Galaxy Buds"
+]
+```
+
+---
+
+⚡ Summary:
+
+* **N-Gram** tokenizer index time pe multiple prefixes generate karta hai.
+* **Autocomplete** ke liye best combo = `analyzer: ngram` + `search_analyzer: standard`.
+* Spring Boot me tum query ko `match` ke saath execute karke **real-time suggestion** nikal sakte ho.
+
+---
+
+Vishnudas, kya tum chahte ho mai tumhe iska **Edge N-Gram** version bhi bana kar dikhau (jo sirf prefix suggest kare, middle part nahi)?
+
+===============================================================================================================================================================
+Perfect, Vishnudas 👍
+Agar tum **“bike” index** create karna chahte ho aur **Edge N-Gram** use karna chahte ho (prefix-based autocomplete), to ye step-by-step example hai:
+
+---
+
+## 1️⃣ Create Index with Edge N-Gram Analyzer
+
+```json
+PUT /bike
+{
+  "settings": {
+    "analysis": {
+      "tokenizer": {
+        "edge_ngram_tokenizer": {
+          "type": "edge_ngram",
+          "min_gram": 2,
+          "max_gram": 10,
+          "token_chars": ["letter", "digit"]
+        }
+      },
+      "analyzer": {
+        "edge_ngram_index": {
+          "type": "custom",
+          "tokenizer": "edge_ngram_tokenizer",
+          "filter": ["lowercase"]
+        },
+        "edge_ngram_search": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "text",
+        "analyzer": "edge_ngram_index",
+        "search_analyzer": "edge_ngram_search"
+      }
+    }
+  }
+}
+```
+
+---
+
+### 🔹 Explanation
+
+* `edge_ngram_tokenizer` → word ke **starting edge se substrings** banata hai.
+
+  * `"Honda"` → `"Ho"`, `"Hon"`, `"Hond"`, `"Honda"`
+* `edge_ngram_index` → index time analyzer
+* `edge_ngram_search` → search time analyzer
+* `name` field me apply kar diya → autocomplete ready.
+
+---
+
+## 2️⃣ Insert Some Documents
+
+```json
+POST /bike/_doc
+{ "name": "Honda Activa" }
+
+POST /bike/_doc
+{ "name": "Honda Shine" }
+
+POST /bike/_doc
+{ "name": "Yamaha FZ" }
+
+POST /bike/_doc
+{ "name": "Royal Enfield Classic 350" }
+```
+
+---
+
+## 3️⃣ Search / Autocomplete Example
+
+User ne `"Ho"` type kiya:
+
+```json
+GET /bike/_search
+{
+  "query": {
+    "match": {
+      "name": "Ho"
+    }
+  }
+}
+```
+
+👉 Result:
+
+* `"Honda Activa"`
+* `"Honda Shine"`
+
+---
+
+User ne `"Roy"` type kiya:
+
+```json
+GET /bike/_search
+{
+  "query": {
+    "match": {
+      "name": "Roy"
+    }
+  }
+}
+```
+
+👉 Result:
+
+* `"Royal Enfield Classic 350"`
+
+---
+
+### 🔹 Key Difference from N-Gram
+
+| Feature    | N-Gram                 | Edge N-Gram                |
+| ---------- | ---------------------- | -------------------------- |
+| Substrings | Start + Middle + End   | Start only (prefix)        |
+| Use Case   | Fuzzy/Partial matching | Autocomplete/Prefix search |
+| Tokens     | Zyada tokens           | Kam tokens, fast search    |
+
+---
+
+Vishnudas, agar chaho to mai iska **Java + Spring Boot Elasticsearch Client example** bhi bana du, jisme:
+
+* Index create ho
+* Documents insert ho
+* Edge N-Gram autocomplete API ready ho
+
+Kya mai bana du?
+
+=================================================================================================================================================================
+Sahi sawaal hai Vishnudas 👌
+
+Agar tum **`ngram` tokenizer** use karna chahte ho, toh tumhe `minGram` aur `maxGram` ke values carefully choose karni padti hai — warna tumhe wahi error aayega jo pehle aya tha:
+
+```
+The difference between max_gram and min_gram in NGram Tokenizer must be <= 1
+```
+
+---
+
+### 🔹 Default Restriction
+
+By default:
+
+```
+maxGram - minGram <= 1
+```
+
+Matlab agar `minGram = 2` hai → `maxGram` sirf `3` ho sakta hai.
+Ya agar `minGram = 3` hai → `maxGram` max `4` ho sakta hai.
+
+---
+
+### 🔹 Example: Valid NGram settings
+
+```java
+.ngram(ng -> ng
+    .minGram(2)
+    .maxGram(3)   // ✅ allowed (3 - 2 = 1)
+    .tokenChars(TokenChar.Letter, TokenChar.Digit)
+)
+```
+
+Ye `"bike"` ko banayega:
+
+* `"bi"`, `"ik"`, `"ke"` (bigrams)
+* `"bik"`, `"ike"` (trigrams)
+
+---
+
+### 🔹 Agar tumhe bada difference chahiye (jaise `minGram=2, maxGram=10`)
+
+Toh tumhe index create karte waqt ek **extra setting** set karni hogi:
+
+```java
+.settings(s -> s
+    .setting("index.max_ngram_diff", "8")  // (10 - 2 = 8)
+    .analysis(a -> a
+        .tokenizer("ngram_tokenizer", t -> t
+            .definition(d -> d
+                .ngram(ng -> ng
+                    .minGram(2)
+                    .maxGram(10)
+                    .tokenChars(TokenChar.Letter, TokenChar.Digit)
+                )
+            )
+        )
+    )
+)
+```
+
+---
+
+### 🔑 In short:
+
+* **Default Elasticsearch** → sirf `maxGram = minGram + 1` allowed
+* **Bigger range (autocomplete use case)** → ya to
+
+  * EdgeNGram use karo (recommended) ✅
+  * Ya `index.max_ngram_diff` setting increase karo
+
+---
+
+👉 Tum Flipkart-style autocomplete bana rahe ho, toh **EdgeNGram** best hai.
+**NGram** zyada use hota hai substring search (e.g. `"ike"` se `"bike"` mil jaye).
+
+---
+
+Vishnudas, kya tum chahte ho mai tumhe ek **comparison example** bana kar du jisme:
+
+* NGram search output
+* EdgeNGram search output
+  Ek hi word `"bike"` ke liye side-by-side dikhau?
+
+=================================================================================================================================================================
+Nice 👌 Vishnudas,
+abhi tum sirf ek field (`name`) pe `match` query laga rahe ho.
+Agar tumhe **multiple fields** (e.g. `name` aur `brand`) pe search karna hai, toh tumhe `multi_match` query use karni hogi.
+
+---
+
+## 🔹 `multi_match` Example (Java Client)
+
+```java
+public List<String> autoSuggest(String prefix) throws IOException {
+    Query multiMatchQuery = Query.of(q -> q
+            .multiMatch(m -> m
+                    .fields("name", "brand")  // multiple fields
+                    .query(prefix)
+            )
+    );
+
+    SearchResponse<Map> response = client.search(
+            s -> s.index("bike").query(multiMatchQuery),
+            Map.class
+    );
+
+    return response.hits().hits().stream()
+            .map(hit -> {
+                Map<String, Object> source = hit.source();
+                return source.get("name") + " - " + source.get("brand");
+            })
+            .toList();
+}
+```
+
+---
+
+## 🔹 Agar tumhe **bool query** use karna hai
+
+Agar tum chahte ho ki prefix dono fields me alag-alag check ho (jaise OR condition), toh `bool` ke saath multiple `match` queries bana sakte ho:
+
+```java
+Query boolQuery = Query.of(q -> q
+        .bool(b -> b
+                .should(s -> s.match(m -> m.field("name").query(prefix)))
+                .should(s -> s.match(m -> m.field("brand").query(prefix)))
+        )
+);
+```
+
+👉 Isme agar `prefix` `name` ya `brand` dono me se kahin bhi match hota hai, result aa jayega.
+
+---
+
+### 🔑 Difference
+
+* **multi\_match** → ek hi query string ko multiple fields me search karega (simpler, autocomplete ke liye best).
+* **bool (should)** → tum zyada control paate ho (e.g. weight/boost alag fields ke liye set karna).
+
+---
+
+Vishnudas, kya tum chahte ho mai tumhe ek example bana du jisme `name` field ko 2x boost mile aur `brand` ko normal weight mile (taaki naam se match zyada priority pe aaye)?
+
+=================================================================================================================================================================
+Haan Vishnudas, Elasticsearch me jo **analyzer** aur **search\_analyzer** tumne mapping me define kiya hai, usse **Java Spring Boot + Elasticsearch Java Client** me specify karne ke liye tum **index create request** me settings aur mappings pass karte ho.
+
+Java me direct `@Field(analyzer=..., searchAnalyzer=...)` annotation **Spring Data Elasticsearch** me use hota hai agar tum repository approach lete ho.
+
+---
+
+## 1️⃣ Spring Data Elasticsearch Approach
+
+```java
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
+@Document(indexName = "products")
+public class Product {
+
+    @Id
+    private String id;
+
+    @Field(type = FieldType.Text, analyzer = "autocomplete_index", searchAnalyzer = "autocomplete_search")
+    private String name;
+
+    // getters & setters
+}
+```
+
+* `analyzer` → **index time analyzer**
+* `searchAnalyzer` → **search time analyzer**
+
+---
+
+## 2️⃣ Elasticsearch Java Client Approach
+
+Agar tum **official Elasticsearch Java Client** use kar rahe ho (co.elastic.clients.elasticsearch), to **index create request** me `settings` aur `mappings` define karte ho:
+
+```java
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
+import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
+
+import java.io.IOException;
+
+public class ESIndexCreator {
+
+    private final ElasticsearchClient client;
+
+    public ESIndexCreator(ElasticsearchClient client) {
+        this.client = client;
+    }
+
+    public void createProductsIndex() throws IOException {
+        CreateIndexResponse response = client.indices().create(c -> c
+            .index("products")
+            .settings(s -> s
+                .analysis(a -> a
+                    .tokenizer("autocomplete_ngram", t -> t
+                        .type("ngram")
+                        .minGram(2)
+                        .maxGram(20)
+                        .tokenChars("letter", "digit")
+                    )
+                    .analyzer("autocomplete_index", an -> an
+                        .type("custom")
+                        .tokenizer("autocomplete_ngram")
+                        .filter("lowercase")
+                    )
+                    .analyzer("autocomplete_search", an -> an
+                        .type("custom")
+                        .tokenizer("standard")
+                        .filter("lowercase")
+                    )
+                )
+            )
+            .mappings(m -> m
+                .properties("name", p -> p
+                    .text(t -> t
+                        .analyzer("autocomplete_index")
+                        .searchAnalyzer("autocomplete_search")
+                    )
+                )
+            )
+        );
+
+        System.out.println("Index created: " + response.acknowledged());
+    }
+}
+```
+
+---
+
+### 🔑 Summary
+
+1. **Spring Data Elasticsearch** → `@Field(analyzer="...", searchAnalyzer="...")`
+2. **Elasticsearch Java Client** → index create request me `.analyzer(...)` aur `.searchAnalyzer(...)` specify karte ho mappings me.
+
+---
+
+Agar chaho to mai tumhare liye **full Spring Boot autocomplete example** bana du, jisme index creation + document insert + auto-suggest API sab include ho, ready-to-run code ke saath.
+Kya mai ye bana du?
+
+===============================================================================================================================================================
+Bilkul 👍
+Java me Elasticsearch ka **Java API Client** (official client, `co.elastic.clients.elasticsearch`) use karke tum ye `match_all` query bana sakte ho.
+
+Aapne jo pehle code likha tha usme thoda syntax issue tha. Sahi tarike se ye hoga:
+
+```java
+package com.example.utility;
+
+import co.elastic.clients.elasticsearch._types.query_dsl.MatchAllQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+
+public class ElasticSearchUtil {
+
+    public static Query matchAllQuery() {
+        // MatchAllQuery build karna
+        MatchAllQuery matchAllQuery = MatchAllQuery.of(m -> m);
+
+        // Query object me wrap karna (Elasticsearch client Query type expect karta hai)
+        return Query.of(q -> q.matchAll(matchAllQuery));
+    }
+}
+```
+
+### Samajhne ke liye:
+
+1. `MatchAllQuery.of(m -> m)` → ek khaali match\_all banata hai ( `{ "match_all": {} }` ).
+2. `Query.of(q -> q.matchAll(matchAllQuery))` → ise `Query` wrapper me daal deta hai, jo actual client me chahiye hota hai.
+3. Jab tum Elasticsearch client call karoge, to ye query bhejega.
+
+### Example: Client se use karna
+
+```java
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch.core.SearchResponse;
+import co.elastic.clients.elasticsearch.core.search.Hit;
+
+import java.io.IOException;
+
+public class ElasticSearchExample {
+
+    private final ElasticsearchClient client;
+
+    public ElasticSearchExample(ElasticsearchClient client) {
+        this.client = client;
+    }
+
+    public void searchAll() throws IOException {
+        SearchResponse<Object> response = client.search(s -> s
+                        .index("my_index") // apna index naam
+                        .query(ElasticSearchUtil.matchAllQuery()),
+                Object.class);
+
+        for (Hit<Object> hit : response.hits().hits()) {
+            System.out.println(hit.source());
+        }
+    }
+}
+```
+
+👉 Isse `SELECT * FROM my_index` jaisa result milega, yaani index ke saare documents aa jayenge.
+
+---
+
+Vishnudas, kya tum chahte ho ki mai tumhe iska **Maven dependency + client initialization code** bhi likh kar du (so that end-to-end connect ho jaye)?
+
+=============================================================================================================================================================
+Achchha, chalo is code ko step by step samajhte hain 👇
+
+```java
+@Service
+public class ElasticSearchService {
+
+    @Autowired
+    private ElasticsearchClient elasticsearchClient;
+
+    public SearchResponse<Map> matchAllServices() throws IOException {
+        Supplier<Query> supplier = ElasticSearchUtil.supplier();
+        SearchResponse<Map> searchResponse = elasticsearchClient.search(
+            s -> s.query(supplier.get()), // yaha query set hoti hai
+            Map.class // har document ko Map me convert karega
+        );
+        System.out.println("ElasticSearch Query is " + supplier.get().toString());
+        return searchResponse;
+    }
+}
+```
+
+---
+
+### Breakdown:
+
+#### 1. `@Service`
+
+* Ye Spring stereotype annotation hai.
+* Is class ko **Spring container ke andar ek service bean** ke roop me register karta hai.
+* Iska matlab: tum is class ko kahin aur inject karke use kar sakte ho (e.g., controller me).
+
+---
+
+#### 2. `@Autowired private ElasticsearchClient elasticsearchClient;`
+
+* Yaha tumne Spring ko bola hai ki mujhe ek `ElasticsearchClient` chahiye (jo pehle configuration se banaya gaya hoga).
+* Ye client Elasticsearch cluster se interact karne ka main object hai.
+
+---
+
+#### 3. `Supplier<Query> supplier = ElasticSearchUtil.supplier();`
+
+* Tumhari `ElasticSearchUtil` class ek **Supplier<Query>** return karti hogi.
+* `Supplier` ek Java functional interface hai → iska kaam hai lazily ek object provide karna jab `get()` call karte ho.
+* Matlab: Jab `supplier.get()` karoge, tabhi ek `Query` object generate hoga (jo `match_all` query represent karta hai).
+
+---
+
+#### 4. `elasticsearchClient.search(...)`
+
+```java
+SearchResponse<Map> searchResponse = elasticsearchClient.search(
+    s -> s.query(supplier.get()), // query provide kar raha hai
+    Map.class                     // response documents ko Map me convert karega
+);
+```
+
+* `elasticsearchClient.search()` → ek **search request** bhejta hai.
+* `s -> s.query(...)` → lambda expression jo batata hai ki kaunsi query lagani hai.
+* `supplier.get()` → tumhari `match_all` query de deta hai.
+* `Map.class` → har document ko JSON se Java `Map` me convert karega (key-value pairs ke form me).
+
+---
+
+#### 5. `System.out.println(...)`
+
+```java
+System.out.println("ElasticSearch Query is " + supplier.get().toString());
+```
+
+* Ye query ka Java object ka `.toString()` print karega.
+* Isse tum dekh sakte ho ki query backend me kaise ban rahi hai.
+
+---
+
+#### 6. Return Value
+
+* `searchResponse` ek **SearchResponse<Map>** object hai.
+* Isme:
+
+  * Hits (documents)
+  * Metadata (total hits, took time, shards info)
+  * Aggregations (agar diye ho)
+    sab aata hai.
+
+---
+
+### SQL analogy:
+
+Ye method roughly SQL me ye kaam karta hai:
+
+```sql
+SELECT * FROM my_index;
+```
+
+Aur response ko ek list of rows (`Map`) ke form me return karta hai.
+
+---
+
+👉 Ab ek doubt: Tumhare `ElasticSearchUtil.supplier()` ka code kaisa hai?
+Main bata du ki use `Supplier<Query>` ke bajay seedha `Query` return karna better hoga, unless tumhe lazy evaluation zaroori hai.
+
+Kya tum chahte ho mai tumhara `ElasticSearchUtil.supplier()` bhi likh du properly `match_all` ke liye?
+
+=============================================================================================================================================================
+Samajh gaya 👍
+Ab tum `match_all` ke bajay `match` query use karna chahte ho:
+
+```json
+{
+  "query": {
+    "match": {
+      "name": "Samsung Galaxy S24"
+    }
+  }
+}
+```
+
+Ye query bolegi: **`name` field me “Samsung Galaxy S24” search karo.**
+
+---
+
+### Java Spring Boot Implementation
+
+Aapke pehle waale `ElasticSearchService` ko thoda modify karte hain:
+
+```java
+@Service
+public class ElasticSearchService {
+
+    @Autowired
+    private ElasticsearchClient elasticsearchClient;
+
+    public SearchResponse<Map> matchByName(String productName) throws IOException {
+        // Match query banate hain
+        Query matchQuery = Query.of(q -> q
+            .match(m -> m
+                .field("name")          // jis field me search karna hai
+                .query(productName)     // search term
+            )
+        );
+
+        // Search request bhejna
+        SearchResponse<Map> searchResponse = elasticsearchClient.search(
+            s -> s.index("products")   // apna index ka naam likhna
+                  .query(matchQuery),
+            Map.class
+        );
+
+        System.out.println("ElasticSearch Query is " + matchQuery.toString());
+        return searchResponse;
+    }
+}
+```
+
+---
+
+### Example Controller
+
+```java
+@RestController
+@RequestMapping("/api/products")
+public class ProductController {
+
+    @Autowired
+    private ElasticSearchService elasticSearchService;
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchProducts(@RequestParam String name) {
+        try {
+            SearchResponse<Map> response = elasticSearchService.matchByName(name);
+            return ResponseEntity.ok(response.hits().hits());
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
+    }
+}
+```
+
+---
+
+### How to call:
+
+```http
+GET http://localhost:8080/api/products/search?name=Samsung Galaxy S24
+```
+
+Ye tumhare `products` index me `"name":"Samsung Galaxy S24"` search karega.
+
+---
+
+🔑 Difference from `match_all`:
+
+* `match_all` → sabhi docs fetch karta hai (SQL: `SELECT * FROM table;`)
+* `match` → specific term ke basis pe filter karta hai (SQL: `SELECT * FROM table WHERE name LIKE '%Samsung Galaxy S24%';`)
+
+---
+
+Vishnudas, chaho to main tumhe **`ElasticSearchUtil` class ka version** bhi bana ke dikhata ho jo `match` aur `match_all` dono supplier return kare. Kya bana du?
+
+=============================================================================================================================================================
+
+=============================================================================================================================================================
+Perfect! Tumhe **Elasticsearch 9.1.4** aur **Kibana 9.1.4** chahiye. Docker ke liye official Elastic images available hain, aur yeh dono versions match karte hain.
+
+---
+
+### 1️⃣ Docker command se directly pull karna:
+
+**Elasticsearch 9.1.4:**
+
+```bash
+docker pull docker.elastic.co/elasticsearch/elasticsearch:9.1.4
+```
+
+**Kibana 9.1.4:**
+
+```bash
+docker pull docker.elastic.co/kibana/kibana:9.1.4
+```
+
+---
+
+### 2️⃣ Docker-compose example (recommended):
+
+Tumhare liye ek ready-to-use `docker-compose.yml`:
+
+```yaml
+version: '3.8'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.1.4
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - elk
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.1.4
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
+
+networks:
+  elk:
+    driver: bridge
+```
+
+---
+
+### ✅ Steps:
+
+1. `docker-compose.yml` save karo kisi folder me.
+2. PowerShell / Terminal me us folder me jao.
+3. Run karo:
+
+```bash
+docker-compose up -d
+```
+
+4. Browser me open karo: `http://localhost:5601` (Kibana)
+
+---
+
+Agar chaho, mai tumhare liye **timelion aur xpack ke saare issues se free ready-to-use setup** bhi bana sakta hu, jisme tumhe `kibana.yml` tweak karne ki zarurat nahi padegi.
+
+Kya mai wo bana doon?
+============================================================================================================================================
+=================================================================================================================================================
+Ah, thoda clarify kar deta hu. 😄
+
+Command:
+
+```bash
+docker-compose up -d
+```
+
+* `docker-compose up` → Ye command **containers start** karta hai aur log output console me show karta hai.
+* `-d` → iska matlab hai **detached mode**.
+
+  * Yani containers **background me run honge**, aur tumhare terminal free rahega.
+  * Agar `-d` nahi lagate to logs continuously terminal me aate rahenge aur terminal busy rahega.
+
+> Tum `docker-compose up` bina `-d` bhi run kar sakte ho, lekin fir logs dekhne ke liye terminal khula rahega.
+
+Ek hi `-d` kaafi hai, `-d -d` duplicate hai, sirf ek `-d` lagana chahiye.
+
+Agar chaho, mai tumhe bata sakta hu kaise background me run karte hue **logs bhi separately dekh sakte ho**. Chahiye?
+=========================================================================================================================
+Agar `docker logs` me enrollment token show nahi ho raha, iska matlab hai ki Elasticsearch container **abhi enrollment token generate nahi kar raha**, ya phir **security setup disabled hai**.
+
+Elasticsearch 9.x me enrollment token **tabhi generate hota hai jab security (TLS + authentication) enabled ho**. Agar aapne simple Docker image run ki hai without security, token nahi milega.
+
+### Solutions:
+
+1. **Enable security**:
+
+Docker Compose me `elasticsearch.yml` ya environment variables me add karo:
+
+```yaml
+environment:
+  - xpack.security.enabled=true
+  - discovery.type=single-node
+```
+
+2. **Start container with auto-enrollment**:
+
+Elasticsearch 9.x Docker image me startup ke time token generate hota hai. Container first time start ho raha ho, tab logs me ye dikhega. Agar container pehle se exist karta hai, ye token dobara generate nahi hota.
+
+3. **Manual token generate karna**:
+
+Container ke andar jaake manually generate kar sakte ho:
+
+```powershell
+docker exec -it es01 /bin/bash
+bin/elasticsearch-create-enrollment-token -s kibana
+```
+
+Ye command **Kibana ke liye enrollment token** generate karegi.
+
+Agar chaho, mai tumhare Docker Compose file me **security enabled + enrollment token generate karne ka proper setup** bana ke bata doon. Ye easiest hoga.
+
+=========================================================================================================================
+Ah, samajh gaya. Tumhare docker-compose me **Elasticsearch me security (`xpack.security.enabled=true`) enable hai**, iska matlab hai ki **default username/password chahiye hota hai**. Agar tumne manually `elasticsearch-setup-passwords` run nahi kiya, to credentials nahi mile.
+
+### Steps to get username/password in Docker
+
+1. **Container ke andar jao**:
+
+```bash
+docker exec -it elasticsearch bash
+```
+
+2. **Setup passwords run karo**:
+
+```bash
+bin/elasticsearch-setup-passwords interactive
+```
+
+Ye command tumse **built-in users ke liye passwords set karne ko kahegi**, jaise:
+
+* `elastic` (main admin user)
+* `kibana_system` (Kibana ke liye)
+* `logstash_system`
+* `beats_system`
+
+3. **Kibana me login karne ke liye `kibana_system` ya `elastic` ka use karo**:
+
+* Username: `elastic`
+* Password: jo tumne setup me diya
+
+💡 Tip: Agar automatic generate karna hai:
+
+```bash
+bin/elasticsearch-setup-passwords auto
+```
+
+Ye **random passwords generate karke console me show karega**, jise tum note kar lo.
+
+---
+
+Agar chaho, mai tumhare docker-compose me **automatic password setup aur Kibana ke liye env variables add karke ready-to-use version bana doon**. Ye start karte hi login credentials ready ho jaenge. Chahoge mai wo bana doon?
+
+============================================================================================================================
