@@ -8,4 +8,288 @@ how to check ollama is running or not default port is :
 
 spring.ai.ollama.base-url=http://localhost:11434
 
+=============================================================
+Accha question hai 👍
+
+**Large Language Model (LLM)** जैसे GPT में **token** बहुत important concept है।
+
+### 🔹 Token क्या होता है?
+
+* **Token मतलब text का छोटा टुकड़ा (unit of meaning)** जिसे model समझता और process करता है।
+* ये हमेशा **पूरा word** नहीं होता, कभी-कभी word का हिस्सा भी हो सकता है।
+* Model text को पहले tokens में तोड़ता है → फिर उन tokens पर calculation करता है।
+
+### 🔹 Example
+
+मान लो text है:
+
+```
+I love programming
+```
+
+इसे tokenize करने पर:
+
+* "I" → 1 token
+* " love" → 1 token (शुरुआत में space भी गिना जाता है)
+* " programming" → 1 token
+
+तो पूरे sentence के 3 tokens बनेंगे।
+
+अगर हिंदी लें:
+
+```
+मुझे पढ़ना अच्छा लगता है
+```
+
+इसे model subword tokens में तोड़ेगा, जैसे:
+
+* "मुझे"
+* " पढ़"
+* "ना"
+* " अच्छा"
+* " लगता"
+* " है"
+
+(कुल 6 tokens)
+
+### 🔹 क्यों जरूरी है?
+
+1. **Input/Output Limit** → हर LLM में token की limit होती है (जैसे GPT-4 में 128k tokens तक)।
+2. **Cost Calculation** → API call का खर्च tokens पर आधारित होता है।
+3. **Processing Efficiency** → Model words के बजाय tokens पर training करता है, जिससे अलग-अलग भाषाएँ और complex words handle हो जाते हैं।
+
+### 🔹 ध्यान रखने वाली बात
+
+* 1 token ≠ 1 word
+* English में 1 token ≈ 4 characters (औसतन)
+* 100 tokens ≈ 75 words (approx)
+
+---
+
+क्या आप चाहोगे मैं आपको एक छोटा demo दूँ कि आपका लिखा हुआ कोई भी text कितने tokens लेगा?
+===================================================================================================================
+Bahut accha सवाल है 👌.
+Aap **apna Large Language Model (LLM)** bana sakte ho, lekin uske level aur scale depend karte hain ki aap **scratch se banana chahte ho ya kisi pre-trained model ko fine-tune** karna chahte ho।
+
+मैं step by step समझाता हूँ:
+
+---
+
+## 🔹 1. Scratch se apna LLM banana
+
+Yeh research-level kaam hai, aur **बहुत resources** chahiye hote hain (GPUs, data, infra).
+Steps roughly aise hote hain:
+
+1. **Data collect karo**
+
+   * Bahut bada text corpus chahiye (billions of tokens).
+   * Sources: Wikipedia, books, research papers, code, social media (अगर policy allow करे)।
+
+2. **Data cleaning & preprocessing**
+
+   * Text को साफ करना (HTML tags, duplicates हटाना)।
+   * Tokenizer banana (जैसे BPE, SentencePiece)।
+
+3. **Model architecture design**
+
+   * Mostly **Transformer** architecture use hota hai (Vaswani et al. 2017).
+   * Decide: कितने layers, कितने attention heads, embedding size, hidden size।
+
+4. **Training**
+
+   * GPU/TPU clusters चाहिए (NVIDIA A100/ H100 level cards)।
+   * Training में हफ्तों/महीनों लग सकते हैं।
+   * Loss function: Cross-entropy (next token prediction)।
+
+5. **Evaluation & testing**
+
+   * Benchmarks pe test karo (perplexity, downstream tasks)।
+
+⚠️ Problem: ये बहुत महंगा है (millions of dollars लग सकते हैं)।
+
+---
+
+## 🔹 2. Fine-tuning pre-trained LLM (सबसे practical तरीका)
+
+Yeh aap easily kar सकते ho.
+Already trained open-source models le lo (जैसे HuggingFace पर)। फिर unhe **fine-tune** करो apne data par.
+
+Steps:
+
+1. **Model choose karo**
+
+   * GPT-NeoX, LLaMA, Falcon, Mistral, Gemma (open-source available)।
+
+2. **Tokenizer load karo** (जो उस model ke साथ आता है)।
+
+3. **Data prepare karo**
+
+   * Apna domain-specific dataset बनाओ (जैसे finance, medical, coding, Hindi text)।
+
+4. **Fine-tuning** techniques:
+
+   * **Full fine-tuning** (पूरे model ko train karo → heavy compute chahiye)।
+   * **LoRA / PEFT (Parameter Efficient Fine-Tuning)** → sirf कुछ parameters ko train karo (cheap & fast)।
+
+5. **Training framework use karo**
+
+   * HuggingFace Transformers + PyTorch
+   * deepspeed / accelerate for distributed training
+
+6. **Deploy karo**
+
+   * Model ko API ke रूप में expose करो (FastAPI, Flask, LangChain)।
+
+---
+
+## 🔹 3. Chhota apna model (learning ke liye)
+
+Agar आप बस सीखना चाहते हो तो:
+
+* एक छोटा **Transformer** खुद implement कर सकते हो PyTorch me।
+* छोटे dataset (Wikipedia subset) pe train karo।
+* ये आपको समझाएगा कि internally LLM kaise काम करता है।
+
+---
+
+👉 Mere hisaab se agar aapke paas **zyaada infra nahi hai**, to best option hai:
+**HuggingFace par pre-trained model + LoRA fine-tuning** use karna.
+
+---
+
+Kya aap chahte ho main aapko ek **practical roadmap** bana kar doon (kaunse tools, kaunse models, kaunse steps follow karne hain) ताकि aap apna chhota LLM bana sako?
+=====================================================================================================================================================================
+बहुत बढ़िया सवाल 👌
+
+LLM और Machine Learning में **embedding** बहुत important concept है।
+
+---
+
+## 🔹 Embedding क्या होता है?
+
+**Embedding = किसी शब्द/वाक्य/चीज़ का numerical (vector) representation**
+मतलब:
+
+* Text को numbers में बदलना
+* ताकि model उस text को समझ सके और उस पर calculation कर सके
+
+ये numbers randomly नहीं होते, बल्कि ऐसे बनाए जाते हैं कि **similar meanings वाले words करीब हों और अलग meanings वाले दूर हों**।
+
+---
+
+## 🔹 Example
+
+मान लो हमारे पास 3 words हैं:
+
+* "king"
+* "queen"
+* "apple"
+
+अगर इन्हें embedding space (say 3D space) में map करें, तो result कुछ ऐसा होगा:
+
+* **king → [0.8, 0.2, 0.1]**
+* **queen → [0.79, 0.25, 0.15]**
+* **apple → [0.1, 0.9, 0.7]**
+
+👉 यहाँ "king" और "queen" एक-दूसरे के **पास होंगे**, लेकिन "apple" उनसे बहुत **दूर** होगा।
+
+---
+
+## 🔹 क्यों जरूरी है?
+
+1. **Semantic meaning पकड़ना** → Words को सिर्फ spelling से नहीं, उनके meaning से represent करना।
+2. **Similarity search** → अगर कोई "doctor" लिखे, तो "physician" भी पास आना चाहिए।
+3. **Input for ML models** → Model सीधे words पर काम नहीं कर सकता, उसे numbers चाहिए।
+
+---
+
+## 🔹 Embedding कहाँ use होते हैं?
+
+* **Search engines** → Similar documents ढूँढने के लिए
+* **Recommendation system** → Similar products suggest करने के लिए
+* **Chatbots / LLMs** → Context और semantic meaning समझने के लिए
+* **Clustering** → Similar चीज़ों को group करने के लिए
+
+---
+
+## 🔹 Real-world Example
+
+Sentence:
+
+```
+I love programming
+```
+
+Model embeddings बना सकता है:
+
+* "I" → [0.12, -0.45, 0.87, ...]
+* "love" → [0.91, 0.33, -0.12, ...]
+* "programming" → [0.75, 0.65, -0.22, ...]
+
+अब इन vectors पर model math कर सकता है।
+
+---
+
+👉 Short mein:
+**Embedding = Text को ऐसे numbers (vectors) में बदलना जो meaning preserve करें।**
+
+---
+
+क्या आप चाहोगे मैं आपको Python का एक छोटा demo दूँ (HuggingFace या OpenAI embedding API से) ताकि आप देख सको कि किसी word/sentence का actual embedding vector कैसा दिखता है?
+=========================================================================================================================================
+बिल्कुल 👌 आपने सही समझा।
+
+Error message में साफ लिखा है:
+
+```
+"You exceeded your current quota, please check your plan and billing details."
+"code": "insufficient_quota"
+```
+
+मतलब आपके OpenAI account के पास **अब कोई free quota नहीं बचा है**।
+
+---
+
+## 🔹 OpenAI Free Usage का क्या scene है?
+
+* पहले (2023 तक) OpenAI नए users को **free trial credits ($18)** देता था।
+* अब (2025 तक) वो free trial बंद हो चुका है।
+* अब कोई भी request करने के लिए आपको **paid subscription या billing setup** करना पड़ेगा।
+
+---
+
+## 🔹 Options आपके लिए
+
+1. **अगर पैसे खर्च नहीं करना चाहते**
+   👉 तो OpenAI वाले beans (`OpenAiChatModel`) हटा दो और केवल **Ollama (local LLM)** या कोई और open-source model use करो।
+
+   * पूरी तरह free चलेगा
+   * Local machine पर run होगा
+   * Popular free models: `mistral`, `llama2`, `gemma`, `codellama`
+
+2. **अगर OpenAI use करना ही है**
+   👉 तो आपको billing setup करनी होगी:
+
+   * [OpenAI Billing Page](https://platform.openai.com/account/billing/overview) पर जाओ
+   * Credit card जोड़ो
+   * फिर quota unlock होगा
+
+---
+
+## 🔹 Suggestion (Best Free Path)
+
+Spring Boot + Ollama का integration बहुत smooth है। बस:
+
+```properties
+spring.ai.ollama.base-url=http://localhost:11434
+spring.ai.ollama.chat.model=mistral
+```
+
+और आप free में अपना chatbot चला सकते हो 🚀
+
+---
+
+क्या आप चाहोगे मैं आपको एक **ready-made example project** दिखाऊँ (Spring Boot + Ollama) ताकि आप बिना OpenAI के free में test कर सको?
+
+========================================================================================================================================
 

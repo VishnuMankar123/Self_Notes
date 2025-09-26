@@ -1,0 +1,548 @@
+
+path.data: C:/Users/Pratiti_Users/IdeaProjects/elastic_search_testing/elasticsearch/data
+==================================================================================================
+"Forgot Password with 2 Step Authentication" का मतलब यह है कि जब आप अपना पासवर्ड भूल जाते हैं और "Forgot Password" का ऑप्शन चुनते हैं, तो सिर्फ ईमेल/OTP से ही नहीं बल्कि एक extra सुरक्षा स्टेप (2 Step Authentication) भी यूज़ किया जाता है ताकि कोई और आपके अकाउंट तक न पहुँच सके।
+
+👉 इसका flow ऐसे चलता है:
+
+Forgot Password क्लिक करना
+
+आप लॉगिन पेज पर "Forgot Password" चुनते हैं।
+
+Identity Verification (Step 1)
+
+सिस्टम आपसे रजिस्टर्ड ईमेल या मोबाइल नंबर पूछेगा।
+
+उस पर OTP या लिंक भेजा जाएगा।
+
+Second Step Authentication (Step 2)
+
+OTP डालने के बाद भी सिस्टम एक दूसरा सुरक्षा स्टेप मांगेगा, जैसे:
+
+Google Authenticator / Authenticator App का कोड
+
+Backup codes
+
+Security questions
+
+Registered device पर push notification
+
+Password Reset
+
+दोनों स्टेप सफल होने के बाद ही आपको नया पासवर्ड बनाने का option मिलेगा।
+
+⚡ मतलब: अगर कोई आपका ईमेल या मोबाइल OTP पकड़ भी ले, तब भी वो आपके अकाउंट तक नहीं पहुँच पाएगा जब तक कि उसके पास आपका दूसरा verification तरीका (Authenticator app या backup code) न हो।
+=======================================================================================================
+E-commerce application में **Forgot Password + 2 Step Authentication** का सबसे common तरीका यह होता है कि:
+
+### 🔹 Common Flow (जो ज़्यादातर Amazon, Flipkart, Myntra जैसी sites follow करती हैं)
+
+1. **Forgot Password पर क्लिक**
+   – User login screen से *Forgot Password* चुनता है।
+
+2. **Primary Verification (Step 1 – Registered Email/Mobile OTP)**
+   – System registered email या mobile number पर OTP भेजता है।
+   – User को वो OTP डालना पड़ता है।
+
+3. **Secondary Verification (Step 2 – 2FA method)**
+   – इसके बाद दूसरा step आता है:
+
+   * **Authenticator App (Google Authenticator / Authy)** से 6-digit code
+   * या **SMS/Email पर second OTP**
+   * या **Trusted device पर Push Notification**
+
+4. **Password Reset Page**
+   – दोनों steps पास करने के बाद user नया password set कर सकता है।
+
+---
+
+### 🔹 क्यों ये common है?
+
+* **Security बढ़ाने के लिए**: सिर्फ OTP से reset करना risky है (अगर OTP leak हो जाए)।
+* **User friendly**: Mobile OTP + Authenticator सबसे simple और secure balance है।
+* **Regulatory compliance**: Payment-related apps (जैसे RBI guidelines वाले) में multi-factor authentication mandatory है।
+
+---
+
+👉 मतलब:
+**E-commerce apps में सबसे common तरीका है — "Forgot Password → Mobile/Email OTP → Authenticator App code (या second OTP)" → Password Reset.**
+
+---
+
+क्या आप चाहेंगे कि मैं इसका **Spring Boot में implementation flow diagram + code outline** भी बना दूँ?
+======================================================================================================
+सही कहा आपने 👍
+**बहुत सारे लोग e-commerce में Authenticator app (Google Authenticator, Authy, Microsoft Authenticator)** यूज़ नहीं करते, क्योंकि ये थोड़ा technical होता है और हर user के लिए convenient नहीं होता।
+
+### 🔹 इसलिए e-commerce apps में **सबसे ज़्यादा common तरीका** है:
+
+1. **Forgot Password → Registered Mobile/Email पर OTP**
+
+   * Primary verification: Mobile/email पर OTP जाता है।
+   * User वो OTP डालता है।
+
+2. **Second Step (extra check)**
+   Authenticator app की जगह आम तौर पर ये options यूज़ होते हैं:
+
+   * **Same Mobile पर दूसरा OTP** (कभी-कभी 2 OTP steps होते हैं)
+   * **Registered Email + Mobile दोनों पर verification**
+   * **Push notification** (जैसे Flipkart/Paytm app में “Approve login request”)
+   * **Security Question** (कम use होता है, लेकिन कुछ sites रखते हैं)
+
+### 🔹 Why not Authenticator App?
+
+* Normal shoppers को extra app install करना झंझट लगता है।
+* Lost/changed mobile पर Authenticator recover करना मुश्किल है।
+* OTP via SMS/Email already बहुत common और आसान है।
+
+---
+
+👉 **Summary:**
+E-commerce में **OTP based 2-step authentication** (SMS + Email / SMS + Push notification) सबसे common है। Authenticator app ज़्यादातर **banking, IT services या developer accounts** (जैसे GitHub, AWS, Google Cloud) में use होता है।
+
+---
+
+क्या आप चाहेंगे कि मैं आपको **OTP based Forgot Password + 2FA का practical flow diagram** बना दूँ (जैसे Flipkart/Amazon में होता है)?
+===================================================================================================================
+हाँ, बिल्कुल! 🙌
+**Consent management** के लिए कई third-party services और tools available हैं, खासकर जब compliance (जैसे **GDPR, CCPA**) की जरूरत हो।
+
+---
+
+### 🔹 Common Third-Party Consent Tools
+
+1. **OneTrust**
+
+   * सबसे popular tool worldwide।
+   * Features:
+
+     * Cookie consent banners
+     * Terms & Privacy acceptance tracking
+     * Granular consent management (Marketing, Analytics, Functional cookies)
+     * Audit log for compliance
+
+2. **TrustArc**
+
+   * Enterprise-grade compliance solution।
+   * Features:
+
+     * Privacy notices
+     * Consent capture and reporting
+     * Regulatory compliance management
+
+3. **Cookiebot**
+
+   * Mostly cookies / website tracking consent के लिए।
+   * Automatically scans website and manages consent preferences.
+
+4. **Osano**
+
+   * Privacy compliance और consent management platform।
+   * GDPR / CCPA ready.
+   * User consent tracking और reporting available.
+
+5. **Custom Implementation with Spring Boot / Backend**
+
+   * अगर third-party tool नहीं use करना, तो backend में consent log store किया जा सकता है।
+   * Example: `user_id, document_version, timestamp, ip_address`
+
+---
+
+### 🔹 E-commerce context में
+
+* **Small/Medium apps** → Usually **custom checkbox + DB logging** काफी है।
+* **Large platforms / multi-country apps** → Third-party tools (OneTrust, TrustArc) ज़्यादा safe और audit-friendly होते हैं।
+
+---
+
+अगर आप चाहो तो मैं **Spring Boot + Thymeleaf में Consent capture & DB logging का practical example** भी बना सकता हूँ, जिससे आप समझ सको कि बिना third-party कैसे implement कर सकते हैं।
+
+क्या मैं वो बना दूँ?
+==============================================================================================================================
+ठीक है! मैं आपको **Osano** के use करने का आसान तरीका step by step समझाता हूँ।
+
+---
+
+## **Osano क्या है?**
+
+Osano एक **Consent Management Platform (CMP)** है जो websites और apps के लिए **privacy compliance और user consent tracking** provide करता है।
+
+* Mostly GDPR (EU), CCPA (California), और अन्य privacy laws के लिए use होता है।
+* यह automatically user consents capture और store करता है, और audit-ready reports देता है।
+
+---
+
+## **Osano use करने का तरीका**
+
+### 1️⃣ Osano Account Create करना
+
+1. [Osano website](https://www.osano.com/) पर जाएँ।
+2. **Sign Up** करें।
+3. अपनी website या app का **domain / project** add करें।
+
+---
+
+### 2️⃣ Consent Banner Configure करना
+
+* Dashboard में जाएँ → **Consent Banner** section।
+* Banner के options:
+
+  * Text (Terms & Privacy Policy)
+  * Buttons: Accept / Reject
+  * Categories (Analytics, Marketing, Functional cookies)
+* Banner customize करें (colors, language, style)।
+
+---
+
+### 3️⃣ Code Snippet Generate करना
+
+* Osano dashboard में “**Install / Embed**” section जाएगा।
+* वहाँ आपको **JavaScript snippet** मिलेगा।
+
+Example snippet:
+
+```html
+<script src="https://cdn.osano.com/consent.js"></script>
+<script>
+   Osano.consent.initialize({
+      clientId: "YOUR_CLIENT_ID",
+      language: "en"
+   });
+</script>
+```
+
+* इसे अपने **HTML `<head>`** में add करें।
+
+---
+
+### 4️⃣ Backend / Tracking
+
+* Osano automatically:
+
+  * User consent capture करता है
+  * Cookie categories assign करता है
+  * Consent log store करता है (audit ready)
+* Optional: REST API से consent status fetch करके backend में भी store कर सकते हैं।
+
+---
+
+### 5️⃣ Testing
+
+1. अपने website/app पर visit करें।
+2. Banner दिखेगा → Accept / Reject करें।
+3. Dashboard में check करें कि consent log properly captured हुआ या नहीं।
+
+---
+
+### 🔹 Key Points
+
+* **No need to code full consent management** – Osano mostly client-side handle करता है।
+* **Server-side logging optional** – अगर compliance ज़्यादा strict है, API call करके database में log कर सकते हैं।
+* **Multi-country support** – Auto handles GDPR/CCPA compliance based on user location.
+
+---
+
+अगर आप चाहो तो मैं **Spring Boot + Thymeleaf में Osano integrate करने ka practical example** भी बना दूँ, जिससे आपको real e-commerce app में use करने का तरीका दिखे।
+
+क्या मैं वो बना दूँ?
+==================================================================================================
+ठीक है! 😊 मैं आपको समझाता हूँ कि **Osano** Cookie Consent और Privacy Compliance में कैसे help करता है।
+
+---
+
+## **1️⃣ Cookie Consent Simplification**
+
+* Osano automatically detect करता है कि आपकी website पर कौन-कौन सी cookies use हो रही हैं।
+* ये आपके users को एक **banner/popup** दिखाता है जहाँ वे **Accept / Reject / Manage Preferences** कर सकते हैं।
+* User की choice **log और track** की जाती है, ताकि compliance proof रहे।
+* Features:
+
+  * Automatic cookie scanning
+  * Cookie categorization (Essential, Marketing, Analytics, Functional)
+  * Multi-language consent banners
+
+---
+
+## **2️⃣ Privacy Compliance Simplification**
+
+* Osano GDPR, CCPA, और अन्य privacy laws का पालन आसान बनाता है।
+* ये automatically handle करता है:
+
+  * User consent collection और storage
+  * Consent revocation (अगर user बाद में अपनी choice बदलता है)
+  * Audit-ready logs (कौन कब consent दिया या बदला)
+* Advanced features (Paid/Enterprise):
+
+  * Vendor management
+  * Data Subject Access Requests (DSAR) handling
+  * Compliance reporting
+
+---
+
+## **3️⃣ Practical Example (E-commerce)**
+
+1. User आपकी e-commerce site visit करता है।
+2. Osano banner automatically show होता है:
+
+   ```
+   This website uses cookies to improve your experience. 
+   [Accept] [Reject] [Manage Preferences]
+   ```
+3. User अपनी choice करता है।
+4. Osano backend में consent log save कर देता है।
+5. आपकी website केवल **user approved cookies** ही load करती है।
+
+---
+
+### 🔹 Summary
+
+* **Osano automatically:**
+
+  1. Cookies detect करता है
+  2. Consent banners show करता है
+  3. User choices store और track करता है
+  4. Compliance audit-ready बनाता है
+
+💡 मतलब: आपको खुद **complex compliance code लिखने की जरूरत नहीं**, Osano ये सब आसान बना देता है।
+
+---
+
+अगर आप चाहो तो मैं आपको **Spring Boot + Thymeleaf में Osano integrate करने का simple demo** दिखा सकता हूँ, जिससे यह real e-commerce scenario में काम करता दिखे।
+
+क्या मैं वो बना दूँ?
+==========================================================================================
+ठीक है, मैं step by step समझाता हूँ कि **Osano या कोई भी Consent Management Platform (CMP) आपकी वेबसाइट की cookies कैसे detect करता है**।
+
+---
+
+## **1️⃣ Website Scan (Automated Detection)**
+
+* जब आप Osano dashboard में अपनी वेबसाइट जोड़ते हैं, तो Osano की service आपकी website को **scan** करती है।
+* Scan के दौरान ये check करता है:
+
+  * कौन-कौन सी cookies set हो रही हैं।
+  * Cookies का **purpose** (Analytics, Marketing, Functional, Essential) क्या है।
+  * कौन से **third-party scripts** cookies generate कर रहे हैं।
+
+---
+
+## **2️⃣ JavaScript Injection (Client-Side Detection)**
+
+* Osano आपकी website में एक छोटा **JavaScript snippet** inject करता है।
+* जब कोई user website visit करता है:
+
+  * यह snippet browser में चलकर detect करता है कि कौन-कौन सी cookies अभी loaded हैं।
+  * यह cookies के **name, domain, duration, category** जैसी details capture करता है।
+* User की consent के आधार पर:
+
+  * **Accept → All allowed cookies load**
+  * **Reject → Non-essential cookies block**
+
+---
+
+## **3️⃣ Categorization & Consent Management**
+
+* Detected cookies को categories में divide किया जाता है:
+
+  1. **Essential cookies** – website properly चलाने के लिए जरूरी
+  2. **Functional cookies** – user preferences store करने के लिए
+  3. **Analytics cookies** – site usage track करने के लिए
+  4. **Marketing cookies** – ads, retargeting, personalization के लिए
+* Banner में दिखाया जाता है कि कौन-सी category enable/disable करना चाहते हैं।
+
+---
+
+## **4️⃣ Backend Logging**
+
+* Osano automatically हर user की consent choice log करता है।
+* Stored data:
+
+  * User IP, Device info, Timestamp
+  * Which cookies/categories accepted/rejected
+* यह logs **audit-ready** होती हैं और compliance के लिए इस्तेमाल की जा सकती हैं।
+
+---
+
+### 🔹 Summary
+
+1. **Website scan** → existing cookies detect
+2. **JavaScript snippet** → user browser में cookie detection & control
+3. **Categorization** → cookies type के हिसाब से organize
+4. **Consent & Logging** → user choice store & track
+
+💡 मतलब: Osano user की **privacy choice respect करते हुए automatically cookies detect और manage करता है**, बिना आपको हर cookie manually track करने की जरूरत।
+
+---
+
+अगर आप चाहो तो मैं आपको **Spring Boot + Thymeleaf website में Osano snippet integrate करके live cookie detection demo** भी दिखा सकता हूँ।
+
+क्या मैं वो बना दूँ?
+================================================================================================
+“**Typeahead with Clear**” का मतलब है **एक input field जिसमें typing करते ही suggestions दिखते हैं, और जिसे clear (खाली) किया जा सकता है।**
+
+---
+
+### 🔹 Step by Step Explanation
+
+1. **Typeahead (Autocomplete)**
+
+   * जब user input field में कुछ टाइप करता है, तो system real-time में suggestions दिखाता है।
+   * Example:
+
+     ```
+     Input: "Ap" → Suggestions: ["Apple", "Appliance", "Application"]
+     ```
+
+2. **With Clear**
+
+   * Input field के पास एक **“X” button या clear icon** होता है।
+   * इस button को क्लिक करने से input field खाली हो जाता है।
+   * Example:
+
+     ```
+     [ Apple ] [ X ] → क्लिक करने पर खाली हो जाता है
+     ```
+
+---
+
+### 🔹 E-commerce Example
+
+* Search bar में:
+
+  * User “Shoe” टाइप करता है → suggestions दिखते हैं: “Shoes for men”, “Shoes for women”
+  * User को जल्दी से input हटाना है → Clear button पर क्लिक करता है → search box खाली हो जाता है
+
+---
+
+### 🔹 Summary
+
+**Typeahead with Clear = Autocomplete input + Quick clear option**
+
+---
+
+अगर आप चाहो तो मैं आपको **Spring Boot + Thymeleaf या HTML/JS में Typeahead with Clear का working example** दिखा सकता हूँ।
+
+क्या मैं वो बना दूँ?
+===============================================================================
+Spring Boot में e-commerce एप्लिकेशन में **notifications** भेजने के लिए आप कई approaches use कर सकते हैं, यह depend करता है कि आप किस तरह की notification भेजना चाहते हैं: **Email, SMS, Push Notification, या In-App Notification**। मैं नीचे अलग-अलग तरीके explain कर रहा हूँ:
+
+---
+
+### **1. Email Notifications**
+
+Spring Boot में सबसे common तरीका है **Spring Boot Starter Mail** का use करना।
+
+**Dependency (Maven):**
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+```
+
+**Configuration (`application.properties`):**
+
+```properties
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=your-email@gmail.com
+spring.mail.password=your-password
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+```
+
+**Service Example:**
+
+```java
+@Service
+public class EmailService {
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    public void sendEmail(String to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        mailSender.send(message);
+    }
+}
+```
+
+---
+
+### **2. SMS Notifications**
+
+SMS भेजने के लिए आपको third-party provider use करना होगा जैसे:
+
+* Twilio
+* Msg91
+* Nexmo (Vonage)
+
+**Example (Twilio)**
+
+```java
+@Service
+public class SmsService {
+
+    public void sendSms(String to, String message) {
+        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+        Message.creator(new PhoneNumber(to), new PhoneNumber(FROM_NUMBER), message).create();
+    }
+}
+```
+
+---
+
+### **3. Push Notifications (Mobile)**
+
+अगर आपका e-commerce app mobile app के साथ connected है, तो आप push notifications भेज सकते हैं:
+
+* **Firebase Cloud Messaging (FCM)** – Android/iOS devices के लिए
+* **Web Push** – Browser users के लिए
+
+**Example:** Firebase SDK का use करके Spring Boot से HTTP request भेज सकते हैं।
+
+---
+
+### **4. In-App Notifications**
+
+* Database में notification entity maintain करके
+* Frontend पर WebSocket या SSE (Server-Sent Events) से real-time notifications push करना।
+
+**Example:**
+
+```java
+@Entity
+public class Notification {
+    @Id
+    @GeneratedValue
+    private Long id;
+    private Long userId;
+    private String message;
+    private boolean read;
+    private LocalDateTime createdAt;
+}
+```
+
+* Spring WebSocket या SSE के साथ user के browser में notify कर सकते हैं।
+
+---
+
+✅ **Summary Table:**
+
+| Type              | Spring Boot Approach       |
+| ----------------- | -------------------------- |
+| Email             | `spring-boot-starter-mail` |
+| SMS               | Twilio, Msg91, Nexmo API   |
+| Push Notification | FCM, Web Push API          |
+| In-App            | WebSocket / SSE + DB       |
+
+---
+
+अगर आप चाहो तो मैं **एक complete e-commerce notification system का example** दिखा सकता हूँ जिसमें email + SMS + in-app notifications handle हों।
+
+क्या मैं वो दिखाऊँ?
+==================================================================================================================================
