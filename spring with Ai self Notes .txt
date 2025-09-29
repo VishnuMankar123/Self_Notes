@@ -292,4 +292,114 @@ spring.ai.ollama.chat.model=mistral
 क्या आप चाहोगे मैं आपको एक **ready-made example project** दिखाऊँ (Spring Boot + Ollama) ताकि आप बिना OpenAI के free में test कर सको?
 
 ========================================================================================================================================
+Samajh gaya 👍
+aap puchh rahe ho ki **LLM ke andar alag-alag categories** hote hain jaise:
+
+---
+
+## 🌐 Types of AI / LLM-based Models
+
+### 1️⃣ **Chat Models (Conversational)**
+
+* Human jaisa baat karte hain.
+* Based on **autoregressive (decoder-only)** models.
+* Fine-tuned on dialogues, instructions, safety rules.
+* ✅ Example: **ChatGPT, LLaMA-2-Chat, Mistral-Instruct, Vicuna, Claude**
+
+---
+
+### 2️⃣ **Speech-to-Text Models (ASR – Automatic Speech Recognition)**
+
+* Voice ko text me convert karte hain.
+* Audio input lete hain aur transcription output dete hain.
+* ✅ Example: **Whisper (OpenAI), DeepSpeech (Mozilla), wav2vec 2.0 (Meta)**
+
+---
+
+### 3️⃣ **Text-to-Speech Models (TTS)**
+
+* Text ko natural sounding voice me bolte hain.
+* Use: Virtual assistants, audiobooks, accessibility.
+* ✅ Example: **VALL-E (Microsoft), Tacotron, Coqui TTS, ElevenLabs**
+
+---
+
+### 4️⃣ **Multimodal Models**
+
+* Ek hi model jo **text + image + audio + video** sab handle karta hai.
+* Example: Image input + text output, ya text input + image output.
+* ✅ Example: **GPT-4V (Vision), Gemini, LLaVA, Kosmos-1, CLIP**
+
+---
+
+### 5️⃣ **Code Models**
+
+* Programming help karne ke liye trained hote hain.
+* ✅ Example: **Codex (GitHub Copilot), StarCoder, CodeLLaMA**
+
+---
+
+### 6️⃣ **Domain-Specific Models**
+
+* Special purpose models jo ek hi field ke liye optimized hote hain:
+
+  * **Medical** → Med-PaLM
+  * **Legal** → LawGPT
+  * **Finance** → BloombergGPT
+
+---
+
+📌 Matlab:
+
+* **Chat models** → baat karne ke liye
+* **Speech-to-Text** → voice ko text me
+* **Text-to-Speech** → text ko voice me
+* **Multimodal** → text + image + audio + video ek sath
+
+---
+
+👉 Kya aap chahte ho main ek **table bana du** jisme Chat, Speech-to-Text, Text-to-Speech, Multimodal models ke examples aur use-cases ek jagah compare karke dikhau?
+============================================================================================================================
+ठीक है Vishnudas 🙂 मैं simple language में समझाता हूँ:
+
+---
+
+## 🔥 Hugging Face kya hai?
+
+Socho **GitHub jaisa ek website/platform**, lekin **AI aur Machine Learning ke models** ke liye.
+
+* Agar aapko **pre-trained model** chahiye (jaise ChatGPT jaisa chhota model, speech-to-text, translation, sentiment analysis), to Hugging Face par aapko **ready-made models** mil jaate hain.
+* Wahan **datasets** bhi hote hain (Wikipedia text, movie reviews, images, audio, etc.) jinse aap apna model train kar sakte ho.
+* Aur aap apne banaye models/datasets ko **upload karke share** bhi kar sakte ho.
+
+---
+
+## 🛠 Example use
+
+1. Aapko **sentiment analysis** karna hai (“I love you” positive hai ya negative?).
+2. Normal coding me aapko khud model banana padta.
+3. Lekin Hugging Face me bas 2 line likho:
+
+```python
+from transformers import pipeline
+
+sentiment = pipeline("sentiment-analysis")
+print(sentiment("I love Hugging Face!"))
+```
+
+👉 Output: `Positive 😊`
+
+Matlab aapko **zero training** ki zaroorat nahi, bas model load karke use kar sakte ho.
+
+---
+
+## 📌 Simple words me:
+
+* **GitHub → code ke liye**
+* **Hugging Face → AI models ke liye**
+
+---
+
+Kya main aapko Hugging Face ka **real-life example** bataun jaise ki “Speech-to-Text” (voice ko text me badalna) Hugging Face se kaise hota hai?
+========================================================================================================================
 
