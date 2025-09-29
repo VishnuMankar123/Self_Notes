@@ -1,0 +1,1253 @@
+1) To delete a table in MySQL, you can use the DROP TABLE statement.
+Basic Syntax:
+DROP TABLE table_name;
+
+Example:
+DROP TABLE employees;
+
+2)How to create table : 
+
+CREATE TABLE emp (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255),
+    address VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+Example :  create table emp(id int not null auto_increment,name varchar(255),address varchar(255),primary key (id));
+
+Absolutely Vishnudas! Here's a complete list of **essential SQL queries related to tables** in MySQL — everything from creating, altering, and dropping, to inspecting and managing data structure. 💪
+
+---
+
+Got it, Vishnudas! Here's the **complete list of MySQL table-related queries** in the format you requested — with **syntax** and **example** clearly separated. 👇
+
+---
+
+### ✅ 1. Create Table
+
+**Syntax:**
+```sql
+CREATE TABLE table_name (
+    column1 datatype,
+    column2 datatype,
+    ...
+);
+```
+
+**Example:**
+```sql
+CREATE TABLE emp (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255),
+    address VARCHAR(255),
+    PRIMARY KEY (id)
+);
+```
+
+---
+
+### ✅ 2. Add Column
+
+**Syntax:**
+```sql
+ALTER TABLE table_name ADD COLUMN column_name datatype;
+```
+
+**Example:**
+```sql
+ALTER TABLE emp ADD COLUMN email VARCHAR(255);
+```
+
+---
+
+### ✅ 3. Modify Column
+
+**Syntax:**
+```sql
+ALTER TABLE table_name MODIFY column_name new_datatype;
+```
+
+**Example:**
+```sql
+ALTER TABLE emp MODIFY name VARCHAR(100);
+```
+
+---
+
+### ✅ 4. Rename Column
+
+**Syntax:**
+```sql
+ALTER TABLE table_name RENAME COLUMN old_name TO new_name;
+```
+
+**Example:**
+```sql
+ALTER TABLE emp RENAME COLUMN name TO full_name;
+```
+
+---
+
+### ✅ 5. Drop Column
+
+**Syntax:**
+```sql
+ALTER TABLE table_name DROP COLUMN column_name;
+```
+
+**Example:**
+```sql
+ALTER TABLE emp DROP COLUMN email;
+```
+
+---
+
+### ✅ 6. Rename Table
+
+**Syntax:**
+```sql
+RENAME TABLE old_table_name TO new_table_name;
+```
+
+**Example:**
+```sql
+RENAME TABLE emp TO employee;
+```
+
+---
+
+### ✅ 7. Describe Table
+
+**Syntax:**
+```sql
+DESCRIBE table_name;
+```
+
+**Example:**
+```sql
+DESCRIBE employee;
+```
+
+---
+
+### ✅ 8. Delete Specific Row
+
+**Syntax:**
+```sql
+DELETE FROM table_name WHERE condition;
+```
+
+**Example:**
+```sql
+DELETE FROM employee WHERE id = 1;
+```
+
+---
+
+### ✅ 9. Delete All Rows (Keep Structure)
+
+**Syntax:**
+```sql
+TRUNCATE TABLE table_name;
+```
+
+**Example:**
+```sql
+TRUNCATE TABLE employee;
+```
+
+---
+
+### ✅ 10. Drop Table
+
+**Syntax:**
+```sql
+DROP TABLE table_name;
+```
+
+**Example:**
+```sql
+DROP TABLE employee;
+```
+
+---
+
+### ✅ 11. Add NOT NULL Constraint
+
+**Syntax:**
+```sql
+ALTER TABLE table_name MODIFY column_name datatype NOT NULL;
+```
+
+**Example:**
+```sql
+ALTER TABLE employee MODIFY address VARCHAR(255) NOT NULL;
+```
+
+---
+
+### ✅ 12. Add UNIQUE Constraint
+
+**Syntax:**
+```sql
+ALTER TABLE table_name ADD CONSTRAINT constraint_name UNIQUE (column_name);
+```
+
+**Example:**
+```sql
+ALTER TABLE employee ADD CONSTRAINT unique_fullname UNIQUE (full_name);
+```
+
+---
+
+### ✅ 13. Insert Data
+
+**Syntax:**
+```sql
+INSERT INTO table_name (column1, column2) VALUES (value1, value2);
+```
+
+**Example:**
+```sql
+INSERT INTO employee (full_name, address) VALUES ('Vishnudas', 'Mumbai');
+```
+
+---
+
+### ✅ 14. Select Data
+
+**Syntax:**
+```sql
+SELECT * FROM table_name;
+```
+
+**Example:**
+```sql
+SELECT * FROM employee;
+```
+
+You got it, Vishnudas! Here's a **complete list of possible `SELECT` query combinations** in MySQL — starting from basic to advanced, with syntax and examples. Let’s go! 🚀
+
+---
+
+## ✅ 1. **Select All Columns**
+
+**Syntax:**
+```sql
+SELECT * FROM table_name;
+```
+
+**Example:**
+```sql
+SELECT * FROM employee;
+```
+
+---
+
+## ✅ 2. **Select Specific Columns**
+
+**Syntax:**
+```sql
+SELECT column1, column2 FROM table_name;
+```
+
+**Example:**
+```sql
+SELECT full_name, address FROM employee;
+```
+
+---
+
+## ✅ 3. **Select With WHERE Condition**
+
+**Syntax:**
+```sql
+SELECT * FROM table_name WHERE condition;
+```
+
+**Example:**
+```sql
+SELECT * FROM employee WHERE address = 'Mumbai';
+```
+
+---
+
+## ✅ 4. **Using Comparison Operators**
+
+| Operator | Description        |
+|----------|--------------------|
+| `=`      | Equal              |
+| `!=`     | Not Equal          |
+| `<`      | Less than          |
+| `>`      | Greater than       |
+| `<=`     | Less than or equal |
+| `>=`     | Greater or equal   |
+
+**Example:**
+```sql
+SELECT * FROM employee WHERE id > 2;
+```
+
+---
+
+## ✅ 5. **Using AND / OR / NOT**
+
+**Example:**
+```sql
+SELECT * FROM employee WHERE address = 'Mumbai' AND full_name = 'Vishnudas';
+```
+
+---
+
+## ✅ 6. **IN Operator**
+
+**Syntax:**
+```sql
+SELECT * FROM table_name WHERE column IN (value1, value2, ...);
+```
+
+**Example:**
+```sql
+SELECT * FROM employee WHERE address IN ('Mumbai', 'Pune');
+```
+
+---
+
+## ✅ 7. **BETWEEN Operator**
+
+**Syntax:**
+```sql
+SELECT * FROM table_name WHERE column BETWEEN value1 AND value2;
+```
+
+**Example:**
+```sql
+SELECT * FROM employee WHERE id BETWEEN 2 AND 5;
+```
+
+---
+
+## ✅ 8. **LIKE Operator (Pattern Matching)**
+
+**Syntax:**
+```sql
+SELECT * FROM table_name WHERE column LIKE pattern;
+```
+
+**Example:**
+```sql
+SELECT * FROM employee WHERE full_name LIKE 'Vish%';
+```
+
+---
+
+## ✅ 9. **IS NULL / IS NOT NULL**
+
+**Example:**
+```sql
+SELECT * FROM employee WHERE email IS NULL;
+```
+
+---
+
+## ✅ 10. **ORDER BY**
+
+**Syntax:**
+```sql
+SELECT * FROM table_name ORDER BY column [ASC|DESC];
+```
+
+**Example:**
+```sql
+SELECT * FROM employee ORDER BY full_name DESC;
+```
+
+---
+
+## ✅ 11. **LIMIT (Pagination)**
+
+**Syntax:**
+```sql
+SELECT * FROM table_name LIMIT number;
+```
+
+**Example:**
+```sql
+SELECT * FROM employee LIMIT 5;
+```
+
+With offset:
+```sql
+SELECT * FROM employee LIMIT 5 OFFSET 10;
+```
+
+---
+
+## ✅ 12. **DISTINCT (Remove duplicates)**
+
+**Example:**
+```sql
+SELECT DISTINCT address FROM employee;
+```
+
+---
+
+## ✅ 13. **Aliases using AS**
+
+**Example:**
+```sql
+SELECT full_name AS name, address AS city FROM employee;
+```
+
+---
+
+## ✅ 14. **Aggregate Functions**
+
+| Function   | Description         |
+|------------|---------------------|
+| `COUNT()`  | Count rows          |
+| `SUM()`    | Sum of values       |
+| `AVG()`    | Average             |
+| `MIN()`    | Minimum value       |
+| `MAX()`    | Maximum value       |
+
+**Example:**
+```sql
+SELECT COUNT(*) FROM employee;
+```
+
+---
+
+## ✅ 15. **GROUP BY**
+
+**Example:**
+```sql
+SELECT address, COUNT(*) FROM employee GROUP BY address;
+```
+
+---
+
+## ✅ 16. **HAVING (for filtering groups)**
+
+**Example:**
+```sql
+SELECT address, COUNT(*) FROM employee GROUP BY address HAVING COUNT(*) > 1;
+```
+
+---
+
+## ✅ 17. **JOINs**
+
+### ➤ INNER JOIN
+
+```sql
+SELECT e.full_name, d.dept_name
+FROM employee e
+INNER JOIN department d ON e.dept_id = d.id;
+```
+
+### ➤ LEFT JOIN
+
+```sql
+SELECT e.full_name, d.dept_name
+FROM employee e
+LEFT JOIN department d ON e.dept_id = d.id;
+```
+
+---
+
+## ✅ 18. **UNION**
+
+```sql
+SELECT full_name FROM employee
+UNION
+SELECT manager_name FROM department;
+```
+
+---
+
+## ✅ 19. **Subqueries**
+
+**Example:**
+```sql
+SELECT * FROM employee
+WHERE id = (SELECT MAX(id) FROM employee);
+```
+
+Sure, Vishnudas! Here's a complete list of **all important subquery combinations in MySQL** — each with **syntax + example** and short explanation for quick understanding. Let's go 🚀
+
+---
+
+## ✅ 1. **Subquery in WHERE Clause**
+
+### ➤ Returns a single value (scalar)
+
+**Syntax:**
+```sql
+SELECT * FROM table WHERE column = (SELECT ...);
+```
+
+**Example:**
+```sql
+SELECT * FROM employee
+WHERE id = (SELECT MAX(id) FROM employee);
+```
+
+👉 *Gets the employee with the highest ID.*
+
+---
+
+## ✅ 2. **Subquery using IN**
+
+**Syntax:**
+```sql
+SELECT * FROM table WHERE column IN (SELECT ...);
+```
+
+**Example:**
+```sql
+SELECT * FROM employee
+WHERE address IN (SELECT address FROM employee WHERE full_name = 'Vishnudas');
+```
+
+👉 *Finds employees from the same address as Vishnudas.*
+
+---
+
+## ✅ 3. **Subquery using NOT IN**
+
+**Example:**
+```sql
+SELECT * FROM employee
+WHERE address NOT IN (SELECT address FROM employee WHERE full_name = 'Vishnudas');
+```
+
+👉 *Finds employees not from Vishnudas' address.*
+
+---
+
+## ✅ 4. **Subquery using EXISTS**
+
+**Syntax:**
+```sql
+SELECT * FROM table WHERE EXISTS (SELECT ...);
+```
+
+**Example:**
+```sql
+SELECT * FROM employee e
+WHERE EXISTS (
+  SELECT 1 FROM department d WHERE e.dept_id = d.id
+);
+```
+
+👉 *Returns employees whose `dept_id` exists in the department table.*
+
+---
+
+## ✅ 5. **Subquery using NOT EXISTS**
+
+**Example:**
+```sql
+SELECT * FROM employee e
+WHERE NOT EXISTS (
+  SELECT 1 FROM department d WHERE e.dept_id = d.id
+);
+```
+
+👉 *Finds employees without matching department records.*
+
+---
+
+## ✅ 6. **Subquery in FROM Clause (Derived Table)**
+
+**Syntax:**
+```sql
+SELECT * FROM (SELECT ... FROM ...) AS alias;
+```
+
+**Example:**
+```sql
+SELECT emp_summary.address, emp_summary.total
+FROM (
+  SELECT address, COUNT(*) AS total
+  FROM employee
+  GROUP BY address
+) AS emp_summary
+WHERE emp_summary.total > 1;
+```
+
+👉 *First groups by address, then filters groups with more than 1 employee.*
+
+---
+
+## ✅ 7. **Subquery with ANY / SOME**
+
+**Syntax:**
+```sql
+SELECT * FROM table WHERE column > ANY (SELECT ...);
+```
+
+**Example:**
+```sql
+SELECT * FROM employee
+WHERE id > ANY (SELECT id FROM employee WHERE address = 'Pune');
+```
+
+👉 *Returns rows with id greater than any of the ids from Pune.*
+
+---
+
+## ✅ 8. **Subquery with ALL**
+
+**Example:**
+```sql
+SELECT * FROM employee
+WHERE id > ALL (SELECT id FROM employee WHERE address = 'Pune');
+```
+
+👉 *Returns rows with id greater than **all** ids from Pune.*
+
+---
+
+## ✅ 9. **Correlated Subquery (depends on outer query)**
+
+**Example:**
+```sql
+SELECT e1.full_name
+FROM employee e1
+WHERE e1.id = (
+  SELECT MAX(e2.id)
+  FROM employee e2
+  WHERE e2.address = e1.address
+);
+```
+
+👉 *Gets the latest employee (by ID) from each address.*
+
+---
+
+Would you like me to prepare a `.sql` or visual notes/PDF version of this?
+
+---
+
+## ✅ 20. **Case Statements**
+
+```sql
+SELECT full_name,
+  CASE
+    WHEN address = 'Mumbai' THEN 'West Zone'
+    ELSE 'Other Zone'
+  END AS zone
+FROM employee;
+```
+
+---
+
+Let me know if you want this as a printable PDF or `.sql` cheatsheet!
+
+=================================================================================
+Of course! I’ll explain all three MySQL joins **in very simple words** with a small **example**.
+
+Imagine you have two tables:
+
+---
+**Table 1: `students`**
+| id | name   |
+|----|--------|
+| 1  | John   |
+| 2  | Alice  |
+| 3  | Bob    |
+
+---
+**Table 2: `marks`**
+| id | student_id | score |
+|----|------------|-------|
+| 1  | 1          | 80    |
+| 2  | 2          | 90    |
+| 3  | 4          | 70    |
+
+(Notice: student_id=4 in marks table does **NOT** exist in students table.)
+
+---
+
+Now, let's see each join:
+
+---
+
+### 1. **INNER JOIN**
+- **Meaning:** Give me only the records that match in **both** tables.
+- **Example query:**
+```sql
+SELECT students.name, marks.score
+FROM students
+INNER JOIN marks
+ON students.id = marks.student_id;
+```
+- **Result:**
+| name  | score |
+|-------|-------|
+| John  | 80    |
+| Alice | 90    |
+
+> **Explanation:** Only John and Alice are shown because they exist in both `students` and `marks`. Bob is missing because Bob has no mark entry, and the student_id=4 is missing because no such student.
+
+---
+
+### 2. **LEFT JOIN (LEFT OUTER JOIN)**
+- **Meaning:** Give me **all students** even if they don't have marks. If no match, show **NULL**.
+- **Example query:**
+```sql
+SELECT students.name, marks.score
+FROM students
+LEFT JOIN marks
+ON students.id = marks.student_id;
+```
+- **Result:**
+| name  | score |
+|-------|-------|
+| John  | 80    |
+| Alice | 90    |
+| Bob   | NULL  |
+
+> **Explanation:** All students are shown. Bob has no mark, so score is NULL.
+
+---
+
+### 3. **RIGHT JOIN (RIGHT OUTER JOIN)**
+- **Meaning:** Give me **all marks** even if the student is missing. If no matching student, show **NULL**.
+- **Example query:**
+```sql
+SELECT students.name, marks.score
+FROM students
+RIGHT JOIN marks
+ON students.id = marks.student_id;
+```
+- **Result:**
+| name  | score |
+|-------|-------|
+| John  | 80    |
+| Alice | 90    |
+| NULL  | 70    |
+
+> **Explanation:** All marks are shown. The mark with student_id=4 has no student, so name is NULL.
+
+---
+
+### 🎯 Quick Summary
+| JOIN Type   | What it returns                       |
+|-------------|----------------------------------------|
+| INNER JOIN  | Only matched rows in both tables       |
+| LEFT JOIN   | All from left table + matching right   |
+| RIGHT JOIN  | All from right table + matching left   |
+
+---
+
+Would you also like me to show this with a small diagram? (It becomes even easier!) 🎨
+===========================================================================================
+Of course! Let’s talk about **keys in MySQL** in **very simple words** with **examples**.
+
+---
+
+# 🔑 What is a Key in MySQL?
+> A **key** is a way to **identify** or **link** data inside a table quickly.
+
+Keys make sure:
+- The data is **unique** (no duplicates if needed)
+- Searching is **faster**
+- Tables can **connect** to each other
+
+---
+
+# Types of Keys (Simple Words + Examples)
+
+---
+
+## 1. **Primary Key**
+👉 It **uniquely identifies** each row.
+👉 **Cannot be NULL** (must have a value).
+👉 Only **one primary key** per table.
+
+**Example:**
+```sql
+CREATE TABLE students (
+    id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+```
+Here, `id` is the **primary key**.  
+Each student must have a unique `id`.
+
+| id | name   |
+|----|--------|
+| 1  | John   |
+| 2  | Alice  |
+
+---
+
+## 2. **Foreign Key**
+👉 It **connects two tables**.
+👉 It says: "This value must exist in another table."
+👉 Used for **relationships**.
+
+**Example:**
+```sql
+CREATE TABLE marks (
+    id INT PRIMARY KEY,
+    student_id INT,
+    score INT,
+    FOREIGN KEY (student_id) REFERENCES students(id)
+);
+```
+Here, `student_id` is a **foreign key**.  
+It must match a valid `id` in the `students` table.
+
+---
+
+## 3. **Unique Key**
+👉 Makes sure that the column values are **unique** (no duplicates).
+👉 **Can have multiple unique keys** in a table.
+👉 **NULL** is allowed.
+
+**Example:**
+```sql
+CREATE TABLE employees (
+    emp_id INT PRIMARY KEY,
+    email VARCHAR(100) UNIQUE
+);
+```
+Here, `email` must be unique for every employee.
+
+---
+
+## 4. **Candidate Key**
+👉 These are **possible keys** that can become **primary key**.
+👉 Every primary key is a candidate key, but not every candidate key is selected.
+
+**Example:**
+Suppose in a `students` table:
+- `id` is unique
+- `email` is also unique
+
+Both can be candidate keys, but **you select one** as primary key.
+
+---
+
+## 5. **Composite Key**
+👉 A **primary key** made from **two or more columns together**.
+
+**Example:**
+```sql
+CREATE TABLE course_enrollment (
+    student_id INT,
+    course_id INT,
+    PRIMARY KEY (student_id, course_id)
+);
+```
+Here, **student_id + course_id together** make the primary key.  
+One student can enroll in many courses, and one course can have many students, but **the combination must be unique**.
+
+---
+
+## 6. **Index Key**
+👉 Used to **make search faster**.
+👉 Does not guarantee uniqueness.
+👉 Just helps speed up the search.
+
+**Example:**
+```sql
+CREATE INDEX idx_name ON students(name);
+```
+Now, searching by `name` will be faster!
+
+---
+
+# 📝 Quick Table
+
+| Key Type        | Meaning                                    |
+|-----------------|--------------------------------------------|
+| Primary Key     | Unique identity for each row (no NULL)     |
+| Foreign Key     | Connects two tables                       |
+| Unique Key      | No duplicate values allowed               |
+| Candidate Key   | Possible keys for identifying rows        |
+| Composite Key   | Primary key made of multiple columns      |
+| Index           | Makes searching faster (no uniqueness)    |
+
+---
+
+Would you also like me to give you a **real-world analogy** (like school ID card, passport etc.) to remember these keys even better? 🚀
+========================================================================================================================
+Sure! Let's do **Foreign Key** example in a very simple way.
+
+---
+
+# 🌟 What is a Foreign Key?
+- A **Foreign Key** connects two tables together.
+- It says: "**The value in my table must exist in another table**."
+- It **creates a relationship** between tables.
+
+---
+
+# 🔥 Example
+
+Imagine two tables:
+
+---
+**Table 1: `students`**
+```sql
+CREATE TABLE students (
+    id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+```
+| id | name   |
+|----|--------|
+| 1  | John   |
+| 2  | Alice  |
+| 3  | Bob    |
+
+---
+
+**Table 2: `marks`**
+```sql
+CREATE TABLE marks (
+    id INT PRIMARY KEY,
+    student_id INT,
+    score INT,
+    FOREIGN KEY (student_id) REFERENCES students(id)
+);
+```
+| id | student_id | score |
+|----|------------|-------|
+| 1  | 1          | 80    |
+| 2  | 2          | 90    |
+
+---
+
+### 🎯 Key Point:
+- `marks.student_id` is a **foreign key**.
+- It **must match** a valid `id` from the `students` table.
+- You **cannot insert** a mark for student_id=5 if there is no student with id=5 in students.
+
+---
+
+# ❌ Example of an Invalid Insert
+```sql
+INSERT INTO marks (id, student_id, score) VALUES (3, 5, 75);
+```
+> ❌ This will give an error because **student_id=5** does **not exist** in students table.
+
+---
+
+# ✅ Example of a Valid Insert
+```sql
+INSERT INTO marks (id, student_id, score) VALUES (3, 3, 70);
+```
+> ✅ This will work because student_id=3 (Bob) exists.
+
+---
+
+# 🧠 Simple way to remember
+> **Foreign key = a rule** that says: "I trust only those who are listed in another table!"
+
+---
+
+Would you also like me to show a small **diagram** 📈 of this relationship? It can make it even easier to understand! 🚀
+====================================================================
+Perfect! Let’s explain all **three types of mapping** — **One-to-One**, **One-to-Many**, and **Many-to-Many** — in **very simple words** with **examples**.
+
+---
+
+# 🔥 1. One-to-One Mapping
+👉 **Meaning:**  
+One record in **Table A** connects to exactly **one record** in **Table B**.
+
+---
+
+### 📚 Example: **Person and Passport**
+- One person has **one passport**.
+- One passport belongs to **one person**.
+
+---
+
+**Table 1: `person`**
+```sql
+CREATE TABLE person (
+    id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+```
+| id | name   |
+|----|--------|
+| 1  | John   |
+| 2  | Alice  |
+
+---
+
+**Table 2: `passport`**
+```sql
+CREATE TABLE passport (
+    id INT PRIMARY KEY,
+    person_id INT UNIQUE,
+    passport_number VARCHAR(50),
+    FOREIGN KEY (person_id) REFERENCES person(id)
+);
+```
+| id | person_id | passport_number |
+|----|-----------|-----------------|
+| 1  | 1         | P12345           |
+| 2  | 2         | P67890           |
+
+---
+✅ Here:  
+- Each `person_id` in `passport` is unique — one person has one passport.
+
+---
+
+# 🔥 2. One-to-Many Mapping
+👉 **Meaning:**  
+One record in **Table A** connects to **many records** in **Table B**.
+
+---
+
+### 📚 Example: **Teacher and Students**
+- One teacher teaches **many students**.
+- Each student has **one teacher**.
+
+---
+
+**Table 1: `teacher`**
+```sql
+CREATE TABLE teacher (
+    id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+```
+| id | name    |
+|----|---------|
+| 1  | Mr. John|
+| 2  | Mrs. Alice |
+
+---
+
+**Table 2: `student`**
+```sql
+CREATE TABLE student (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    teacher_id INT,
+    FOREIGN KEY (teacher_id) REFERENCES teacher(id)
+);
+```
+| id | name   | teacher_id |
+|----|--------|------------|
+| 1  | Bob    | 1          |
+| 2  | Charlie| 1          |
+| 3  | David  | 2          |
+
+---
+✅ Here:  
+- Mr. John teaches Bob and Charlie (one-to-many).
+- Mrs. Alice teaches David.
+
+---
+
+# 🔥 3. Many-to-Many Mapping
+👉 **Meaning:**  
+**Many records** in Table A connect to **many records** in Table B.
+
+---
+
+### 📚 Example: **Students and Courses**
+- One student can join **many courses**.
+- One course can have **many students**.
+
+---
+
+You need a **third table** (linking table) to handle this.
+
+---
+
+**Table 1: `student`**
+```sql
+CREATE TABLE student (
+    id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+```
+| id | name   |
+|----|--------|
+| 1  | John   |
+| 2  | Alice  |
+
+---
+
+**Table 2: `course`**
+```sql
+CREATE TABLE course (
+    id INT PRIMARY KEY,
+    course_name VARCHAR(100)
+);
+```
+| id | course_name |
+|----|-------------|
+| 1  | Math        |
+| 2  | Science     |
+
+---
+
+**Table 3: `student_course`** (linking table)
+```sql
+CREATE TABLE student_course (
+    student_id INT,
+    course_id INT,
+    PRIMARY KEY (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES student(id),
+    FOREIGN KEY (course_id) REFERENCES course(id)
+);
+```
+| student_id | course_id |
+|------------|-----------|
+| 1          | 1         |
+| 1          | 2         |
+| 2          | 2         |
+
+---
+✅ Here:  
+- John is enrolled in Math and Science.  
+- Alice is enrolled only in Science.  
+- Many students can join many courses.
+
+---
+
+# 🎯 Quick Summary
+
+| Type            | Example                    | Special Table Needed? |
+|-----------------|-----------------------------|------------------------|
+| One-to-One      | Person and Passport         | No                     |
+| One-to-Many     | Teacher and Students        | No                     |
+| Many-to-Many    | Students and Courses        | Yes (Linking Table)     |
+
+---
+
+Would you like me to also draw a **small diagram** 📈 for these mappings? (It'll make it even easier to remember!) 🚀
+
+
+
+================================================================================
+ SQL Create Table Queries
+If you want to create these tables in your MySQL database, use these queries:
+
+sql
+Copy
+Edit
+-- Create Department Table
+CREATE TABLE department (
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(50)
+);
+
+-- Insert Data into Department Table
+INSERT INTO department (dept_id, dept_name) VALUES
+(10, 'IT'),
+(20, 'HR'),
+(30, 'Finance'),
+(40, 'Marketing');
+sql
+Copy
+Edit
+-- Create Employee Table
+CREATE TABLE emp (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    address VARCHAR(100),
+    email VARCHAR(100),
+    salary INT,
+    dept_id INT,
+    FOREIGN KEY (dept_id) REFERENCES department(dept_id)
+);
+
+-- Insert Data into Employee Table
+INSERT INTO emp (id, name, address, email, salary, dept_id) VALUES
+(1, 'Vishnudas', 'Pune', 'vishnu@gmail.com', 50000, 10),
+(2, 'Ganesh', 'Mumbai', 'ganesh@gmail.com', 60000, 20),
+(3, 'Avinash', 'Nagpur', 'avinash@gmail.com', 55000, 10),
+(4, 'Om', 'Akola', 'om@gmail.com', 45000, NULL),
+(5, 'Radha', 'Pune', 'radha@gmail.com', 70000, 30),
+(6, 'Krishna', 'Gokul', 'krishna@gmail.com', 30000, 40),
+(7, 'Yash', 'Telhara', 'yash@gmail.com', 40000, 20);
+
+
+
+
+1) Find second highest salary ?
+
+SELECT MAX(salary)
+FROM emp
+WHERE salary < (SELECT MAX(salary) FROM emp);
+
+2) find 4th highest salary 
+SELECT salary
+FROM emp
+ORDER BY salary DESC
+LIMIT 1 OFFSET 3;
+	
+3) find name of the employees whose name start with "V"
+
+SELECT * FROM employee WHERE full_name LIKE 'Vish%';
+select * from emp where name like "v%";
+
+4) find name of employess whose name fourth latter is h;
+select * from emp where name like "_ _ _h%";
+
+5) write the Query to display the first recored form the table 
+ select * from emp where id =(select min(id) from emp);
+ 
+6) write the Query to display the Last recored form the table 
+ select * from emp where id =(select max(id) from emp);
+ 
+7) 	Find employees who don't belong to any department
+SELECT * FROM emp WHERE dept_id IS NULL;
+
+8)Find duplicate records (by name)
+SELECT name, COUNT(*) FROM emp GROUP BY name HAVING COUNT(*) > 1;
+
+9)	Count employees department-wise
+SELECT dept_id, COUNT(*) FROM emp GROUP BY dept_id;
+
+10)Highest salary department-wise
+SELECT dept_id, MAX(salary) FROM emp GROUP BY dept_id;
+
+11) Find employees with salary between 40000 and 60000
+SELECT * FROM emp WHERE salary BETWEEN 40000 AND 60000;
+
+12)Find total salary expense
+select max(salary) from emp;
+
+
+ Syntax to Find Even and Odd Records:
+Assuming your table is ep and column is emp_id:
+
+🔹 1. Find Even Records:
+sql
+Copy
+Edit
+SELECT * FROM ep
+WHERE emp_id % 2 = 0;
+✅ This returns rows where emp_id is divisible by 2 (even numbers).
+
+🔹 2. Find Odd Records:
+sql
+Copy
+Edit
+SELECT * FROM ep
+WHERE emp_id % 2 <> 0;
+✅ This returns rows where emp_id is not divisible by 2 (odd numbers).
+
+
+
+
+ 
+
+	
