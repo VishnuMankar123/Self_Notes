@@ -4,6 +4,67 @@ Docker notes : https://www.freecodecamp.org/news/the-docker-handbook/
 docker login -u vishnumankar123 
 Password is : Vishnu@123
 =============================================
+docker emailID : mankarvishnudas27@gmail.com
+docker username : vishnumankar123
+doker Password : Vishnu@19031997
+
+[-d ]
+means detach mode means running in background mode
+
+//Check the verions
+docker -v
+
+// pull the images
+docker pull [imageName]
+
+// run the images
+docker run [imageName]
+
+// to check the container
+docker ps -a
+
+// to run the container in detached mode and give the name to the container
+docker run --name [name which you want to give] -d [image name/imageID]
+
+//to run the docker interactive mode
+docker run --name [continer Name] -it -d imageName
+
+//to check container is running or not
+docker ps
+
+
+//
+docker exec -it [containerName which you given above] [command}
+
+//to get the container info
+docker inspect [containerID]
+
+//for exist
+exit
+
+// stop the docker runed
+
+docker stop [image name /image id]
+
+//docker stop and remove form the history
+docker rm [image name / image id ]
+
+
+//to remove the images
+docker rmi [imageName]
+
+====================================================================
+# Stop and remove the existing container
+docker stop ubantuOS
+docker rm ubantuOS
+
+# Run a new container with the name 'ubantuOS' and start a shell session
+docker run --name ubantuOS -it ubuntu
+
+
+ to run the ubnatu images with interactive mode
+
+================================================
 बहुत अच्छा सवाल है!
 👉 **"Docker Linux ही क्यों इस्तेमाल करता है?"**
 

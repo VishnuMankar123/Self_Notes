@@ -1,0 +1,14 @@
+aws account info
+
+12 Digit Account ID :011528268538
+Email ID for aws account: mankarvishnudas27@gmail.com
+
+UserName : VishnudasMankar
+
+Root User Password
+Vishnu@19031996
+
+key pair name for aws : myredhatserver
+
+
+ssh -i "myredhatserver.pem" ec2-user@ec2-16-171-22-118.eu-north-1.compute.amazonaws.com
