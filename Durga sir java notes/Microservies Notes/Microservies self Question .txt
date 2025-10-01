@@ -48,8 +48,7 @@ That's exactly what **Service Discovery** does!
 ---
 
 Let me know if youâ€™d like a diagram or example project showing Service Discovery with Spring Boot + Eureka!
-
-
+=====================================================================================================
 Absolutely! Letâ€™s explain these two important Eureka client properties in **simple words with examples**:
 
 ---
@@ -110,8 +109,6 @@ eureka.client.fetch-registry=true
 Let me know if you want a diagram or real Spring Boot config example!
 
 
-
-
 If you **don't mention** the property `eureka.client.fetch-registry`, the **default value** is **`true`**.
 
 ### Default Behavior:
@@ -128,11 +125,8 @@ If you donâ€™t explicitly set `eureka.client.fetch-registry` in your `applicatio
 ```properties
 eureka.client.fetch-registry=true
 ```
-
 Let me know if you need more details or examples!
-
-
-
+=====================================================================================================
 Great follow-up! Let's see **how Service A and B find each other through Eureka** â€” without hardcoding URLs.
 
 ---
@@ -205,7 +199,7 @@ public String getOrderDetails() {
 
 Let me know if you want a complete working Spring Boot project example or diagram for this!
 
-
+===================================================================================================================
 Sure, here's the complete **text version** of the image content you shared, which you can use to prepare your notes:
 
 ---
@@ -4502,14 +4496,14 @@ AWS Lambda kya hai?
 AWS Lambda ek serverless computing service hai jo aapko code chalane deta hai bina server manage kiye.
 
 ?? Simple definition:
-Lambda = “Upload your function, and AWS will run it when needed — automatically.”
+Lambda = ï¿½Upload your function, and AWS will run it when needed ï¿½ automatically.ï¿½
 
 ?? Key Concepts:
 Feature	Description
-Event-driven	Lambda trigger hota hai kisi event se — jaise S3 file upload, API call, DynamoDB update, etc.
+Event-driven	Lambda trigger hota hai kisi event se ï¿½ jaise S3 file upload, API call, DynamoDB update, etc.
 No server needed	Aapko koi EC2 ya server maintain karne ki zarurat nahi
 Pay-per-use	Sirf jitna time function run hota hai utna hi paisa lagta hai
-Auto-scaling	1 se lekar 1000+ requests ek saath handle kar sakta hai — no setup needed
+Auto-scaling	1 se lekar 1000+ requests ek saath handle kar sakta hai ï¿½ no setup needed
 Runtime supported	Java, Python, Node.js, Go, .NET, Ruby, etc.
 
 ?? Lambda Work Flow Example:
@@ -4539,7 +4533,7 @@ exports.handler = async (event) => {
 };
 
 =============================================================================================
-Great question! Let’s break it down clearly:
+Great question! Letï¿½s break it down clearly:
 
 ---
 
@@ -4550,7 +4544,7 @@ Great question! Let’s break it down clearly:
 | ?? **What it is**    | A virtual machine running 24/7                       | A serverless function that runs **only when triggered**                 |
 | ?? **Running Time**  | Always-on                                            | On-demand (runs only when needed)                                       |
 | ?? **Cost Model**    | You pay **monthly/hourly** whether you use it or not | You pay **only when code runs** (based on execution time + memory used) |
-| ?? **Management**    | You manage OS, updates, security, etc.               | AWS handles everything — fully managed                                  |
+| ?? **Management**    | You manage OS, updates, security, etc.               | AWS handles everything ï¿½ fully managed                                  |
 | ?? **Deployment**    | You install and run apps manually                    | You upload a function (code snippet), AWS runs it                       |
 | ?? **Customization** | Full control: install anything, set configs          | Limited to function logic and supported runtimes                        |
 | ?? **Scalability**   | Manual: you set up scaling rules or buy larger VPS   | Auto-scales instantly (1 or 10,000 requests = no problem)               |
@@ -4578,7 +4572,7 @@ Great question! Let’s break it down clearly:
 
 ### ?? Example Comparison:
 
-Let’s say you're running a **Java Spring Boot API**:
+Letï¿½s say you're running a **Java Spring Boot API**:
 
 * On a **VPS**, you'd set up Linux, install Java, Tomcat, deploy app, and keep it running.
 * On **Lambda**, you'd write the API handler as a function, deploy via AWS, and it only runs when someone calls the API.
