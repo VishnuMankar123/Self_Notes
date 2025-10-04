@@ -519,314 +519,9 @@ Let’s break it down:
 
 Let me know if you want a visual diagram or example setup for this!
 
-==============================================================================
-What is  Zipkin Server ?
-
-Bilkul! Chalo easy Hindi-English mix mein samjhaata hoon ki **Zipkin Server** Java microservices mein kya kaam aata hai.
-
----
-
-### 🔧 **Problem in Microservices**
-
-Jab hum ek **Java microservices** architecture banate hain (jaise: frontend → service A → service B → service C), to kabhi-kabhi request slow ho jaata hai ya fail ho jaata hai.  
-Ab samajhna mushkil hota hai ki:
-
-- Delay **kahan** ho raha hai?
-- **Kis service** mein time zyada lag raha hai?
-- Kya koi **error** hua hai?
-- Request ka **flow** kya tha?
-
----
-
-### ✅ **Yahan Zipkin Server ka kaam aata hai**
-
-**Zipkin Server** ek tool hai jo:
-
-1. **Trace** karta hai har ek request ka **journey** microservices ke through.
-2. Batata hai ki **kaun kaun se services call hui**.
-3. Har ek service ke liye **kitna time** laga — millisecond level par.
-4. Agar koi error aaya ho to usko bhi highlight karta hai.
-
----
-
-### 🔁 **Kaise kaam karta hai (Simple Flow)**
-
-1. Aap apne **Java microservices** mein tracing add karte ho (jaise `Spring Cloud Sleuth` + Zipkin).
-2. Jab koi request aati hai, to har service ek **trace ID** ke through usko track karti hai.
-3. Ye trace data **Zipkin Server** ko bhej diya jaata hai.
-4. **Zipkin UI** mein aap dekh sakte ho ki request ka flow kya tha, aur kaha time laga.
-
----
-
-### 🔍 **Ek Example**
-
-Man lo:
-
-- Frontend → Service A → Service B → Database
-
-Agar koi user bole ki "Website slow hai", to aap Zipkin mein dekh paoge:
-
-- Service A: 10ms
-- Service B: 300ms 😬
-- Database: 5ms
-
-To aapko turant pata chal jaayega ki **Service B slow hai**, wahan optimization chahiye.
-
----
-
-### 🤝 Java ke sath use kaise hota hai?
-
-Spring Boot apps mein aap use karte ho:
-
-- `spring-cloud-starter-sleuth`
-- `spring-cloud-starter-zipkin`
-
-Aur bas config mein `zipkin.base-url` de do. Baaki tracing automatic ho jaata hai.
-
----
-
-Agar tu chahe to main ek simple Spring Boot + Zipkin ka example project bhi bana ke dikha sakta hoon. Chahiye kya?
-
-Great question Vishnudas! Let’s break down the use of these two Spring Boot properties in the context of **Zipkin + Sleuth** integration:
-
----
-
-## 🔧 `spring.zipkin.base-url=http://localhost:9411/`
-
-### 📌 **Purpose**:
-Ye property batati hai ki **Zipkin Server** kaha run ho raha hai — yani tracing data **kahan bhejna hai**.
-
-### ✅ **Use Case**:
-- Jab Sleuth trace data generate karta hai (like trace ID, span ID), wo us data ko **Zipkin Server** ko bhejta hai.
-- Agar Zipkin local machine par run ho raha hai Docker ke through, to aap `http://localhost:9411` likhte ho.
-
-> 🧠 **Default** value hota hai: `http://localhost:9411` — but it’s always good to define it explicitly.
-
----
-
-## 🎯 `spring.sleuth.sampler.probability=1.0`
-
-### 📌 **Purpose**:
-Ye define karta hai ki **kitne % requests trace hongi**.
-
-### 🔢 **Value Range**: `0.0` to `1.0`
-- `1.0` = **100%** requests trace hongi (useful for dev/testing).
-- `0.1` = **10%** of the requests will be traced.
-- `0.0` = No request will be traced.
-
-### ✅ **Use Case**:
-- **Dev mode** mein use karo `1.0` → har request trace hogi (jaise debugging ke liye).
-- **Production** mein usually 0.1 ya 0.01 rakhte hain to reduce overhead.
-
----
-
-### 📌 Summary:
-
-| Property                                | Meaning                                                |
-|-----------------------------------------|--------------------------------------------------------|
-| `spring.zipkin.base-url`               | Zipkin server ka address jahan trace data bhejna hai  |
-| `spring.sleuth.sampler.probability`    | Kitne % requests trace karne hain (1.0 = all)         |
-
----
-
-Agar tu chahe to main isko ek ready-made `application.yml` ke form mein bhi de sakta hoon — ya agar tu AWS/GCP use kar raha hai to remote Zipkin setup bhi explain kar sakta hoon. Just let me know!
-
-
-Example of zipkin server : 
-
-Bilkul Vishnudas! 😄  
-Chalo ek **simple example** banaate hain jisme hum 2 Spring Boot microservices banaenge, aur inhe **Zipkin** ke saath trace karenge.
-
----
-
-## 🧱 Architecture
-
-```
-Client → Service A → Service B
-                    ↑
-                 (Zipkin trace data yahan bheja jaayega)
-```
-
----
-
-## 🧰 Tools Required
-
-- Spring Boot
-- Spring Cloud Sleuth
-- Spring Cloud Zipkin
-- Docker (for running Zipkin server)
-
----
-
-## 🧪 Step-by-Step Example
-
-### 🐳 1. Start Zipkin using Docker
-
-```bash
-docker run -d -p 9411:9411 openzipkin/zipkin
-```
-
-It will start Zipkin on [http://localhost:9411](http://localhost:9411)
-
----
-
-### 📦 2. `Service A` – Caller Service
-
-**Dependencies:**
-```xml
-<!-- pom.xml -->
-<dependencies>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-starter-zipkin</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-starter-sleuth</artifactId>
-    </dependency>
-</dependencies>
-```
-
-**application.properties**
-```properties
-spring.application.name=service-a
-server.port=8081
-spring.zipkin.base-url=http://localhost:9411/
-spring.sleuth.sampler.probability=1.0
-```
-
-**Controller**
-```java
-@RestController
-public class ServiceAController {
-
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @Bean
-    public RestTemplate getRestTemplate() {
-        return new RestTemplate();
-    }
-
-    @GetMapping("/callB")
-    public String callServiceB() {
-        String response = restTemplate.getForObject("http://localhost:8082/hello", String.class);
-        return "Response from B: " + response;
-    }
-}
-```
-
----
-
-### 📦 3. `Service B` – Callee Service
-
-**application.properties**
-```properties
-spring.application.name=service-b
-server.port=8082
-spring.zipkin.base-url=http://localhost:9411/
-spring.sleuth.sampler.probability=1.0
-```
-
-**Controller**
-```java
-@RestController
-public class ServiceBController {
-
-    @GetMapping("/hello")
-    public String sayHello() {
-        return "Hello from B";
-    }
-}
-```
-
----
-
-### ▶️ 4. Run the services
-
-- Run **Service B** first (`8082`)
-- Then run **Service A** (`8081`)
-- Open browser and hit: `http://localhost:8081/callB`
-
----
-
-### 👁️ 5. View in Zipkin
-
-- Go to: [http://localhost:9411](http://localhost:9411)
-- Click on "Find Traces"
-- You’ll see how the trace flows from **Service A → Service B** with all timing info!
-
----
-
-Would you like me to generate this full example as a ZIP project you can download and run?
 ================================================================================================================
-Bilkul, chalo step by step simple words me samjhate hain:
 
----
-
-## 1️⃣ **Spring Cloud Sleuth**
-
-* **Purpose:** Distributed tracing ke liye Spring ka purana library.
-* **Kaam:**
-
-  * Automatically HTTP requests, messaging events aur database calls me **trace ids** aur **span ids** add karta hai.
-  * Traces ko **Zipkin ya other tracing systems** me bhejne ka kaam karta hai.
-* **Note:** Sleuth Spring Boot 3 me **Micrometer Tracing** me migrate ho gaya hai.
-
----
-
-## 2️⃣ **Micrometer Tracing**
-
-* **Purpose:** Modern replacement for Sleuth in Spring Boot 3.x.
-* **Kaam:**
-
-  * Same as Sleuth: request tracing, span creation, timing measurement.
-  * Ye **Micrometer metrics ecosystem** ke sath integrate hota hai → metrics + tracing ek hi system me manage hota hai.
-* **Advantages over Sleuth:**
-
-  * Sleeker API
-  * Multiple tracing backends support (Zipkin, Jaeger, etc.)
-  * Future-ready with Spring Boot 3.x
-
----
-
-## 3️⃣ **Zipkin**
-
-* **Purpose:** Distributed tracing ka **backend / server**.
-* **Kaam:**
-
-  * Traces ko **store, visualize, analyze** karta hai.
-  * Sleuth ya Micrometer Tracing se aane wale spans ko receive karta hai.
-* **Important:** Zipkin **library nahi**, ye **server / tool** hai jahan traces dekh sakte ho.
-
----
-
-### 🔹 Example Flow
-
-1. **Micrometer Tracing / Sleuth** → Spring app me request trace generate karta hai.
-2. **Span info** → HTTP call, DB call, messaging, etc. record hota hai.
-3. **Zipkin Reporter** → Ye span info Zipkin server ko bhejta hai.
-4. **Zipkin UI** → Traces visualize kar sakte ho.
-
----
-
-**Shortcut:**
-
-| Component                   | Role                                                          |
-| --------------------------- | ------------------------------------------------------------- |
-| Sleuth / Micrometer Tracing | Trace generate karta hai, span ids add karta hai              |
-| Zipkin                      | Trace data ko collect aur visualize karta hai                 |
-| Micrometer Tracing          | Sleuth ka modern version, metrics + tracing ka unified system |
-
----
-
-Agar chaho, mai ek **diagram ke sath simple example** bana ke dikha sakta hoon jo Micrometer Tracing + Zipkin ka flow easily samjha de.
-
-Chahoge mai wo bana du?
+================================================================================================================
 
 =================================================================================================================
 Sure! In **Java microservices architecture**, an **API Gateway** is a **single entry point** for all clients to interact with the backend microservices. Think of it as a front door to your system that **routes requests**, **handles authentication**, **performs rate limiting**, and **aggregates data** from multiple services.
@@ -3966,6 +3661,237 @@ No fallbackMethod found with name 'fallbackResponse' and compatible arguments.
 
 Let me know if you want examples for `List`, `ResponseEntity`, or `Mono` return types too.
 =====================================================================================================
+Okta ek **Identity and Access Management (IAM) platform** hai. Matlab ye ek service hai jo organizations ko help karti hai ki wo **users ko securely login, authenticate, aur resources (applications, data, systems) access karne de**.
+
+Simpler words me: Okta ek **digital gatekeeper** hai jo ye decide karta hai ki kaun kya dekh sakta hai aur kaun kya access kar sakta hai.
+
+### Okta ke key features:
+
+1. **Single Sign-On (SSO):**
+
+   * Users ek hi login se multiple apps (like Gmail, Slack, Salesforce) access kar sakte hai.
+   * Ek hi password ya authentication process ka use hota hai.
+
+2. **Multi-Factor Authentication (MFA):**
+
+   * Security badhane ke liye, login ke time extra verification mangta hai (jaise OTP, mobile push notification).
+
+3. **User Lifecycle Management:**
+
+   * Employees join ya leave karte hai, unke accounts automatically create, update, ya deactivate ho jate hai.
+
+4. **Directory Integration:**
+
+   * Existing user directories (Active Directory, LDAP) ke sath integrate ho jata hai.
+
+5. **API Access Management:**
+
+   * Secure API ke access ko manage karta hai.
+
+6. **Adaptive Security:**
+
+   * User behavior ke basis par unusual login detect karta hai aur security rules apply karta hai.
+
+### Example:
+
+Agar ek company me employees Slack, Jira, aur Zoom use karte hain:
+
+* Okta ke through ek hi login se ye sab apps access kar sakte hain.
+* Agar employee leave kar de, to Okta automatically sab apps ka access revoke kar dega.
+
+Agar chaho, mai **ek simple diagram ke through Okta ka workflow bhi dikha sakta hu** jo beginner ke liye easy samajh me aaye.
+
+Kya mai wo bana du?
+
+=====================================================================================================
+Bilkul! Spring Boot ke saath Okta ko use karna kaafi straightforward hai, specially **authentication aur authorization** ke liye. Mai simple steps aur example ke sath samjha deta hu:
+
+---
+
+## 1️⃣ Okta account aur app setup
+
+1. Okta par jaake free developer account create karo: [https://developer.okta.com](https://developer.okta.com)
+2. Dashboard me **Applications → Add Application → Web** choose karo.
+3. Redirect URI set karo (Spring Boot ke liye typical: `http://localhost:8080/login/oauth2/code/okta`)
+4. Client ID aur Client Secret note karo – ye Spring Boot me use hoga.
+
+---
+
+## 2️⃣ Spring Boot project setup
+
+**Dependencies:**
+`pom.xml` me ye dependencies add karo (Maven project ke liye):
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-oauth2-client</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+
+---
+
+## 3️⃣ `application.yml` / `application.properties` me Okta config
+
+```yaml
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          okta:
+            client-id: <YOUR_CLIENT_ID>
+            client-secret: <YOUR_CLIENT_SECRET>
+            scope: openid, profile, email
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            client-name: Okta
+        provider:
+          okta:
+            issuer-uri: https://<your-okta-domain>/oauth2/default
+```
+
+> Replace `<YOUR_CLIENT_ID>` aur `<YOUR_CLIENT_SECRET>` aur `<your-okta-domain>` apne Okta account se.
+
+---
+
+## 4️⃣ Simple Controller
+
+```java
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
+
+@Controller
+public class HomeController {
+
+    @GetMapping("/")
+    public String home(@AuthenticationPrincipal OidcUser user, Model model) {
+        if(user != null) {
+            model.addAttribute("name", user.getFullName());
+        }
+        return "home"; // home.html
+    }
+}
+```
+
+`home.html` me simple message dikha sakte ho:
+
+```html
+<h1>Welcome, <span th:text="${name}">User</span>!</h1>
+```
+
+---
+
+## 5️⃣ Security Config (Optional)
+
+Spring Boot 3.x me `WebSecurityConfigurerAdapter` deprecated hai. Simple config:
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.stereotype.Component;
+
+@Component
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().authenticated()
+            )
+            .oauth2Login();
+        return http.build();
+    }
+}
+```
+
+---
+
+✅ **Ab kaam ye karega:**
+
+1. User `http://localhost:8080/` open karega.
+2. Spring Boot automatically Okta login page redirect karega.
+3. Login ke baad user info `OidcUser` object me milega aur aap UI me show kar sakte ho.
+
+---
+
+Agar chaho, mai ek **diagram ke saath flow bhi dikha du** jo beginner ke liye “Okta + Spring Boot login” ka samajhna aur easy bana de.
+
+Kya mai wo bana du?
+
+=====================================================================================================
+Haan, bilkul! 😄
+
+Okta ka **login flow bilkul Google, Facebook ya GitHub OAuth2 login** jaisa hi hai. Matlab:
+
+1. **User tries to access your app** → Spring Boot redirect karta hai **Okta ke login page** par.
+2. **User Okta me login karta hai** → Okta verify karta hai credentials.
+3. **Okta user ko app par redirect karta hai** → Saath me **access token / ID token** bhi bhejta hai.
+4. **Spring Boot app token check karta hai** → User authenticated ho jata hai, aur app access mil jata hai.
+
+So, conceptually:
+
+* Google login = OAuth2 provider
+* Okta login = OAuth2 provider
+
+Difference sirf itna hai ki **Okta aapka khud ka corporate login system ho sakta hai**, aur aap SSO, MFA, aur user management bhi uske through control kar sakte ho.
+
+Agar chaho, mai **ek simple flow diagram bana ke dikha du** jo Google login aur Okta login ka comparison easy samjha de.
+
+Kya mai wo bana du?
+
+=====================================================================================================
+Thik hai, mai aur simple aur beginner-friendly way me samjhata hu:
+
+---
+
+### Google Login
+
+* Jab aap kisi website par **“Login with Google”** click karte ho:
+
+  1. Website aapko Google ke login page par bhejti hai.
+  2. Aap Google account se login karte ho.
+  3. Google verify karta hai ki aap kaun ho.
+  4. Fir aap website par wapas aate ho aur website aapko access de deti hai.
+
+**Point:** Website ko user ka Gmail account chahiye aur authentication Google handle karta hai.
+
+---
+
+### Okta Login
+
+* Jab aap company ke **internal apps** me login karte ho (jaise Jira, Slack, internal dashboard):
+
+  1. Website aapko **Okta login page** par bhejti hai.
+  2. Aap company ka username/password se login karte ho.
+  3. Okta verify karta hai aapka account aur permissions.
+  4. Fir aapko apps ka access milta hai.
+
+**Point:** Okta **organization ka gatekeeper** hai. Ye decide karta hai ki kaun kaun se apps use kar sakta hai, kaun kaun se permissions milenge, aur security rules enforce karta hai.
+
+---
+
+### Simplest way samjhne ke liye:
+
+* **Google login** → Personal account ka login
+* **Okta login** → Company account ka login + control + security
+
+---
+
+Agar chaho, mai ek **chhota example diagram** bana ke difference visually dikha du jo ek nazar me samajh aaye.
+
+Kya mai bana du?
+
+=====================================================================================================
 बिलकुल, नीचे हिंदी में समझाया गया है कि **Spring Security** और **Okta** क्या हैं और ये एक-दूसरे से कैसे अलग हैं:
 
 ---
@@ -4527,277 +4453,7 @@ http://localhost:8080
 
 बस बोलो **“हाँ चाहिए!”** 🚀✨
 =============================================================================================
-बहुत अच्छा सवाल है — चलिए **Spring Boot** में **Distributed Logging** के इन दोनों concepts (**Sleuth Logging** और **Zipkin Server**) को आसान भाषा में समझते हैं:
 
----
-
-## 🔹 1️⃣ **Sleuth Logging (Spring Cloud Sleuth)**
-
-👉 **Spring Cloud Sleuth** एक library है जो **distributed tracing** के लिए Spring Boot apps में automatically tracing information जोड़ देती है।
-
-### ⚙️ क्या करता है?
-
-* Sleuth हर request को एक **trace ID** और हर step को एक **span ID** assign करता है।
-* ये IDs logs में add हो जाते हैं जिससे पता चलता है कि कौनसा request कहां से कहां जा रहा है।
-* अगर आपका app multiple microservices में divided है, तो Sleuth हर microservice की logs में same trace ID और span IDs डाल देगा।
-* इससे आप पूरी request chain को easily trace कर सकते हैं।
-
-### ✅ Benefit:
-
-* Logs में correlation आता है — आप देख सकते हैं कि एक request ने कौन-कौन से microservices hit किए।
-* Debugging और performance monitoring आसान हो जाता है।
-
----
-
-## 🔹 2️⃣ **Zipkin Server**
-
-👉 **Zipkin** एक distributed tracing system है — ये Sleuth से collect किए गए trace data को store और visualize करता है।
-
-### ⚙️ क्या करता है?
-
-* Sleuth जो tracing data बनाता है, उसे Zipkin Server पर भेजता है।
-* Zipkin ये data collect करके आपको एक web UI देता है।
-* उस UI में आप trace graph देख सकते हैं — कौन सा request कब कहां गया, कितनी latency हुई, bottleneck कहां है, etc.
-
-### ✅ Benefit:
-
-* Full end-to-end request tracing का visualization मिलता है।
-* Performance issue, slow API या microservice chain में delay को आसानी से find किया जा सकता है।
-
----
-
-## 🔹 कैसे काम करते हैं साथ में?
-
-1️⃣ **Sleuth:** Request की tracing info बनाता है और logs में जोड़ता है।
-2️⃣ **Zipkin:** Sleuth से trace data लेता है और उसे store + visualize करता है।
-
----
-
-## 🔹 Example Dependencies
-
-**Maven में Sleuth और Zipkin के लिए dependencies:**
-
-```xml
-<!-- Sleuth -->
-<dependency>
-  <groupId>org.springframework.cloud</groupId>
-  <artifactId>spring-cloud-starter-sleuth</artifactId>
-</dependency>
-
-<!-- Zipkin -->
-<dependency>
-  <groupId>org.springframework.cloud</groupId>
-  <artifactId>spring-cloud-starter-zipkin</artifactId>
-</dependency>
-```
-
-**`application.properties` में config:**
-
-```properties
-spring.application.name=my-service
-
-# Zipkin server address
-spring.zipkin.base-url=http://localhost:9411/
-
-# Sample rate (1.0 means 100% tracing)
-spring.sleuth.sampler.probability=1.0
-```
-
----
-
-## 🔹 Practical Scenario
-
-मान लीजिए:
-
-* आपके पास 3 microservices हैं: `A`, `B`, और `C`.
-* Client `A` को call करता है, `A` → `B` → `C`.
-
-👉 Sleuth हर hop पर **trace ID** attach करेगा।
-👉 Zipkin आपको end-to-end trace दिखाएगा — request कहां से कहां गया और कहां कितना time लगा।
-
----
-
-## 🔹 Summary
-
-| Concept    | Role                                            |
-| ---------- | ----------------------------------------------- |
-| **Sleuth** | Logs में trace IDs जोड़ता है                    |
-| **Zipkin** | Trace data collect करता है और visualize करता है |
-
----
-
-अगर आप चाहें तो मैं एक **working Spring Boot example** भी बना दूं जिसमें Sleuth + Zipkin setup हो — बताना चाहेंगे? 🚀
-============================================================================================================
-Perfect! Let’s build a **full working example** to show how to configure **Spring Cloud Sleuth + Zipkin** in a Spring Boot project step-by-step.
-
----
-
-## ✅ **Step 1: Create a Spring Boot project**
-
-You can use **Spring Initializr**:
-
-* Website: [start.spring.io](https://start.spring.io)
-* Choose:
-
-  * **Spring Boot Version:** 2.7.x or 3.x (compatible with Spring Cloud)
-  * **Dependencies:**
-
-    * Spring Web
-    * Spring Cloud Sleuth
-    * Spring Cloud Zipkin
-
----
-
-## ✅ **Step 2: Add Maven dependencies**
-
-Your `pom.xml` must have:
-
-```xml
-<dependency>
-  <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-starter-web</artifactId>
-</dependency>
-
-<dependency>
-  <groupId>org.springframework.cloud</groupId>
-  <artifactId>spring-cloud-starter-sleuth</artifactId>
-</dependency>
-
-<dependency>
-  <groupId>org.springframework.cloud</groupId>
-  <artifactId>spring-cloud-starter-zipkin</artifactId>
-</dependency>
-```
-
-Also add Spring Cloud version in `<dependencyManagement>`:
-
-```xml
-<dependencyManagement>
-  <dependencies>
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-dependencies</artifactId>
-      <version>2022.0.5</version> <!-- Replace with current version -->
-      <type>pom</type>
-      <scope>import</scope>
-    </dependency>
-  </dependencies>
-</dependencyManagement>
-```
-
----
-
-## ✅ **Step 3: Configure `application.properties`**
-
-Add below configs in `src/main/resources/application.properties`:
-
-```properties
-spring.application.name=my-sleuth-zipkin-example
-
-# Zipkin server URL (default if running locally)
-spring.zipkin.base-url=http://localhost:9411/
-
-# Send 100% traces
-spring.sleuth.sampler.probability=1.0
-
-# Optional: log level
-logging.level.org.springframework.web=DEBUG
-```
-
----
-
-## ✅ **Step 4: Add a simple REST Controller**
-
-Example `HelloController.java`:
-
-```java
-package com.example.demo;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
-public class HelloController {
-
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello, Sleuth + Zipkin!";
-    }
-}
-```
-
-When you hit `/hello`, Sleuth will generate trace IDs automatically.
-
----
-
-## ✅ **Step 5: Run Zipkin**
-
-👉 Easiest: run Zipkin using Docker
-
-```bash
-docker run -d -p 9411:9411 openzipkin/zipkin
-```
-
-This will run Zipkin UI at [http://localhost:9411](http://localhost:9411)
-
----
-
-## ✅ **Step 6: Run your Spring Boot app**
-
-Run your app:
-
-```
-mvn spring-boot:run
-```
-
-Open browser → `http://localhost:8080/hello`
-
-Check your logs — you’ll see:
-
-```
-[traceId, spanId]
-```
-
-added automatically!
-
----
-
-## ✅ **Step 7: Verify traces in Zipkin UI**
-
-Go to:
-
-```
-http://localhost:9411
-```
-
-* Click **Find Traces**.
-* You’ll see your `/hello` calls.
-* Click a trace to see how it traveled through your app.
-
----
-
-## 🔥 **How it works**
-
-✔ **Sleuth:**
-Adds trace ID + span ID to logs, sends trace data to Zipkin.
-
-✔ **Zipkin:**
-Collects traces, stores in-memory, shows on UI.
-
----
-
-## ✅ ✅ ✅ That’s it — full working **Sleuth + Zipkin example!**
-
----
-
-If you want, I can share:
-
-* Full sample project as a zip.
-* OR: A **multi-service** example with Service A → Service B → Service C, so you see real distributed tracing.
-
-**Want that? Tell me!** 🚀
-
-=============================================================================================================
 Good — let’s break down **ELK Stack** in simple words for a Spring Boot developer:
 
 ---
