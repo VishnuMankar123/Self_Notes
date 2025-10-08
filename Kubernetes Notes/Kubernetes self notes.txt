@@ -403,3 +403,72 @@ minikube stop
 
 To enable the dashboard 
 minikube dashboard
+
+==================================================================================================
+Excellent question, Vishnudas 👍
+
+Let’s break it down clearly 👇
+
+---
+
+### 🧩 Command:
+
+```bash
+minikube start --nodes 2 --driver=docker
+```
+
+### 💡 What happens:
+
+* ✅ **Minikube will create its own Kubernetes cluster** (inside Docker).
+* It will **not stop or delete Docker Desktop’s Kubernetes** — both can coexist, but **they are separate clusters**.
+
+---
+
+### ⚙️ Details:
+
+| Component                     | Explanation                                                                                                                               |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **Docker Desktop Kubernetes** | The built-in cluster that comes with Docker Desktop. It usually has **only 1 node** and is managed by Docker.                             |
+| **Minikube**                  | A separate tool that creates a **Kubernetes cluster inside Docker containers or VMs**. You can choose number of nodes (like `--nodes 2`). |
+| **Driver `--driver=docker`**  | It tells Minikube to create nodes as Docker containers, not VMs.                                                                          |
+
+---
+
+### ⚠️ Important:
+
+When you run both clusters, you might have **two kubeconfigs**.
+Minikube will automatically **switch context** to its own cluster.
+
+You can check current cluster:
+
+```bash
+kubectl config current-context
+```
+
+If you want to switch back to Docker Desktop’s Kubernetes:
+
+```bash
+kubectl config use-context docker-desktop
+```
+
+And to go back to Minikube:
+
+```bash
+kubectl config use-context minikube
+```
+
+---
+
+### ✅ Summary
+
+| Action                                         | Result                                               |
+| ---------------------------------------------- | ---------------------------------------------------- |
+| Run `minikube start --nodes 2 --driver=docker` | Creates a **new cluster** with 2 nodes inside Docker |
+| Docker Desktop’s K8s                           | **Still runs**, not stopped                          |
+| Cluster selection                              | Controlled by **kubectl context**                    |
+
+---
+
+Would you like me to show you the full steps to verify both clusters (Minikube + Docker Desktop) and switch between them safely?
+
+==================================================================================================

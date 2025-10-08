@@ -6029,10 +6029,371 @@ Would you like me to show a **practical example** — like a dashboard layout wi
 That’s often asked in React interviews.
 
 ==========================================================================================================
-React Router 10 Nested Routing completed
+React me useLocation ek hook hai jo React Router (specifically react-router-dom library) ke andar milta hai.
+Ye hook current URL ki information (location object) return karta hai — jisme path, query parameters, hash, etc. hota hai.
+
+## 🎯 Goal:
+
+Hum ek page banayenge —
+URL hoga:
+
+```
+http://localhost:3000/user?id=101&name=Vishnu
+```
+
+Aur component me hum **id** aur **name** ko URL se read karenge.
+
+---
+
+## 🧩 Step-by-Step Example
+
+### 1️⃣ App.js
+
+```jsx
+import React from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import User from "./User";
+
+function App() {
+  return (
+    <Router>
+      <div style={{ padding: "20px" }}>
+        <h2>React useLocation Example</h2>
+        <Link to="/user?id=101&name=Vishnu">Go to User Page</Link>
+
+        <Routes>
+          <Route path="/user" element={<User />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+```
+
+---
+
+### 2️⃣ User.js
+
+```jsx
+import React from "react";
+import { useLocation } from "react-router-dom";
+
+function User() {
+  const location = useLocation();
+
+  // Query params nikalne ke liye
+  const queryParams = new URLSearchParams(location.search);
+  const id = queryParams.get("id");
+  const name = queryParams.get("name");
+
+  return (
+    <div>
+      <h3>User Page</h3>
+      <p>Current Path: {location.pathname}</p>
+      <p>User ID: {id}</p>
+      <p>User Name: {name}</p>
+    </div>
+  );
+}
+
+export default User;
+```
+
+---
+
+## ⚙️ Output:
+
+Jab aap click karoge:
+
+```
+Go to User Page
+```
+
+to browser URL hoga:
+
+```
+http://localhost:3000/user?id=101&name=Vishnu
+```
+
+Aur page pe output dikhega:
+
+```
+User Page
+Current Path: /user
+User ID: 101
+User Name: Vishnu
+```
+
+---
+
+## 💡 Samjho kya hua:
+
+1. `useLocation()` → current URL ka data diya.
+2. `location.search` → `?id=101&name=Vishnu` mila.
+3. `new URLSearchParams(location.search)` → query params parse karne me help ki.
+4. `queryParams.get("id")` → `"101"` mila,
+   `queryParams.get("name")` → `"Vishnu"` mila.
+
+---
+
+Agar chaho to mai ek version bana du jisme **navigate karte time state bhi bhej kar** `useLocation` se receive kare (URL me params ke bina)?
+e.g. navigate('/user', { state: { id: 101, name: 'Vishnu' } })
+
 ==========================================================================================================
+React me Protected Route (ya Private Route) ka matlab hota hai —
+wo route jise sirf authorized (login kiye hue) user hi access kar sakte hain.
+Agar user login nahi hai, to use login page pe redirect kar diya jata hai.
+
+💡 Simple Definition:
+
+Protected Route = Ek aisa route jahan access karne ke liye authentication check lagta hai.
+
+---
+
+## 🧩 Example: Simple Protected Route
+
+### 📁 `App.js`
+
+```jsx
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Home from "./Home";
+import Dashboard from "./Dashboard";
+
+function App() {
+  const isLoggedIn = false; // 👈 yahan hum maan lete hain user login nahi hai
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+
+        {/* Protected Route */}
+        <Route
+          path="/dashboard"
+          element={
+            isLoggedIn ? <Dashboard /> : <Navigate to="/" replace />
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+---
+
+### 📁 `Home.js`
+
+```jsx
+import React from "react";
+
+function Home() {
+  return (
+    <div>
+      <h2>Home Page 🏠</h2>
+      <p>Yahan se login karke dashboard ja sakte ho.</p>
+    </div>
+  );
+}
+
+export default Home;
+```
+
+---
+
+### 📁 `Dashboard.js`
+
+```jsx
+import React from "react";
+
+function Dashboard() {
+  return (
+    <div>
+      <h2>Dashboard 🔒</h2>
+      <p>Ye page sirf logged-in users ke liye hai.</p>
+    </div>
+  );
+}
+
+export default Dashboard;
+```
+
+---
+
+## ⚙️ Output Behavior
+
+| Case                 | Result                                                  |
+| -------------------- | ------------------------------------------------------- |
+| `isLoggedIn = false` | Dashboard pe jaane ki koshish karoge → redirect to Home |
+| `isLoggedIn = true`  | Dashboard dikhai dega                                   |
+
+---
+
+Bas itna hi logic hota hai Protected Route ka:
+👉 “Agar login hai to page dikhao, warna redirect kar do.”
+
+---
+
+Chaho to mai isi example me ek **button ke click pe login karne ka simple version** bhi add kar du (taaki tum switch kar sako Home ↔ Dashboard)?
+
 ==========================================================================================================
+Bahut accha sawaal 🔥
+
+React me **Protected Route** (ya **Private Route**) ka matlab hota hai —
+**wo route jise sirf authorized (login kiye hue) user hi access kar sakte hain.**
+Agar user login nahi hai, to use **login page pe redirect** kar diya jata hai.
+
+---
+
+## 💡 Simple Definition:
+
+> Protected Route = Ek aisa route jahan access karne ke liye **authentication check** lagta hai.
+
+---
+
+## 🧠 Real-Life Example:
+
+Jaise koi website hai:
+
+* `/login` — sab dekh sakte hain ✅
+* `/dashboard` — sirf login users dekh sakte hain ❌ (agar login nahi ho to redirect to `/login`)
+
+---
+
+## ⚙️ Step-by-Step Example
+
+### 1️⃣ `App.js`
+
+```jsx
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Dashboard from "./Dashboard";
+import Login from "./Login";
+import ProtectedRoute from "./ProtectedRoute";
+
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  return (
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+
+        {/* Protected route */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
+```
+
+---
+
+### 2️⃣ `ProtectedRoute.js`
+
+```jsx
+import React from "react";
+import { Navigate } from "react-router-dom";
+
+function ProtectedRoute({ isAuthenticated, children }) {
+  if (!isAuthenticated) {
+    // Agar login nahi hai to redirect karega /login pe
+    return <Navigate to="/login" replace />;
+  }
+  return children; // agar login hai to content dikhao
+}
+
+export default ProtectedRoute;
+```
+
+---
+
+### 3️⃣ `Login.js`
+
+```jsx
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+function Login({ setIsAuthenticated }) {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    setIsAuthenticated(true); // user ko login kar diya
+    navigate("/dashboard"); // redirect to dashboard
+  };
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h2>Login Page</h2>
+      <button onClick={handleLogin}>Login</button>
+    </div>
+  );
+}
+
+export default Login;
+```
+
+---
+
+### 4️⃣ `Dashboard.js`
+
+```jsx
+import React from "react";
+
+function Dashboard() {
+  return (
+    <div style={{ padding: "20px" }}>
+      <h2>Welcome to Dashboard 🎉</h2>
+      <p>Ye page sirf logged-in users ke liye hai.</p>
+    </div>
+  );
+}
+
+export default Dashboard;
+```
+
+---
+
+## 🧩 Output Behavior:
+
+| Situation                             | Result                    |
+| ------------------------------------- | ------------------------- |
+| User tries `/dashboard` without login | Redirect → `/login`       |
+| User logs in                          | Redirect → `/dashboard`   |
+| After login                           | Dashboard content visible |
+
+---
+
+## 🔐 Summary
+
+| Concept             | Description                                            |
+| ------------------- | ------------------------------------------------------ |
+| **Protected Route** | Page only for authenticated users                      |
+| **`Navigate`**      | Used to redirect unauthenticated users                 |
+| **Usage**           | Wrap protected pages inside `<ProtectedRoute>`         |
+| **Control**         | Based on state like `isAuthenticated`, JWT token, etc. |
+
+---
+
+Agar chaho to mai iska **JWT Token based version** bhi bana du (jisme localStorage me token check hota hai)?
+Woh real-world production ke jaisa hota hai.
+
 ==========================================================================================================
+Routing setup 47 video
 ==========================================================================================================
 ==========================================================================================================
 ==========================================================================================================
