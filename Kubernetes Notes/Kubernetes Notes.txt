@@ -3206,7 +3206,7 @@ kubectl exec -it <pod-name> -- <command>
 ### **a) Open bash shell in a pod**
 
 ```bash
-kubectl exec -it nginx -- bash
+kubectl exec -it myapp-deployment-5ff475d5ff-25clz -- bash
 ```
 
 * Agar pod ke andar **bash available hai**, to tum **terminal ke through pod ke andar interact** kar sakte ho.
@@ -3256,7 +3256,7 @@ nginx   1/1     Running
 2. Open bash shell:
 
 ```bash
-kubectl exec -it nginx -- bash
+kubectl exec -it myapp-deployment-5ff475d5ff-l2t4l -- bash
 ```
 
 3. Tum ab pod ke andar ho:
