@@ -1,0 +1,904 @@
+
+Annotation in Spring Boot : 
+
+==================================================================
+Excellent question, Vishnudas 👏 — ye interview me **bahut common Spring Core** topic hai.
+Let’s clearly compare `@Resource`, `@Autowired`, aur `@Inject` with proper explanation 👇
+
+---
+
+### ✅ **Basic Purpose**
+
+Tino annotations ka kaam same hai — **dependency injection (DI)** karna.
+Lekin ye alag-alag frameworks se aate hain aur unka behavior thoda different hai.
+
+---
+
+### 📘 **Comparison Table**
+
+| Annotation   | Package / Origin                                                           | Injection Type                                            | How It Resolves Dependency                                                        | Extra Features / Notes                                                 |
+| ------------ | -------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `@Autowired` | `org.springframework.beans.factory.annotation.Autowired` (Spring-specific) | By **Type** (default), can use `@Qualifier` for by-name   | First matches **type**, then (if multiple beans) checks `@Qualifier` or bean name | Can be used on **constructor**, **field**, or **setter**               |
+| `@Resource`  | `jakarta.annotation.Resource` (J2EE / Java EE standard)                    | By **Name** (default), then by **Type** if name not found | First looks for **bean name** same as variable, then tries **type** match         | Optional attributes: `name` and `type`                                 |
+| `@Inject`    | `jakarta.inject.Inject` (JSR-330 standard)                                 | By **Type**                                               | Works like `@Autowired`, but **doesn’t support `required=false`**                 | Needs additional qualifier via `@Named` if multiple beans of same type |
+
+---
+
+### 🧩 **Example**
+
+```java
+@Component
+public class Example {
+
+    @Autowired
+    private ServiceA serviceA; // Injects by type
+
+    @Resource(name = "serviceB")
+    private ServiceB service;  // Injects by bean name
+
+    @Inject
+    private ServiceC serviceC; // Injects by type (JSR-330)
+}
+```
+
+---
+
+### 💡 **When to Use What**
+
+| Situation                                                    | Recommended Annotation |
+| ------------------------------------------------------------ | ---------------------- |
+| Pure Spring project                                          | `@Autowired` ✅         |
+| You want standard Java EE style (for portability)            | `@Resource`            |
+| Working with Jakarta EE or CDI standard                      | `@Inject`              |
+| You need fine control with qualifiers or optional dependency | `@Autowired`           |
+
+---
+
+Would you like me to also show **how Spring resolves conflicts** (e.g., when 2 beans of the same type exist) for these annotations?
+======================================================================================================
+
+## ⚙️ **1. @PostConstruct**
+
+| Aspect           | Description                                                      |
+| ---------------- | ---------------------------------------------------------------- |
+| **Package**      | `jakarta.annotation.PostConstruct`                               |
+| **Purpose**      | Run **initialization logic** after all dependencies are injected |
+| **When it runs** | After the bean is created and dependency injection is complete   |
+| **Usage**        | Useful for loading config, establishing connections, etc.        |
+| **Example**      |                                                                  |
+
+```java
+@Component
+public class DataLoader {
+
+    @PostConstruct
+    public void init() {
+        System.out.println("✅ Bean initialized — loading data...");
+    }
+}
+```
+
+💡 Equivalent to implementing `InitializingBean.afterPropertiesSet()`, but cleaner.
+
+---
+
+## 🧹 **2. @PreDestroy**
+
+| Aspect           | Description                                                  |
+| ---------------- | ------------------------------------------------------------ |
+| **Package**      | `jakarta.annotation.PreDestroy`                              |
+| **Purpose**      | Run **cleanup logic** before the bean is destroyed           |
+| **When it runs** | Before the ApplicationContext shuts down                     |
+| **Usage**        | Useful for releasing resources, closing DB connections, etc. |
+| **Example**      |                                                              |
+
+```java
+@Component
+public class DataCleaner {
+
+    @PreDestroy
+    public void cleanup() {
+        System.out.println("🧹 Cleaning up before bean destruction...");
+    }
+}
+```
+
+💡 Equivalent to implementing `DisposableBean.destroy()`.
+
+---
+
+### ⚖️ **Summary Table**
+
+| Annotation       | Purpose                        | Runs When / Used For                    | Package              |
+| ---------------- | ------------------------------ | --------------------------------------- | -------------------- |     
+| `@PostConstruct` | Initialization logic           | After bean creation & DI complete       | `jakarta.annotation` |
+| `@PreDestroy`    | Cleanup logic                  | Before bean destruction (context close) | `jakarta.annotation` |
+
+---
+
+Would you like me to show how these three annotations work **together in one Spring class** (like a lifecycle demo example)?
+=============================================================================================================
+Sure Vishnudas 👏 — `@RequestHeader` **Spring MVC / Spring Boot** me use hota hai to **HTTP request headers ko controller method me access karne ke liye**.
+
+Let’s break it down clearly 👇
+
+---
+
+## 🔹 **@RequestHeader**
+
+| Aspect              | Description                                                                   |
+| ------------------- | ----------------------------------------------------------------------------- |
+| **Package**         | `org.springframework.web.bind.annotation.RequestHeader`                       |
+| **Purpose**         | HTTP request header values ko controller method ke parameters me inject karna |
+| **Usage**           | Optional or required headers, default values support                          |
+| **Supported Types** | String, int, long, boolean, List<String>, Map<String, String>                 |
+
+---
+
+## 🧩 **Basic Example**
+
+```java
+@RestController
+@RequestMapping("/api")
+public class MyController {
+
+    @GetMapping("/greet")
+    public String greetUser(
+        @RequestHeader("username") String username,
+        @RequestHeader(value = "role", defaultValue = "guest") String role) {
+        
+        return "Hello " + username + "! Your role is " + role;
+    }
+}
+```
+
+### 🔍 Explanation
+
+* `@RequestHeader("username") String username` → fetches the `username` header from the HTTP request.
+* `@RequestHeader(value="role", defaultValue="guest") String role` → if the header is missing, `role` defaults to `"guest"`.
+* Required headers by default, but you can make it optional:
+
+```java
+@RequestHeader(value="token", required=false) String token
+```
+
+---
+
+## 📌 **Use Cases**
+
+1. Authentication: Pass JWT or API token via header.
+2. Localization: `Accept-Language` header.
+3. Custom tracking: `X-Request-ID` for request tracing.
+4. Feature flags: Enable/disable features via headers.
+
+---
+
+Agar chaho to main **@RequestHeader vs @RequestParam vs @PathVariable** ka **comparison table** bhi bana du, jo interview me kaafi helpful hota hai.
+Chalu karu?
+
+=============================================================================================================
+Samajhta hoon Vishnudas, thoda detail me explain karta hoon 👇
+
+---
+
+### **“Available in View — model attributes can be pre-populated for forms” ka matlab**
+
+1. **Context:**
+   Spring MVC me **controller** ka kaam sirf request handle karna nahi, balki **data model** view (JSP, Thymeleaf, etc.) tak bhejna bhi hai.
+
+2. **ModelAttribute on method level:**
+
+   ```java
+   @ModelAttribute("roles")
+   public List<String> populateRoles() {
+       return List.of("ADMIN", "USER", "GUEST");
+   }
+   ```
+
+   * Ye method controller ke **har request ke liye** automatically call hota hai.
+   * Jo value return hoti hai (`List.of("ADMIN","USER","GUEST")`) wo **view ke model me add ho jati hai** with name `"roles"`.
+
+3. **View me iska use:**
+   Suppose tumhare form me ek dropdown hai jisme user role select karega:
+
+   **Thymeleaf Example:**
+
+   ```html
+   <select name="role">
+       <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+   </select>
+   ```
+
+   * `${roles}` refers to **model attribute added by @ModelAttribute method**
+   * Isse dropdown me automatically `"ADMIN"`, `"USER"`, `"GUEST"` options aa jaate hain.
+
+4. **Key Idea:**
+
+   * Tum **controller se view tak data bhej rahe ho**.
+   * View automatically ye data form me **pre-populate** kar sakta hai.
+
+---
+
+💡 **Shortcut Understanding:**
+
+* `@ModelAttribute` method → prepares data → **makes it available in view**
+* Form / JSP / Thymeleaf → automatically use kar sakta hai without additional code
+
+---
+
+Agar chaho to main **small diagram bana ke** dikha du kaise `@ModelAttribute` → Controller → Model → View me data flow hota hai,
+ye visual samajhne me bohot easy hota hai.
+
+Chalu karu Vishnudas?
+
+=============================================================================================================
+Bilkul Vishnudas 👏 — `@ModelAttribute` **Spring MVC / Spring Boot** me kaafi commonly use hota hai, specially **form data bind karne aur controller me objects populate karne ke liye**.
+
+Let’s break it down clearly 👇
+
+---
+
+## 🔹 **@ModelAttribute**
+
+| Aspect         | Description                                                                         |
+| -------------- | ----------------------------------------------------------------------------------- |
+| **Package**    | `org.springframework.web.bind.annotation.ModelAttribute`                            |
+| **Purpose**    | HTTP request parameters (form data / query params) ko **Java object** me bind karna |
+| **Usage**      | Method parameter or method level dono pe use ho sakta hai                           |
+| **Works With** | Form submissions, query parameters, model attributes (for view)                     |
+
+---
+
+## 🧩 **Example 1: Binding Form Data to Object**
+
+```java
+// Entity / DTO
+public class User {
+    private String name;
+    private String email;
+
+    // getters & setters
+}
+
+// Controller
+@Controller
+@RequestMapping("/user")
+public class UserController {
+
+    @PostMapping("/save")
+    public String saveUser(@ModelAttribute User user) {
+        // Spring automatically binds request params "name" and "email" to User object
+        System.out.println(user.getName() + " | " + user.getEmail());
+        return "userSuccess";
+    }
+}
+```
+
+**Request example:**
+
+```
+POST /user/save
+Content-Type: application/x-www-form-urlencoded
+
+name=Vishnu&email=vishnu@example.com
+```
+
+* Spring automatically populates `User` object with these values.
+
+---
+
+## 🧩 **Example 2: Method Level @ModelAttribute**
+
+```java
+@Controller
+public class MyController {
+
+    @ModelAttribute("roles")
+    public List<String> populateRoles() {
+        return List.of("ADMIN", "USER", "GUEST");
+    }
+
+    @GetMapping("/showForm")
+    public String showForm() {
+        // roles list automatically added to the model
+        return "formView";
+    }
+}
+```
+
+* Here, `roles` list is available in the view (Thymeleaf / JSP) automatically.
+
+---
+
+## 📌 **Key Points**
+
+1. **Automatic Binding** — request parameters → Java object properties.
+2. **Available in View** — model attributes can be pre-populated for forms.
+3. Can be used **on method parameter** (binding) or **on method** (populate model).
+4. Useful in **form handling, preloading dropdowns, or shared data across multiple views**.
+
+---
+
+Agar chaho to main **@ModelAttribute vs @RequestParam vs @RequestBody** ka **comparison table** bhi bana du, jo interview me kaafi handy hota hai.
+Banau Vishnudas?
+
+=============================================================================================================
+Bilkul Vishnudas 👏 — `@Conditional` Spring me **bean creation ko conditionally control karne** ke liye use hota hai.
+
+Let’s break it down clearly 👇
+
+---
+
+## 🔹 **@Conditional Annotation**
+
+| Aspect        | Description                                                                                         |
+| ------------- | --------------------------------------------------------------------------------------------------- |
+| **Package**   | `org.springframework.context.annotation.Conditional`                                                |
+| **Purpose**   | Spring container me **bean ko load ya skip** karna **specific condition ke basis pe**               |
+| **Usage**     | Method-level or class-level **bean definition** me use hota hai                                     |
+| **Mechanism** | Condition implement karne ke liye **Condition interface** ka implementation provide karna padta hai |
+
+---
+
+## 🧩 **Basic Example**
+
+### 1️⃣ Define a Condition
+
+```java
+import org.springframework.context.annotation.Condition;
+import org.springframework.context.annotation.ConditionContext;
+import org.springframework.core.type.AnnotatedTypeMetadata;
+
+public class WindowsCondition implements Condition {
+    @Override
+    public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+        // Agar OS Windows hai, true return karo
+        String os = System.getProperty("os.name");
+        return os.toLowerCase().contains("windows");
+    }
+}
+```
+
+### 2️⃣ Use @Conditional on a Bean
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class AppConfig {
+
+    @Bean
+    @Conditional(WindowsCondition.class)
+    public MyService myService() {
+        return new MyService();
+    }
+}
+```
+
+* Agar **current OS Windows** hai → `MyService` bean load hoga
+* Agar Windows nahi → Spring skip kar dega aur bean create nahi hoga
+
+---
+
+## 📌 **Key Points**
+
+1. `@Conditional` **dynamic bean registration** ke liye use hota hai.
+2. Multiple conditions bhi laga sakte ho — e.g., `@Conditional({Condition1.class, Condition2.class})`
+3. Spring Boot me bohot predefined conditions bhi hai:
+
+   * `@ConditionalOnProperty` → bean tabhi create hoga jab property exist kare
+   * `@ConditionalOnClass` → bean tabhi create hoga jab koi class classpath me ho
+   * `@ConditionalOnMissingBean` → tabhi create ho jab bean already exist na kare
+
+---
+
+💡 **Interview Tip:**
+Spring Boot ke **auto-configuration classes** me mostly `@Conditional` ka use hota hai to avoid creating unnecessary beans.
+
+---
+
+Agar chaho to main tumhare liye **@Conditional ke common Spring Boot examples** (like `@ConditionalOnProperty`, `@ConditionalOnClass`) ka **table + example** bana du, jo interview me kaafi handy hota hai.
+
+Banau Vishnudas?
+
+=============================================================================================================
+Bilkul Vishnudas 👌 — `@PathVariable` aur `@RequestParam` Spring MVC / Spring Boot me **HTTP request se data fetch karne ke liye** use hote hain.
+
+Short aur notes-friendly comparison bana diya:
+
+---
+
+## 🔹 **@PathVariable vs @RequestParam**
+
+| Annotation      | Purpose                                        | Source in Request            | Example URL                                  | Notes                                    |
+| --------------- | ---------------------------------------------- | ---------------------------- | -------------------------------------------- | ---------------------------------------- |
+| `@PathVariable` | URI path se value nikalna                      | URL path segment             | `/user/123` → `@PathVariable("id")` = 123    | Usually RESTful URLs me use hota hai     |
+| `@RequestParam` | Query parameters ya form data se value nikalna | URL query string / form data | `/user?id=123` → `@RequestParam("id")` = 123 | Optional / defaultValue set kar sakte ho |
+
+---
+
+### 🧩 **Example**
+
+```java
+// Using @PathVariable
+@GetMapping("/user/{id}")
+public String getUser(@PathVariable("id") int userId) {
+    return "User ID: " + userId;
+}
+
+// Using @RequestParam
+@GetMapping("/user")
+public String getUser(@RequestParam(name="id", defaultValue="0") int userId) {
+    return "User ID: " + userId;
+}
+```
+
+---
+
+💡 **Shortcut:**
+
+* PathVariable → **part of URL path**
+* RequestParam → **query param or form field**
+
+---
+
+Agar chaho, main **notes ke liye ek diagram bhi bana du** jisme URL → PathVariable/RequestParam clearly dikhe.
+Banau?
+
+=============================================================================================================
+Bilkul Vishnudas 👌 — ye dono Spring MVC annotations bhi controller level pe use hote hain.
+Main short aur notes-friendly explanation de raha hoon:
+
+🔹 1. @SessionAttributes
+Aspect	Description
+Package	org.springframework.web.bind.annotation.SessionAttributes
+Purpose	Controller ke model attributes ko HTTP session me store karna
+Usage	Class-level pe lagate hain
+Example	
+@Controller
+@SessionAttributes("user")
+public class UserController {
+
+    @ModelAttribute("user")
+    public User createUser() {
+        return new User();
+    }
+
+    @PostMapping("/save")
+    public String saveUser(@ModelAttribute("user") User user) {
+        // user object session me stored rahega
+        return "success";
+    }
+}
+
+
+💡 Use case: Multi-page form, login info, shopping cart, etc.
+=============================================================================================================
+Samajhta hoon Vishnudas, thoda simple aur step-by-step explain karta hoon 👇
+
+---
+
+## **@InitBinder ka matlab**
+
+* Jab **HTTP request se data** controller me aata hai (jaise form submit hota hai), Spring automatically usko **Java object** me map karta hai.
+* Is mapping ko **data binding** kehte hain.
+* `@InitBinder` ka kaam hai **ye binding customize karna** — jaise kuch fields bind na ho, ya date format set karna.
+
+---
+
+## **Simple Example**
+
+Suppose tumhare paas ek `User` class hai:
+
+```java
+public class User {
+    private int id;
+    private String name;
+    private Date dob; // date of birth
+    // getters and setters
+}
+```
+
+Aur tumhara form submit karta hai:
+
+```
+id=101&name=Vishnu&dob=10-10-2025
+```
+
+---
+
+### **Problem 1: Prevent binding certain fields**
+
+```java
+@InitBinder
+public void initBinder(WebDataBinder binder) {
+    binder.setDisallowedFields("id"); // id field ignore kar do
+}
+```
+
+* Iska matlab: request me `id=101` aaya, lekin **Spring User object me id field set nahi karega**.
+
+---
+
+### **Problem 2: Customize date format**
+
+```java
+@InitBinder
+public void initBinder(WebDataBinder binder) {
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
+}
+```
+
+* Spring ko bataya ki **dob** field ko kaise convert karna hai string → Date.
+* Agar ye na karoge, Spring error de sakta hai (format mismatch).
+
+---
+
+### **Summary (Simple)**
+
+* `@InitBinder` = **binding customize karne ke liye**
+* Use cases:
+
+  1. Ignore certain fields
+  2. Custom converters (dates, numbers)
+  3. Field validation before binding
+
+---
+
+Agar chaho to main **@ModelAttribute + @InitBinder ka full example** bana du jisme form submit aur binding dono clearly dikh rahe ho.
+Banau Vishnudas?
+
+=============================================================================================================
+Bilkul Vishnudas 👌 — `@Import` Spring me **beans aur configuration classes ko ek saath include/import karne** ke liye use hota hai.
+
+Short aur notes-friendly explanation 👇
+
+---
+
+## 🔹 **@Import Annotation**
+
+| Aspect      | Description                                                                                              |
+| ----------- | -------------------------------------------------------------------------------------------------------- |
+| **Package** | `org.springframework.context.annotation.Import`                                                          |
+| **Purpose** | Ek configuration class se **dusri configuration class ko import** karna, taaki beans available ho jayein |
+| **Usage**   | Class-level, `@Configuration` ke saath                                                                   |
+| **Example** |                                                                                                          |
+
+---
+
+### **Basic Example**
+
+```java
+@Configuration
+public class AppConfig {
+    // Beans specific to AppConfig
+}
+
+@Configuration
+@Import(AppConfig.class)  // Import AppConfig beans here
+public class MainConfig {
+    // Beans specific to MainConfig
+}
+```
+
+* `MainConfig` ke context me **AppConfig ke beans automatically available ho jaayenge**.
+
+---
+
+### **Use Cases**
+
+1. **Modular configuration**
+
+   * Alag-alag modules ke beans ko ek central config me combine karna.
+2. **Third-party configurations**
+
+   * Dusri library ki config class import karna.
+3. **Avoid multiple `@ComponentScan`**
+
+   * Simple import se beans include kar sakte ho.
+
+---
+
+💡 **Shortcut / Notes Version**
+
+* `@Import` = **bring other config classes into current context**
+* Class-level annotation, mostly **@Configuration ke sath**
+* Helps in **modular & reusable configuration**
+
+---
+
+Agar chaho to main **@Import vs @ComponentScan vs @ImportResource** ka **comparison table** bana du, jo interview notes ke liye handy hota hai.
+Banau?
+
+=============================================================================================================
+Bilkul Vishnudas 👌 — `@Primary` Spring me **multiple beans same type ke hone par default bean select karne** ke liye use hota hai.
+
+Short aur notes-friendly example:
+
+---
+
+## 🔹 **@Primary Example**
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+
+interface PaymentService {
+    void pay();
+}
+
+class PaypalService implements PaymentService {
+    public void pay() { System.out.println("Pay using PayPal"); }
+}
+
+class StripeService implements PaymentService {
+    public void pay() { System.out.println("Pay using Stripe"); }
+}
+
+@Configuration
+public class AppConfig {
+
+    @Bean
+    @Primary  // Default bean
+    public PaymentService paypalService() {
+        return new PaypalService();
+    }
+
+    @Bean
+    public PaymentService stripeService() {
+        return new StripeService();
+    }
+}
+```
+
+---
+
+### 🔹 **Usage in Injection**
+
+```java
+@Autowired
+private PaymentService paymentService; // PaypalService will be injected by default
+```
+
+✅ Explanation:
+
+* Multiple beans of type `PaymentService` exist (`PaypalService` & `StripeService`).
+* `@Primary` marks `PaypalService` as **default bean**.
+* Agar **Qualifier** use nahi karte → `@Primary` bean inject hota hai.
+
+---
+
+💡 Shortcut:
+
+* `@Primary` = **default choice** when multiple beans of same type exist.
+* Use **with @Autowired** to avoid `NoUniqueBeanDefinitionException`.
+
+---
+
+Agar chaho to main **@Primary vs @Qualifier** ka **short comparison table** bhi bana du, notes ke liye perfect hoga.
+Banau?
+=============================================================================================================
+Bilkul Vishnudas 👌 — `@EnableConfigurationProperties` Spring Boot me **external configuration (application.properties / application.yml) ko POJO me bind karne** ke liye use hota hai.
+
+Short aur notes-friendly explanation:
+
+---
+
+## 🔹 **@EnableConfigurationProperties**
+
+| Aspect      | Description                                                                                 |
+| ----------- | ------------------------------------------------------------------------------------------- |
+| **Package** | `org.springframework.boot.context.properties.EnableConfigurationProperties`                 |
+| **Purpose** | Enable mapping of external configuration properties to a **@ConfigurationProperties class** |
+| **Usage**   | Class-level (usually main config or @Configuration class)                                   |
+
+---
+
+## 🧩 **Example**
+
+### 1️⃣ Create a POJO for properties
+
+```java
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties(prefix = "app")
+public class AppProperties {
+    private String name;
+    private int timeout;
+
+    // getters & setters
+}
+```
+
+**application.properties:**
+
+```
+app.name=FileGenerator
+app.timeout=30
+```
+
+---
+
+### 2️⃣ Enable properties binding
+
+```java
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableConfigurationProperties(AppProperties.class)
+public class AppConfig {
+}
+```
+
+---
+
+### 3️⃣ Use the POJO in any bean
+
+```java
+import org.springframework.stereotype.Service;
+
+@Service
+public class MyService {
+
+    private final AppProperties appProperties;
+
+    public MyService(AppProperties appProperties) {
+        this.appProperties = appProperties;
+    }
+
+    public void print() {
+        System.out.println("App Name: " + appProperties.getName());
+        System.out.println("Timeout: " + appProperties.getTimeout());
+    }
+}
+```
+
+✅ Explanation:
+
+* `@ConfigurationProperties` → Maps properties to Java object.
+* `@EnableConfigurationProperties` → Tells Spring Boot to process and inject that POJO.
+
+---
+
+💡 Shortcut / Notes Version:
+
+* `@EnableConfigurationProperties(AppProperties.class)` → **bind external config to POJO**
+* POJO class me **@ConfigurationProperties(prefix="…")** lagana zaruri hai.
+
+---
+
+Agar chaho to main **@ConfigurationProperties + @Value + @EnableConfigurationProperties ka short comparison table** bana du, taaki notes me ek hi jagah clear ho.
+Banau Vishnudas?
+
+=============================================================================================================
+Bilkul Vishnudas 👌 — Spring aur Spring Boot me **bohot saari annotations** hote hain. Notes ke liye main **categorical list** de raha hoon, short aur concise, taaki tum directly use kar sako.
+
+---
+
+# **1️⃣ Core / Bean Annotations (Spring Core)**
+
+| Annotation        | Purpose                                                |
+| ----------------- | ------------------------------------------------------ |
+| `@Component`      | Marks a class as a Spring-managed bean                 |
+| `@Service`        | Marks a service layer bean (specialized @Component)    |
+| `@Repository`     | Marks a DAO / repository bean (specialized @Component) |
+| `@Controller`     | Marks a controller class in MVC                        |
+| `@RestController` | Controller + @ResponseBody                             |
+| `@Bean`           | Marks a method as a bean provider                      |
+| `@Configuration`  | Marks a class as configuration for beans               |
+| `@Import`         | Import other configuration classes                     |
+| `@Lazy`           | Bean will initialize lazily                            |
+| `@Scope`          | Defines bean scope (singleton, prototype)              |
+| `@Primary`        | Marks a bean as primary when multiple beans exist      |
+
+---
+
+# **2️⃣ Dependency Injection Annotations**
+
+| Annotation   | Purpose                                                |
+| ------------ | ------------------------------------------------------ |
+| `@Autowired` | Inject by type (Spring-specific)                       |
+| `@Resource`  | Inject by name (Java EE standard)                      |
+| `@Inject`    | Inject by type (JSR-330 standard)                      |
+| `@Qualifier` | Specify which bean to inject when multiple beans exist |
+
+---
+
+# **3️⃣ Lifecycle Annotations**
+
+| Annotation           | Purpose                                |
+| -------------------- | -------------------------------------- |
+| `@PostConstruct`     | Run after bean initialization          |
+| `@PreDestroy`        | Run before bean destruction            |
+| `@InitBinder`        | Customize data binding in controllers  |
+| `@SessionAttributes` | Store model attributes in HTTP session |
+
+---
+
+# **4️⃣ Spring MVC Annotations**
+
+| Annotation                                                        | Purpose                                                |
+| ----------------------------------------------------------------- | ------------------------------------------------------ |
+| `@RequestMapping`                                                 | Maps HTTP request to method/class                      |
+| `@GetMapping` / `@PostMapping` / `@PutMapping` / `@DeleteMapping` | Shortcut for @RequestMapping with specific HTTP method |
+| `@PathVariable`                                                   | Bind URI path variable to method parameter             |
+| `@RequestParam`                                                   | Bind query/form param to method parameter              |
+| `@RequestBody`                                                    | Bind HTTP request body to Java object                  |
+| `@ResponseBody`                                                   | Return object as HTTP response body                    |
+| `@RequestHeader`                                                  | Bind HTTP header value to parameter                    |
+| `@CookieValue`                                                    | Bind cookie value to parameter                         |
+| `@ModelAttribute`                                                 | Bind request parameters to object + populate model     |
+| `@SessionAttributes`                                              | Keep model attributes in session                       |
+| `@InitBinder`                                                     | Customize request parameter binding                    |
+
+---
+
+# **5️⃣ Spring AOP / Conditional**
+
+| Annotation                                                          | Purpose                                             |
+| ------------------------------------------------------------------- | --------------------------------------------------- |
+| `@Aspect`                                                           | Marks class as Aspect (AOP)                         |
+| `@Before`, `@After`, `@Around`, `@AfterReturning`, `@AfterThrowing` | Advice for method interception                      |
+| `@Conditional`                                                      | Conditional bean creation                           |
+| `@ConditionalOnProperty`                                            | Spring Boot: load bean if property exists           |
+| `@ConditionalOnClass`                                               | Spring Boot: load bean if class exists in classpath |
+| `@ConditionalOnMissingBean`                                         | Spring Boot: load bean if not already present       |
+
+---
+
+# **6️⃣ Spring Boot Stereotype / Auto-Configuration**
+
+| Annotation                       | Purpose                                                                |
+| -------------------------------- | ---------------------------------------------------------------------- |
+| `@SpringBootApplication`         | Main class: @Configuration + @EnableAutoConfiguration + @ComponentScan |
+| `@EnableAutoConfiguration`       | Enable Spring Boot auto-configuration                                  |
+| `@EnableConfigurationProperties` | Bind external config to POJO                                           |
+| `@ConfigurationProperties`       | Map properties (application.properties/yml) to POJO                    |
+| `@SpringBootTest`                | Integration test context                                               |
+| `@RestController`                | Combines @Controller + @ResponseBody                                   |
+
+---
+
+# **7️⃣ Spring Security / Misc**
+
+| Annotation                               | Purpose                        |
+| ---------------------------------------- | ------------------------------ |
+| `@EnableWebSecurity`                     | Enable security config         |
+| `@PreAuthorize` / `@PostAuthorize`       | Method level security          |
+| `@Secured`                               | Restrict method access by role |
+| `@Transactional`                         | Manage transactions            |
+| `@Cacheable`, `@CachePut`, `@CacheEvict` | Spring caching annotations     |
+
+---
+
+💡 **Tips for Notes**
+
+1. Group them by **Core / DI / MVC / Boot / Security**
+2. Use **short explanation + example** for important ones like `@Autowired`, `@PathVariable`, `@RequestBody`, `@Transactional`.
+3. For interviews, **50-60 key annotations** are usually enough.
+
+---
+
+Vishnudas, agar chaho to main **ye full list ko ek **compact table PDF format** me ready karke tumhare liye handwritten style notes jaisa bana du**, taaki directly print ya refer kar sako.
+
+Chahoge mai bana du?
+
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
