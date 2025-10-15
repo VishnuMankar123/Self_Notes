@@ -308,10 +308,715 @@ Would you like me to show a **small diagram** showing how the loopback address w
 
 ==========================================================================================
 Session - 3 | Working of DNS Load Balancer | Role of DNS, NS, SOA & Firewall | Nehra Classes
+Perfect Vishnudas 👏
+तुम्हारा point बिल्कुल सही है — दोनों parts में काफी content repeat हो रहा था।
+तो मैंने दोनों versions (Part 1 और Part 2) को **merge करके एक single, full, classroom-style detailed note** बनाया है —
+जहाँ कोई duplication नहीं है, explanation sequential है, और format है **Teacher–Student** style (exactly जैसा तुमने कहा था)।
+
+---
+
+# 📘 **Topic: DNS (Domain Name System) – Working Explained (Student–Teacher Format)**
+
+*(Full Detailed Notes + Examples + Summary)*
+
+---
+
+## 👨‍🏫 **Teacher: Introduction**
+
+आज हम सीखेंगे — **DNS कैसे काम करता है**,
+क्योंकि Internet की हर website के पीछे एक **IP address** होता है,
+और DNS उस “नाम” को उस “नंबर” (IP) से जोड़ने का काम करता है।
+
+---
+
+## 👨‍🎓 **Student:**
+
+सर, क्या हम सीधे IP डालकर website नहीं खोल सकते?
+
+---
+
+## 👨‍🏫 **Teacher:**
+
+सकते हैं, लेकिन कोई भी इंसान लाखों websites के IP याद नहीं रख सकता।
+इसलिए Internet ने एक “नाम से नंबर खोजने वाली system” बनाई —
+जिसे कहते हैं **DNS (Domain Name System)**।
+
+---
+
+## 🔹 **Concept 1 – DNS क्या करता है**
+
+**Teacher:**
+DNS का काम है → “Domain Name” को “IP Address” में बदलना।
+
+**Example:**
+
+```
+www.google.com  ➜  142.250.190.78
+```
+
+इंसानों को नाम याद रखना आसान है, लेकिन कंप्यूटर सिर्फ IP address समझते हैं।
+DNS दोनों के बीच translator का काम करता है।
+
+---
+
+## 🔹 **Concept 2 – जब आप Browser में कोई Website खोलते हैं तो क्या होता है**
+
+**Teacher:**
+चलो step by step समझते हैं कि जब आप browser में `www.google.com` लिखते हैं तो background में क्या-क्या होता है 👇
+
+---
+
+### 🟩 Step 1: Browser Cache Check
+
+* Browser सबसे पहले अपने **local cache** में चेक करता है कि क्या उस domain का IP पहले से मौजूद है।
+* अगर मिला → वही IP use कर लेता है।
+* अगर नहीं मिला → अगला step।
+
+---
+
+### 🟨 Step 2: OS Cache Check
+
+* Browser फिर **Operating System (DNS Cache Table)** में check करता है।
+* अगर नहीं मिला → आगे बढ़ता है।
+
+---
+
+### 🟦 Step 3: Router/Local DNS Check
+
+* अब request जाती है आपके **Router** या **Local DNS Server** तक।
+* अगर वहाँ भी नहीं मिला → request भेजी जाती है आपके ISP के DNS Resolver को।
+
+---
+
+### 🟧 Step 4: Recursive DNS Resolver (ISP DNS)
+
+* यह आपका **Internet Service Provider (Jio, Airtel आदि)** का DNS होता है।
+* इसे कहते हैं **Recursive Resolver**, क्योंकि यह बाकी servers से recursively जवाब ढूंढता है।
+
+---
+
+### 🟥 Step 5: Root DNS Server
+
+* अगर ISP के पास IP नहीं है, तो यह **Root DNS Server** से पूछता है।
+* Root server actual IP नहीं बताता — वह बताता है कि उस domain का TLD server कौन-सा है।
+* Root servers दुनिया में केवल **13 logical sets (A–M)** हैं।
+
+---
+
+### 🟪 Step 6: TLD (Top Level Domain) Server
+
+* Root server `.com`, `.org`, `.in` जैसे extensions के लिए TLD server का path देता है।
+* अब resolver उस **TLD server** से पूछता है कि यह domain कहाँ hosted है।
+
+**Example:**
+`.com` server कहेगा → “google.com का authoritative server है ns1.google.com।”
+
+---
+
+### 🟫 Step 7: Authoritative Name Server
+
+* अब resolver उस authoritative server से पूछता है — “google.com का actual IP बताओ।”
+* Authoritative server actual IP देता है जैसे `142.250.190.78`।
+* यही final जवाब होता है।
+
+---
+
+### ⬛ Step 8: Response to Browser
+
+* यह IP अब resolver → system → browser को वापस भेजी जाती है।
+* Browser इस IP को cache कर लेता है (next time fast access के लिए)।
+* फिर browser TCP/IP connection बनाता है और web page लोड हो जाता है ✅
+
+---
+
+## 🔹 **Concept 3 – DNS Record Types**
+
+| Record Type | Full Form          | Function / Use                           |
+| ----------- | ------------------ | ---------------------------------------- |
+| A           | Address Record     | Domain → IPv4 address                    |
+| AAAA        | Quad A Record      | Domain → IPv6 address                    |
+| CNAME       | Canonical Name     | एक domain को दूसरे domain से map करता है |
+| MX          | Mail Exchange      | Mail server की जानकारी                   |
+| NS          | Name Server        | Domain के authoritative servers          |
+| PTR         | Pointer Record     | Reverse DNS (IP → Domain)                |
+| SOA         | Start of Authority | Domain admin, update & refresh details   |
+
+---
+
+## 🔹 **Concept 4 – DNS में Port और Protocol**
+
+| Protocol | Port | Use                                 |
+| -------- | ---- | ----------------------------------- |
+| UDP      | 53   | Normal DNS queries                  |
+| TCP      | 53   | Zone transfer / Large data transfer |
+
+---
+
+## 🔹 **Concept 5 – DNS Load Balancer कैसे काम करता है**
+
+**Teacher:**
+जब किसी domain के पीछे कई servers होते हैं (high traffic sites),
+तो DNS एक ही domain के लिए **multiple IP addresses** देता है।
+इससे load अलग-अलग servers पर divide हो जाता है।
+
+---
+
+### ⚙️ Common DNS Load Balancing Algorithms
+
+| Algorithm     | Description                                             |
+| ------------- | ------------------------------------------------------- |
+| Round Robin   | हर request को अलग server पर भेजता है (sequence में)     |
+| Geo-based     | User के location के पास वाले server पर भेजता है         |
+| Latency-based | जो server सबसे fast response दे रहा हो, उसी पर भेजता है |
+| Weighted      | Priority के हिसाब से servers को traffic देता है         |
+
+---
+
+### 🧩 **Example: Round Robin Load Balancing**
+
+| Client | DNS Response (IP) | Server Selected   |
+| ------ | ----------------- | ----------------- |
+| User A | 10.0.0.1          | Server 1          |
+| User B | 10.0.0.2          | Server 2          |
+| User C | 10.0.0.3          | Server 3          |
+| User D | 10.0.0.1          | Server 1 (repeat) |
+
+👉 इससे load बराबर बंट जाता है और कोई server overload नहीं होता।
+
+---
+
+## 🔹 **Concept 6 – Firewall का Role**
+
+**Teacher:**
+Firewall एक **Security Wall** की तरह काम करता है —
+यह network में आने-जाने वाले traffic को filter करता है।
+यह ensure करता है कि कोई malicious या unauthorized request अंदर न जाए।
+
+| Type             | Description                   |
+| ---------------- | ----------------------------- |
+| Network Firewall | पूरे LAN की सुरक्षा           |
+| Host Firewall    | किसी single system की सुरक्षा |
+
+---
+
+## 🧠 **DNS Working Summary (One-line Flow)**
+
+```
+Browser → Cache → OS → Router → ISP Resolver → Root Server → TLD Server → Authoritative Server → IP → Browser → Website
+```
+
+---
+
+## 🧩 **AWS में DNS Load Balancer (Route 53)**
+
+| Service                         | Layer     | Function                                    |
+| ------------------------------- | --------- | ------------------------------------------- |
+| Application Load Balancer (ALB) | Layer 7   | HTTP/HTTPS traffic                          |
+| Network Load Balancer (NLB)     | Layer 4   | TCP/UDP traffic                             |
+| Gateway Load Balancer (GLB)     | Layer 3   | Gateway traffic                             |
+| Route 53                        | DNS level | Geo, Latency, Weighted based load balancing |
+
+---
+
+## ✍️ **Student’s Short Notes**
+
+1. DNS का काम: Domain → IP mapping.
+2. 4 मुख्य Servers: Root → TLD → Authoritative → Resolver.
+3. Recursive resolver पूरे process को पूरा करता है।
+4. Port 53 (UDP/TCP) DNS communication के लिए होता है।
+5. Common records: A, AAAA, MX, NS, CNAME, PTR.
+6. DNS Load Balancer traffic को servers में divide करता है।
+7. Firewall security layer की तरह काम करता है।
+
+---
+
+## 🔄 **Quick Revision Diagram (Text Flow View)**
+
+```
+[User]
+   ↓
+[Browser Cache]
+   ↓ (not found)
+[OS Cache]
+   ↓ (not found)
+[Router / ISP DNS Resolver]
+   ↓
+[Root DNS Server]
+   ↓
+[TLD Server (.com / .org / .in)]
+   ↓
+[Authoritative DNS Server]
+   ↓
+[IP Address Found → Sent to Browser]
+   ↓
+[Browser Connects to Web Server]
+   ↓
+[Website Loads ✅]
+```
+
+---
+
+क्या चाहोगे Vishnudas कि मैं इसी combined note का एक **diagrammatic visual (image form में)** बना दूँ?
+जिसमें DNS flow arrows, servers के icons और Load Balancer का working भी एक page में दिखाया जाए —
+ताकि तुम इसे revision या notes PDF में रख सको?
 
 ==========================================================================================
+Session 4 – Network Models & Protocols (TCP/IP Model + URL Parts)
+
+Bilkul Vishnudas, main **TCP aur UDP** ko step by step simple terms me samjhaata hoon:
+
+---
+
+## **1️⃣ TCP (Transmission Control Protocol)**
+
+**Key Features:**
+
+1. **Reliable delivery:**
+
+   * TCP ensure karta hai ki **sab packets sahi order me aur loss ke bina** receiver tak pahunch jaaye.
+   * Agar koi packet lost ho jaye, to TCP automatically **resend** karta hai.
+
+2. **Connection-oriented:**
+
+   * Sender aur receiver ke beech **connection establish** hota hai pehle (3-way handshake).
+   * Jaise phone call start karte ho, dono ready hain baat karne ke liye.
+
+3. **Error checking & flow control:**
+
+   * Agar data me error ho → TCP detect karke **request karta hai resend**
+   * Flow control se sender ka data receiver ko overwhelm nahi karta.
+
+**Analogy:**
+
+* TCP = **Registered Post / Courier Service**
+
+  * Letter guaranteed deliver hoga, agar lost ho to resend hoga, aur sab letters order me pahunchenge.
+
+**Use Cases:**
+
+* Web browsing → **HTTP/HTTPS**
+* Email → **SMTP, IMAP, POP3**
+* File transfer → **FTP**
+
+---
+
+## **2️⃣ UDP (User Datagram Protocol)**
+
+**Key Features:**
+
+1. **Faster delivery:**
+
+   * UDP **connection nahi banata**, simply packet bhej deta hai.
+   * Error checking aur resend ka kaam nahi karta → speed fast.
+
+2. **Connectionless:**
+
+   * Sender aur receiver ke beech pehle se connection establish nahi hota.
+   * Jaise aap ek postcard bhejte ho, direct receiver ko.
+
+3. **Less reliable:**
+
+   * Agar packet lost ho gaya → **koi automatic resend nahi**.
+   * Order guarantee bhi nahi hai.
+
+**Analogy:**
+
+* UDP = **Postcard / WhatsApp message**
+
+  * Jaldi bheja jaata hai, lekin agar lost ho gaya, firse bhejna **aapko khud karna padega**.
+
+**Use Cases:**
+
+* Video/Audio streaming → **YouTube, Netflix**
+* Online gaming → **fast updates, minor packet loss acceptable**
+* DNS queries → **fast request-response**
+
+---
+
+**Summary Table:**
+
+| Feature        | TCP                 | UDP                    |
+| -------------- | ------------------- | ---------------------- |
+| Delivery       | Reliable            | Unreliable             |
+| Connection     | Connection-oriented | Connectionless         |
+| Speed          | Slower              | Faster                 |
+| Error Handling | Yes, resend         | No                     |
+| Use Case       | Web, Email, FTP     | Streaming, Gaming, DNS |
+
+---
+
+Agar chaho, main ek **easy visual diagram** bhi bana doon jo TCP aur UDP ke difference ko ek **line me samjha de**, jo notes me bohot handy rahega.
+
+Kya main wo bana doon?
+
 ==========================================================================================
+Bilkul Vishnudas! TCP aur IP **alag cheezein** hain, lekin aksar log confuse ho jaate hain. Main step by step samjhaata hoon:
+
+---
+
+## **1️⃣ TCP (Transmission Control Protocol)**
+
+* **Type:** Transport Layer Protocol
+* **Function:**
+
+  * Data ko **reliable aur ordered** delivery ensure karta hai.
+  * Error checking aur retransmission ka kaam karta hai.
+* **Connection:** Connection-oriented (pehle handshake hota hai)
+* **Example Use:** HTTP, FTP, Email
+* **Analogy:** Courier service – sab parcels order me aur safe deliver hote hain.
+
+---
+
+## **2️⃣ IP (Internet Protocol)**
+
+* **Type:** Internet Layer Protocol
+* **Function:**
+
+  * Data packets ko **logical addressing (IP address)** aur **routing** provide karta hai.
+  * Decide karta hai ki packet **kaunse path se destination tak jaayega**.
+* **Connection:** Connectionless (bina handshake ke packet bhejta hai)
+* **Example Use:** IP packet delivery across networks
+* **Analogy:** Road network / GPS – packet ko destination tak pahunchata hai, lekin delivery ki guarantee nahi deta.
+
+---
+
+## **Key Differences (Simple Table)**
+
+| Feature    | TCP                            | IP                             |
+| ---------- | ------------------------------ | ------------------------------ |
+| Layer      | Transport                      | Internet                       |
+| Delivery   | Reliable, ordered              | Unreliable, no order guarantee |
+| Connection | Connection-oriented            | Connectionless                 |
+| Function   | Data delivery & error checking | Packet addressing & routing    |
+| Analogy    | Courier service                | Road / GPS system              |
+
+---
+
+💡 **Important:**
+
+* TCP aur IP aksar **TCP/IP** ke form me saath me use hote hain.
+* IP packet ko **destination tak pahunchata hai**, TCP ensure karta hai ki **data sahi aur complete mile**.
+
+---
+
+Agar chaho, main **ek simple diagram** bana doon jisme TCP aur IP ka kaam ek hi data flow me dikhaye, to easily yaad rahega.
+
+Kya main wo bana doon?
 ==========================================================================================
+Perfect Vishnudas 👏
+अब मैं इस **“Session - 4 | Network Models & Protocols | TCP/IP Model | Parts of URL”** वीडियो का transcript लेकर तुम्हारे लिए **Student–Teacher style में full detailed notes** बना रहा हूँ — बिल्कुल वैसे जैसे तुमने पहले मांगे थे 📘
+
+---
+
+## 🎓 **Session 4 – Network Models & Protocols (TCP/IP Model + URL Parts)**
+
+**By: Nehra Classes | Instructor: Vikas Mehra**
+
+---
+
+### 👨‍🏫 **Teacher Explanation (Concepts)**
+
+### 👨‍🎓 **Student Notes (Short + Pointwise Summary)**
+
+---
+
+### 🧩 **1. Introduction to Session**
+
+**👨‍🏫 Teacher:**
+आज के सेशन में हम बात करेंगे —
+
+* TCP/IP Model क्या है और कैसे काम करता है
+* TCP/IP की Layers और उनका role
+* URL (Uniform Resource Locator) के parts
+* Protocols (HTTP, HTTPS) और उनके ports
+* Internet Protocol (IP) और उसकी working
+
+**👨‍🎓 Student Notes:**
+
+* Topic: TCP/IP Model + URL + Protocols
+* Total 4 Layers: Application, Transport, Internet, Network Access
+* URL = Web Address containing multiple parts (protocol, domain, etc.)
+
+---
+
+### 🌐 **2. Recap: How URL Works (via DNS & Load Balancer)**
+
+**👨‍🏫 Teacher:**
+जब हम किसी website जैसे `www.google.com` को access करते हैं —
+
+1. Browser पहले **hosts file** में check करता है (C:\Windows\System32\drivers\etc\hosts).
+2. अगर entry नहीं है → Local DNS check करता है.
+3. अगर वहाँ भी नहीं → Root Name Server → Top Level Domain (.com, .gov, .in, etc.)
+4. फिर **Authoritative Name Server** से उस domain का IP address मिलता है.
+5. Request IP तक पहुँचती है → Firewall → Load Balancer → Web Server.
+
+**👨‍🎓 Student Notes:**
+🧠 URL resolution process:
+1️⃣ Browser → Hosts File
+2️⃣ Local DNS
+3️⃣ Root Server
+4️⃣ TLD Server
+5️⃣ Authoritative Server → IP found
+➡️ Request → Firewall → Load Balancer → Web Server
+
+---
+
+### 💻 **3. Parts of a URL**
+
+**👨‍🏫 Teacher:**
+Example:
+
+```
+https://www.neraclasses.in:443/page1?course=network#section2
+```
+
+Parts breakdown:
+1️⃣ **Protocol** → https
+2️⃣ **Host name / Domain name** → [www.neraclasses](http://www.neraclasses)
+3️⃣ **Top-level domain (TLD)** → .in
+4️⃣ **Port number** → :443 (optional if using default port)
+5️⃣ **Path** → /page1
+6️⃣ **Query separator** → ?
+7️⃣ **Query string** → course=network
+8️⃣ **Fragment** → #section2
+
+**👨‍🎓 Student Notes:**
+🧾 URL = Protocol + Domain + TLD + Port + Path + Query + Fragment
+⚙️ Default Ports:
+
+* HTTP → 80
+* HTTPS → 443
+
+📌 Port number optional for default ports.
+
+---
+
+### 🔐 **4. Protocols – HTTP vs HTTPS**
+
+**👨‍🏫 Teacher:**
+
+* **HTTP (HyperText Transfer Protocol)**
+
+  * Port 80
+  * Plain text communication
+  * Not encrypted → vulnerable to hackers
+* **HTTPS (HTTP Secure)**
+
+  * Port 443
+  * Uses SSL/TLS encryption
+  * Secure communication between client ↔ server
+
+**👨‍🎓 Student Notes:**
+
+| Protocol | Port | Security     | Encryption |
+| -------- | ---- | ------------ | ---------- |
+| HTTP     | 80   | ❌ Not secure | No         |
+| HTTPS    | 443  | ✅ Secure     | SSL/TLS    |
+
+🔒 HTTPS = Secure, encrypted communication between browser & website.
+
+---
+
+### 🌍 **5. Internet Protocol (IP)**
+
+**👨‍🏫 Teacher:**
+
+* IP = Method to send data from one computer to another over the Internet.
+* Uses **IP address** to locate destination machine.
+* Similar to home address or phone number concept.
+* Data is converted into **binary (electronic signals)** before transmission.
+* Used with communication models like TCP/IP.
+
+**👨‍🎓 Student Notes:**
+🧠 IP (Internet Protocol):
+
+* Transfers data packets between devices.
+* Needs receiver’s IP address.
+* Converts data → binary → sends over network.
+
+---
+
+### 🧱 **6. TCP/IP Model – Layers**
+
+**👨‍🏫 Teacher:**
+TCP/IP model adopted in **1983** (ARPANET standard).
+It has **4 layers**:
+1️⃣ **Application Layer** – User interaction (HTTP, FTP, SMTP).
+2️⃣ **Transport Layer** – Data delivery control (TCP, UDP).
+3️⃣ **Internet Layer** – Logical addressing & routing (IP, ICMP).
+4️⃣ **Network Access Layer** – Physical network (Ethernet, Wi-Fi).
+
+Data Flow (Sender → Receiver):
+
+* Sender: App → Transport → Internet → Network
+* Receiver: Network → Internet → Transport → App
+
+**👨‍🎓 Student Notes:**
+📘 **TCP/IP Model Layers**
+
+| Layer          | Function                     | Example Protocols |
+| -------------- | ---------------------------- | ----------------- |
+| Application    | User-level communication     | HTTP, SMTP, FTP   |
+| Transport      | Reliable/unreliable delivery | TCP, UDP          |
+| Internet       | Routing, addressing          | IP, ICMP          |
+| Network Access | Physical transmission        | Ethernet, Wi-Fi   |
+
+📡 Sender → (App→Trans→Net→Phys)
+Receiver → (Phys→Net→Trans→App)
+
+---
+
+### 🔁 **7. TCP vs UDP**
+
+**👨‍🏫 Teacher:**
+
+* **TCP (Transmission Control Protocol)** – Reliable, connection-oriented.
+* **UDP (User Datagram Protocol)** – Faster, connectionless, less reliable.
+
+**👨‍🎓 Student Notes:**
+
+| Feature     | TCP        | UDP               |
+| ----------- | ---------- | ----------------- |
+| Connection  | Oriented   | Connectionless    |
+| Reliability | Reliable   | Unreliable        |
+| Speed       | Slower     | Faster            |
+| Use Case    | Web, Email | Streaming, Gaming |
+
+---
+
+### 📊 **8. Summary (Quick Revision)**
+
+**👨‍🏫 Teacher Recap:**
+✔️ URL parts – Protocol, Domain, Port, Path, Query, Fragment
+✔️ HTTP vs HTTPS – Port 80 vs 443
+✔️ IP – Identifies & routes packets
+✔️ TCP/IP Model – 4 layers (App, Transport, Internet, Network)
+✔️ TCP vs UDP – Reliable vs Fast
+
+**👨‍🎓 Student Revision Sheet:**
+🧠 TCP/IP → 4 Layers → Flow control + Routing + Communication
+🔗 URL → Web address with multiple structured parts
+🔒 HTTPS → Secure version of HTTP using SSL/TLS
+🌍 IP → Unique identity of machine on internet
+
+---
+
+Would you like me to make this same content in **PDF format (Student–Teacher notes layout)** with headings, tables, and highlights (for easy print or study)?
+
+==========================================================================================
+
+Bilkul Vishnudas! Chalo TCP/IP model ko **detail me** samajhte hain aur har layer ke **example protocols** bhi discuss karte hain. Main step by step bataunga:
+
+---
+
+## **1️⃣ Application Layer**
+
+**Function:**
+
+* Ye layer **user aur application programs** ke beech communication ka kaam karti hai.
+* Ye data ko aise format me prepare karti hai jo **network par bhejne ke liye ready** ho.
+* Directly **end-user interact** karte hain (browser, email client).
+
+**Example Protocols & Use:**
+
+| Protocol       | Purpose                                                                     |
+| -------------- | --------------------------------------------------------------------------- |
+| **HTTP/HTTPS** | Web browsing; HTTPS encrypted version of HTTP                               |
+| **FTP**        | File transfer between client and server                                     |
+| **SMTP**       | Sending emails                                                              |
+| **POP3/IMAP**  | Receiving emails                                                            |
+| **DNS**        | Domain name resolution (e.g., [www.google.com](http://www.google.com) → IP) |
+
+**Analogy:** Ye layer **office receptionist** jaisi hai jo request samajhkar proper department ko forward karta hai.
+
+---
+
+## **2️⃣ Transport Layer**
+
+**Function:**
+
+* Ye layer **data ko segments me todta hai** aur reliable delivery ensure karta hai.
+* **Error checking, flow control, congestion control** ka kaam bhi karta hai.
+* Sender aur receiver ke beech **end-to-end communication** maintain karta hai.
+
+**Example Protocols & Use:**
+
+| Protocol                                | Features                                                                          |
+| --------------------------------------- | --------------------------------------------------------------------------------- |
+| **TCP (Transmission Control Protocol)** | Reliable, connection-oriented, ensures all packets arrive in order                |
+| **UDP (User Datagram Protocol)**        | Unreliable, connectionless, faster, used for streaming, DNS queries, online games |
+
+**Analogy:** Ye layer **post office** jaisi hai jo letters ko sahi address pe deliver karne ki responsibility leta hai, aur agar letter lost ho jaye to resend karta hai (TCP).
+
+---
+
+## **3️⃣ Internet Layer**
+
+**Function:**
+
+* Ye layer **logical addressing** aur **routing** ka kaam karti hai.
+* Ye decide karti hai **data ka kaunsa path lena hai sender → receiver tak**.
+* Packet ko **source IP se destination IP** tak bhejna iska kaam hai.
+
+**Example Protocols & Use:**
+
+| Protocol                                     | Features                                    |
+| -------------------------------------------- | ------------------------------------------- |
+| **IP (Internet Protocol)**                   | Addressing & routing; IPv4 or IPv6          |
+| **ICMP (Internet Control Message Protocol)** | Error reporting, e.g., ping command         |
+| **ARP (Address Resolution Protocol)**        | Maps IP addresses to physical MAC addresses |
+
+**Analogy:** Ye layer **GPS navigator** jaisi hai jo decide karti hai kaunsa route follow karna hai destination tak pahunchne ke liye.
+
+---
+
+## **4️⃣ Network Access Layer** (Link Layer / Physical Layer)
+
+**Function:**
+
+* Ye layer **physical transmission** ka kaam karti hai: cables, switches, Wi-Fi signals.
+* Data ko **frames** me convert karke **actual network hardware** se bhejti hai.
+
+**Example Protocols & Use:**
+
+| Protocol/Technology               | Purpose                             |
+| --------------------------------- | ----------------------------------- |
+| **Ethernet**                      | Wired LAN connection                |
+| **Wi-Fi (IEEE 802.11)**           | Wireless LAN connection             |
+| **PPP (Point-to-Point Protocol)** | Direct connection over serial links |
+| **Frame Relay, ATM**              | WAN transmission protocols          |
+
+**Analogy:** Ye layer **delivery truck / courier service** jaisi hai jo actual physical delivery karta hai.
+
+---
+
+## **📡 Data Flow Example**
+
+**Sender:**
+Application → Transport → Internet → Network Access → Physical Media → Receiver
+
+**Receiver:**
+Physical Media → Network Access → Internet → Transport → Application
+
+**Example:**
+
+* Aap browser me `www.google.com` type karte ho.
+
+1. **Application Layer:** Browser request prepare karta hai → HTTP GET request
+2. **Transport Layer:** TCP segment me divide karke error checking lagata hai
+3. **Internet Layer:** Packet ko IP address ke through route karta hai
+4. **Network Layer:** Ethernet/Wi-Fi se actual physical network par send karta hai
+
+Receiver ke side me ye process reverse hota hai → finally aapko Google page milta hai.
+
+---
+
+Agar chaho to main ek **visual diagram ke saath** TCP/IP ke layers + protocols + data flow bhi bana doon, jo note banane me **bohot easy** ho jaayega.
+
+Kya main wo bana doon?
+
+==========================================================================================
+Session - 4 | Network Models & Protocols | TCP/IP Model | Parts of URL | Nehra Classes
 ==========================================================================================
 ==========================================================================================
 ==========================================================================================

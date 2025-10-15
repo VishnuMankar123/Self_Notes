@@ -2181,7 +2181,7 @@ Agar chaho to main **ek ready-to-use full example** bana doon jisme **Spring Boo
 Kya main ye ready example bana doon?
 ==========================================================================================================
 ===========================================================================================================
-Session - 7 | Kubernates NameSpaces
+Session - 7 | Kubernetes Namespaces Explained with Live Practicals | K8s Namespaces | Nehra Classes
 
 Bahut accha sawal Vishnudas 👏 — ye **Kubernetes interview** aur **real project** dono me bahut important concept hai.
 Chalo simple aur practical way me samjhte hain 👇
@@ -4417,6 +4417,528 @@ Ye practice ke liye best hoga.
 
 Chahiye mai wo example bana doon?
 
+===========================================================================================================
+Session - 9 | Smarter Scheduling in Kubernetes: Zones & Node Selectors Explained | Nehra Classes
+
+Not Available
+
+
+===========================================================================================================
+Session - 10 | Mastering Labels, Selectors & Annotations in Kubernetes | K8s Deep Dive
+
+Chalo Vishnudas, main bahut simple aur step-by-step tarike se samjhaata hoon. 😊
+
+---
+
+## **Kubernetes me Selector kya hai?**
+
+* Socho aapke paas **bahut saare Pods** hain (chhote chhote apps ke pieces).
+* Aapko sirf kuch **specific Pods** pe kaam karna hai.
+* **Selector** wahi tool hai jo batata hai: “Ye pods select karo, baki ignore karo.”
+
+---
+
+### **Selector ka kaam**
+
+* **Filter ka kaam karta hai.**
+* Aap **labels** ya **fields** ke basis pe Pods choose karte ho.
+
+---
+
+## **1️⃣ Label Selector**
+
+**Label** = Pod ke upar chhoti information jo key-value format me hoti hai.
+
+**Example Label:**
+
+```yaml
+app: my-app
+env: production
+```
+
+* Agar aapko sirf `env=production` wale Pods chahiye, toh aap **Label Selector** use karoge.
+
+**Example YAML:**
+
+```yaml
+selector:
+  matchLabels:
+    env: production
+```
+
+Ye sirf `env=production` wale Pods ko select karega.
+
+---
+
+### **2️⃣ Field Selector**
+
+* Ye **Pod ke internal fields** ke basis pe select karta hai, jaise Pod ka status, name, ya node jaha hai.
+
+**Example:**
+
+```bash
+kubectl get pods --field-selector=status.phase=Running
+```
+
+* Ye command sirf **Running state** wale Pods dikhayega.
+
+---
+
+### **Difference in simple words**
+
+* **Label Selector** → Pod ke **user-defined tags** pe kaam karta hai.
+* **Field Selector** → Pod ke **system properties** (status, name) pe kaam karta hai.
+
+---
+
+Agar chaho, main **ek simple diagram bana ke dikhau** jisme 5 Pods hain aur **Selector kaise filter karta hai** ye easily samajh aaye.
+
+Kya mai diagram bana du?
+
+===========================================================================================================
+Chalo Vishnudas, Kubernetes me **Selectors ke main types** simple tarike se samajhte hain:
+
+---
+
+## **1️⃣ Label Selector (Sabse common)**
+
+* Ye **Pods ko unke labels ke basis pe select karta hai**.
+* Labels = key-value pairs (jaise `app=myapp`, `env=prod`)
+
+**Usage:**
+
+* Deployment, Service, ReplicaSet me sabse zyada use hota hai.
+
+**Example:**
+
+```yaml
+selector:
+  matchLabels:
+    env: production
+```
+
+* Sirf `env=production` wale Pods select honge.
+
+**Advanced Label Selector:**
+
+```yaml
+selector:
+  matchExpressions:
+    - key: tier
+      operator: In
+      values: ["frontend","backend"]
+```
+
+* Isme `tier` key ke `frontend` ya `backend` values wale Pods select honge.
+
+---
+
+## **2️⃣ Field Selector**
+
+* Ye **Pods ke system fields** ke basis pe select karta hai.
+* Fields = Pod ka name, status, node etc.
+
+**Example CLI:**
+
+```bash
+kubectl get pods --field-selector=status.phase=Running
+```
+
+* Sirf `Running` state wale Pods dikhenge.
+
+---
+
+## **Summary Table**
+
+| Selector Type      | Basis                      | Example                | Use Case                         |
+| ------------------ | -------------------------- | ---------------------- | -------------------------------- |
+| **Label Selector** | Pod ke user-defined labels | `env=production`       | Service, Deployment, ReplicaSet  |
+| **Field Selector** | Pod ke system fields       | `status.phase=Running` | Filtering pods by status or name |
+
+---
+
+Agar chaho, main **Label Selector vs Field Selector ka visual diagram** bhi bana ke dikhau, jisse easily yaad rahe.
+
+Chahiye bana du?
+
+===========================================================================================================
+Bilkul Vishnudas! Kubernetes me **Equality-based selectors** ek type ka **Label Selector** hote hain jo **label ke value ke exact match** pe kaam karte hain.
+
+---
+
+## **Equality-Based Selector**
+
+### **Definition:**
+
+* Ye selector check karta hai ki **label ka value exactly match karta hai ya nahi**.
+* Operators:
+
+  * `=` ya `==` → Equal
+  * `!=` → Not equal
+
+---
+
+### **Example 1: Equal (= or ==)**
+
+```yaml
+selector:
+  matchLabels:
+    env: production
+```
+
+* Matlab: Sirf woh Pods select honge jinke labels me `env=production` ho.
+
+CLI example:
+
+```bash
+kubectl get pods -l env=production
+```
+
+---
+
+### **Example 2: Not Equal (!=)**
+
+```yaml
+selector:
+  matchExpressions:
+    - key: env
+      operator: NotIn
+      values: ["production"]
+```
+
+* Matlab: Woh Pods select honge jinke labels me `env` **production nahi hai**.
+
+---
+
+### **Summary Table:**
+
+| Operator | Meaning           | Example           |
+| -------- | ----------------- | ----------------- |
+| `=`      | Equal             | `env=production`  |
+| `==`     | Equal (same as =) | `env==production` |
+| `!=`     | Not Equal         | `env!=production` |
+
+---
+
+Agar chaho, main **Equality-based aur Set-based selectors ka simple diagram** bana ke dikhau, jisse easily difference samajh aaye.
+
+Kya bana du?
+
+===========================================================================================================
+Bilkul Vishnudas! Ab **Set-Based Selectors** ko samajhte hain. Ye thoda flexible hote hain **ek ya multiple values ke saath** Pods select karne ke liye.
+
+---
+
+## **Set-Based Selector**
+
+### **Definition:**
+
+* Ye selector allow karta hai **labels ke values ko ek set ke against match karna**.
+* Operators:
+
+  * `In` → Label value **set ke andar ho**
+  * `NotIn` → Label value **set ke andar na ho**
+  * `Exists` → Label exist karta ho
+  * `DoesNotExist` → Label exist **na kare**
+
+---
+
+### **Example 1: In**
+
+```yaml
+selector:
+  matchExpressions:
+    - key: env
+      operator: In
+      values: ["production", "staging"]
+```
+
+* Matlab: Sirf woh Pods select honge jinke `env` label **production ya staging** ho.
+
+CLI example:
+
+```bash
+kubectl get pods -l 'env in (production,staging)'
+```
+
+---
+
+### **Example 2: NotIn**
+
+```yaml
+selector:
+  matchExpressions:
+    - key: env
+      operator: NotIn
+      values: ["dev"]
+```
+
+* Matlab: Woh Pods select honge jinke `env` label **dev nahi hai**.
+
+---
+
+### **Example 3: Exists**
+
+```yaml
+selector:
+  matchExpressions:
+    - key: version
+      operator: Exists
+```
+
+* Matlab: Sirf woh Pods select honge jinke paas `version` label exist karta ho.
+
+---
+
+### **Example 4: DoesNotExist**
+
+```yaml
+selector:
+  matchExpressions:
+    - key: version
+      operator: DoesNotExist
+```
+
+* Matlab: Woh Pods select honge jinke paas `version` label **nahin hai**.
+
+---
+
+### **Summary Table:**
+
+| Operator       | Meaning                      |
+| -------------- | ---------------------------- |
+| `In`           | Label value **set me ho**    |
+| `NotIn`        | Label value **set me na ho** |
+| `Exists`       | Label **exist karta ho**     |
+| `DoesNotExist` | Label exist **na kare**      |
+
+---
+
+Agar chaho, main **Equality-based aur Set-based selectors ka simple diagram** bana ke dikhau, jisse **difference visually samajh aaye**.
+
+Kya bana du?
+
+===========================================================================================================
+Bilkul Vishnudas! Chalo **Kubernetes Annotations** ko clearly samajhte hain.
+
+---
+
+## **1️⃣ Definition**
+
+* **Annotations** Kubernetes objects (Pods, Services, Deployments, etc.) ke **extra metadata** hote hain.
+* Ye **key-value pairs** ke form me store hote hain.
+* **Purpose:** System ya tools ko extra information dena jo **labels** ke liye nahi hoti.
+
+> Labels mostly **selecting & grouping** ke liye use hote hain,
+> Annotations **metadata ya description** ke liye use hote hain.
+
+---
+
+## **2️⃣ Features**
+
+* Not used for selecting objects (unlike labels).
+* Can store large data (labels usually short hote hain).
+* Useful for:
+
+  * Build/version info
+  * Deployment info
+  * Monitoring data
+  * Tool-specific metadata (kubectl, Helm, Prometheus)
+
+---
+
+## **3️⃣ Syntax Example**
+
+### **Pod me Annotation**
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+  annotations:
+    description: "This pod runs the backend API"
+    version: "v1.2.0"
+spec:
+  containers:
+    - name: my-container
+      image: nginx
+```
+
+* Yahaan `description` aur `version` annotations hai.
+* Ye **kubectl get pod -o yaml** me dekh sakte hain.
+
+---
+
+## **4️⃣ Key Differences: Labels vs Annotations**
+
+| Feature       | Labels                                     | Annotations                 |
+| ------------- | ------------------------------------------ | --------------------------- |
+| Purpose       | Select/organize objects                    | Store metadata/info         |
+| Query Support | Yes (kubectl -l)                           | No                          |
+| Size Limit    | Small (63 chars per key/value recommended) | Large (can store long text) |
+| Examples      | `env=prod`                                 | `description="Backend pod"` |
+
+---
+
+## **5️⃣ Usage Example**
+
+1. Tool like **Prometheus** annotation to scrape metrics:
+
+```yaml
+annotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "9100"
+```
+
+2. Helm chart deployment info:
+
+```yaml
+annotations:
+  helm.sh/chart: "mychart-1.0.0"
+```
+
+---
+
+Agar chaho, main **Labels aur Annotations ka simple visual diagram** bana ke **difference ko easily yaad rakhne layak** bana du.
+
+Kya bana du?
+
+===========================================================================================================
+Bilkul Vishnudas! Kubernetes me **Labels ke saath kaam karne ke liye jo commands commonly use hote hain**, unka main summary deta hoon:
+
+---
+
+## **1️⃣ Add / Set Label**
+
+```bash
+kubectl label <resource-type> <resource-name> <key>=<value>
+```
+
+**Example:**
+
+```bash
+kubectl label pod my-pod environment=production
+kubectl label deployment my-deploy tier=backend
+```
+
+* Agar key already exist karti hai, to update ho jayegi.
+* Agar nahi, to naya label add ho jayega.
+
+---
+
+## **2️⃣ Remove Label**
+
+```bash
+kubectl label <resource-type> <resource-name> <key>-
+```
+
+**Example:**
+
+```bash
+kubectl label pod my-pod environment-
+```
+
+* Ye `environment` label remove karega.
+
+---
+
+## **3️⃣ List Labels of a Resource**
+
+```bash
+kubectl get <resource-type> <resource-name> --show-labels
+```
+
+**Example:**
+
+```bash
+kubectl get pod my-pod --show-labels
+kubectl get pods --show-labels
+```
+
+* Ye pod ke saare labels dikhata hai.
+
+---
+
+## **4️⃣ Get Resources by Label Selector**
+
+```bash
+kubectl get <resource-type> -l <key>=<value>
+```
+
+**Example:**
+
+```bash
+kubectl get pods -l environment=production
+kubectl get deployments -l tier=backend
+```
+
+### **Operators in Label Selectors**
+
+* `=` : equal to
+* `!=` : not equal to
+* `in` : key in (list)
+* `notin` : key not in (list)
+
+**Example:**
+
+```bash
+kubectl get pods -l 'tier in (frontend, backend)'
+kubectl get pods -l 'environment!=dev'
+```
+
+---
+
+## **5️⃣ Edit Labels Directly**
+
+```bash
+kubectl edit <resource-type> <resource-name>
+```
+
+* Open editor, metadata → labels section me changes kar sakte ho.
+
+---
+
+## **6️⃣ Label Namespaces**
+
+* Same commands **namespace specific resources** ke liye bhi use hoti hain:
+
+```bash
+kubectl get pods -n my-namespace -l environment=production
+```
+
+---
+
+Agar chaho, mai **Labels + Annotations commands ka ek simple cheat sheet table** bana ke de sakta hoon, jo yaad rakhna aur reference lena easy ho.
+
+Kya mai wo bana du?
+
+===========================================================================================================
+Session - 11 | Mastering Kubernetes Workloads: Replica Controller, ReplicaSets & Deployments HandsOn
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+Session - 12 | K8s Deployment Strategies | Recreate, Rolling, Blue-Green, Canary, A/B & Shadow
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+Session - 13 | Blue-Green Deployment in Kubernetes (K8s) with Live Practical Demo | Nehra Classes
 ===========================================================================================================
 ===========================================================================================================
 ===========================================================================================================
