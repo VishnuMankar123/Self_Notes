@@ -4,11 +4,18 @@ aws account info
 Email ID for aws account: mankarvishnudas27@gmail.com
 
 UserName : VishnudasMankar
-
-Root User Password
 Vishnu@19031996
 
 key pair name for aws : myredhatserver
 
 
 ssh -i "myredhatserver.pem" ec2-user@ec2-16-171-22-118.eu-north-1.compute.amazonaws.com
+
+========================================================================
+Root Mail : vishnudasmankar1996@gmail.com
+username : vishnudasmankar
+Accoutn id : 789406174611
+========================================================================
+https://vishnumankar.signin.aws.amazon.com/console
+Admin
+Vishnu@123

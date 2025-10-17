@@ -2949,6 +2949,174 @@ Snow Family केवल data **AWS में भेजने** के लिए
 क्या मैं वो diagram बना दूँ तुम्हारे notes के लिए?
 
 ==========================================================================================
+Session - 14 | AWS Database Services Introduction | AWS Relational Database Service | Nehra Classes
+
+यह वीडियो AWS की **Database Services** का परिचय देता है, खासकर **Amazon RDS (Relational Database Service)** पर केंद्रित है। नीचे मैंने इसे **Q&A स्टाइल (शिक्षक–विद्यार्थी)** में आसान और नोट्स-जैसे पॉइंट्स में लिखा है👇
+
+---
+
+### 🧩 **Session 14 – AWS Database Services (Amazon RDS Introduction)**
+
+🎓 *By: Nehra Classes | Trainer: Vikas Nehra*
+
+---
+
+#### 🧠 **1. Database क्या होता है?**
+
+**Teacher:** Database क्या है?
+**Student:** Database एक **structured collection of data** होता है जिसे इस तरह organize और store किया जाता है कि डेटा को efficiently **retrieve, manage और manipulate** किया जा सके।
+
+**Example:**
+Employee details वाली टेबल जिसमें ID, Name, Salary आदि stored हों — यह एक database table का हिस्सा है।
+
+---
+
+#### 🧩 **2. DBMS क्या है?**
+
+**Teacher:** DBMS (Database Management System) क्या करता है?
+**Student:** DBMS एक software है जो database के साथ interact करने की सुविधा देता है। इससे हम data को:
+
+* Create
+* Retrieve
+* Modify
+* Manage
+  कर सकते हैं, साथ ही **security और integrity** बनाए रखते हैं।
+
+---
+
+#### 🧮 **3. RDBMS क्या है?**
+
+**Teacher:** Relational Database क्या होता है?
+**Student:** RDBMS में data **tables (rows और columns)** के रूप में store किया जाता है, और टेबल्स के बीच **relationships** बनाए जाते हैं (जैसे primary key, foreign key)।
+**Example:** MySQL, PostgreSQL, Oracle, SQL Server आदि।
+
+---
+
+#### 💬 **4. SQL क्या है?**
+
+**Teacher:** SQL का use क्या है?
+**Student:** SQL (Structured Query Language) एक standard language है जो relational databases के साथ **query, update और structure define** करने के लिए उपयोग होती है।
+
+---
+
+#### ⚙️ **5. Normalization क्या है?**
+
+**Student:** Normalization एक process है जिससे data को इस तरह organize किया जाता है कि redundancy (duplicate data) और dependency कम हो, जिससे database efficient बनता है।
+
+---
+
+#### 🔍 **6. Indexes क्या करते हैं?**
+
+**Student:** जैसे किताब में Index हमें जल्दी page तक पहुंचाता है, वैसे ही database में Index data retrieval को **fast** करता है।
+
+---
+
+#### ⚔️ **7. DBMS vs RDBMS Difference**
+
+| Feature       | DBMS              | RDBMS                      |
+| ------------- | ----------------- | -------------------------- |
+| Structure     | Files-based       | Tables (rows/columns)      |
+| Relationships | नहीं enforce करता | Enforce करता (keys के साथ) |
+| Normalization | Optional          | Mandatory                  |
+| Examples      | MS Access         | MySQL, Oracle, SQL Server  |
+
+---
+
+#### 🏗️ **8. Physical Database Server की Problems**
+
+**Teacher:** Traditional (on-premise) database servers में क्या दिक्कतें हैं?
+**Student:**
+
+* Hardware failure (CPU, RAM, HDD issues)
+* Scalability problem (resources बढ़ाना कठिन)
+* Maintenance downtime
+* Power & cooling issues
+* Space requirement
+* High cost (hardware + license + maintenance)
+* Backup, recovery, security सब खुद manage करना
+* Limited redundancy (high availability मुश्किल)
+
+---
+
+#### ☁️ **9. Cloud क्यों बेहतर है?**
+
+**Teacher:** Cloud databases को क्यों prefer किया जाता है?
+**Student:**
+क्योंकि Cloud databases (जैसे AWS RDS) में:
+
+* High availability
+* Scalability
+* Low maintenance
+* Automatic backup
+* Cost efficiency
+* Disaster recovery
+* Security और performance बेहतर होती है।
+
+---
+
+#### 🌐 **10. AWS Database Services Overview**
+
+**AWS में Database Services:**
+
+1. **RDS (Relational Database Service)** – Managed relational DB.
+2. **DynamoDB** – NoSQL database.
+3. **Elasticache** – In-memory cache.
+4. **Redshift** – Data warehousing service.
+
+---
+
+#### 🧱 **11. Amazon RDS क्या है?**
+
+**Teacher:** RDS क्या है — Database या Service?
+**Student:** RDS एक **database नहीं** है, यह एक **managed database service** है जो AWS पर relational databases को **setup, operate और scale** करने की सुविधा देती है।
+
+**RDS Features:**
+
+* AWS खुद database instance manage करता है
+* User को infrastructure manage करने की जरूरत नहीं
+* Focus सिर्फ application logic पर रह सकता है
+
+---
+
+#### 💡 **12. RDS कौन-कौन से Database Engines को Support करता है?**
+
+| Database Engine | Owner                                            |
+| --------------- | ------------------------------------------------ |
+| MySQL           | Open Source                                      |
+| PostgreSQL      | Open Source                                      |
+| Oracle          | Oracle Corporation                               |
+| SQL Server      | Microsoft                                        |
+| MariaDB         | Open Source                                      |
+| Amazon Aurora   | AWS (proprietary, MySQL & PostgreSQL compatible) |
+
+---
+
+#### 🧭 **13. RDS के Benefits**
+
+* Fully managed (no manual maintenance)
+* Automatic backup & recovery
+* High availability (Multi-AZ)
+* Easy scaling
+* Cost-effective pay-as-you-go model
+* Secure (encryption & IAM integration)
+
+---
+
+### ✅ **Summary Notes**
+
+* **Database** = structured data collection
+* **DBMS** = software to manage databases
+* **RDBMS** = relational model (tables, keys)
+* **SQL** = language for database operations
+* **Normalization & Indexing** = improve efficiency
+* **AWS RDS** = managed relational database service
+* **Supports 6 Engines:** MySQL, PostgreSQL, Oracle, SQL Server, MariaDB, Aurora
+* **Solves:** hardware, scaling, maintenance & cost issues of traditional servers
+
+---
+
+क्या आप चाहेंगे कि मैं इसके **Part 2** (DynamoDB, Elasticache, Redshift explanation वाला हिस्सा) का भी ऐसा ही Q&A नोट्स में बना दूं?
+
 ==========================================================================================
 ==========================================================================================
 ==========================================================================================
@@ -2957,7 +3125,309 @@ Snow Family केवल data **AWS में भेजने** के लिए
 ==========================================================================================
 ==========================================================================================
 ==========================================================================================
+Session - 21 | AWS Support Plans | How To Create AWS Account? | AWS Signup Process | Nehra Classes
+Here’s a **clear, structured note summary (Q&A style)** of the YouTube session you shared:
+
+---
+
+## 🎯 **Session 21 – AWS Support Plans & How to Create AWS Account**
+
+**Trainer:** Vikas Nehra
+**Channel:** Nehra Classes
+**Topic:** AWS Support Plans and AWS Free Tier Account Signup Process
+
+---
+
+### 🧑‍🏫 **Q1. What is discussed in this session?**
+
+**Answer:**
+In this session, the trainer explains:
+
+1. The **types of AWS Support Plans** available for different users.
+2. The **process to create a free-tier AWS account** step-by-step.
+3. A **practical demo** of account creation.
+4. Introduction to **AWS CloudShell**.
+
+---
+
+### 💡 **Q2. What are AWS Support Plans?**
+
+**Answer:**
+AWS provides four types of support plans depending on user needs:
+
+1. **Basic Support (Free Tier)**
+2. **Developer Support**
+3. **Business Support**
+4. **Enterprise Support**
+
+---
+
+### 🆓 **Q3. What is the Basic Support Plan?**
+
+**Answer:**
+
+* It is **free of cost** (used for learning and experimenting).
+* Includes **Knowledge Center**, **Forums**, and **Documentation access**.
+* Does **not allow raising technical tickets** or direct engineer support.
+* Suitable for beginners and learners.
+
+---
+
+### 👨‍💻 **Q4. What is the Developer Support Plan?**
+
+**Answer:**
+
+* Designed for **individual developers or small teams**.
+* Provides support during **business hours (Mon–Fri)**.
+* **Response time:** Up to **24 hours**.
+* Starts at **$29 per month**.
+
+---
+
+### 🏢 **Q5. What is the Business Support Plan?**
+
+**Answer:**
+
+* Ideal for **production workloads**.
+* **24×7 support** available.
+* **Response time:** 1 hour for urgent issues.
+* Starts at **$100 per month**.
+* Includes access to **AWS Trusted Advisor**, **API support**, and **architectural guidance**.
+
+---
+
+### 🏬 **Q6. What is the Enterprise Support Plan?**
+
+**Answer:**
+
+* Suitable for **large enterprises** and **mission-critical workloads**.
+* **24×7 dedicated support** with **15-minute response time**.
+* Includes **Technical Account Manager (TAM)** and **full Trusted Advisor checks**.
+* Pricing is **customized** based on usage.
+
+---
+
+### ⚖️ **Q7. Comparison of AWS Support Plans**
+
+| **Feature**                  | **Basic** | **Developer** | **Business** | **Enterprise** |
+| ---------------------------- | --------- | ------------- | ------------ | -------------- |
+| Price                        | Free      | $29/month     | $100/month   | Custom         |
+| 24×7 Support                 | ❌         | ❌             | ✅            | ✅              |
+| Response Time                | None      | 24 hrs        | 1 hr         | 15 min         |
+| Access to Engineers          | ❌         | ❌             | ✅            | ✅              |
+| Architecture Guidance        | ❌         | ❌             | ✅            | ✅              |
+| Trusted Advisor Checks       | 7 checks  | 7 checks      | Full         | Full           |
+| Third-party Software Support | ❌         | ❌             | ❌            | ✅              |
+
+---
+
+### 🧾 **Q8. What are the Free Tier Account Limits?**
+
+**Answer:**
+AWS Free Tier lasts **12 months** for new accounts.
+Some limits include:
+
+* **EC2:** 750 hours/month of `t2.micro` instance.
+* **S3:** 5 GB storage, 20,000 GET & 2,000 PUT requests/month.
+* **RDS:** 750 hours/month for `t2.micro` DB instance + 20 GB storage.
+* **Lambda:** 1 million requests/month, 400,000 GB-seconds compute time.
+* **CloudWatch:** 10 custom metrics and 10 alarms.
+
+---
+
+### ☁️ **Q9. What is AWS CloudShell?**
+
+**Answer:**
+
+* **Browser-based shell environment** for executing AWS CLI commands.
+* Pre-configured with **AWS CLI and tools** — no manual setup needed.
+* Provides **1 GB persistent storage**.
+* **Free to use**, integrated within the AWS Console.
+* Can execute commands like `ls`, `cat`, `aws s3 ls`, etc.
+
+---
+
+### 🧑‍💼 **Q10. How to Create a Free-Tier AWS Account?**
+
+**Steps:**
+
+1. Go to [https://aws.amazon.com](https://aws.amazon.com) → Click **Create an AWS Account**.
+2. Enter **email address**, **account name**, and **password**.
+3. Choose **Personal Account**.
+4. Fill in **contact details** and **address**.
+5. Provide **credit/debit card details** (₹2 will be charged and refunded).
+6. Verify phone number via **OTP**.
+7. Select **Basic (Free) Support Plan**.
+8. Sign in using **Root User credentials**.
+9. Access the **AWS Management Console**.
+
+---
+
+### 🔍 **Q11. What does the AWS Console look like?**
+
+**Answer:**
+
+* Top-left: AWS Logo → Home
+* Next to it: **Services** → Categories like Compute, Storage, Database, etc.
+* **Search bar:** To find any service quickly (e.g., EC2, S3).
+* **Top bar (right side):** CloudShell icon, Billing, and Account options.
+
+---
+
+### 🧠 **Key Takeaways**
+
+* AWS provides multiple support plans for different user needs.
+* Free Tier (Basic Plan) is perfect for learning and testing.
+* Always monitor usage to avoid charges.
+* CloudShell simplifies AWS CLI command usage directly from browser.
+
+---
+
+Would you like me to create this summary in **Hindi (Q&A style)** as well, so it matches the video’s language and is easier for revision?
+
 ==========================================================================================
+Session - 22 | AWS IAM Service | Getting Started With AWS IAM | IAM Users & Groups | Nehra Classes
+
+Perfect Vishnudas 👌
+Chalo — is topic **“AWS IAM Service – Getting Started with IAM Users & Groups” (Session 22 – Nehra Classes)** ke liye main **clear, student-friendly practical notes** bana deta hoon — jaise ek teacher samjha raha ho aur tum likh rahe ho 👇
+
+---
+
+## 🧾 **AWS IAM Service – Getting Started with IAM Users & Groups**
+
+### 🎯 **Objective:**
+
+To understand and perform basic IAM (Identity and Access Management) operations — creating **Users**, **Groups**, and assigning **Permissions** in AWS.
+
+---
+
+### 🧠 **Concept Summary**
+
+* **IAM (Identity and Access Management)** is an AWS service used to **securely control access** to AWS resources.
+* With IAM, you can **create users, groups, and roles**, and assign permissions using **policies**.
+* It’s a **global service** (not region-specific).
+* IAM ensures **least privilege principle** — give only the permissions required.
+
+---
+
+### 🧩 **Step-by-Step Practical**
+
+#### 🪪 **1. Open AWS IAM Console**
+
+* Go to AWS Console → Search **IAM** → Open the IAM Dashboard.
+* Left side menu shows options: Users, Groups, Roles, Policies.
+
+---
+
+#### 👥 **2. Create IAM User**
+
+1. Click **Users → Add user**
+2. Enter username (e.g., `developer1`)
+3. Select **Access type**:
+
+   * ✅ *AWS Management Console access* (for GUI login)
+   * ✅ *Programmatic access* (for CLI / SDK)
+4. Set a custom password (e.g., `Dev@1234`)
+5. Choose **Require password reset** (optional)
+6. Click **Next** to set permissions.
+
+---
+
+#### 👨‍👩‍👦 **3. Create IAM Group**
+
+1. Go to **Groups → Create group**
+2. Name it (e.g., `Developers`)
+3. Attach a policy:
+
+   * Example: **AmazonS3FullAccess** or **EC2ReadOnlyAccess**
+4. Click **Create group**
+5. Now add your user (`developer1`) into this group.
+
+---
+
+#### 🔑 **4. Assign Permissions to User or Group**
+
+* If user is part of a group → permissions are inherited from the group.
+* Alternatively, attach a policy directly to the user.
+
+Example:
+
+* Policy name: `AmazonEC2FullAccess`
+* Effect: Allow
+* Action: All EC2 actions
+* Resource: All resources
+
+---
+
+#### 🧾 **5. Test the Access**
+
+1. Sign out of the root account.
+2. Login using the new IAM user credentials.
+3. Try accessing allowed and restricted services — verify permission boundaries.
+
+---
+
+### 💻 **6. Optional: Access Keys (for CLI)**
+
+If programmatic access was chosen:
+
+* Go to IAM → Users → Select user → **Security credentials** → Create Access key
+* Use these in AWS CLI:
+
+  ```bash
+  aws configure
+  AWS Access Key ID [None]: AKIAxxxxxxx
+  AWS Secret Access Key [None]: XXXXXXXXXXXXX
+  Default region name [None]: ap-south-1
+  Default output format [None]: json
+  ```
+
+---
+
+### 🧾 **Output / Result**
+
+✅ IAM User `developer1` created successfully.
+✅ IAM Group `Developers` created with attached policy.
+✅ User inherits permissions from the group and can access allowed services only.
+
+---
+
+### ⚙️ **Key Points**
+
+* Root account should not be used for daily operations.
+* Always create IAM users for team members.
+* IAM is **Global**, not tied to a region.
+* Use **Policies** to define what actions are allowed/denied.
+* Follow **Principle of Least Privilege**.
+
+---
+
+### ❌ **Common Errors & Fixes**
+
+| Error                 | Cause                    | Solution                               |
+| --------------------- | ------------------------ | -------------------------------------- |
+| “Access Denied”       | Missing permission       | Attach required policy                 |
+| “User cannot login”   | Console access not given | Enable “AWS Management Console Access” |
+| “Invalid credentials” | Wrong username/password  | Reset from IAM console                 |
+
+---
+
+### 🧩 **Conclusion**
+
+> In this session, we learned how to manage access in AWS using IAM by creating users, groups, and assigning permissions through policies. This ensures secure and organized control over AWS resources.
+
+---
+
+### 📒 **Assignment / Practice**
+
+✅ Create 2 users — *developer* and *tester*.
+✅ Create groups — *Developers* (EC2 full access) and *Testers* (S3 read-only access).
+✅ Verify each user’s access by logging in separately.
+
+---
+
+Would you like me to give this note as a **Word file (editable format)** so you can directly save and print it for your AWS practical folder?
+
 ==========================================================================================
 ==========================================================================================
 ==========================================================================================
