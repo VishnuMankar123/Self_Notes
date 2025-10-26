@@ -3429,13 +3429,1102 @@ If programmatic access was chosen:
 Would you like me to give this note as a **Word file (editable format)** so you can directly save and print it for your AWS practical folder?
 
 ==========================================================================================
+Session - 23 | AWS IAM Service | Users & Groups Practice Questions Solution | Nehra Classes
+
+Awesome Vishnudas 🚀
+चलो शुरू करते हैं —
+**AWS IAM Service – Practice Questions (Session 23 | Nehra Classes)**
+💡 *Detailed Q&A Notes – Hindi + English Mix (All 14 Tasks)*
+
+---
+
+## 🧩 **Task 1 – Create an IAM User**
+
+**Q (Teacher):** अगर हमें AWS में नया IAM User बनाना हो, तो process क्या है?
+**A (Student):**
+Step-by-step process 👇
+
+1. **Login** करो AWS Console में → Search करो **IAM** service.
+2. Left panel से क्लिक करो **Users** → फिर **Create user**.
+3. Enter user name → Example: **developer1**
+4. Choose access type:
+
+   * अगर console access देना है → tick **Provide user access to the AWS Management Console**
+   * फिर **Custom password** set करो (Example: `Dev@1234`)
+   * Optionally, uncheck "Require password reset" if not needed.
+5. Next → **Set permissions**:
+
+   * Option 1: Attach user to existing group
+   * Option 2: Copy permissions from another user
+   * Option 3: Attach policies directly
+     Example: choose **Attach policies directly** → select `AmazonS3FullAccess`
+6. Review → **Create user**
+7. Done ✅ user successfully created.
+
+📘 **Note:** हर IAM user को unique username और permission policy मिलती है।
+
+---
+
+## 🧩 **Task 2 – Create an IAM Group**
+
+**Q (Teacher):** IAM Group क्या होता है और कैसे बनाते हैं?
+**A (Student):**
+
+* IAM Group एक **collection of users** होता है जिनकी permissions same होती हैं।
+* Example: All developers को S3 और EC2 की same access देनी है → तो एक **Developers Group** बनाते हैं।
+
+**Steps:**
+
+1. Go to **IAM → User Groups → Create group**
+2. Group name: **Developers**
+3. Attach policies जैसे `AmazonS3FullAccess`, `AmazonEC2ReadOnlyAccess`
+4. Add existing users → Example: developer1
+5. Click **Create group** ✅
+
+📘 **Benefit:** Group-based permission management easy और scalable होता है।
+
+---
+
+## 🧩 **Task 3 – Attach Policy to User**
+
+**Q:** अगर user को directly कोई policy देनी हो, तो कैसे करेंगे?
+**A:**
+
+1. Go to **IAM → Users → developer1**
+2. Tab: **Permissions → Add permissions → Attach policies directly**
+3. Example: Select `AmazonEC2FullAccess`
+4. Click **Add permissions** ✅
+
+📝 Direct policy user-level पर लगती है, group-level नहीं।
+
+---
+
+## 🧩 **Task 4 – Create a Custom Policy**
+
+**Q:** Custom policy क्या होती है और कैसे बनाते हैं?
+**A:** Custom policy एक ऐसी policy होती है जो **JSON format** में manually लिखी जाती है और organization-specific permissions देती है।
+
+**Steps:**
+
+1. Go to **IAM → Policies → Create policy**
+2. Choose **JSON** tab
+3. Paste example policy👇
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:ListBucket", "s3:GetObject"],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+4. Review policy → name: **S3ReadOnlyCustom** → Create policy ✅
+
+📘 Custom policies ज़्यादा control देती हैं।
+
+---
+
+## 🧩 **Task 5 – Create IAM Role**
+
+**Q:** IAM Role क्यों बनाते हैं और कैसे बनाते हैं?
+**A:** Role का use तब होता है जब किसी **AWS service को दूसरे service के resource access** करने की जरूरत होती है।
+Example: EC2 को S3 bucket access देना।
+
+**Steps:**
+
+1. Go to **IAM → Roles → Create role**
+2. Select trusted entity: **AWS service**
+3. Choose use case: **EC2**
+4. Attach policy: `AmazonS3ReadOnlyAccess`
+5. Review → Role name: **EC2S3AccessRole** → Create role ✅
+
+📘 EC2 instance में ये role attach करने से वह S3 access कर सकता है।
+
+---
+
+## 🧩 **Task 6 – Attach Role to EC2 Instance**
+
+**Q:** पहले बनाए गए role को EC2 instance से कैसे attach करें?
+**A:**
+
+1. Go to **EC2 → Instances**
+2. Select instance → Click **Actions → Security → Modify IAM role**
+3. Choose role: **EC2S3AccessRole**
+4. Click **Update IAM role** ✅
+
+अब instance बिना credentials के S3 access कर सकता है।
+
+---
+
+## 🧩 **Task 7 – Create a Policy with Deny Rule**
+
+**Q:** किसी action को explicitly deny कैसे करें?
+**A:**
+
+Example policy 👇
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Action": "ec2:TerminateInstances",
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+→ यह policy किसी भी EC2 instance को terminate करने की permission **deny** करती है।
+
+📘 **Deny always overrides Allow** in AWS IAM.
+
+---
+
+## 🧩 **Task 8 – Create Password Policy**
+
+**Q:** Password policy क्या है और configure कैसे करें?
+**A:** Password policy से हम enforce करते हैं कि user strong password use करे।
+
+**Steps:**
+
+1. Go to **IAM → Account settings → Password policy**
+2. Enable:
+
+   * Minimum length: 8
+   * Require uppercase, lowercase, number, special character
+   * Require password rotation every 90 days
+3. Save changes ✅
+
+📘 इससे security standards maintain रहते हैं।
+
+---
+
+## 🧩 **Task 9 – Enable MFA (Multi-Factor Authentication)**
+
+**Q:** MFA क्या होता है और enable कैसे करें?
+**A:** MFA एक **extra security layer** है — username/password के अलावा एक OTP authentication भी होता है।
+
+**Steps:**
+
+1. Go to **IAM → Users → developer1 → Security credentials**
+2. Click **Assign MFA device**
+3. Choose type: **Virtual MFA device**
+4. Use mobile app (e.g., Google Authenticator) → scan QR code
+5. Enter 2 consecutive codes → **Activate MFA** ✅
+
+📘 अब login करने के लिए password + OTP दोनों चाहिए।
+
+---
+
+## 🧩 **Task 10 – Create Access Key for CLI**
+
+**Q:** CLI या SDK access के लिए credentials कैसे generate करते हैं?
+**A:**
+
+1. Go to **IAM → Users → developer1 → Security credentials**
+2. Click **Create access key**
+3. Choose use case → **Command Line Interface (CLI)**
+4. Download `.csv` file (contains Access key ID & Secret key) ✅
+
+📘 ये keys AWS CLI या SDK में configure करने के लिए होती हैं (`aws configure` command से)।
+
+---
+
+## 🧩 **Task 11 – Set Permissions Boundary**
+
+**Q:** Permission boundary का purpose क्या है?
+**A:**
+Boundary एक **limit** define करता है कि user या role maximum कौन-सी permissions तक जा सकता है।
+Example: User को allow policies हैं, लेकिन boundary उसे restrict कर सकती है।
+
+**Steps:**
+
+1. Go to **IAM → Users → developer1 → Permissions**
+2. Click **Add permissions boundary**
+3. Choose a policy → Example: `AmazonS3ReadOnlyAccess`
+4. Save ✅
+
+📘 अब भले user को `FullAccess` policy दी गई हो, boundary उसे restrict कर देगी।
+
+---
+
+## 🧩 **Task 12 – Delete User / Group / Policy**
+
+**Q:** किसी user, group या policy को कैसे delete करते हैं?
+**A:**
+
+* **User delete:**
+  `IAM → Users → Select user → Delete user`
+* **Group delete:**
+  `IAM → User groups → Select group → Delete group`
+* **Policy delete:**
+  `IAM → Policies → Select → Delete`
+
+📘 Delete करने से पहले ensure करो कि dependency न हो (जैसे attached roles/policies)।
+
+---
+
+## 🧩 **Task 13 – Policy Simulator Use**
+
+**Q:** IAM Policy Simulator का use क्या है?
+**A:**
+Policy Simulator help करता है test करने में कि किसी user या role को कौन-कौन सी permissions effective मिल रही हैं।
+
+**Steps:**
+
+1. Go to **IAM → Policy Simulator**
+2. Select user → Example: developer1
+3. Select service → Example: S3
+4. Run simulation → Shows Allow/Deny result ✅
+
+📘 इससे हम troubleshoot कर सकते हैं कि access क्यों fail हो रहा है।
+
+---
+
+## 🧩 **Task 14 – Identity Center (SSO) Brief**
+
+**Q:** AWS Identity Center (पूर्व में AWS SSO) का role क्या है?
+**A:**
+AWS Identity Center का use होता है **Single Sign-On (SSO)** implement करने के लिए ताकि users एक ही login से multiple AWS accounts और applications access कर सकें।
+
+📘 ये enterprise-level authentication system है जो **centralized user management** देता है।
+
+---
+
+✅ **Session Summary (Nehra Classes – Session 23):**
+
+* IAM basics clear हुए
+* Users, Groups, Roles, Policies practically बनाए
+* MFA, Boundary, Simulator जैसे advanced concepts समझे
+* अब real-time AWS environment में confidently काम कर सकते हैं 💪
+
+---
+
+क्या चाहोगे Vishnudas कि मैं अब इसका **short revision sheet (1-page summary)** भी बना दूँ — ताकि तुम exam या interview से पहले जल्दी revise कर सको?
+
 ==========================================================================================
+Session - 24 | AWS IAM Service | Roles, Policies & Identity Providers in IAM Service | Nehra Classes
+
+बहुत अच्छा सवाल Vishnudas 👏
+चलो इसे एकदम **easy + practical तरीके** से समझते हैं —
+
+---
+
+## 🔹 **IAM Role क्या होता है (What is a Role in AWS IAM)?**
+
+**👉 Simple Definition:**
+IAM Role एक **temporary permission identity** है जिसे **AWS services या users** adopt करते हैं ताकि वो कुछ specific actions perform कर सकें — **बिना permanent credentials** के।
+
+---
+
+### 💡 **Example से समझो:**
+
+मान लो तुम्हारे पास एक **EC2 instance** है, और तुम्हें उस EC2 को **S3 bucket access** देना है।
+
+❌ तुम ऐसा नहीं कर सकते कि EC2 में S3 के लिए Access Key और Secret Key डाल दो — क्योंकि ये **insecure** तरीका है।
+
+✅ इसके बजाय तुम एक **IAM Role** बनाते हो जिसमें **S3 access की permission** होती है,
+और फिर उस role को EC2 instance से attach कर देते हो।
+
+अब EC2 instance **securely और automatically** S3 access कर सकता है, बिना किसी key के।
+
+---
+
+## 🔹 **Main Features of IAM Roles:**
+
+| Feature                       | Description                                                           |
+| ----------------------------- | --------------------------------------------------------------------- |
+| **Temporary credentials**     | Roles credentials short-lived होते हैं                                |
+| **No password / access key**  | Role login नहीं करता, सिर्फ assume किया जाता है                       |
+| **Used by AWS services**      | जैसे EC2, Lambda, ECS, Glue, etc.                                     |
+| **Cross-account access**      | एक AWS account का user दूसरे account में access पा सकता है (via role) |
+| **Least privilege principle** | Roles से हम सिर्फ उतनी ही permission देते हैं जितनी जरूरत है          |
+
+---
+
+## 🧩 **Step-by-Step: IAM Role कैसे बनाते हैं (Using AWS Console)**
+
+### 🎯 Example: EC2 को S3 read-only access देना
+
+1. **Login** करो AWS Console में
+2. Search bar में type करो **IAM**
+3. Left panel से **Roles** पर क्लिक करो
+4. अब क्लिक करो **Create Role**
+
+---
+
+### Step 1: **Select trusted entity**
+
+* Choose **AWS Service**
+* फिर service select करो → **EC2**
+  (क्योंकि EC2 को ये role assign करना है)
+
+---
+
+### Step 2: **Attach permissions policy**
+
+* Search करो: `AmazonS3ReadOnlyAccess`
+* उसे select करो
+* Click **Next**
+
+---
+
+### Step 3: **Add tags (optional)**
+
+* Example:
+
+  * Key: `Project`, Value: `DevEnvironment`
+  * (ये optional है, tagging से manage करना easy होता है)
+
+---
+
+### Step 4: **Name and create role**
+
+* Role name दो: `EC2S3AccessRole`
+* Review summary
+* Click **Create role** ✅
+
+अब role create हो गया।
+
+---
+
+## 🧩 **Step-by-Step: EC2 Instance में Role attach करना**
+
+1. Go to **EC2 → Instances**
+2. जिस instance को access देना है उसे select करो
+3. Click **Actions → Security → Modify IAM Role**
+4. Select `EC2S3AccessRole`
+5. Click **Update IAM Role** ✅
+
+अब वो instance S3 commands (जैसे `aws s3 ls`) चला सकता है **बिना किसी key के**।
+
+---
+
+## 🧠 **Important Notes:**
+
+* IAM Role **temporary credentials** provide करता है internally via **STS (Security Token Service)**।
+* एक role को **multiple policies** attach की जा सकती हैं।
+* Role का use **Lambda functions**, **CodeBuild**, **ECS Tasks**, **CloudFormation stacks**, etc. में भी होता है।
+
+---
+
+## ✅ **Quick Summary:**
+
+| Concept         | Description                                       |
+| --------------- | ------------------------------------------------- |
+| **IAM Role**    | Temporary access identity                         |
+| **Purpose**     | Secure service-to-service communication           |
+| **Example**     | EC2 → access S3 without keys                      |
+| **Created For** | AWS services, Users (cross-account), Applications |
+| **Attached To** | EC2, Lambda, ECS, etc.                            |
+
+---
+
+क्या चाहोगे Vishnudas कि मैं तुम्हें इसका **diagram (EC2 → Role → S3 access flow)** बनाकर दिखाऊँ ताकि पूरा concept visual तरीके से clear हो जाए?
+
 ==========================================================================================
+बहुत अच्छा सवाल Vishnudas 👏
+चलो इसे step-by-step simple words में समझते हैं —
+
+---
+
+## 🔹 **Question:**
+
+👉 *“Roles kis par kaam karte hain?”*
+या
+👉 *“IAM Roles AWS me kis ke liye use hote hain?”*
+
+---
+
+## 🔸 **Answer:**
+
+IAM **Roles** उन situations में काम करते हैं जहाँ **AWS resources (services)** को **temporarily दूसरे resources** तक पहुँच चाहिए — बिना username-password या access keys के।
+
+मतलब, **Roles services पर काम करते हैं, users पर नहीं।**
+(Users के पास permanent credentials होते हैं, Roles के पास temporary credentials होते हैं।)
+
+---
+
+## 🧩 **Roles kis par kaam karte hain (Where Roles Work):**
+
+| Sr. | AWS Service / Entity                  | Role का Purpose                                                                                              |
+| --- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| 1️⃣ | **EC2 Instance**                      | EC2 को S3, DynamoDB या CloudWatch जैसी services access करने देना।                                            |
+| 2️⃣ | **AWS Lambda**                        | Lambda function को DynamoDB, S3, SNS आदि access करने की permission देना।                                     |
+| 3️⃣ | **ECS / EKS Tasks**                   | Containers को specific AWS resources access करने देना।                                                       |
+| 4️⃣ | **AWS Glue / EMR**                    | Data analytics services को S3 buckets और databases तक पहुँच देना।                                            |
+| 5️⃣ | **AWS CodeBuild / CodePipeline**      | Build और deploy automation के दौरान resources manage करने देना।                                              |
+| 6️⃣ | **Cross-account Access**              | एक AWS account के user को दूसरे account के resources तक पहुँच देना।                                          |
+| 7️⃣ | **Federated Users (SSO or AD users)** | External identity provider (जैसे Google, Okta, Active Directory) से आने वाले users को temporary access देना। |
+
+---
+
+## 🧠 **Concept Summary:**
+
+* IAM **User** → real human होता है (username, password, access keys)।
+* IAM **Role** → virtual identity है जो **AWS services** या **applications** के लिए होती है।
+* Role को **assume** किया जाता है, **login नहीं किया जाता**।
+
+---
+
+## 💡 **Example: EC2 Role Use Case**
+
+1. EC2 instance को `AmazonS3ReadOnlyAccess` role attach किया गया।
+2. अब EC2 पर कोई भी app बिना access keys के S3 से data read कर सकता है।
+3. EC2 internally **STS (Security Token Service)** से temporary credentials लेता है।
+
+➡️ यह temporary credentials AWS SDK या CLI में auto-manage हो जाते हैं।
+
+---
+
+## ⚙️ **Working Flow (Simple Diagram Explanation):**
+
+```
+[ EC2 Instance ]
+       │
+       │  (Assume Role)
+       ▼
+[ IAM Role → Attached Policy (e.g., S3 ReadOnly) ]
+       │
+       ▼
+[ AWS STS provides Temporary Credentials ]
+       │
+       ▼
+[ EC2 securely accesses S3 ]
+```
+
+---
+
+## ✅ **In Short:**
+
+| Concept                    | Explanation                                 |
+| -------------------------- | ------------------------------------------- |
+| **Role works on**          | AWS Services (EC2, Lambda, ECS, Glue, etc.) |
+| **Provides**               | Temporary permissions                       |
+| **Purpose**                | Secure resource-to-resource access          |
+| **No need of**             | Access keys or passwords                    |
+| **Created and managed in** | AWS IAM Console                             |
+
+---
+
+अगर तुम चाहो तो मैं इसका **real AWS example (EC2 → Role → S3 access)** का practical demo steps भी लिख दूँ — जिससे तुम्हें clear समझ आ जाएगा कि internally role कैसे काम करता है।
+क्या बनाऊँ वो next?
+
 ==========================================================================================
+बहुत बढ़िया Vishnudas 👏 — ये IAM का **सबसे important concept** है!
+चलो इसे एकदम आसान language में समझते हैं —
+कि **Policy क्या है**, **क्यों use होती है**, और **कैसे बनाते हैं** 👇
+
+---
+
+## 🔹 **1️⃣ Policy क्या होती है (What is a Policy in AWS IAM)?**
+
+👉 **Policy** एक **permission rule document** होती है जो बताती है कि —
+**कौन (Who)** क्या **action (What)** किस **resource (Which)** पर कर सकता है या नहीं कर सकता।
+
+मतलब, policy AWS को बताती है कि —
+
+> “इस user/role/group को कौन-सी services या actions की permission है।”
+
+---
+
+### 💡 **Example:**
+
+अगर किसी user को S3 की read-only access देनी है,
+तो उसकी policy होगी:
+
+> “Allow s3:ListBucket and s3:GetObject on all buckets.”
+
+---
+
+## 🔸 **2️⃣ Policy का Format (JSON Structure)**
+
+AWS policies हमेशा **JSON format** में होती हैं।
+
+👇 Example:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetObject"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+### Explanation:
+
+| Key          | Meaning                                                 |
+| ------------ | ------------------------------------------------------- |
+| **Version**  | Policy format version (always `"2012-10-17"`)           |
+| **Effect**   | `"Allow"` या `"Deny"` – क्या करना है                    |
+| **Action**   | कौन-से operations allow करने हैं (e.g., `s3:GetObject`) |
+| **Resource** | किस resource पर (e.g., `"arn:aws:s3:::mybucket/*"`)     |
+
+---
+
+## 🔹 **3️⃣ AWS में Policy के Types**
+
+| Type                             | Description                                                             | Example                                     |
+| -------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------- |
+| **AWS Managed Policy**           | AWS द्वारा predefined ready-made policies                               | `AmazonS3FullAccess`, `AdministratorAccess` |
+| **Customer Managed Policy**      | User खुद बनाता है (custom JSON rules)                                   | Custom policy for limited S3 + EC2 access   |
+| **Inline Policy**                | किसी specific user/role/group के अंदर directly attach की जाती है        | Only for one entity                         |
+| **Permission Boundary**          | Limit करती है कि max permission क्या हो सकती है                         | Boundary for developers                     |
+| **Service Control Policy (SCP)** | AWS Organizations में use होती है multiple accounts control करने के लिए | Deny certain services for all accounts      |
+
+---
+
+## 🔹 **4️⃣ Policies का Use कहाँ होता है**
+
+Policies attach की जाती हैं:
+
+* **IAM User**
+* **IAM Group**
+* **IAM Role**
+
+👉 इससे ये entities AWS resources पर specific actions कर सकती हैं।
+
+---
+
+### 💡 Example Use Cases:
+
+| Entity            | Attached Policy           | Result                                 |
+| ----------------- | ------------------------- | -------------------------------------- |
+| `developer1`      | `AmazonS3FullAccess`      | User can access all S3 buckets         |
+| `DevelopersGroup` | `AmazonEC2ReadOnlyAccess` | All group users can only view EC2 info |
+| `EC2S3Role`       | `AmazonS3ReadOnlyAccess`  | EC2 can read data from S3 bucket       |
+
+---
+
+## 🔹 **5️⃣ Policy कैसे बनाते हैं (Create Policy Steps)**
+
+### 🔧 Using AWS Console:
+
+1. **Open IAM Console** → Left panel → **Policies → Create Policy**
+2. Choose method:
+
+   * **Visual editor:** Click and choose service + actions
+   * **JSON:** Paste your own JSON code
+3. Example JSON:
+
+   ```json
+   {
+     "Version": "2012-10-17",
+     "Statement": [
+       {
+         "Effect": "Allow",
+         "Action": [
+           "ec2:DescribeInstances",
+           "ec2:StartInstances",
+           "ec2:StopInstances"
+         ],
+         "Resource": "*"
+       }
+     ]
+   }
+   ```
+4. Click **Next** → Review
+5. Give a name → Example: `EC2StartStopPolicy`
+6. Click **Create policy** ✅
+
+अब ये policy **user**, **group**, या **role** पर attach की जा सकती है।
+
+---
+
+## 🔹 **6️⃣ Policy कैसे Attach करते हैं**
+
+### For User:
+
+IAM → Users → Select user → **Permissions → Add permissions → Attach policies directly**
+
+### For Group:
+
+IAM → User groups → Select group → **Permissions → Attach policies**
+
+### For Role:
+
+IAM → Roles → Select role → **Permissions → Attach policies**
+
+---
+
+## 🧠 **7️⃣ Important Points to Remember**
+
+* Default behavior: **“Deny everything”** — जब तक Allow policy नहीं लगती।
+* **Deny always overrides Allow.**
+* Policy को हमेशा **least privilege principle** के साथ design करो (only what is necessary).
+* Policies reusable होती हैं (Managed policies multiple users को assign हो सकती हैं)।
+
+---
+
+## ✅ **8️⃣ Quick Summary Table**
+
+| Concept           | Description                                  |
+| ----------------- | -------------------------------------------- |
+| **Policy**        | Ruleset for permissions                      |
+| **Format**        | JSON                                         |
+| **Effect**        | Allow / Deny                                 |
+| **Attached to**   | User / Group / Role                          |
+| **Types**         | Managed, Inline, Boundary, SCP               |
+| **Created in**    | IAM → Policies → Create Policy               |
+| **Best Practice** | Least privilege + Managed policies preferred |
+
+---
+
+अगर तुम चाहो Vishnudas, तो मैं तुम्हारे लिए
+📘 “**Custom Policy Example Collection**” बना सकता हूँ —
+जैसे:
+
+* Only start/stop EC2
+* Read-only S3
+* Access only one bucket
+* Restrict deletion of resources
+
+इससे तुम real AWS practice के लिए ready हो जाओगे 🔥
+
+क्या बनाऊँ ये next?
+
 ==========================================================================================
+बहुत बढ़िया Vishnudas 👏
+अब तुमने पूछा — **“Account Role क्या है AWS में?”**
+चलो इसे step-by-step **Hindi + English mix** में एकदम clear तरीके से समझते हैं 👇
+
+---
+
+## 🔹 1️⃣ सबसे पहले — Role क्या होता है (Recap)
+
+👉 AWS में **Role** basically एक **temporary permission identity** होती है।
+यह **User की तरह होती है**, लेकिन इसके पास **permanent credentials (username/password)** नहीं होते।
+
+> यानी Role = Identity + Permissions (Policies)
+
+जब कोई service या user ये Role **assume करता है**,
+तो वो temporarily उस Role की permissions ले लेता है।
+
+---
+
+## 🔸 2️⃣ अब बात करते हैं — “**Account Role**” क्या होता है?
+
+### 🔹 Meaning:
+
+**Account Role** का मतलब है एक ऐसा Role जो
+या तो **एक ही AWS account के अंदर** use होता है
+या **cross-account access** के लिए create किया जाता है।
+
+> मतलब – एक AWS account दूसरे account को कुछ limited permission देने के लिए Role बना सकता है।
+
+---
+
+## 🔹 3️⃣ Types of Account Roles
+
+| Type                   | Description                                                               | Example                                                 |
+| ---------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------- |
+| **Same Account Role**  | Role जो उसी AWS account में users/services use करते हैं                   | EC2 instance को S3 access देने वाला role                |
+| **Cross-Account Role** | Role जो किसी *दूसरे AWS account* के user या service को permission देता है | Account A में Role create करके Account B को access देना |
+
+---
+
+## 🔸 4️⃣ Example 1 — Same Account Role (for EC2 or Lambda)
+
+🎯 **Scenario:**
+तुम्हें अपने EC2 instance से S3 bucket access करनी है।
+
+तो तुम ये steps follow करोगे 👇
+
+### 🔧 Steps:
+
+1. IAM → **Roles → Create Role**
+2. Choose trusted entity: **AWS Service**
+3. Select service: **EC2**
+4. Attach policy: `AmazonS3ReadOnlyAccess`
+5. Name the role: `EC2_S3ReadOnly_Role`
+6. Launch EC2 → Attach role → Done ✅
+
+अब वो EC2 instance S3 से data read कर सकता है, क्योंकि
+उसने EC2_S3ReadOnly_Role “assume” किया हुआ है।
+
+---
+
+## 🔸 5️⃣ Example 2 — Cross-Account Role
+
+🎯 **Scenario:**
+Account A का user चाहता है कि वो Account B के S3 bucket में data upload कर सके।
+
+### 🔧 Steps:
+
+#### In **Account B** (Resource Owner):
+
+1. IAM → Roles → Create Role
+2. Choose trusted entity: **Another AWS Account**
+3. Enter Account A ID (the one who needs access)
+4. Attach Policy: (e.g. `AmazonS3FullAccess`)
+5. Create Role → e.g., `CrossAccountS3AccessRole`
+
+#### In **Account A** (User Side):
+
+1. User calls `sts:AssumeRole` API with Role ARN of Account B
+2. AWS STS gives **temporary credentials**
+3. User now acts as that Role and can access Account B resources 🎯
+
+---
+
+## 🔹 6️⃣ Policy Example (Cross Account Trust Policy)
+
+👇 यह trust policy Account B की role definition में होगी:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::111122223333:root"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+```
+
+👉 यहाँ `111122223333` Account A का ID है — जिसे access दी जा रही है।
+
+---
+
+## 🔸 7️⃣ Account Role कहाँ-कहाँ काम आता है
+
+| Use Case                 | Description                                                                  |
+| ------------------------ | ---------------------------------------------------------------------------- |
+| **Cross-account access** | एक AWS account दूसरे को temporary access देता है                             |
+| **Service Role**         | EC2, Lambda जैसी services को permission देने के लिए                          |
+| **Delegated Admin Role** | किसी account को admin-like permissions देने के लिए                           |
+| **External ID Role**     | Third-party vendors (जैसे monitoring tools) को controlled access देने के लिए |
+
+---
+
+## 🔹 8️⃣ Important Points
+
+* Role **temporary credentials** generate करता है via `STS (Security Token Service)`
+* Role को **assume** करने के लिए `sts:AssumeRole` permission चाहिए
+* Account Role हमेशा **trusted entity + permission policy** से बनता है
+* Role passwords या keys store नहीं करता — security ज़्यादा strong होती है
+* **Least privilege** principle हमेशा follow करें
+
+---
+
+## ✅ 9️⃣ Quick Summary Table
+
+| Concept               | Description                                                 |
+| --------------------- | ----------------------------------------------------------- |
+| **Account Role**      | IAM Role जो same या different AWS account को access देता है |
+| **Credentials**       | Temporary (via STS)                                         |
+| **Trust Policy**      | Defines कौन assume कर सकता है                               |
+| **Permission Policy** | Defines क्या कर सकता है                                     |
+| **Use Case**          | Cross-account access, EC2, Lambda roles                     |
+| **Security Benefit**  | No permanent credentials, temporary tokens only             |
+
+---
+
+अगर तुम चाहो Vishnudas,
+मैं इसका एक **real AWS Console Example + JSON Policy set** बना दूँ —
+जैसे:
+
+> “Account A → Account B S3 access using Role”
+
+जिससे तुम्हें practice के लिए पूरा step-by-step process मिल जाएगा ✅
+
+क्या बनाऊँ वो next?
+
 ==========================================================================================
+बहुत बढ़िया Vishnudas 👏
+अब तुमने पूछा —
+👉 **“AWS IAM Identity Center / Single Sign-On (SSO) क्या होता है?”**
+
+ये IAM का **सबसे practical और real-world topic** है —
+क्योंकि हर company अपने users के लिए centralized login system यही से manage करती है।
+चलो इसे step-by-step **Hindi + English mix** में detail में समझते हैं 👇
+
+---
+
+## 🔹 1️⃣ IAM Identity Center (पूर्व नाम: AWS SSO)
+
+👉 पहले इसे **AWS Single Sign-On (SSO)** कहा जाता था,
+अब इसका नया नाम है — **AWS IAM Identity Center**.
+
+📘 इसका काम है:
+
+> “एक centralized place देना जहाँ से users multiple AWS accounts और applications में login कर सकें — वो भी सिर्फ एक बार password डालकर।”
+
+यानि यह **Single Sign-On (SSO)** system है AWS के अंदर।
+
+---
+
+## 🔸 2️⃣ Real-life Example से समझो
+
+मान लो तुम्हारी company के पास कई AWS accounts हैं:
+
+* Dev Account
+* Test Account
+* Prod Account
+
+अब अगर हर user को अलग-अलग IAM user बनाकर access देना पड़े,
+तो ये बहुत complex हो जाएगा।
+
+इसलिए आप **IAM Identity Center (SSO)** setup करते हो।
+
+> अब हर employee अपने corporate email या identity provider (जैसे Google Workspace, Microsoft AD) से login करेगा सिर्फ **एक बार**
+> और फिर वो directly multiple AWS accounts और apps access कर सकेगा — बिना बार-बार password डाले हुए 🔐
+
+---
+
+## 🔹 3️⃣ Simple Definition
+
+| Concept                  | Explanation                                                                             |
+| ------------------------ | --------------------------------------------------------------------------------------- |
+| **IAM Identity Center**  | Centralized system for managing user login and permissions across multiple AWS accounts |
+| **SSO (Single Sign-On)** | Login once → Access all assigned AWS accounts and applications                          |
+| **Integration**          | Works with external identity providers (like Microsoft AD, Okta, Google)                |
+
+---
+
+## 🔸 4️⃣ IAM Identity Center कैसे काम करता है (Working Process)
+
+### 🔧 Step-by-Step Flow:
+
+1. **User logs in** at IAM Identity Center (SSO portal).
+2. System verifies identity (either internal or via external IdP).
+3. Once authenticated, user sees all **assigned AWS accounts & apps** on the dashboard.
+4. When the user clicks one account →
+   IAM Identity Center automatically issues **temporary credentials** via AWS STS.
+5. User gets into AWS Console or CLI without entering password again ✅
+
+---
+
+## 🔹 5️⃣ Architecture Diagram (Conceptual)
+
+```
+User → IAM Identity Center (SSO Portal)
+           ↓ verifies identity via
+        ┌──────────────┐
+        │ Identity Provider │ (Google, AD, Okta)
+        └──────────────┘
+           ↓
+       Temporary Credentials via STS
+           ↓
+     Access AWS Accounts / Apps
+```
+
+---
+
+## 🔸 6️⃣ Main Components of IAM Identity Center
+
+| Component                   | Description                                                  |
+| --------------------------- | ------------------------------------------------------------ |
+| **Users & Groups**          | Manage users manually or sync from external IdP              |
+| **Permission Sets**         | Define what actions user can perform (like IAM policies)     |
+| **AWS Account Assignments** | Map users/groups → permission sets → accounts                |
+| **SSO Portal**              | Web page where users login once and access all accounts/apps |
+
+---
+
+## 🔹 7️⃣ Example Setup (Step-by-Step)
+
+🎯 **Goal:**
+Company employees should access multiple AWS accounts with one login.
+
+### 🔧 Steps:
+
+1. Go to **IAM Identity Center (SSO)** in AWS Console
+2. Choose **Enable IAM Identity Center**
+3. Choose your identity source:
+
+   * **Default Identity Center Directory** (manage users directly)
+   * **External Identity Provider** (Google, Azure AD, Okta, etc.)
+4. Create **Users** or **Groups**
+5. Create **Permission Set** (like “AdministratorAccess”, “ReadOnlyAccess”)
+6. Assign user/group to:
+
+   * AWS Account → Permission Set
+7. User logs in via:
+
+   * **https://<your-sso-portal>.awsapps.com/start**
+
+✅ अब user अपने SSO portal से किसी भी assigned AWS account में login कर सकता है।
+
+---
+
+## 🔸 8️⃣ Permission Sets क्या हैं?
+
+**Permission Set** = IAM policy का reusable version
+जो define करता है कि user के पास AWS में कौन-सी permissions होंगी।
+
+Example:
+
+* `AdministratorAccess`
+* `PowerUserAccess`
+* `BillingAccess`
+* Custom permissions (you can create yourself)
+
+---
+
+## 🔹 9️⃣ Benefits of IAM Identity Center / SSO
+
+| Benefit                          | Description                               |
+| -------------------------------- | ----------------------------------------- |
+| ✅ **Single Login**               | One password for all AWS accounts/apps    |
+| ✅ **Centralized Access Control** | Manage everything from one place          |
+| ✅ **Temporary Credentials**      | More secure (no long-term IAM keys)       |
+| ✅ **Multi-Account Management**   | Assign same user to multiple AWS accounts |
+| ✅ **Integrates with IdPs**       | Works with Okta, Google, Azure AD, etc.   |
+| ✅ **Auditing and Reporting**     | Track who accessed what and when          |
+
+---
+
+## 🔸 10️⃣ Real-World Use Cases
+
+| Use Case                    | Example                                                            |
+| --------------------------- | ------------------------------------------------------------------ |
+| **Enterprise Login**        | Employees login using company credentials to multiple AWS accounts |
+| **Developer Access**        | Dev team gets limited access to only dev environment               |
+| **Third-party Contractors** | Temporary login without creating IAM users                         |
+| **Security Compliance**     | MFA, least privilege, and centralized monitoring                   |
+
+---
+
+## 🔹 11️⃣ Difference: IAM vs IAM Identity Center
+
+| Feature         | **IAM (Old)**                   | **IAM Identity Center (SSO)**   |
+| --------------- | ------------------------------- | ------------------------------- |
+| **User Type**   | IAM Users (individual accounts) | Federated Users (SSO login)     |
+| **Login**       | Separate for each account       | One login for all               |
+| **Management**  | Per-account                     | Centralized                     |
+| **Credentials** | Permanent access keys           | Temporary STS credentials       |
+| **Integration** | Limited                         | External IdPs supported         |
+| **Best For**    | Small setups                    | Enterprise multi-account setups |
+
+---
+
+## ✅ 12️⃣ Quick Summary
+
+| Concept              | Description                                         |
+| -------------------- | --------------------------------------------------- |
+| **Full Name**        | AWS IAM Identity Center (formerly AWS SSO)          |
+| **Purpose**          | Single login access to multiple AWS accounts & apps |
+| **Identity Source**  | Internal or external IdP                            |
+| **Credentials Type** | Temporary (STS)                                     |
+| **Core Components**  | Users, Groups, Permission Sets, Assignments         |
+| **Access Point**     | SSO portal URL                                      |
+| **Best Practice**    | Use for enterprise or multi-account environments    |
+
+---
+
+अगर तुम चाहो Vishnudas,
+मैं तुम्हारे लिए इसका एक **real AWS setup example** बना सकता हूँ —
+जिसमें दिखाऊँगा कि कैसे
+
+> “Google Workspace या Azure AD को AWS IAM Identity Center से connect करके users को multiple AWS accounts में SSO access देना है।”
+
+क्या बनाऊँ वो next?
+
 ==========================================================================================
+बहुत अच्छा सवाल Vishnudas 👍
+तुम्हारे द्वारा भेजी गई image **“Access reports”** section की है — जो **AWS IAM (Identity and Access Management)** में होती है।
+इसका main purpose है **permissions, access usage, policies और compliance auditing** को analyze करना।
+
+चलो हर option को detail में step-by-step समझते हैं 👇
+
+---
+
+### 🧾 **1. Access Analyzer**
+
+👉 **Purpose:** यह बताता है कि कौन से AWS resources (जैसे S3 bucket, IAM role, KMS key आदि) **publicly accessible** हैं या **cross-account** share हो रहे हैं।
+**Use:** Security audit और compliance check के लिए।
+
+#### Sub-options:
+
+* **🔹 Resource analysis (New)**
+  → ये analyze करता है कि आपके resources externally (publicly या दूसरे account से) accessible तो नहीं हैं।
+  → Example: कोई S3 bucket accidentally public हो गई है या cross-account access दे रही है — यह identify करता है।
+
+* **🔹 Unused access**
+  → यह बताता है कि कौन-से **users, roles या permissions** लंबे समय से use नहीं हुए हैं।
+  → Example: कोई IAM user है जिसने 90 दिन से login नहीं किया — इसे आप identify करके deactivate या delete कर सकते हो।
+
+* **🔹 Analyzer settings**
+  → यहाँ से आप नए analyzers create कर सकते हैं और existing analyzers के region व scope सेट कर सकते हैं (जैसे entire organization या specific account के लिए)।
+
+---
+
+### 📜 **2. Credential Report**
+
+👉 **Purpose:** Account में मौजूद सभी IAM users की credentials (passwords, access keys, MFA status, etc.) की एक consolidated report देता है।
+**Use:** Security monitoring के लिए।
+**Example:**
+तुम देख सकते हो कौन-से user का password expire हुआ, किसने MFA enable नहीं किया, किसकी access key old है, etc.
+Report CSV format में download की जा सकती है।
+
+---
+
+### 🏢 **3. Organization Activity**
+
+👉 **Purpose:** यह बताता है कि organization level (अगर AWS Organizations use हो रही है) पर कौन-से users या accounts क्या actions perform कर रहे हैं।
+**Use:** Cross-account access और consolidated audit देखने के लिए।
+
+---
+
+### 🧰 **4. Service Control Policies (SCPs)**
+
+👉 **Purpose:** यह AWS Organizations में policy boundaries define करता है।
+**Use:**
+तुम organization के root या OU (Organizational Unit) पर restriction लगा सकते हो कि कौन-से services/accounts को access किया जा सकता है।
+**Example:**
+
+> “Developers OU” केवल S3 और EC2 use कर सके, लेकिन RDS नहीं — ऐसा SCP से control किया जा सकता है।
+
+---
+
+### 🧩 **5. Resource Control Policies**
+
+👉 **Purpose:** नए type की policies जो granular resource-level access control के लिए होती हैं।
+**Use:** Resource-based conditions define करने के लिए (e.g., कौन user कौन-सी resource modify कर सकता है)।
+**Example:**
+कह सकते हो — केवल admin user ही “production” tag वाले EC2 instances terminate कर सके।
+
+---
+
+### 📘 Summary Table:
+
+| Option Name                         | Purpose                         | Example Use                 |
+| ----------------------------------- | ------------------------------- | --------------------------- |
+| **Access Analyzer**                 | External or public access check | S3 bucket public है या नहीं |
+| **Resource analysis**               | Resource-level access analysis  | कौन resources public हैं    |
+| **Unused access**                   | Identify inactive users/roles   | 90 दिन से inactive user     |
+| **Analyzer settings**               | Manage analyzers                | नया analyzer बनाना          |
+| **Credential report**               | User credentials report         | Password/MFA status check   |
+| **Organization activity**           | Org-level activity tracking     | कौन account क्या कर रहा है  |
+| **Service control policies (SCPs)** | Org-wide access limits          | OU को restrict करना         |
+| **Resource control policies**       | Resource-level access rules     | Tag-based access control    |
+
+---
+
+क्या चाहोगे मैं इसके बाद “**Access Analyzer practical example**” (जैसे S3 bucket public access check करना) step-by-step बना दूँ Q&A format में?
+
 ==========================================================================================
+Session - 25 | AWS EC2 Service | Introduction To Elastic Compute Cloud | Nehra Classes
 ==========================================================================================
 ==========================================================================================
 ==========================================================================================
