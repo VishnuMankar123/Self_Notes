@@ -1,0 +1,574 @@
+JVM Architecture :
+
+1) Types of ClassLoaders
+
++------------------------+--------------------------------------------------+-----------------------------+----------------+------------------------+-----------------------------+
+| ClassLoader Type       | Description                                      | Loads From                  | Implemented In | Parent Loader          | Example Classes Loaded      |
++------------------------+--------------------------------------------------+-----------------------------+----------------+------------------------+-----------------------------+
+| BootstrapClassLoader   | Loads core Java classes (essential to JVM)       | jdk/jre/lib/rt.jar          | Native (C/C++) | – (Top-level)          | java.lang.String, Object    |
+| ExtensionClassLoader   | Loads classes from extension libraries           | jdk/jre/lib/ext             | Java           | BootstrapClassLoader   | JCE, Java 3D, etc.          |
+| ApplicationClassLoader | Loads user-defined classes from classpath        | Current working directory   | Java           | ExtensionClassLoader   | User's .class files         |
++------------------------+--------------------------------------------------+-----------------------------+----------------+------------------------+-----------------------------+
+2) How Java ClassLoader Works?
+ClassLoader follows Delegation Hierarchy Principle.
+ Whenever JVM Come Across a Particular Class, first  it will Check whether the
+corresponding Class is Already Loaded OR Not.
+ If it is Already Loaded in Method Area then JVM will Use that Loaded Class.
+ If it is Not Already Loaded then JVM Requests ClassLoaderSub System to Load that
+Particular Class.
+ Then ClassLoaderSub System Handovers the Request to ApplicationClassLoader.
+ ApplicationClassLoader Delegates that Request to ExtensionClassLoader and
+ExtenstionClassLoader in-turn Delegates that Request to BootstrapClassLoader.
+ BootstrapClassLoader Searches in Bootstrap Class Path for the required .class File
+(jdk/jre/lib)
+
+ If the required .class is Available, then it will be Loaded. Otherwise BootstrapClassLoader
+Delegates that Request to ExtensionClassLoader.
+ ExtensionClassLoader will Search in Extension Class Path (jdk/jre/lib/ext). If the required
+.class File is Available then it will be Loaded, Otherwise it Delegates that
+Request to ApplicationClassLoader.
+ ApplicationClassLoader will Search in Application Class Path (Current Working
+Directory). If the specified .class is Already Available, then it will be Loaded.
+Otherwise we will get Runtime Exception Saying ClassNotFoundExceptionOR
+NoClassDefFoundError.
+
+3) What is the Need of Customized ClassLoader?
+Default ClassLoader will load .class Files Only Once Eventhough we are using
+Multiple Times that Class in Our Program.
+ After loading .class File if it is modified Outside, then Default ClassLoaderwon't Load
+Updated Version of Class File on Fly (Dynamically). Because .class File already there in
+Method Area.
+ We can Resolve this Problem by defining Our Own Customized ClassLoader.
+ The Main Advantage of Customized ClassLoader is we can Control Class loading
+Mechanism Based on Our Requirement.
+ For Example we can Load Class File Separately Every Time. So that Updated Version
+Available to Our Program.
+
+4)What is the Purpose of java.lang.ClassLoader Class?
+  This Class Act as Base Class for designing Our Own Customized ClassLoaders.
+ Hence Every Customized ClassLoader Class should extendsjava.lang.ClassLoader either
+Directly OR Indirectly.
+
+
+5) What is Resolution in JVM?
+
+**Resolution** is the process where the **JVM converts symbolic references into actual memory references**.
+
+---
+### 🧠 Wait… What is a symbolic reference?
+
+A **symbolic reference** is like a **name or label** (not the actual object or memory address).
+Think of it as **"a mention" of something**, not the real thing.
+
+---
+
+### 📦 Example (Real-World Analogy)
+
+Suppose your `.class` file has this line:
+
+```java
+String s = new String("Durga");
+```
+
+Here’s what’s happening:
+
+1. The **class name** `String` is just a **symbolic name** in the `.class` file.
+2. JVM doesn’t yet know **where** the `String` class is in memory.
+3. During **Resolution**, the JVM searches in the **Method Area**, finds the actual `String.class`, and links it to this reference.
+
+🎯 So "String" → becomes a real reference to `java.lang.String` in memory.
+
+---
+
+### 💻 In JVM terms:
+
+- The symbolic name `java/lang/String` is found in the **constant pool** of the class.
+- In Resolution phase:
+  - JVM looks up the class in memory (Method Area)
+  - Finds `java.lang.String.class`
+  - Replaces the symbolic entry with a **direct reference** (pointer)
+
+---
+
+### 🧠 Summary:
+
+| Term            | Meaning                                  |
+|-----------------|-------------------------------------------|
+| Symbolic Reference | A name/label (like "java/lang/String") |
+| Resolution        | JVM finds actual memory location of that class/method/field |
+| Result            | JVM can now use real references for execution |
+
+---
+
+
+How class loading work ?
+Loading Means Reading Class Files and Store Corresponding Binary Data in Method Area.
+ For Each Class File JVM will Store the following Information in Method Area.
+1) Fully Qualified Name of the Loaded Class OR Interface ORenum.
+2) Fully Qualified Name of its Immediate Parent Class.
+3) Whether .class File is related to Class OR Interface OR enum.
+4) The Modifiers Information
+5) Variables OR Fields Information
+6) Methods Information
+7) Constant Pool Information and so on.
+
+ After loading .class File Immediately JVM will Creates an Object of the Type class Class to
+Represent Class Level  Binary Information on the Heap Memory.
+The Class Object can be used by Programmer to get Class Level Information Like Fully
+Qualified Name of the Class, Parent Name, Methods and Variables Information Etc.
+
+### ✅ Why is this important?
+
+Without Resolution:
+- JVM won’t know where the class or method actually is.
+- Code would fail at runtime due to **unresolved references**.
+
+6)What is ClassLoader Subsystem Activity ?
+
+ClassLoader Subsystem – 3 Steps
+Loading
+
+Reads .class file & stores info in Method Area
+
+Creates a Class object on Heap (for reflection)
+
+Linking
+a. Verification – Bytecode is valid?
+b. Preparation – Allocates memory for static vars
+c. Resolution – Converts symbolic names to real references
+
+Initialization
+
+Assigns original values to static variables
+
+Runs static blocks
+
+=======================================
+how many method area in java ?
+1) Method Area
+2) Heap Area OR Heap Memory
+3) Java Stacks Area
+4) PC Registers Area
+5) Native Method Stacks Area
+
+ Method Area:
+ Method Area will be Created at the Time of JVM Start- Up.
+ It will be Shared by All Threads (Global Memory).
+ This Memory Area Need Not be Continuous.
+ Method area shows runtime constant pool.
+ Total  Class Level Binary Information including Static Variables Stored in Method
+Area.
+
+Heap Area:
+
+ Programmer Point of View Heap Area is Consider as Important Memory Area.
+ Heap Area will be Created at the Time of JVM Start- Up.
+ Heap Areacan be accessed by All Threads (Global OR Sharable Memory).
+ Heap Area Nee Not be Continuous.
+ All Objects and corresponding Instance Variables will be stored in the
+Heap Area.
+ Every Array in Java is an Object and Hence Arrays Also will be stored in Heap
+Memory Only.
+
+Stack Memory:
+ For Every Thread JVM will Create a Separate Runtime Stack.
+ Runtime Stack will be Created Automatically at the Time of Thread Creation.
+ All Method Calls and corresponding Local Variables, Intermediate Results will be
+stored in the Stack.
+ For Every Method Call a Separate Entry will be Added to the Stack and that Entry is
+Called Stack Frame OR Activation Record.
+ After completing that Method Call the corresponding Entry from the Stack will
+beRemoved.
+ After completing All Method Calls, Just Before terminating the Thread,the Runtime
+Stack will be destroyed by the JVM.
+ The Data stored in the Stack can be accessed by Only the corresponding Thread and it
+is Not Available to Other Threads.
+
+PC (Program Counter) Registers Area:
+For Every Thread a Separate PC Register will be Created at the Time of Thread Creation.
+ PC Registers contains Address of Current executing Instruction.
+ Once Instruction Execution Completes Automatically PC Register will be
+incremented to Hold Address of Next Instruction.
+ Native Method Stacks:
+  For Every Thread JVM will Create a Separate Native Method Stack.
+ All Native Method Calls invoked by the Thread will be stored in the corresponding
+Native Method Stack.
+
+Note:
+  Method Area, Heap Area and Stack Area are considered as Major Memory Areas with
+Respect to Programmers Point of View.
+Method Area and Heap Area are for JVM. Whereas Stack Area, PC Registers Area and
+Native Method Stack Area are for Thread. That is
+ One Separate Heap for Every JVM
+ One Separate Method Area for Every JVM
+ One Separate Stack for Every Thread
+ One Separate PC Register for Every Thread
+ One Separate Native Method Stack for Every Thread
+
+  Static Variables will be stored in Method Area whereas Instance Variables will be stored in
+Heap Area and Local Variables will be stored in Stack Area.
+
+what is Execution Engine ?
+This is the Central Component of JVM.
+ Execution Engine is Responsible to Execute Java Class Files.
+ Execution Engine contains 2 Components for executing Java Classes.
+1) Interpreter
+2) JIT Compiler
+
+What is use of Interpreter ? drawback ?
+
+It is Responsible to Read Byte Code and Interpret (Convert) into Machine Code (Native
+Code) and Execute that Machine Code Line by Line.
+ The Problem with Interpreter is it Interpreters Every Time Even the Same Method
+Multiple Times. Which Reduces Performance of the System.
+ To Overcome this Problem SUN People Introduced JIT Compilers in 1.1 Version.
+
+What is use JIT Compiler ?
+The Main Purpose of JIT Compiler is to Improve Performance.
+ Internally JIT Compiler Maintains a Separate Count for Every Method whenever JVM
+Come Across any Method Call.
+ First that Method will be interpreted normally by the Interpreter and JIT Compiler
+Increments the corresponding Count Variable.
+ This Process will be continued for Every Method.
+ Once if any Method Count Reaches Threshold (The Starting Point for a New State) Value,
+then JIT Compiler Identifies that Method Repeatedly used Method (HOT SPOT).
+ Immediately JIT Compiler Compiles that Method and Generates the corresponding Native
+Code. Next Time JVM Come Across that Method Call then JVM Directly Use Native Code
+and Executes it Instead of interpreting Once Again. So that Performance of the System will
+be Improved.
+ The Threshold Count Value varied from JVM to JVM.
+ Some Advanced JIT Compilers will Re-compile generated Native Code if Count Reaches
+Threshold Value Second Time, So that More optimized Machine Code                will be
+generated.
+ Profiler which is the Part of JIT Compiler is Responsible to IdentifY HOT SPOTS.
+
+Note:
+ JVM Interprets Total Program Line by Line at least Once.
+ JIT Compilation is Applicable Only for Repeatedly invoked Methods. But Not for Every
+Method.
+
+How JIT Compiler resolve the problem of Interpreter ?
+
+What is use of Java Native Interface ?
+Java Native Interface (JNI) allows Java code to call or be called by native applications written in languages like C or C++ for tasks Java can't handle directly.
+
+===========================================================================================
+JVM Architecture :
+Q) ClassLoader Sub System:
+
+ClassLoader Sub System is Responsible for the following 3 Activities.
+1) Loading
+2) Linking
+ Verification
+ Preparation
+ Resolution
+3) Initialization
+
+
+) Loading:
+
+ Loading Means Reading Class Files and Store Corresponding Binary Data in Method Area.
+ For Each Class File JVM will Store the following Information in Method Area.
+1) Fully Qualified Name of the Loaded Class OR Interface ORenum.
+2) Fully Qualified Name of its Immediate Parent Class.
+3) Whether .class File is related to Class OR Interface OR enum.
+4) The Modifiers Information
+5) Variables OR Fields Information
+6) Methods Information
+7) Constant Pool Information and so on.
+
+ After loading .class File Immediately JVM will Creates an Object of the Type class Class to
+Represent Class Level  Binary Information on the Heap Memory.
+
+The Class Object can be used by Programmer to get Class Level Information Like Fully
+Qualified Name of the Class, Parent Name, Methods and Variables Information Etc.
+
+In the Above Example by using Student class Class Object we can get its Methods and Variable
+Information.
+
+Note: For Every loaded .class file Only One Class Object will be Created, even though we are
+using Class Multiple Times in Our Application.
+
+) Linking:
+ Linking Consists of 3 Activities
+1) Verification
+2) Preparation
+3) Resolution
+Verification:
+  It is the Process of ensuring that Binary Representation of a Class is Structurally Correct
+OR Not.
+ That is JVM will Check whether .class File generated by Valid Compiler OR Not.i.ewhether
+.class File is Properly Formatted OR Not.
+ Internally Byte Code Verifier which is Part of ClassLoader Sub System is Responsible for
+this Activity.
+ If Verification Fails then we will get Runtime Exception Saying java.lang.VerifyError.
+
+Preparation:
+ In this Phase JVM will Allocate Memory for the Class Level Static Variables and
+Assign DefaultValues (But Not Original Values).
+Note:
+ Original Values will be assignedin Initialization Phase.
+
+Resolution:
+  It is the Process of Replaced Symbolic References used by the Loaded Type with Original
+References.
+ Symbolic References are Resolved into Direct References by searching through Method
+Area to Locate the Referenced Entity.
+
+3) Initialization:
+ In this Phase All Static Variables will be assigned with  Original Values and Static Blocks will
+be executed from fromtop to bottom and from Parent to Child.
+
+
+
+1) Types of ClassLoaders
+
++------------------------+--------------------------------------------------+-----------------------------+----------------+------------------------+-----------------------------+
+| ClassLoader Type       | Description                                      | Loads From                  | Implemented In | Parent Loader          | Example Classes Loaded      |
++------------------------+--------------------------------------------------+-----------------------------+----------------+------------------------+-----------------------------+
+| BootstrapClassLoader   | Loads core Java classes (essential to JVM)       | jdk/jre/lib/rt.jar          | Native (C/C++) | – (Top-level)          | java.lang.String, Object    |
+| ExtensionClassLoader   | Loads classes from extension libraries           | jdk/jre/lib/ext             | Java           | BootstrapClassLoader   | JCE, Java 3D, etc.          |
+| ApplicationClassLoader | Loads user-defined classes from classpath        | Current working directory   | Java           | ExtensionClassLoader   | User's .class files         |
++------------------------+--------------------------------------------------+-----------------------------+----------------+------------------------+-----------------------------+
+2) How Java ClassLoader Works?
+ClassLoader follows Delegation Hierarchy Principle.
+ Whenever JVM Come Across a Particular Class, first  it will Check whether the
+corresponding Class is Already Loaded OR Not.
+ If it is Already Loaded in Method Area then JVM will Use that Loaded Class.
+ If it is Not Already Loaded then JVM Requests ClassLoaderSub System to Load that
+Particular Class.
+ Then ClassLoaderSub System Handovers the Request to ApplicationClassLoader.
+ ApplicationClassLoader Delegates that Request to ExtensionClassLoader and
+ExtenstionClassLoader in-turn Delegates that Request to BootstrapClassLoader.
+ BootstrapClassLoader Searches in Bootstrap Class Path for the required .class File
+(jdk/jre/lib)
+
+ If the required .class is Available, then it will be Loaded. Otherwise BootstrapClassLoader
+Delegates that Request to ExtensionClassLoader.
+ ExtensionClassLoader will Search in Extension Class Path (jdk/jre/lib/ext). If the required
+.class File is Available then it will be Loaded, Otherwise it Delegates that
+Request to ApplicationClassLoader.
+ ApplicationClassLoader will Search in Application Class Path (Current Working
+Directory). If the specified .class is Already Available, then it will be Loaded.
+Otherwise we will get Runtime Exception Saying ClassNotFoundExceptionOR
+NoClassDefFoundError.
+
+3) What is the Need of Customized ClassLoader?
+Default ClassLoader will load .class Files Only Once Eventhough we are using
+Multiple Times that Class in Our Program.
+ After loading .class File if it is modified Outside, then Default ClassLoaderwon't Load
+Updated Version of Class File on Fly (Dynamically). Because .class File already there in
+Method Area.
+ We can Resolve this Problem by defining Our Own Customized ClassLoader.
+ The Main Advantage of Customized ClassLoader is we can Control Class loading
+Mechanism Based on Our Requirement.
+ For Example we can Load Class File Separately Every Time. So that Updated Version
+Available to Our Program.
+
+4)What is the Purpose of java.lang.ClassLoader Class?
+  This Class Act as Base Class for designing Our Own Customized ClassLoaders.
+ Hence Every Customized ClassLoader Class should extendsjava.lang.ClassLoader either
+Directly OR Indirectly.
+
+
+5) What is Resolution in JVM?
+
+**Resolution** is the process where the **JVM converts symbolic references into actual memory references**.
+
+---
+### 🧠 Wait… What is a symbolic reference?
+
+A **symbolic reference** is like a **name or label** (not the actual object or memory address).
+Think of it as **"a mention" of something**, not the real thing.
+
+---
+
+### 📦 Example (Real-World Analogy)
+
+Suppose your `.class` file has this line:
+
+```java
+String s = new String("Durga");
+```
+
+Here’s what’s happening:
+
+1. The **class name** `String` is just a **symbolic name** in the `.class` file.
+2. JVM doesn’t yet know **where** the `String` class is in memory.
+3. During **Resolution**, the JVM searches in the **Method Area**, finds the actual `String.class`, and links it to this reference.
+
+🎯 So "String" → becomes a real reference to `java.lang.String` in memory.
+
+---
+
+### 💻 In JVM terms:
+
+- The symbolic name `java/lang/String` is found in the **constant pool** of the class.
+- In Resolution phase:
+  - JVM looks up the class in memory (Method Area)
+  - Finds `java.lang.String.class`
+  - Replaces the symbolic entry with a **direct reference** (pointer)
+
+---
+
+### 🧠 Summary:
+
+| Term            | Meaning                                  |
+|-----------------|-------------------------------------------|
+| Symbolic Reference | A name/label (like "java/lang/String") |
+| Resolution        | JVM finds actual memory location of that class/method/field |
+| Result            | JVM can now use real references for execution |
+
+---
+
+
+How class loading work ?
+Loading Means Reading Class Files and Store Corresponding Binary Data in Method Area.
+ For Each Class File JVM will Store the following Information in Method Area.
+1) Fully Qualified Name of the Loaded Class OR Interface ORenum.
+2) Fully Qualified Name of its Immediate Parent Class.
+3) Whether .class File is related to Class OR Interface OR enum.
+4) The Modifiers Information
+5) Variables OR Fields Information
+6) Methods Information
+7) Constant Pool Information and so on.
+
+ After loading .class File Immediately JVM will Creates an Object of the Type class Class to
+Represent Class Level  Binary Information on the Heap Memory.
+The Class Object can be used by Programmer to get Class Level Information Like Fully
+Qualified Name of the Class, Parent Name, Methods and Variables Information Etc.
+
+### ✅ Why is this important?
+
+Without Resolution:
+- JVM won’t know where the class or method actually is.
+- Code would fail at runtime due to **unresolved references**.
+
+6)What is ClassLoader Subsystem Activity ?
+
+ClassLoader Subsystem – 3 Steps
+Loading
+
+Reads .class file & stores info in Method Area
+
+Creates a Class object on Heap (for reflection)
+
+Linking
+a. Verification – Bytecode is valid?
+b. Preparation – Allocates memory for static vars
+c. Resolution – Converts symbolic names to real references
+
+Initialization
+
+Assigns original values to static variables
+
+Runs static blocks
+
+=======================================
+how many method area in java ?
+1) Method Area
+2) Heap Area OR Heap Memory
+3) Java Stacks Area
+4) PC Registers Area
+5) Native Method Stacks Area
+
+ Method Area:
+ Method Area will be Created at the Time of JVM Start- Up.
+ It will be Shared by All Threads (Global Memory).
+ This Memory Area Need Not be Continuous.
+ Method area shows runtime constant pool.
+ Total  Class Level Binary Information including Static Variables Stored in Method
+Area.
+
+Heap Area:
+
+ Programmer Point of View Heap Area is Consider as Important Memory Area.
+ Heap Area will be Created at the Time of JVM Start- Up.
+ Heap Areacan be accessed by All Threads (Global OR Sharable Memory).
+ Heap Area Nee Not be Continuous.
+ All Objects and corresponding Instance Variables will be stored in the
+Heap Area.
+ Every Array in Java is an Object and Hence Arrays Also will be stored in Heap
+Memory Only.
+
+Stack Memory:
+ For Every Thread JVM will Create a Separate Runtime Stack.
+ Runtime Stack will be Created Automatically at the Time of Thread Creation.
+ All Method Calls and corresponding Local Variables, Intermediate Results will be
+stored in the Stack.
+ For Every Method Call a Separate Entry will be Added to the Stack and that Entry is
+Called Stack Frame OR Activation Record.
+ After completing that Method Call the corresponding Entry from the Stack will
+beRemoved.
+ After completing All Method Calls, Just Before terminating the Thread,the Runtime
+Stack will be destroyed by the JVM.
+ The Data stored in the Stack can be accessed by Only the corresponding Thread and it
+is Not Available to Other Threads.
+
+PC (Program Counter) Registers Area:
+For Every Thread a Separate PC Register will be Created at the Time of Thread Creation.
+ PC Registers contains Address of Current executing Instruction.
+ Once Instruction Execution Completes Automatically PC Register will be
+incremented to Hold Address of Next Instruction.
+ Native Method Stacks:
+  For Every Thread JVM will Create a Separate Native Method Stack.
+ All Native Method Calls invoked by the Thread will be stored in the corresponding
+Native Method Stack.
+
+Note:
+  Method Area, Heap Area and Stack Area are considered as Major Memory Areas with
+Respect to Programmers Point of View.
+Method Area and Heap Area are for JVM. Whereas Stack Area, PC Registers Area and
+Native Method Stack Area are for Thread. That is
+ One Separate Heap for Every JVM
+ One Separate Method Area for Every JVM
+ One Separate Stack for Every Thread
+ One Separate PC Register for Every Thread
+ One Separate Native Method Stack for Every Thread
+
+  Static Variables will be stored in Method Area whereas Instance Variables will be stored in
+Heap Area and Local Variables will be stored in Stack Area.
+
+what is Execution Engine ?
+This is the Central Component of JVM.
+ Execution Engine is Responsible to Execute Java Class Files.
+ Execution Engine contains 2 Components for executing Java Classes.
+1) Interpreter
+2) JIT Compiler
+
+What is use of Interpreter ? drawback ?
+
+It is Responsible to Read Byte Code and Interpret (Convert) into Machine Code (Native
+Code) and Execute that Machine Code Line by Line.
+ The Problem with Interpreter is it Interpreters Every Time Even the Same Method
+Multiple Times. Which Reduces Performance of the System.
+ To Overcome this Problem SUN People Introduced JIT Compilers in 1.1 Version.
+
+What is use JIT Compiler ?
+The Main Purpose of JIT Compiler is to Improve Performance.
+ Internally JIT Compiler Maintains a Separate Count for Every Method whenever JVM
+Come Across any Method Call.
+ First that Method will be interpreted normally by the Interpreter and JIT Compiler
+Increments the corresponding Count Variable.
+ This Process will be continued for Every Method.
+ Once if any Method Count Reaches Threshold (The Starting Point for a New State) Value,
+then JIT Compiler Identifies that Method Repeatedly used Method (HOT SPOT).
+ Immediately JIT Compiler Compiles that Method and Generates the corresponding Native
+Code. Next Time JVM Come Across that Method Call then JVM Directly Use Native Code
+and Executes it Instead of interpreting Once Again. So that Performance of the System will
+be Improved.
+ The Threshold Count Value varied from JVM to JVM.
+ Some Advanced JIT Compilers will Re-compile generated Native Code if Count Reaches
+Threshold Value Second Time, So that More optimized Machine Code                will be
+generated.
+ Profiler which is the Part of JIT Compiler is Responsible to IdentifY HOT SPOTS.
+
+Note:
+ JVM Interprets Total Program Line by Line at least Once.
+ JIT Compilation is Applicable Only for Repeatedly invoked Methods. But Not for Every
+Method.
+
+How JIT Compiler resolve the problem of Interpreter ?
+
+What is use of Java Native Interface ?
+Java Native Interface (JNI) allows Java code to call or be called by native applications written in languages like C or C++ for tasks Java can't handle directly.
