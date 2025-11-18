@@ -1,0 +1,2049 @@
+
+========================================================================================================================
+GraphQL kya hai?
+
+GraphQL ek query language for APIs hai jisme client sirf required fields hi maang sakta hai. REST ke over-fetching/under-fetching problems solve karta hai.
+========================================================================================================================
+Graphql kay hota hai ?
+
+GraphQL API **ek modern API technology** hai jo client ko **exact data** request karne ki freedom deti hai — na zyada, na kam.
+
+Isko Facebook ne banaya tha REST API ke drawbacks solve karne ke liye.
+
+---
+
+# ✅ **GraphQL kya hai? (Simple Definition)**
+
+**GraphQL ek query language hai APIs ke liye, jisme client sirf wohi fields maang sakta hai jo usko chahiye.**
+
+REST API me:
+
+* Server fixed response deta hai
+* Client ko zyada data mil jata hai (over-fetching)
+* Kabhi data kam milta hai to multiple API calls karni padti hain (under-fetching)
+
+GraphQL me:
+👉 **Client apna response format khud define karta hai**
+👉 **Ek hi API endpoint se multiple data fetch ho sakta hai**
+
+---
+
+# 🔥 Example (Simple)
+
+### 🎯 REST API (Traditional):
+
+`/users/1`
+Response fix:
+
+```
+{
+  "id": 1,
+  "name": "Vishnu",
+  "email": "vishnu@gmail.com",
+  "mobile": "9999999999",
+  "address": "Pune"
+}
+```
+
+Aapko sirf “name” chahiye, lekin server pura data bhej deta hai.
+
+---
+
+### 🎯 GraphQL:
+
+Aap query likhoge:
+
+```
+{
+  user(id: 1) {
+    name
+  }
+}
+```
+
+Response sirf:
+
+```
+{
+  "name": "Vishnu"
+}
+```
+
+👉 **Client decides what data to fetch.**
+
+---
+
+# ⚡ GraphQL ke main benefits
+
+### ✔ 1. Over-fetching aur Under-fetching solve
+
+Aap sirf required fields hi maang sakte ho.
+
+### ✔ 2. Ek hi endpoint hota hai
+
+REST me multiple endpoints = `/users`, `/orders`, `/products`
+GraphQL me ek endpoint:
+`/graphql`
+
+### ✔ 3. Multiple resources ek saath fetch
+
+```
+{
+  user(id: 1) {
+    name
+    posts {
+      title
+      likes
+    }
+  }
+}
+```
+
+👉 User + posts + likes sab ek hi request me!
+
+### ✔ 4. Strongly typed schema
+
+API ka data structure clear hota hai.
+
+### ✔ 5. Developer friendly
+
+GraphiQL tools me live testing hoti hai.
+
+---
+
+# 📌 GraphQL Schema Example
+
+```
+type User {
+  id: ID!
+  name: String!
+  age: Int
+}
+
+type Query {
+  user(id: ID!): User
+}
+```
+
+---
+
+# 📌 GraphQL vs REST (2-line me)
+
+| REST                       | GraphQL                 |
+| -------------------------- | ----------------------- |
+| Multiple endpoints         | Single endpoint         |
+| Server decides response    | Client decides response |
+| Over/under fetching common | Exact data              |
+
+---
+
+Agar chaho to mai **GraphQL ka architecture diagram** ya **example Spring Boot GraphQL project** bhi bana kar de sakta hoon.
+
+
+========================================================================================================================
+2. GraphQL REST se kaise different hai?
+
+| REST                         | GraphQL                    |
+| ---------------------------- | -------------------------- |
+| Multiple endpoints           | Single `/graphql` endpoint |
+| Server decides               | Client decides fields      |
+| Over-fetching/under-fetching | Perfect fetching           |
+| JSON fixed structure         | Flexible structure         |
+
+========================================================================================================================
+3. GraphQL ke main 3 operations kaunse hote hain?
+
+1.Query → Data fetch karne ke liye
+
+2.Mutation → Data modify/insert/delete
+
+3.Subscription → Real-time updates
+========================================================================================================================
+Neeche GraphQL ke **3 main operations** — **Query, Mutation, Subscription** — ko **deep details + real examples** ke saath explain kar raha hoon.
+Yehi explanation interview me **top-quality answer** hota hai.
+
+---
+
+# ✅ **1. Query → Data Fetch Karne Ke Liye**
+
+### **Query ka basic purpose**
+
+* Data **read** karne ke liye
+* REST me GET request ke jaisa
+* Client *exact* fields specify karta hai (over-fetching solve)
+
+---
+
+### 🔥 **Query ka structure**
+
+```
+query {
+  user(id: 1) {
+    id
+    name
+    email
+  }
+}
+```
+
+### **Response (same structure)**
+
+```
+{
+  "user": {
+    "id": 1,
+    "name": "Vishnu",
+    "email": "abc@gmail.com"
+  }
+}
+```
+
+---
+
+### ⭐ Query ke features:
+
+* **Read-only** operations
+* **Caching friendly**
+* Server state change nahi hota
+* Complex JOIN (user + posts + orders) ek hi request me
+
+---
+
+### 🟦 Spring Boot Resolver Example:
+
+```java
+@QueryMapping
+public User getUser(@Argument Long id) {
+    return userService.findById(id);
+}
+```
+
+---
+
+# ⚡ Query Real-world Example:
+
+* Get user list
+* Get product details
+* Get employee + department together
+* Dashboard ke liye combined data
+
+---
+
+# 🔵 GraphQL Query ka advantage (Interview highlight)
+
+👉 REST me 3 API lagte
+👉 GraphQL me **1 query**
+
+Example:
+
+```
+{
+  user(id:1) {
+    name
+    orders { product price }
+    address { city pincode }
+  }
+}
+```
+
+---
+
+# 🔥 **2. Mutation → Data Create / Update / Delete**
+
+### **Mutation ka purpose**
+
+* Data me change karna
+  (CREATE, UPDATE, DELETE, login, upload, etc.)
+
+REST me → POST, PUT, DELETE
+
+---
+
+### 🔥 **Mutation ka structure**
+
+```
+mutation {
+  createUser(input: {
+    name: "Vishnu",
+    email: "test@gmail.com"
+  }) {
+    id
+    name
+  }
+}
+```
+
+### **Response**
+
+```
+{
+  "createUser": {
+    "id": 10,
+    "name": "Vishnu"
+  }
+}
+```
+
+---
+
+### ⭐ Mutation ke features:
+
+* Server state **change** hota hai
+* Query ki tarah flexible fields fetch kar sakte ho
+* Idempotent nahi hota (same mutation repeat → duplicate create ho sakta)
+
+---
+
+### 🟧 Spring Boot Mutation Example:
+
+```java
+@MutationMapping
+public User createUser(@Argument UserInput input) {
+    return userService.save(input);
+}
+```
+
+---
+
+# ⚡ Real-world Mutation Examples:
+
+* User register
+* Login (JWT return)
+* Product create/update
+* Payment initiate
+* Order cancel
+* File upload
+
+---
+
+# 🔥 **3. Subscription → Real-Time Updates**
+
+### **Subscription ka purpose**
+
+**Live**, **real-time**, **push-based** updates dena.
+
+Like:
+
+* WhatsApp new message
+* Live stock price
+* Real-time notifications
+
+REST se yeh possible nahi hota —
+GraphQL WebSocket use karta hai.
+
+---
+
+### 🔥 Subscription ka structure:
+
+```
+subscription {
+  messageReceived {
+    id
+    text
+    sender
+  }
+}
+```
+
+### **Response (continuous stream — Flux/Stream)**
+
+```
+{
+  "messageReceived": {
+    "id": 11,
+    "text": "Hello",
+    "sender": "Rahul"
+  }
+}
+```
+
+---
+
+### ⭐ Subscription Features:
+
+* WebSockets use hota hai
+* Continuous data flow
+* Real-time apps banane ke liye perfect
+* GraphQL ke 3rd powerful feature
+
+---
+
+### 🟥 Spring Boot Subscription Example:
+
+```java
+@SubscriptionMapping
+public Flux<Message> messageStream() {
+    return messagePublisher.getMessageStream();
+}
+```
+
+---
+
+# 💡 **GraphQL Operations Summary Table**
+
+| Operation        | Purpose             | REST Equivalent | Data Change? | Real Time? |
+| ---------------- | ------------------- | --------------- | ------------ | ---------- |
+| **Query**        | Read data           | GET             | ❌            | ❌          |
+| **Mutation**     | Write/Update/Delete | POST/PUT/DELETE | ✔            | ❌          |
+| **Subscription** | Real-time updates   | N/A             | ❌            | ✔          |
+
+---
+
+# ⭐ Interview Me Kaise Bolna Hai? (Ready-made answer)
+
+**GraphQL me 3 main operations hote hain:**
+
+1. **Query** – Read-only operations. REST ke GET jaisa. Client exact fields specify karta hai, isse over-fetching nahi hoti.
+
+2. **Mutation** – Data change karne ke liye (create, update, delete). REST me POST/PUT/DELETE ke equivalent. Response me aap exact fields le sakte ho.
+
+3. **Subscription** – Real-time updates dene ke liye. WebSocket use karta hai. Chat app, notifications, live tracking jaisi features isse bante hain.
+
+---
+
+Agar chaho to mai:
+👉 Query + Mutation + Subscription ka **diagram**
+👉 Spring Boot GraphQL ka **end-to-end mini project**
+bhi bana kar de sakta hoon.
+
+========================================================================================================================
+GraphQL Query ka advantage (Interview highlight)
+
+👉 REST me 3 API lagte
+👉 GraphQL me 1 query
+
+Example:
+
+{
+  user(id:1) {
+    name
+    orders { product price }
+    address { city pincode }
+  }
+}
+
+ye nhi samza spring boot ka example de ke samazo
+
+
+Ans :
+Chalo **exact same example** ko **Spring Boot ke real code** ke saath explain karta hoon —
+taaki tum clearly samaj pao ki REST me 3 API calls lagte hai,
+**but GraphQL me 1 query me sab mil jata hai.**
+
+---
+
+# 💥 **Scenario**
+
+Tumko **User Details + Orders + Address** ek hi screen me show karne hain.
+
+---
+
+# 🟥 **REST API Approach (3 calls required)**
+
+### ➤ API-1 (User Details)
+
+```
+GET /api/users/1
+```
+
+### ➤ API-2 (User Orders)
+
+```
+GET /api/users/1/orders
+```
+
+### ➤ API-3 (User Address)
+
+```
+GET /api/users/1/address
+```
+
+👉 **Client ko 3 baar server par request bhejni padti hai**
+👉 Network latency + slow performance
+👉 Mobile apps me battery aur data zyada waste hota hai
+
+---
+
+# 🟦 **GraphQL Approach (1 Query required)**
+
+Client ye ek hi query bhejega:
+
+```graphql
+{
+  user(id: 1) {
+    name
+    orders { product price }
+    address { city pincode }
+  }
+}
+```
+
+**GraphQL server ek hi baar** poora data return kar dega.
+
+---
+
+# 💥 Ab iska Spring Boot Code Samajhte Hain
+
+---
+
+# ✔ **Step 1: GraphQL Schema (schema.graphqls)**
+
+```graphql
+type Query {
+  user(id: ID!): User
+}
+
+type User {
+  id: ID!
+  name: String
+  orders: [Order]
+  address: Address
+}
+
+type Order {
+  product: String
+  price: Float
+}
+
+type Address {
+  city: String
+  pincode: String
+}
+```
+
+---
+
+# ✔ **Step 2: Query Resolver**
+
+```java
+@Controller
+public class UserQuery {
+
+    @QueryMapping
+    public User user(@Argument Long id) {
+        return userService.getUser(id);   // DB call 1
+    }
+}
+```
+
+---
+
+# ✔ **Step 3: Field Resolver for Orders**
+
+GraphQL automatically deta nahi — hume resolver banana hota hai.
+
+```java
+@Controller
+public class UserFieldResolver {
+
+    @SchemaMapping(typeName = "User", field = "orders")
+    public List<Order> orders(User user) {
+        return orderService.getOrdersByUserId(user.getId());  // DB call 2
+    }
+}
+```
+
+---
+
+# ✔ **Step 4: Field Resolver for Address**
+
+```java
+@Controller
+public class AddressFieldResolver {
+
+    @SchemaMapping(typeName = "User", field = "address")
+    public Address address(User user) {
+        return addressService.getAddressByUserId(user.getId()); // DB call 3
+    }
+}
+```
+
+---
+
+# ⭐ Yaha MAGIC kya hua?
+
+👉 **Client ne sirf ek GraphQL query bheji**
+👉 GraphQL ne internally 3 functions call kiye:
+
+1. `user()`
+2. `orders()`
+3. `address()`
+
+But **client ko pata bhi nahi chala**,
+usko ek compact response mil gaya.
+
+---
+
+# 🟢 **GraphQL Response (1 single response)**
+
+```json
+{
+  "user": {
+    "name": "Vishnu",
+    "orders": [
+      { "product": "Laptop", "price": 50000 },
+      { "product": "Mouse", "price": 800 }
+    ],
+    "address": {
+      "city": "Pune",
+      "pincode": "411045"
+    }
+  }
+}
+```
+
+---
+
+# 🔥 Interview me ye line zaroor bolo:
+
+**“REST me user, orders aur address ke liye 3 endpoints lage.
+GraphQL me ek hi query me dependent data aagaya, jisse network calls kam hue aur performance improve hui.”**
+
+---
+
+Agar chaho to:
+👉 isi example ka **Database + Service layer code**
+👉 **DataLoader ke saath N+1 problem solve**
+bhi de sakta hoon.
+
+========================================================================================================================
+@SchemaMapping(typeName = "User", field = "orders")
+    public List<Order> orders(User user) {
+        return orderService.getOrdersByUserId(user.getId());  // DB call 2
+    }
+}
+
+kaise map karta hai ik bar bato
+
+Ans :
+
+Achha, **@SchemaMapping kaise map karta hai** ye GraphQL + Spring Boot ka **core concept** hai.
+Isko **simple, clear, step-by-step** explain karta hoon.
+
+---
+
+# 🟦 **GraphQL Field Resolver Mapping — Easy Explanation**
+
+Schema me humne likha:
+
+```graphql
+type User {
+  id: ID!
+  name: String
+  orders: [Order]
+}
+```
+
+Yaha `orders` ek **nested field** hai.
+
+Matlab:
+
+* Pehle User fetch hoga
+* Fir User ke andar `orders` field retrieve karni hai
+* GraphQL ko nahi pata ki orders ka data kaha se laana hai
+* Isliye hum `@SchemaMapping` create karte hain
+
+---
+
+# 🟥 **Spring Boot Isko Kaise Map Karta Hai?**
+
+### ✔ Step 1: GraphQL Query aati hai
+
+Client query bhejta hai:
+
+```graphql
+{
+  user(id:1) {
+    name
+    orders { product price }
+  }
+}
+```
+
+### ✔ Step 2: GraphQL pehle `user(id:1)` resolve karta hai
+
+Spring Boot ye method call karega:
+
+```java
+@QueryMapping
+public User user(@Argument Long id) {
+    return userService.getUser(id);
+}
+```
+
+Iska return ek `User` object hai:
+
+```
+User {
+   id: 1,
+   name: "Vishnu"
+}
+```
+
+Ab next field aayi → **orders**
+
+---
+
+# 🟢 **Step 3: GraphQL automatically field resolver dhundta hai**
+
+GraphQL dekhta hai:
+
+✔ schema me `User` ke andar ek field hai → `orders`
+✔ kya spring me aisa koi resolver hai? → Haan!
+
+```java
+@SchemaMapping(typeName = "User", field = "orders")
+public List<Order> orders(User user) {
+    return orderService.getOrdersByUserId(user.getId());
+}
+```
+
+---
+
+# 🟣 **Mapping Ka Magic: How GraphQL Recognizes?**
+
+### 🔥 **GraphQL automatically pass karta hai:**
+
+* Parent object → `User user`
+* Tumne query me `orders` field request ki hai
+* To ye method call hota hai
+
+---
+
+# ⭐ Yani mapping hamesha is logic se hoti hai:
+
+### **1. TypeName = Parent Type**
+
+`typeName = "User"`
+matlab:
+**ye resolver tab call hoga jab user ke andar koi field resolve karna ho.**
+
+---
+
+### **2. Field = Specific GraphQL field**
+
+`field = "orders"`
+matlab:
+**User ke andar orders field fetch karne ka kaam yahi method karega.**
+
+---
+
+# 🧠 Internally kya hota hai?
+
+GraphQL engine bolta hai:
+
+* “Mere paas `User` object ready hai”
+* “Client ko `orders` chaiye”
+* “SchemaMapping me dekho → User + orders ke liye kaun method hai”
+* “Mil gaya → orders()”
+* “orders() function ko User object pass karo”
+* User ka ID leke database call karo
+* Result return karo
+
+Thus:
+
+```
+User → orders()
+```
+
+---
+
+# 🟩 Flow Diagram (Super Simple)
+
+**Query → user() → returns User object**
+⬇
+GraphQL tries to resolve nested fields
+⬇
+Field = orders
+⬇
+GraphQL finds resolver:
+`@SchemaMapping(typeName = "User", field = "orders")`
+⬇
+orders(User user) call hota hai
+⬇
+Database se orders list aati hai
+⬇
+Final response ready
+
+---
+
+# 💥 Final Answer (Interview ke liye perfect)
+
+**@SchemaMapping tab call hota hai jab ek parent type ke andar kisi specific field ko resolve karna hota hai.
+GraphQL automatically parent object (User) ko resolver method ko pass karta hai.
+`typeName="User"` batata hai ki yeh resolver User ke andar kisi field ke liye hai,
+aur `field="orders"` batata hai ki yeh specific orders field ko handle karega.**
+
+---
+
+Agar chaho to mai:
+
+✔ same example ka **Address resolver**
+✔ DataLoader ke saath **N+1 solve**
+✔ Full Spring Boot working project
+
+bhi bana kar de sakta hoon.
+
+========================================================================================================================
+4. GraphQL Schema kya hota hai?
+
+Schema describes:
+
+1.Types
+
+2.Fields
+
+3.Queries
+
+4.Mutations
+GraphQL ka “contract” hota hai.
+========================================================================================================================
+Bilkul! Chalo **GraphQL Schema** ko **deeply**, simple examples ke saath samajhte hain — jaisa interview me expected hota hai.
+
+---
+
+# 🟦 **GraphQL Schema kya hota hai? (Deep Explanation)**
+
+### **Definition:**
+
+GraphQL Schema ek **contract** hota hai jo define karta hai ki:
+
+* API me kaun-kaunse **types** available hain
+* Har type me kaun-se **fields** hain
+* Kaun-se **queries** allowed hain
+* Kaun-se **mutations** allowed hain
+* Kaun-se field ke andar kaun-sa data milega
+* Har field ka **return type** kya hoga
+
+**Schema decide karta hai: API ka structure kaisa hoga.**
+
+Yeh `schema.graphqls` file me likhte hain.
+
+---
+
+# ⭐ **Simple language me:**
+
+Schema = **API ka blueprint**
+Client + Server dono isi schema ke rules follow karte hain.
+
+Isko GraphQL ki **Schema Definition Language (SDL)** me likhte hain.
+
+---
+
+# 🟩 **Schema ke 4 Main Parts (Deep):**
+
+## **1. Types**
+
+Isme hum batate hain ki humare data me kaun-se objects hain.
+
+Example:
+
+```graphql
+type User {
+  id: ID!
+  name: String!
+  age: Int
+}
+```
+
+👉 Yeh batata hai ki `User` ek GraphQL type hai.
+👉 Iske andar 3 fields hain.
+
+---
+
+## **2. Fields**
+
+Field = object ka data column jaise.
+
+Example:
+
+```
+name: String!
+```
+
+Matlab:
+
+* `name` ek field hai
+* `String` return karega
+* `!` means **NULL allowed nahi**
+
+---
+
+## **3. Queries**
+
+Server se **data fetch** karne ke entry point.
+
+Example:
+
+```graphql
+type Query {
+  user(id: ID!): User
+  allUsers: [User]
+}
+```
+
+Matlab:
+
+* `user(id)` → 1 User deta hai
+* `allUsers` → User ki list deta hai
+
+REST me:
+`GET /users/1`
+`GET /users`
+
+GraphQL me:
+Ek hi endpoint `/graphql`
+
+---
+
+## **4. Mutations**
+
+Server me **data change** karne ke entry point.
+
+Example:
+
+```graphql
+type Mutation {
+  createUser(input: UserInput): User
+  updateUser(id: ID!, input: UserInput): User
+  deleteUser(id: ID!): Boolean
+}
+```
+
+Matlab:
+
+* `createUser` → new user create karega
+* `updateUser` → existing ko update karega
+* `deleteUser` → true/false return karega
+
+REST me:
+POST / PUT / DELETE
+
+---
+
+# 🟥 Additional Schema Parts (Interview Extra)
+
+## **5. Input Types**
+
+Mutation me input dene ke liye.
+
+```graphql
+input UserInput {
+  name: String!
+  age: Int
+}
+```
+
+---
+
+## **6. Enums**
+
+Fix set of values.
+
+```graphql
+enum Role {
+  ADMIN
+  USER
+}
+```
+
+---
+
+## **7. Scalar Types**
+
+Built-in primitive types:
+
+* String
+* Int
+* Float
+* Boolean
+* ID
+
+---
+
+## **8. Custom Scalar Types**
+
+Aap khud bana sakte ho:
+
+Example:
+
+```
+scalar Date
+```
+
+---
+
+## **9. List Types**
+
+Multiple items ka type:
+
+```
+users: [User]
+```
+
+---
+
+# 🟦 **GraphQL Schema full example (Complete)**
+
+```graphql
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  age: Int
+  address: Address
+}
+
+type Address {
+  city: String
+  pincode: Int
+}
+
+type Query {
+  user(id: ID!): User
+  allUsers: [User]
+}
+
+type Mutation {
+  createUser(input: UserInput!): User
+}
+
+input UserInput {
+  name: String!
+  email: String!
+  age: Int
+}
+```
+
+---
+
+# 🟩 **Spring Boot me Schema ka role**
+
+Spring Boot:
+
+* `schema.graphqls` file ko parse karta hai
+* Har Query/Mutation ke liye resolver find karta hai
+* Jo fields nested hain unke liye field resolvers dekhta hai
+
+---
+
+# 🟢 Diagram (simple):
+
+```
+schema.graphqls
+   ↓
+Defines: Types + Query + Mutation
+   ↓
+Spring Boot Resolver
+   ↓
+Database / Service Layer
+   ↓
+Return JSON
+```
+
+---
+
+# 🟣 Interview me exact answer (perfect):
+
+**GraphQL schema API ka contract hota hai. Isme hum define karte hain ke API me kaun-se types, fields, queries aur mutations available hain. Schema SDL (Schema Definition Language) me likha jata hai. Server and client dono isi schema ko follow karke communicate karte hain. Schema ke without GraphQL kaam nahi karta.**
+
+---
+
+Agar chaho to mai:
+👉 **Schema → Resolver mapping ka full diagram**
+👉 **Complete Spring Boot GraphQL project**
+bhi de sakta hoon.
+
+========================================================================================================================
+5. Resolver kya hota hai?
+
+Resolver wo function hota hai jo GraphQL field ka actual data return karta hai.
+
+Example:
+
+Query: {
+  user: () => getUserFromDB()
+}
+========================================================================================================================
+Bilkul! **Resolver kya hota hai** isko **deep**, **interview-level**, aur **Spring Boot code example** ke saath samjhate hain.
+Yeh GraphQL ka **most important concept** hai.
+
+---
+
+# 🟦 **Resolver kya hota hai? (Deep Explanation)**
+
+### 📌 **Definition**
+
+GraphQL resolver ek **function/method** hota hai jo **GraphQL field ka actual data** return karta hai.
+
+GraphQL query sirf **structure define karti hai**,
+But **data kaise aayega** — ye resolver batata hai.
+
+---
+
+# 🟢 Simple Example samajh lo:
+
+Query:
+
+```graphql
+{
+  user(id:1) {
+    name
+  }
+}
+```
+
+GraphQL ke paas do kaam hain:
+
+### 1️⃣ `user(id:1)` ka data kaise lana?
+
+→ Yeh Query Resolver karega.
+
+### 2️⃣ user ke andar `name` kaise lana?
+
+→ Yeh field resolver ya model ka default getter handle karega.
+
+---
+
+# 🟣 Resolver KOI BHI field ko data deta hai:
+
+⭐ Query Resolver
+⭐ Mutation Resolver
+⭐ Field Resolver (nested type)
+⭐ Subscription Resolver
+
+---
+
+# 🟩 **Resolver ka kaam:**
+
+* Database se data lana
+* Service call karna
+* External REST API call
+* Business logic apply karna
+* Nested fields ko resolve karna
+
+---
+
+# 🟥 GraphQL Resolver ke Types (Important for interview)
+
+## **1. Query Resolver**
+
+Data fetch karne ka entry point.
+
+Spring Boot:
+
+```java
+@QueryMapping
+public User getUser(@Argument Long id) {
+    return userService.getUser(id);
+}
+```
+
+👉 Ye resolver call hota hai jab client query kare:
+
+```graphql
+{
+  user(id:1) { name }
+}
+```
+
+---
+
+## **2. Mutation Resolver**
+
+Data create/update/delete karta hai.
+
+```java
+@MutationMapping
+public User createUser(@Argument UserInput input) {
+    return userService.save(input);
+}
+```
+
+---
+
+## **3. Field Resolver (MOST IMPORTANT)**
+
+Nested fields resolve karta hai.
+
+Schema:
+
+```graphql
+type User {
+  id: ID!
+  name: String!
+  orders: [Order]
+}
+```
+
+Query:
+
+```graphql
+{
+  user(id:1) {
+    name
+    orders { product price }
+  }
+}
+```
+
+Spring Boot me resolver:
+
+```java
+@SchemaMapping(typeName = "User", field = "orders")
+public List<Order> orders(User user) {
+    return orderService.getOrdersByUserId(user.getId());
+}
+```
+
+⭐ Client ne sirf 1 query bheji
+⭐ GraphQL ne internally ye resolver call kiya
+⭐ Kyunki “orders” field ka data kaise laana hai ye tumne bataya
+
+---
+
+## **4. Subscription Resolver**
+
+Real-time data ke liye:
+
+```java
+@SubscriptionMapping
+public Flux<Message> messageStream() {
+    return publisher.getMessages();
+}
+```
+
+---
+
+# 🟦 Resolver Internally Kaise Kaam Karta Hai?
+
+GraphQL engine kuch steps follow karta hai:
+
+### ✔ Step 1: Client query bhejta hai
+
+### ✔ Step 2: GraphQL schema dekhta hai
+
+### ✔ Step 3: Har field ke liye matching resolver dhundta hai
+
+### ✔ Step 4: Resolver ko **arguments** + **parent object** pass karta hai
+
+### ✔ Step 5: Resolver data return karta hai
+
+### ✔ Step 6: GraphQL result ko JSON structure me format karta hai
+
+---
+
+# 🟢 Example Flow (VERY EASY)
+
+Query:
+
+```graphql
+{
+  user(id:1) {
+    name
+    orders { product }
+  }
+}
+```
+
+Flow:
+
+1. **user(id:1)** → call Query Resolver
+2. User return hua → `{ id:1, name:"Vishnu" }`
+3. **orders** field dekhi → Field Resolver call
+4. orders(User user) → id:1 se DB call
+5. Orders return → combine with user
+6. Final JSON bana → client ko return
+
+---
+
+# 🔥 Resolver Kaise Map Hota Hai?
+
+Yeh teen cheezon se:
+
+1. Parent Type → `User`
+2. Field → `orders`
+3. Function signature → User parameter
+
+Spring Boot matching logic:
+
+**typeName = “User”**
+**field = “orders”**
+So resolver auto-bind ho jata hai.
+
+---
+
+# ⭐ REAL INTERVIEW ANSWER (ready-made):
+
+**Resolver GraphQL ka core component hota hai jo kisi specific field ka actual data return karta hai.
+GraphQL sirf structure define karta hai, but data kaise fetch hoga — database se, service se, ya external API se — yeh resolver decide karta hai.
+Query, Mutation, aur nested fields sab apne resolvers ke through resolve hote hain. GraphQL internally har field ke liye matching resolver dhundta hai aur us function ko execute karke final JSON response banata hai.**
+
+---
+
+Agar tum bologe to main **Resolver ka full diagram** aur **end-to-end Spring Boot GraphQL project** bhi bana dunga.
+
+========================================================================================================================
+Intermediate GraphQL Questions
+6. GraphQL Schema Definition Language (SDL) kya hai?
+
+Yeh ek syntax/format hota hai jisse hum GraphQL types define karte hain.
+Example:
+
+type User {
+  id: ID!
+  name: String!
+}
+========================================================================================================================
+7. GraphQL me “!” ka use kya hota hai?
+
+! means non-nullable
+Example:
+name: String! → name kabhi NULL nahi hoga.
+========================================================================================================================
+8.Pagination GraphQL me kaise implement hota hai?
+2 popular ways:
+
+1.Offset Pagination → skip/limit
+2.Cursor Pagination → edges + nodes
+========================================================================================================================
+9. GraphQL me N+1 problem kya hota hai?
+Jab har record ke liye DB ko ek extra query lagti hai.
+Solution:
+1.DataLoader
+2.Batch resolvers
+========================================================================================================================
+10. Introspection kya hota hai?
+
+GraphQL API ka self-documentation.
+Client API ka schema query kar sakta hai.
+========================================================================================================================
+Chalo **Introspection** ko **super simple**, examples + Spring Boot ke saath samajhte hain.
+Yeh topic interview me important hota hai.
+
+---
+
+# 🟦 **GraphQL Introspection kya hota hai? (Simple Explanation)**
+
+**Introspection = GraphQL API ka self-documentation system.**
+
+Matlab:
+
+👉 Client GraphQL server se **uska schema pooch sakta hai**
+👉 API ke andhar ka structure khud bata deta hai
+👉 Kaun-se types, queries, mutations available hain
+👉 Kaun-se fields exist karte hain
+👉 Kya return type hai
+👉 Konsa field optional / non-null hai
+
+**Ye sab kuch GraphQL ek special query ke through bata deta hai.**
+
+---
+
+# 🟢 Simple Bhasha Me:
+
+Jaisa tum kisi dukaan wale se poochte ho —
+"Yahan kya kya milta hai?"
+
+GraphQL me client server se pooch sakta hai —
+"Tumhari API me kya kya milta hai?"
+
+GraphQL API **khud bata deti hai**.
+Yahi introspection hai.
+
+---
+
+# 🟥 **Example of Introspection Query**
+
+Introspection query ka example:
+
+```graphql
+{
+  __schema {
+    types {
+      name
+    }
+  }
+}
+```
+
+Response me poora schema aa jayega.
+
+---
+
+# 🟦 Ek simple example:
+
+Tumne query bheja:
+
+```graphql
+{
+  __schema {
+    queryType {
+      name
+    }
+  }
+}
+```
+
+GraphQL returns:
+
+```
+{
+  "data": {
+    "__schema": {
+      "queryType": {
+        "name": "Query"
+      }
+    }
+  }
+}
+```
+
+Matlab:
+
+* Server ka main Query root ka naam “Query” hai.
+
+---
+
+# 🟣 **GraphiQL / Playground UI kaisa chalta hai?
+
+Introspection ke through!**
+
+Jo auto-suggestions milti hain:
+
+* `user`
+* `createUser`
+* `orders`
+* `address`
+
+Ye sab GraphiQL tool **schema introspection** se fetch karta hai.
+
+---
+
+# 🟧 **Spring Boot me Introspection**
+
+Spring Boot GraphQL me introspection **default: enabled** hota hai.
+
+Yani tum GraphQL endpoint ko ye query bhej do:
+
+```graphql
+{
+  __schema {
+    mutationType {
+      name
+    }
+  }
+}
+```
+
+Aur server response dega.
+
+---
+
+# 🟥 **Why Introspection is useful?**
+
+### ✔ 1. API auto documentation
+
+Swagger ki tarah docs banane ki jarurat nahi
+GraphQL khud docs provide karta hai.
+
+### ✔ 2. Tools (GraphiQL, Postman, Insomnia) auto-complete dete hain
+
+### ✔ 3. Frontend developer bina backend wale se pooche API samajh sakta hai
+
+### ✔ 4. Contract clarity between teams
+
+---
+
+# 🛑 **Production me kya hota hai? → Security**
+
+Production me introspection ko **disable** kar dete hain.
+
+Kyun?
+
+Agar attackers schema dekh lenge, to:
+
+* Pure API ki structure samajh jayenge
+* Security issue ho sakta hai
+
+Spring Boot me disable:
+
+```yaml
+graphql:
+  tools:
+    introspection-enabled: false
+```
+
+---
+
+# ⭐ **Interview ka perfect answer:**
+
+**GraphQL introspection ek feature hai jisme client GraphQL server se pooch sakta hai ki API me kaun-kaunse types, fields, queries, aur mutations available hain. Ye API ka self-documentation system hai. GraphiQL, Playground jaise tools introspection ko use karke auto-complete aur documentation provide karte hain. Production me security reasons ke wajah se introspection disable kiya jata hai.**
+
+---
+
+Agar chaho to mai tumhe
+👉 introspection ka real-time demo query,
+👉 or disable/enable code
+bhi de sakta hoon.
+
+========================================================================================================================
+Chalo **GraphQL Fragment** ko **simple language + real example + Spring Boot scenario** ke saath samajhte hain.
+Yeh topic first time me sabko confusing lagta hai, but main bilkul aasaan bana kar samjha deta hoon.
+
+---
+
+# 🟦 **GraphQL Fragment kya hota hai? (Simple Explanation)**
+
+**Fragment = Query ka reusable part.**
+
+Matlab agar tumko **same fields** baar-baar query me likhne pad rahe hain,
+to unko ek **fragment** me bana lo
+aur jaha-jaha chahiye waha use kar lo.
+
+---
+
+# 🟢 Simple Real-Life Example
+
+Tum 3 jagah pe **User ka id, name, email** fetch kar rahe ho:
+
+### Without Fragment:
+
+```graphql
+{
+  user1: user(id: 1) {
+    id
+    name
+    email
+  }
+  user2: user(id: 2) {
+    id
+    name
+    email
+  }
+  user3: user(id: 3) {
+    id
+    name
+    email
+  }
+}
+```
+
+⭐ Same fields baar-baar likhne pad rahe hain.
+
+---
+
+# 🟩 Ab Fragment use karte hain:
+
+```graphql
+fragment userFields on User {
+  id
+  name
+  email
+}
+
+{
+  user1: user(id: 1) {
+    ...userFields
+  }
+  user2: user(id: 2) {
+    ...userFields
+  }
+  user3: user(id: 3) {
+    ...userFields
+  }
+}
+```
+
+* Fragment me tum ek baar fields likh diye
+* Fir use jaha-jaha chahiye “...” se include kar liya
+
+👉 **code short ho gaya
+👉 maintain karna easy
+👉 repeated code hat gaya**
+
+---
+
+# 🟥 WHY Fragment Useful? (Important for Interview)
+
+### ✔ 1. Code Reuse
+
+Same fields baar-baar likhne ki zarurat nahi.
+
+### ✔ 2. Maintenance Easy
+
+Agar kal email field hatana ho — ek hi jagah change karna padega.
+
+### ✔ 3. Complex Query me Structure Clean ho jata hai
+
+React, Angular apps me fragments bahut use hote hain.
+
+---
+
+# 🟦 Spring Boot wala Example
+
+Schema:
+
+```graphql
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  age: Int
+}
+```
+
+Client Query (with fragment):
+
+```graphql
+fragment basicFields on User {
+  id
+  name
+}
+
+query {
+  user(id: 1) {
+    ...basicFields
+    email
+  }
+}
+```
+
+Spring Boot ko koi extra code nahi likhna hota.
+GraphQL engine automatically fragment expand karta hai.
+
+---
+
+# 🟩 Fragment Internally Kaise Work Karte Hain?
+
+GraphQL engine jab query receive karta hai:
+
+### 1️⃣ Fragment definition read karta hai
+
+```
+fragment userFields on User { id name email }
+```
+
+### 2️⃣ Fragment name find karta hai query me
+
+```
+...userFields
+```
+
+### 3️⃣ Exactly same fields “expand” karke final query banata hai
+
+GraphQL internally isko is tarah convert kar deta hai:
+
+```graphql
+{
+  user(id:1) {
+    id
+    name
+    email
+  }
+}
+```
+
+Tumko manually likhne ki zarurat nahi —
+GraphQL engine automatically karta hai.
+
+---
+
+# ⭐ Interview Perfect Answer:
+
+**GraphQL Fragment ek reusable query block hota hai jisme hum commonly required fields ko define karte hain. Isse hum same fields ko multiple jagah repeat nahi karte. Fragment query ko readable, maintainable aur DRY (Don’t Repeat Yourself) banata hai. Fragment ko `...fragmentName` syntax se include kiya jata hai.**
+
+---
+
+Agar chaho to mai:
+👉 Fragment + Nested Fragment example
+👉 Fragment + Variables example
+👉 Real React/Apollo client example
+
+bhi de sakta hoon.
+
+========================================================================================================================
+Chalo **GraphQL Directives** ko **super-simple**, examples + explanation ke saath samajhte hain.
+Tumko 100% samajh aa jayega.
+
+---
+
+# 🟦 **GraphQL Directives kya hoti hain?**
+
+**Directive = Query me dynamic conditions add karne ka tarika.**
+
+Matlab:
+
+👉 Query runtime (code run hone ke time) me decide karegi
+
+* Kaun-sa field include karna hai
+* Kaun-sa field skip karna hai
+* Data ko kaise handle karna hai
+
+Yeh **if/else** jaisa behavior GraphQL me add karta hai.
+
+---
+
+# 🟢 **Simple real-life example se samajho**
+
+Tum mobile app bana rahe ho.
+
+Kabhi tumko user ka **email** chahiye, kabhi nahi.
+
+Agar "emailRequired = true" ho
+→ email field fetch karna.
+
+Agar false ho
+→ email field skip karna.
+
+Yeh possible hai **@include** aur **@skip** directives se.
+
+---
+
+# 🟦 **1. @include(if: condition)**
+
+**Agar condition true ho → field include karo**.
+
+Example:
+
+```graphql
+query getUser($showEmail: Boolean!) {
+  user(id: 1) {
+    name
+    email @include(if: $showEmail)
+  }
+}
+```
+
+Variables:
+
+```json
+{
+  "showEmail": true
+}
+```
+
+Output:
+
+```
+{
+  "user": {
+    "name": "Vishnu",
+    "email": "abc@gmail.com"
+  }
+}
+```
+
+Agar variable false ho:
+
+```json
+{
+  "showEmail": false
+}
+```
+
+Output:
+
+```
+{
+  "user": {
+    "name": "Vishnu"
+  }
+}
+```
+
+👉 Email field automatically remove ho gaya.
+
+---
+
+# 🟥 **2. @skip(if: condition)**
+
+**Agar condition true ho → field skip karo**.
+
+Example:
+
+```graphql
+query getUser($skipEmail: Boolean!) {
+  user(id: 1) {
+    name
+    email @skip(if: $skipEmail)
+  }
+}
+```
+
+---
+
+# 🟩 **Why Directives are useful?**
+
+### ✔ Fetch only required fields
+
+(Optimize data, save bandwidth)
+
+### ✔ Conditional logic from client
+
+(Backend code change nahi karna)
+
+### ✔ Same query har situation me use ho sakti hai
+
+(Frontend me clean code)
+
+---
+
+# 🟦 **More Advanced Directives (Important for interview)**
+
+### 1️⃣ **@deprecated**
+
+Field deprecated karne ke liye.
+
+Schema me:
+
+```graphql
+type User {
+  oldField: String @deprecated(reason: "Use newField instead")
+  newField: String
+}
+```
+
+Tools jaise GraphiQL is field ko strike line dikhayenge.
+
+---
+
+### 2️⃣ **@specifiedBy**
+
+Custom scalar ke liye URL link add karta hai.
+
+---
+
+# 🟧 **Spring Boot me Directives ka role**
+
+Spring Boot ko directives handle karna nahi padta.
+**GraphQL engine automatically**:
+
+* include/skip
+* deprecated
+* variables
+* filtering
+
+Ye sab manage karta hai.
+
+Backend me tumhe kuch extra code nahi likhna padta.
+
+---
+
+# ⭐ **Interview me perfect answer**
+
+**GraphQL directives special annotations hoti hain jisse hum query me dynamic behavior add kar sakte hain. Common directives jaise `@include` aur `@skip` condition ke basis par fields ko include ya skip karte hain. Directives query ko flexible banati hain aur unnecessary data fetch nahi hota, isse performance improve hoti hai.**
+
+---
+
+Agar chaho to mai
+👉 Advanced directives ka example
+👉 Custom directives ka example
+👉 Spring Boot + Directive dynamic use case
+
+bhi de sakta hoon.
+
+========================================================================================================================
+13. Query batching kya hai?
+
+Multiple GraphQL queries ko ek single request me combine karna performance improve karne ke liye.
+========================================================================================================================
+17. GraphQL vs gRPC vs REST comparison?
+
+GraphQL: Flexible data
+REST: Simple + browser-friendly
+gRPC: Fast binary protocol (microservices)
+========================================================================================================================
+Basic GraphQL + Spring Boot Questions
+1. Spring Boot me GraphQL ka use kyun karte hain?
+
+1.GraphQL client ko exact data return karta hai, isliye:
+2.network calls kam hote hain
+3.UI fast banta hai
+4.single endpoint se complex data fetch hota hai
+========================================================================================================================
+2. Spring Boot me GraphQL use karne ke liye kaunse dependency lagti hain?
+
+Spring Boot 3+ (New):
+implementation 'org.springframework.boot:spring-boot-starter-graphql'
+========================================================================================================================
+3. Spring Boot me schema.graphqls file kya hoti hai?
+
+Yeh GraphQL schema define karti hai:
+
+Types
+Query
+Mutation
+Input types
+Default location:
+src/main/resources/graphql/
+========================================================================================================================
+4. GraphQL Resolver Spring Boot me kaise banate hain?
+
+Spring Boot 3 me resolver create karne ke liye:
+Query Resolver: @SchemaMapping, @QueryMapping
+Mutation Resolver: @MutationMapping
+
+Example:
+
+@Controller
+public class UserController {
+
+    @QueryMapping
+    public User getUser(@Argument Long id) {
+        return service.getUser(id);
+    }
+}
+
+========================================================================================================================
+5. GraphQL me DTO ya InputType kaise define karte hain?
+
+Schema me:
+
+input UserInput {
+  name: String!
+  email: String!
+}
+
+
+Spring Boot me:
+public record UserInput(String name, String email) {}
+========================================================================================================================
+6. GraphQL me Mutations Spring Boot me kaise likhte hain?
+
+@MutationMapping
+public User createUser(@Argument UserInput input) {
+   return service.save(input);
+}
+
+========================================================================================================================
+7. GraphQL me Exception Handling Spring Boot me kaise hota hai?
+
+Use:
+DataFetcherExceptionResolver
+GraphQlExceptionHandler
+
+Example:
+
+@Component
+public class CustomExceptionResolver implements DataFetcherExceptionResolver {
+  @Override
+  public Mono<DataFetcherExceptionResolverResult> resolveException(
+         Throwable ex, DataFetchingEnvironment env) {
+         return Mono.just(DataFetcherExceptionResolverResult.newResult().error(
+                 GraphqlErrorBuilder.newError(env).message(ex.getMessage()).build()
+         ).build());
+  }
+}
+========================================================================================================================
+8. GraphQL N+1 problem kaise solve karte hain Spring me?
+
+With DataLoader:
+
+@Bean
+public DataLoaderRegistry dataLoaderRegistry() {
+    DataLoaderRegistry registry = new DataLoaderRegistry();
+    registry.register("users", DataLoader.newMappedDataLoader(userBatchLoader));
+    return registry;
+}
+========================================================================================================================
+11. Spring Boot GraphQL me Pagination kaise implement karte hain?
+
+Offset-based:
+
+@QueryMapping
+public List<User> getUsers(@Argument int page, @Argument int size) {
+    return service.getUsers(page, size);
+}
+========================================================================================================================
+9. GraphQL Subscriptions Spring Boot me kaise implement hoti hain?
+
+Spring Boot WebSocket ke through implement karta hai:
+
+@SubscriptionMapping
+public Flux<Message> messageStream() {
+    return messagePublisher.getMessagesFlux();
+}
+========================================================================================================================
+12. GraphQL Testing Spring Boot me kaise karte hain?
+
+Use:
+
+GraphQlTester (very important!)
+
+Example:
+
+@Autowired
+GraphQlTester graphQlTester;
+
+@Test
+void testUserQuery() {
+   graphQlTester.document("{ user(id:1){name} }")
+        .execute()
+        .path("user.name")
+        .entity(String.class)
+        .isEqualTo("Vishnu");
+}
+========================================================================================================================
+13. GraphQL + JPA performance issues kaise manage karte hain?
+
+FetchType.LAZY
+BatchSize
+DataLoader
+GraphQL projection fields use karna (only required columns)
+========================================================================================================================
+14. GraphQL schema stitching/ federation kya hota hai?
+Large microservices ke schemas ko combine karke single graph banana = Federation.
+Spring Boot me Apollo Federation ka support milta hai:
+implementation 'com.apollographql.federation:federation-graphql-java-support'
+========================================================================================================================
+15. Spring Boot me GraphQL endpoint kya hota hai?
+Default endpoint:
+/graphql
+Testing tool:
+/graphiql
+========================================================================================================================
+16. GraphQL Query vs Resolver difference?
+
+| Query in schema            | Resolver in code      |
+| -------------------------- | --------------------- |
+| Structure define karta hai | Data return karta hai |
+| Static                     | Business logic        |
+
+========================================================================================================================
+17. Example: User + Orders query kaise banate hain?
+{
+  user(id: 1) {
+    name
+    orders {
+      product
+      price
+    }
+  }
+}
+
+
+Resolver:
+
+@SchemaMapping(typeName="User", field="orders")
+public List<Order> getOrders(User user) {
+    return orderService.getOrdersByUserId(user.getId());
+}
+
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
