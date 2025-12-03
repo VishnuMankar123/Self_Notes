@@ -524,7 +524,8 @@ Let me know if you want a visual diagram or example setup for this!
 ================================================================================================================
 
 =================================================================================================================
-Sure! In **Java microservices architecture**, an **API Gateway** is a **single entry point** for all clients to interact with the backend microservices. Think of it as a front door to your system that **routes requests**, **handles authentication**, **performs rate limiting**, and **aggregates data** from multiple services.
+Sure! In **Java microservices architecture**, an **API Gateway** is a **single entry point** for all clients to interact with the backend microservices.
+ Think of it as a front door to your system that **routes requests**, **handles authentication**, **performs rate limiting**, and **aggregates data** from multiple services.
 
 ---
 
@@ -778,7 +779,8 @@ Spring Cloud Gateway supports:
 
 =====================================================================================
 
-Great question! In a Java microservices architecture, a **Config Server** is used to **centralize configuration management** for all your microservices. It ensures that configuration files (like `application.yml`) are managed in one place—usually stored in a **Git repository**—and all services fetch their configs from there.
+Great question! In a Java microservices architecture, a **Config Server** is used to **centralize configuration management** for all your microservices.
+ It ensures that configuration files (like `application.yml`) are managed in one place—usually stored in a **Git repository**—and all services fetch their configs from there.
 
 ---
 

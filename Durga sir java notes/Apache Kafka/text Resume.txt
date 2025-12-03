@@ -2822,8 +2822,490 @@ Set<HttpMethod> methods = restTemplate.optionsForAllow(url);
 अगर चाहें तो मैं **har method ke practical code samples** ek single working Spring Boot project me de सकता हूँ।
 
 ========================================================================================================================
+Samajh gaya 👍
+Aapke paas **3 type ka data** hai — aur aapko har type ko **alag Kafka topic** par bhejna hai.
+
+Chalo ek **clean + professional architecture** banate hain.
+
+---
+
+# ✅ Example: 3 Types of Data
+
+Assume aapke paas yeh 3 data types hain:
+
+1. **Plant data**
+2. **Weather data**
+3. **Log data**
+
+Aur 3 topics:
+
+* `plant-topic`
+* `weather-topic`
+* `log-topic`
+
+---
+
+# 🟢 **Approach 1: Simple if/else (Easy + Works)**
+
+```java
+public void sendData(String type, String data) {
+
+    switch (type) {
+        case "plant":
+            kafkaTemplate.send("plant-topic", data);
+            break;
+
+        case "weather":
+            kafkaTemplate.send("weather-topic", data);
+            break;
+
+        case "log":
+            kafkaTemplate.send("log-topic", data);
+            break;
+
+        default:
+            throw new IllegalArgumentException("Unknown data type: " + type);
+    }
+}
+```
+
+✓ Simple
+✓ Clear
+✓ Perfect for 3–5 types
+
+---
+
+# 🟣 **Approach 2: Map approach (Clean for large projects)**
+
+### Step 1: Create a map of type → topic
+
+```java
+private final Map<String, String> topicMap = Map.of(
+        "plant", "plant-topic",
+        "weather", "weather-topic",
+        "log", "log-topic"
+);
+```
+
+### Step 2: Use this map dynamically
+
+```java
+public void sendData(String type, String data) {
+
+    String topic = topicMap.get(type);
+
+    if (topic == null) {
+        throw new IllegalArgumentException("Unknown data type: " + type);
+    }
+
+    kafkaTemplate.send(topic, data);
+}
+```
+
+✓ Very clean
+✓ Easy to add more types later
+✓ No switch/if needed
+
+---
+
+# 🟠 **Approach 3: Each data type has its own method (Best readability)**
+
+```java
+public void sendPlantData(String data) {
+    kafkaTemplate.send("plant-topic", data);
+}
+
+public void sendWeatherData(String data) {
+    kafkaTemplate.send("weather-topic", data);
+}
+
+public void sendLogData(String data) {
+    kafkaTemplate.send("log-topic", data);
+}
+```
+
+Call like:
+
+```java
+sendPlantData(plantJson);
+sendWeatherData(weatherJson);
+sendLogData(logJson);
+```
+
+✓ Very clean
+✓ Easy to maintain
+✓ Best for production
+
+---
+
+# 🔥 **Advance: Topics from application.yml**
+
+```yaml
+kafka:
+  topics:
+    plant: plant-topic
+    weather: weather-topic
+    log: log-topic
+```
+
+Config:
+
+```java
+@Configuration
+@ConfigurationProperties(prefix = "kafka.topics")
+@Data
+public class KafkaTopicsConfig {
+    private String plant;
+    private String weather;
+    private String log;
+}
+```
+
+Usage:
+
+```java
+@Autowired
+KafkaTopicsConfig config;
+
+public void sendPlant(String data) {
+    kafkaTemplate.send(config.getPlant(), data);
+}
+
+public void sendWeather(String data) {
+    kafkaTemplate.send(config.getWeather(), data);
+}
+
+public void sendLog(String data) {
+    kafkaTemplate.send(config.getLog(), data);
+}
+```
+
+✓ No hardcoded topic names
+✓ Fully configurable
+✓ Best for enterprise apps
+
+---
+
+# ⭐ Summary (Best Recommendation)
+
+✔ If project small → use `switch`
+✔ If project medium → use `Map<String,String>`
+✔ If project large → configure topics in `application.yml`
+
+---
+
+If you want, I can help you create:
+
+✔ Best folder structure
+✔ DTO for each data type
+✔ Kafka consumer code for each topic
+✔ Retry + dead letter topic system
+
+Just tell me!
+
 ========================================================================================================================
+Kafka me **key** bohot important hota hai.
+Aapko simple language me samjhata hoon:
+
+---
+
+# 🟦 **Kafka key kya karta hai?**
+
+**Kafka key = message ka address**
+Jisse Kafka decide karta hai ki message **kis partition** me jayega.
+
+---
+
+# 🟧 **Key ka main kaam: Partitioning**
+
+Kafka topic me multiple partitions hote hain:
+
+```
+topic partitions:
+P0 | P1 | P2 | P3 | ...
+```
+
+Jab aap message send karte ho:
+
+```java
+kafkaTemplate.send("topic", "myKey", data);
+```
+
+To Kafka yeh karta hai:
+
+👉 `"myKey".hashCode()` compute karta hai
+👉 Partition = hash % number_of_partitions
+👉 Message **always** same partition me jayega
+
+---
+
+# ⭐ Simple Example
+
+Agar aap 3 messages same key se bhejte ho:
+
+```java
+send("device-101", "data1");
+send("device-101", "data2");
+send("device-101", "data3");
+```
+
+Sab 3 messages **same partition** me jayenge.
+
+---
+
+# 🟢 **Why is this useful?**
+
+## 1️⃣ **Ordering guarantee**
+
+Same key → same partition
+Same partition → strict ordering
+
+Example:
+
+```
+device-101 reading #1
+device-101 reading #2
+device-101 reading #3
+```
+
+Consumer ko same order me milenge.
+
+---
+
+## 2️⃣ **Load Balancing**
+
+Different keys → different partitions
+Kafka load ko spread kar deta hai.
+
+Example:
+
+```
+Key: device-101 → P0
+Key: device-102 → P1
+Key: device-103 → P2
+```
+
+---
+
+## 3️⃣ **Grouped data**
+
+Consumer ek specific device/user/group ka data logically group kar sakta hai.
+
+---
+
+# 🟩 **Real-World Example – Weather / IoT**
+
+### Case 1: Same device ka data
+
+Key = deviceId
+
+```java
+kafkaTemplate.send("weather-topic", deviceId, jsonData);
+```
+
+Device-1 → always same partition
+Device-2 → same partition
+Device-3 → same partition
+
+Ordering perfect.
+
+---
+
+### Case 2: Plant data
+
+Key = plantId
+
+```java
+kafkaTemplate.send("plant-topic", plantId, plantJson);
+```
+
+Plant-wise ordering guaranteed.
+
+---
+
+# 🟣 **Consumer Benefits**
+
+Consumer can do:
+
+* per-device processing
+* per-plant batch
+* per-user analytics
+* stateful processing
+
+Because all messages of same key come to **same consumer instance**.
+
+---
+
+# 🔥 Summary (Super Easy)
+
+| Feature            | Meaning                                          |
+| ------------------ | ------------------------------------------------ |
+| **Key**            | Message ka address                               |
+| **Partitioning**   | Decide karta hai message kis partition me jayega |
+| **Ordering**       | Same key → ordering maintained                   |
+| **Load balancing** | Different keys → load distribute hota hai        |
+
+---
+
+Agar aap chaho to main aapko:
+
+✔ Best key selection strategy
+✔ Partition logic with examples
+✔ Multi-key system for complex IoT
+✔ Consumer group architecture
+
+Sab explain kar sakta hoon.
+
 ========================================================================================================================
+`groupId` Kafka ka **bahut important concept** hai.
+Main aapko **simple language + real examples** se samjhaata hoon.
+
+---
+
+# 🟦 **groupId kya hota hai?**
+
+**Kafka Consumer Group ka naam** hai.
+
+Example:
+
+```java
+@KafkaListener(
+    topics = "havells-plant-topic",
+    groupId = "havells-group"
+)
+```
+
+Yani is consumer ka group name = `havells-group`
+
+---
+
+# 🟩 **groupId ka main kaam kya hai?**
+
+## ✔ 1. **Load Balancing**
+
+Agar ek topic ke multiple consumers same groupId use karte hain:
+
+```
+Group: havells-group
+Consumers: C1, C2, C3
+```
+
+To Kafka partitions ko consumers me distribute karega:
+
+```
+Partition 0 → C1
+Partition 1 → C2
+Partition 2 → C3
+```
+
+Ye **parallel processing** create karta hai.
+
+---
+
+## ✔ 2. **Each message is processed ONCE per group**
+
+Agar 3 consumer groups hai:
+
+* group-A
+* group-B
+* group-C
+
+To **har group ko message milega**, but group ke andar sirf **1 baar process hoga**.
+
+---
+
+## ✔ 3. **Offset Management**
+
+groupId batata hai:
+
+* is group ne kaha tak messages consume kiye
+* kis offset tak padh liya
+* restart hone par kaha se resume kare
+
+Kafka **offset store karta hai per group**.
+
+---
+
+# 🟧 **Real Example 1: Plant Data Processing**
+
+### Producer sends a lot of plant messages:
+
+```
+havells-plant-topic
+```
+
+### You start 3 consumer instances:
+
+```java
+groupId = "plant-processors"
+```
+
+Kafka karega:
+
+* Consumer-1 → some partitions
+* Consumer-2 → some partitions
+* Consumer-3 → some partitions
+
+💡 **High-speed processing**
+
+---
+
+# 🟧 **Real Example 2: 2 Apps Want Same Data**
+
+App-1: Billing calculation
+App-2: Weather analytics
+
+Agar dono same topic ko listen karte hain,
+but **different groupId** se:
+
+```java
+groupId = "billing-group"
+groupId = "analytics-group"
+```
+
+To:
+
+✔ Billing app ko messages milenge
+✔ Analytics app ko messages milenge
+✔ Dono ko **independent copies** milengi
+
+Kafka **message ko duplicate nahi karta**,
+group ke hisab se deliver hota hai.
+
+---
+
+# 🟥 **IMPORTANT: Common mistake**
+
+Agar aap 2 consumers ko **same groupId** de dete ho
+but **data alag chahiye**:
+
+❌ A consumer will miss data
+❌ Because Kafka load-balance karega, duplicate nahi bhejega
+
+---
+
+# 🟢 Simple Summary
+
+| Concept               | Meaning                                          |
+| --------------------- | ------------------------------------------------ |
+| **groupId**           | Consumer group ka naam                           |
+| **Load Balancing**    | Same group me multiple consumers → message split |
+| **Broadcast**         | Different groups → sabko message milega          |
+| **Offset Management** | Kafka remembers where group left                 |
+
+---
+
+# 🔥 If you want
+
+I can also explain:
+
+✔ How many consumers per group
+✔ Best groupId naming strategy
+✔ Multiple listener containers
+✔ How to scale Kafka consumers in Spring Boot
+
+Just tell me!
+
 ========================================================================================================================
 ========================================================================================================================
 ========================================================================================================================
