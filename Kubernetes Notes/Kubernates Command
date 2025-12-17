@@ -1,0 +1,5 @@
+
+to Delete the deployment object
+kubectl delete deployment spring-boot-k8s
+
+
