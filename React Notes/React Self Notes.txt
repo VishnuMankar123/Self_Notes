@@ -6394,16 +6394,10968 @@ Woh real-world production ke jaisa hota hai.
 
 ==========================================================================================================
 Routing setup 47 video
+Below are **Q&A-style detailed notes** from the video **“React Router v6 Tutorial – Getting Started / Installation”** explained in **simple Hindi-style English (Hinglish)**, exactly like a **teacher asking questions and answering step-by-step**.
+
+---
+
+# React Router v6 – Getting Started (Installation & Basic Routing)
+
+## 1. React Router kya hota hai?
+
+**Teacher:** React Router kya hai?
+
+**Student:**
+**React Router** ek **library** hai jo React applications me **multiple pages / navigation** handle karne ke liye use hoti hai.
+
+Normally React ek **Single Page Application (SPA)** hota hai.
+Isme page reload nahi hota, sirf **component change hota hai**.
+
+👉 React Router ka kaam:
+
+* Different **URLs** ko **different components** se connect karna.
+* Example:
+
+  * `/` → Home Page
+  * `/about` → About Page
+  * `/contact` → Contact Page
+
+**Important Term:**
+**React Router = Navigation system for React apps**
+
+---
+
+## 2. React Router ki zarurat kyun padti hai?
+
+**Teacher:** Agar React me components already hain, to Router kyun chahiye?
+
+**Student:**
+Agar Router nahi hoga to:
+
+* Har navigation ke liye **manual logic** likhna padega.
+* URL change nahi hoga.
+* User directly page access nahi kar payega.
+
+**React Router advantages:**
+
+1️⃣ URL based navigation
+2️⃣ Browser history support
+3️⃣ Page reload nahi hota
+4️⃣ SPA fast rehta hai
+
+---
+
+## 3. React Router ka latest version kya hai?
+
+**Teacher:** React Router ka kaunsa version use ho raha hai?
+
+**Student:**
+Is tutorial me **React Router v6** use ho raha hai.
+
+**React Router v6 features:**
+
+* Simple syntax
+* Fast routing
+* Nested routes support
+* Better performance
+
+---
+
+# 4. React Router install kaise karte hain?
+
+**Teacher:** React Router install kaise karte hain?
+
+**Student:**
+React project me install karne ke liye **npm command** run karte hain.
+
+### Installation Command
+
+```bash
+npm install react-router-dom
+```
+
+**Explanation:**
+
+| Package          | Meaning                    |
+| ---------------- | -------------------------- |
+| react-router     | core library               |
+| react-router-dom | web browser ke liye router |
+
+👉 Web applications me **react-router-dom** use hota hai.
+
+---
+
+# 5. Example Project Structure
+
+Assume humare paas simple React app hai.
+
+```
+src
+ ├── App.js
+ ├── Home.js
+ ├── About.js
+ └── index.js
+```
+
+Hum do pages banayenge:
+
+1️⃣ Home page
+2️⃣ About page
+
+---
+
+# 6. Routing setup ka first step kya hai?
+
+**Teacher:** Router use karne ka first step kya hota hai?
+
+**Student:**
+First step hai **BrowserRouter wrap karna**.
+
+React app ko Router ke andar wrap karna padta hai.
+
+### Example
+
+```javascript
+import { BrowserRouter } from "react-router-dom";
+```
+
+Then wrap inside index.js or App.js.
+
+### Example
+
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import { BrowserRouter } from "react-router-dom";
+
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById("root")
+);
+```
+
+**Explanation**
+
+**BrowserRouter**:
+
+* Browser URL ko manage karta hai
+* Navigation ko control karta hai
+
+---
+
+# 7. React Router ke important components
+
+**Teacher:** React Router me important components kaunse hote hain?
+
+**Student:**
+
+| Component     | Use                            |
+| ------------- | ------------------------------ |
+| BrowserRouter | App ko wrap karta hai          |
+| Routes        | Routes ko group karta hai      |
+| Route         | Specific path define karta hai |
+
+---
+
+# 8. Route ka use kaise karte hain?
+
+**Teacher:** Route ka use kaise karte hain?
+
+**Student:**
+Route define karta hai **kaunsa component kaunsi URL par open hoga**.
+
+### Example
+
+```javascript
+import { Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import About from "./About";
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+    </Routes>
+  );
+}
+
+export default App;
+```
+
+---
+
+## Explanation
+
+| Path     | Component       |
+| -------- | --------------- |
+| `/`      | Home component  |
+| `/about` | About component |
+
+---
+
+# 9. Home Component Example
+
+**Teacher:** Home component ka example kya hai?
+
+**Student:**
+
+```javascript
+function Home() {
+  return <h1>Home Page</h1>;
+}
+
+export default Home;
+```
+
+---
+
+# 10. About Component Example
+
+```javascript
+function About() {
+  return <h1>About Page</h1>;
+}
+
+export default About;
+```
+
+---
+
+# 11. Browser me routing kaise check kare?
+
+**Teacher:** Routing kaise test karte hain?
+
+**Student:**
+Browser me URL change karke.
+
+Example:
+
+```
+http://localhost:3000/
+```
+
+Output:
+
+```
+Home Page
+```
+
+Example:
+
+```
+http://localhost:3000/about
+```
+
+Output:
+
+```
+About Page
+```
+
+👉 Page reload nahi hota
+👉 Sirf component change hota hai
+
+---
+
+# 12. React Router v6 syntax difference
+
+**Teacher:** React Router v6 me syntax kya change hua hai?
+
+**Student:**
+
+Old version (v5)
+
+```javascript
+<Route path="/" component={Home} />
+```
+
+New version (v6)
+
+```javascript
+<Route path="/" element={<Home />} />
+```
+
+**Difference:**
+
+| Version | Syntax    |
+| ------- | --------- |
+| v5      | component |
+| v6      | element   |
+
+---
+
+# 13. Real-world Example
+
+Imagine ek **E-commerce website**.
+
+| URL         | Page          |
+| ----------- | ------------- |
+| `/`         | Home          |
+| `/products` | Product list  |
+| `/cart`     | Shopping cart |
+| `/login`    | Login page    |
+
+React Router automatically decide karega **kaunsa component show karna hai**.
+
+---
+
+# 14. Visual Flow of Routing
+
+User Browser → URL change
+
+Example:
+
+```
+User clicks About
+```
+
+Flow:
+
+```
+Browser URL change
+       ↓
+React Router check path
+       ↓
+Matching Route find
+       ↓
+Component render
+```
+
+---
+
+# 15. Key Concepts Summary
+
+**Teacher:** Important concepts kya yaad rakhne chahiye?
+
+**Student:**
+
+1️⃣ **React Router** navigation ke liye use hota hai
+2️⃣ Install using
+
+```
+npm install react-router-dom
+```
+
+3️⃣ App ko wrap karo with **BrowserRouter**
+
+4️⃣ Routes define karo using:
+
+```
+Routes
+Route
+```
+
+5️⃣ v6 me **element={<Component />}** syntax use hota hai
+
+---
+
+# Final Quick Example (Complete Code)
+
+```javascript
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import About from "./About";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+---
+
+✅ After this video you learned:
+
+* React Router kya hota hai
+* React Router installation
+* BrowserRouter use
+* Routes & Route components
+* Basic routing example
+
+---
+
+If you want, I can also make the **next video notes (React Router Navigation / Link / NavLink)** in the same **teacher-student style with diagrams and real examples**, which will make the topic **very easy to remember for interviews and projects.**
+
+==========================================================================================================
+Routing setup 48 video
+
+Below are **detailed Q&A-style notes** for the video:
+**“React Router v6 Tutorial #2 – Links, Navbar, Anchor Tag”** explained in **simple Hindi-style English (Hinglish)** like **Teacher → Student conversation** with examples.
+
+---
+
+# React Router v6 – Links, Navbar, Anchor Tag
+
+## 1️⃣ React Router me page navigation kaise hota hai?
+
+**Teacher:** React Router me ek page se dusre page par kaise jaate hain?
+
+**Student:**
+React Router me navigation ke liye **Link component** use karte hain.
+
+Ye **React Router ka special component** hai jo:
+
+* URL change karta hai
+* Page reload nahi karta
+* Component render karta hai
+
+**Important Term:**
+**Link = React Router navigation component**
+
+---
+
+# 2️⃣ Simple Link kaise banate hain?
+
+**Teacher:** Simple navigation link kaise banate hain?
+
+**Student:**
+Sabse pehle **Link import karna padta hai**.
+
+### Step 1: Import Link
+
+```javascript
+import { Link } from "react-router-dom";
+```
+
+---
+
+### Step 2: Link create karo
+
+Example:
+
+```javascript
+function Home() {
+  return (
+    <div>
+      <h1>Home Page</h1>
+
+      <Link to="/about">Go to About Page</Link>
+
+    </div>
+  );
+}
+
+export default Home;
+```
+
+---
+
+### Explanation
+
+| Code          | Meaning                 |
+| ------------- | ----------------------- |
+| `Link`        | React Router navigation |
+| `to="/about"` | kis page par jana hai   |
+
+---
+
+# 3️⃣ Routing setup zaroori hai
+
+**Teacher:** Agar Link use kiya hai to routing bhi karni padegi?
+
+**Student:**
+Haan, **Route define karna zaroori hai**.
+
+Example:
+
+```javascript
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import About from "./About";
+
+function App() {
+  return (
+    <BrowserRouter>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+---
+
+# 4️⃣ Navigation ka output kya hoga?
+
+**Teacher:** Agar user link par click kare to kya hoga?
+
+**Student:**
+
+User click karega:
+
+```
+Go to About Page
+```
+
+Browser URL change hoga:
+
+```
+localhost:3000/about
+```
+
+React Router render karega:
+
+```
+About Component
+```
+
+👉 Page reload nahi hoga.
+
+---
+
+# 5️⃣ Navbar kya hota hai?
+
+**Teacher:** Navbar kya hota hai?
+
+**Student:**
+**Navbar (Navigation Bar)** ek menu hota hai jisme multiple links hote hain.
+
+Example website menu:
+
+```
+Home | About | Contact
+```
+
+React Router me navbar create karne ke liye **multiple Links use karte hain**.
+
+---
+
+# 6️⃣ Navbar ka example
+
+Example:
+
+```javascript
+import { Link } from "react-router-dom";
+
+function Navbar() {
+  return (
+    <div>
+
+      <Link to="/">Home</Link>
+
+      <Link to="/about">About</Link>
+
+    </div>
+  );
+}
+
+export default Navbar;
+```
+
+---
+
+### Output
+
+```
+Home   About
+```
+
+User click karega:
+
+```
+Home → Home Page
+About → About Page
+```
+
+---
+
+# 7️⃣ Navbar ko App me kaise use karte hain?
+
+**Teacher:** Navbar ko application me kaise use karte hain?
+
+**Student:**
+Navbar ko **App component ke andar use karte hain**.
+
+Example:
+
+```javascript
+function App() {
+  return (
+    <BrowserRouter>
+
+      <Navbar />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+
+    </BrowserRouter>
+  );
+}
+```
+
+---
+
+# 8️⃣ Anchor tag kyun use nahi karte?
+
+**Teacher:** Normal **anchor tag (`<a>`)** kyun use nahi karte?
+
+**Student:**
+
+Example anchor tag:
+
+```html
+<a href="/about">About</a>
+```
+
+Problem:
+
+❌ Page reload ho jata hai
+❌ SPA ka benefit khatam ho jata hai
+
+React application me **Single Page Application (SPA)** hota hai.
+
+Isliye **Link component use karte hain**.
+
+---
+
+# 9️⃣ Link vs Anchor Tag
+
+| Feature                 | Link  | Anchor Tag |
+| ----------------------- | ----- | ---------- |
+| Page Reload             | ❌ No  | ✔ Yes      |
+| SPA Friendly            | ✔ Yes | ❌ No       |
+| React Router Compatible | ✔ Yes | ❌ No       |
+
+---
+
+# 10️⃣ Real Example
+
+Imagine ek website:
+
+```
+Home | About | Contact
+```
+
+Navbar code:
+
+```javascript
+function Navbar() {
+  return (
+    <div>
+
+      <Link to="/">Home</Link>
+
+      <Link to="/about">About</Link>
+
+      <Link to="/contact">Contact</Link>
+
+    </div>
+  );
+}
+```
+
+Routes:
+
+```javascript
+<Routes>
+  <Route path="/" element={<Home />} />
+  <Route path="/about" element={<About />} />
+  <Route path="/contact" element={<Contact />} />
+</Routes>
+```
+
+---
+
+# 11️⃣ Navigation Flow
+
+User click karta hai:
+
+```
+About
+```
+
+Flow:
+
+```
+Click Link
+     ↓
+React Router intercept request
+     ↓
+URL change
+     ↓
+Matching Route find
+     ↓
+Component render
+```
+
+---
+
+# 12️⃣ BrowserRouter ka rule
+
+**Teacher:** Router components ko kaha use karna chahiye?
+
+**Student:**
+React Router ke components **BrowserRouter ke andar hi kaam karte hain**.
+
+Example:
+
+```javascript
+<BrowserRouter>
+
+   <App />
+
+</BrowserRouter>
+```
+
+Agar **BrowserRouter ke bahar use karoge** to error aa sakta hai.
+
+---
+
+# 13️⃣ Interview Question
+
+**Teacher:** Interview me agar poocha jaye:
+
+“React me anchor tag kyun use nahi karte?”
+
+**Student Answer:**
+
+Because React applications are **Single Page Applications (SPA)**.
+
+Using **anchor tag reloads the entire page**, while **React Router Link performs client-side navigation without reloading the page**.
+
+---
+
+# 14️⃣ Key Concepts Summary
+
+**Teacher:** Is video me kya kya seekha?
+
+**Student:**
+
+1️⃣ **Link component** navigation ke liye use hota hai
+2️⃣ **Navbar multiple links se banta hai**
+3️⃣ **BrowserRouter ke andar routing hoti hai**
+4️⃣ **Anchor tag page reload karta hai**
+5️⃣ **Link SPA navigation provide karta hai**
+
+---
+
+# 15️⃣ Complete Example
+
+```javascript
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+
+function Navbar() {
+  return (
+    <div>
+      <Link to="/">Home</Link>
+      <Link to="/about">About</Link>
+    </div>
+  );
+}
+
+function Home() {
+  return <h1>Home Page</h1>;
+}
+
+function About() {
+  return <h1>About Page</h1>;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+
+      <Navbar />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+---
+
+✅ **After this video you understand:**
+
+* React Router **Link**
+* Navigation **without page reload**
+* **Navbar creation**
+* **Link vs Anchor Tag**
+
+---
+
+If you want, I can also create **next video notes (#3 React Router NavLink)** in the same **teacher-student style with diagrams and real examples**, which makes **React Router 100% clear**.
+
+==========================================================================================================
+Routing setup 48 video
+
+Below are **detailed Q&A-style notes** for the video:
+**“React Router v6 Tutorial #3 – 404 Page Not Found and Redirect”** explained in **simple Hindi-style English (Hinglish)** as **Teacher → Student conversation**, step-by-step with examples.
+
+---
+
+# React Router v6 – 404 Page Not Found & Redirect
+
+---
+
+# 1️⃣ 404 Page Not Found kya hota hai?
+
+**Teacher:** 404 Page Not Found kya hota hai?
+
+**Student:**
+**404 Page Not Found** tab show hota hai jab user **aisa URL open karta hai jo application me exist nahi karta**.
+
+Example:
+
+User browser me likhta hai:
+
+```
+http://localhost:3000/contact
+```
+
+Lekin agar **contact page bana hi nahi hai**, to **404 page show hota hai**.
+
+👉 Isko bolte hain **Page Not Found Error**.
+
+**Important Term:**
+**404 Page = Invalid URL par show hone wala error page**
+
+---
+
+# 2️⃣ React Router me 404 page kaise banate hain?
+
+**Teacher:** React Router v6 me 404 page kaise create karte hain?
+
+**Student:**
+React Router me **wildcard route (`*`)** use karke 404 page banate hain.
+
+---
+
+# 3️⃣ Step 1 – 404 Component create karo
+
+Sabse pehle ek **component create karte hain**.
+
+Example:
+
+### File: `PageNotFound.js`
+
+```javascript
+function PageNotFound() {
+  return (
+    <div>
+      <h1>404 Page Not Found</h1>
+    </div>
+  );
+}
+
+export default PageNotFound;
+```
+
+---
+
+# 4️⃣ Step 2 – Route define karo
+
+Ab **App.js** me route add karte hain.
+
+```javascript
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import About from "./About";
+import PageNotFound from "./PageNotFound";
+
+function App() {
+  return (
+    <BrowserRouter>
+
+      <Routes>
+
+        <Route path="/" element={<Home />} />
+
+        <Route path="/about" element={<About />} />
+
+        <Route path="*" element={<PageNotFound />} />
+
+      </Routes>
+
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+---
+
+# 5️⃣ `*` (Wildcard Route) ka kya matlab hai?
+
+**Teacher:** Route me `*` ka kya meaning hai?
+
+**Student:**
+
+`*` ka matlab hai:
+
+👉 **All unmatched routes**
+
+Matlab agar koi route match nahi hua to:
+
+```
+PageNotFound component show hoga
+```
+
+Example:
+
+User type kare:
+
+```
+localhost:3000/abc
+```
+
+Output:
+
+```
+404 Page Not Found
+```
+
+---
+
+# 6️⃣ 404 page ko better kaise bana sakte hain?
+
+**Teacher:** 404 page ko user-friendly kaise banate hain?
+
+**Student:**
+Hum **extra message aur navigation link** add kar sakte hain.
+
+Example:
+
+```javascript
+import { Link } from "react-router-dom";
+
+function PageNotFound() {
+  return (
+    <div>
+
+      <h1>404 Page Not Found</h1>
+
+      <p>This page does not exist.</p>
+
+      <Link to="/">Go To Home Page</Link>
+
+    </div>
+  );
+}
+
+export default PageNotFound;
+```
+
+---
+
+### Output
+
+```
+404 Page Not Found
+This page does not exist
+Go To Home Page
+```
+
+User click karega:
+
+```
+Go To Home Page
+```
+
+To user **home page par redirect ho jayega**.
+
+---
+
+# 7️⃣ Redirect kya hota hai?
+
+**Teacher:** Redirect kya hota hai?
+
+**Student:**
+**Redirect ka matlab hota hai user ko automatically kisi dusre page par bhejna.**
+
+Example:
+
+User open kare:
+
+```
+/contact
+```
+
+But contact page exist nahi karta.
+
+To automatically:
+
+```
+redirect → home page
+```
+
+---
+
+# 8️⃣ React Router v6 me redirect kaise karte hain?
+
+**Teacher:** React Router v6 me redirect kaise implement karte hain?
+
+**Student:**
+React Router v6 me **Navigate component** use hota hai.
+
+---
+
+# 9️⃣ Redirect Example
+
+Example:
+
+```javascript
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+function App() {
+  return (
+    <BrowserRouter>
+
+      <Routes>
+
+        <Route path="/" element={<Home />} />
+
+        <Route path="/about" element={<About />} />
+
+        <Route path="*" element={<Navigate to="/" />} />
+
+      </Routes>
+
+    </BrowserRouter>
+  );
+}
+```
+
+---
+
+### Explanation
+
+| Code       | Meaning            |
+| ---------- | ------------------ |
+| `Navigate` | Redirect component |
+| `to="/"`   | redirect to home   |
+
+---
+
+### Flow
+
+User open kare:
+
+```
+localhost:3000/xyz
+```
+
+Router karega:
+
+```
+redirect → /
+```
+
+Output:
+
+```
+Home Page
+```
+
+---
+
+# 🔟 404 Page vs Redirect
+
+**Teacher:** 404 page aur redirect me kya difference hai?
+
+**Student:**
+
+| Feature                                 | 404 Page | Redirect |
+| --------------------------------------- | -------- | -------- |
+| User ko error show hota hai             | ✔        | ❌        |
+| Automatically dusre page par bhejta hai | ❌        | ✔        |
+| URL change hota hai                     | ❌        | ✔        |
+
+---
+
+# 11️⃣ Real Website Example
+
+Imagine ek website:
+
+```
+Home
+About
+Products
+Contact
+```
+
+User type kare:
+
+```
+mysite.com/abc
+```
+
+Website show karegi:
+
+```
+404 Page Not Found
+```
+
+Ya redirect karegi:
+
+```
+Home Page
+```
+
+---
+
+# 12️⃣ Navigation Flow
+
+User wrong URL enter karta hai:
+
+```
+/xyz
+```
+
+React Router flow:
+
+```
+URL check
+     ↓
+Route match nahi hua
+     ↓
+Wildcard route (*)
+     ↓
+404 Page show
+```
+
+---
+
+# 13️⃣ Important Rules
+
+**Teacher:** Important rules kya yaad rakhne chahiye?
+
+**Student:**
+
+1️⃣ **Wildcard route (`*`) always last me likhte hain**
+
+Wrong order example ❌
+
+```javascript
+<Route path="*" element={<PageNotFound />} />
+<Route path="/about" element={<About />} />
+```
+
+Correct order ✔
+
+```javascript
+<Route path="/about" element={<About />} />
+<Route path="*" element={<PageNotFound />} />
+```
+
+---
+
+# 14️⃣ Complete Example
+
+```javascript
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+
+function Home() {
+  return <h1>Home Page</h1>;
+}
+
+function About() {
+  return <h1>About Page</h1>;
+}
+
+function PageNotFound() {
+  return (
+    <div>
+
+      <h1>404 Page Not Found</h1>
+
+      <Link to="/">Go To Home</Link>
+
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+
+      <Routes>
+
+        <Route path="/" element={<Home />} />
+
+        <Route path="/about" element={<About />} />
+
+        <Route path="*" element={<PageNotFound />} />
+
+      </Routes>
+
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+---
+
+# 15️⃣ Key Concepts Summary
+
+**Teacher:** Is video se kya kya learn hua?
+
+**Student:**
+
+1️⃣ **404 Page Not Found** concept
+2️⃣ **Wildcard route (`*`)** use
+3️⃣ **Custom 404 component create karna**
+4️⃣ **Redirect using Navigate**
+5️⃣ **Invalid URL handling**
+
+---
+
+✅ After this video you understand:
+
+* React Router **404 error page**
+* **Wildcard routing**
+* **Redirect concept**
+* **Navigate component**
+
+---
+
+If you want, I can also create **next video notes (#4 React Router Nested Routing)** in the same **teacher-student style with diagrams and real project examples**, which will make **React Router fully clear in 30 minutes.**
+
+==========================================================================================================
+Routing setup 49 video
+
+Below are **detailed Q&A-style notes** for the video:
+**“React Router v6 Tutorial #4 – Dynamic Routing with Params”** explained in **simple Hindi-style English (Hinglish)** as **Teacher → Student conversation**, step-by-step with examples.
+
+---
+
+# React Router v6 – Dynamic Routing with Params
+
+---
+
+# 1️⃣ Dynamic Routing kya hota hai?
+
+**Teacher:** Dynamic Routing kya hota hai?
+
+**Student:**
+**Dynamic Routing** ka matlab hai **URL me dynamic value pass karna** aur us value ke basis par **different data show karna**.
+
+Example:
+
+```text
+/users/anil
+/users/peter
+/users/russia
+```
+
+Yaha **anil, peter, russia** dynamic values hain.
+
+Isliye isko **Dynamic Route** bolte hain.
+
+**Important Term:**
+**Dynamic Routing = URL se data pass karna**
+
+---
+
+# 2️⃣ Real-world example kya ho sakta hai?
+
+**Teacher:** Real website me dynamic routing ka use kaha hota hai?
+
+**Student:**
+Bahut jagah use hota hai.
+
+Example **E-commerce website**:
+
+```text
+/product/101
+/product/102
+/product/103
+```
+
+Yaha:
+
+* 101 → Product 1
+* 102 → Product 2
+* 103 → Product 3
+
+Ek hi page use hota hai **different product details show karne ke liye**.
+
+---
+
+# 3️⃣ Dynamic Route ka syntax kya hota hai?
+
+**Teacher:** React Router v6 me dynamic route ka syntax kya hota hai?
+
+**Student:**
+Dynamic route banane ke liye **colon (`:`)** use karte hain.
+
+Example:
+
+```javascript
+<Route path="/user/:name" element={<User />} />
+```
+
+Explanation:
+
+| Part     | Meaning           |
+| -------- | ----------------- |
+| `/user/` | base URL          |
+| `:name`  | dynamic parameter |
+
+---
+
+# 4️⃣ Dynamic Route Example
+
+**Teacher:** Ek simple example dikhao.
+
+**Student:**
+
+### App.js
+
+```javascript
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import User from "./User";
+
+function App() {
+  return (
+    <BrowserRouter>
+
+      <Routes>
+
+        <Route path="/" element={<Home />} />
+
+        <Route path="/user/:name" element={<User />} />
+
+      </Routes>
+
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+---
+
+# 5️⃣ Link ke through dynamic route kaise use karte hain?
+
+**Teacher:** User ko dynamic page par kaise bhejte hain?
+
+**Student:**
+Hum **Link component** use karte hain.
+
+Example:
+
+### Home.js
+
+```javascript
+import { Link } from "react-router-dom";
+
+function Home() {
+  return (
+    <div>
+
+      <h1>User List</h1>
+
+      <Link to="/user/anil">Anil</Link>
+
+      <br />
+
+      <Link to="/user/peter">Peter</Link>
+
+      <br />
+
+      <Link to="/user/russia">Russia</Link>
+
+    </div>
+  );
+}
+
+export default Home;
+```
+
+---
+
+### Output
+
+```text
+User List
+
+Anil
+Peter
+Russia
+```
+
+User click kare:
+
+```text
+Anil
+```
+
+URL banega:
+
+```text
+localhost:3000/user/anil
+```
+
+---
+
+# 6️⃣ URL se parameter kaise read karte hain?
+
+**Teacher:** URL me jo parameter hai usko kaise read karte hain?
+
+**Student:**
+React Router me **useParams() hook** use karte hain.
+
+---
+
+# 7️⃣ useParams() ka example
+
+### User.js
+
+```javascript
+import { useParams } from "react-router-dom";
+
+function User() {
+
+  const params = useParams();
+
+  return (
+    <div>
+
+      <h1>User Name: {params.name}</h1>
+
+    </div>
+  );
+}
+
+export default User;
+```
+
+---
+
+### Output
+
+User click kare:
+
+```text
+Peter
+```
+
+Browser URL:
+
+```text
+/user/peter
+```
+
+Output:
+
+```text
+User Name: Peter
+```
+
+---
+
+# 8️⃣ Parameter ka value kaha se aata hai?
+
+**Teacher:** Parameter ki value kaha se aati hai?
+
+**Student:**
+Value **URL se aati hai**.
+
+Example:
+
+```text
+/user/anil
+```
+
+Router parse karta hai:
+
+```text
+name = anil
+```
+
+Aur `useParams()` se mil jata hai.
+
+---
+
+# 9️⃣ Multiple parameters bhi use kar sakte hain?
+
+**Teacher:** Kya ek se zyada parameters use kar sakte hain?
+
+**Student:**
+Haan.
+
+Example:
+
+```javascript
+<Route path="/user/:name/:age" element={<User />} />
+```
+
+URL:
+
+```text
+/user/anil/25
+```
+
+Read using:
+
+```javascript
+const params = useParams();
+```
+
+Output:
+
+```text
+Name: anil
+Age: 25
+```
+
+---
+
+# 🔟 Example with multiple params
+
+```javascript
+import { useParams } from "react-router-dom";
+
+function User() {
+
+  const params = useParams();
+
+  return (
+    <div>
+
+      <h1>Name: {params.name}</h1>
+
+      <h2>Age: {params.age}</h2>
+
+    </div>
+  );
+}
+
+export default User;
+```
+
+---
+
+# 11️⃣ Dynamic Routing Flow
+
+User click karta hai:
+
+```text
+Anil
+```
+
+Flow:
+
+```text
+Click Link
+      ↓
+URL change → /user/anil
+      ↓
+Route match → /user/:name
+      ↓
+useParams() read value
+      ↓
+Component render
+```
+
+---
+
+# 12️⃣ Dynamic Routing use cases
+
+**Teacher:** Dynamic routing kaha use hoti hai?
+
+**Student:**
+
+Common use cases:
+
+1️⃣ **User Profile Pages**
+
+```text
+/user/101
+```
+
+2️⃣ **Product Detail Page**
+
+```text
+/product/200
+```
+
+3️⃣ **Blog Post**
+
+```text
+/blog/react-router
+```
+
+4️⃣ **Country Information**
+
+```text
+/country/india
+```
+
+---
+
+# 13️⃣ Example: Country Detail
+
+Country list:
+
+```text
+India
+Brazil
+USA
+Japan
+```
+
+User click kare:
+
+```text
+India
+```
+
+URL:
+
+```text
+/country/india
+```
+
+Country page show karega:
+
+```text
+Country: India
+Capital: New Delhi
+Population: ...
+```
+
+---
+
+# 14️⃣ Important Rules
+
+**Teacher:** Dynamic routing use karte waqt kya yaad rakhna chahiye?
+
+**Student:**
+
+1️⃣ Parameter ke liye **colon (`:`)** use hota hai
+
+Example:
+
+```javascript
+/user/:name
+```
+
+2️⃣ Parameter read karne ke liye **useParams() hook**
+
+3️⃣ URL se **dynamic data aata hai**
+
+---
+
+# 15️⃣ Complete Example
+
+### App.js
+
+```javascript
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import User from "./User";
+
+function App() {
+  return (
+    <BrowserRouter>
+
+      <Routes>
+
+        <Route path="/" element={<Home />} />
+
+        <Route path="/user/:name" element={<User />} />
+
+      </Routes>
+
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+---
+
+### Home.js
+
+```javascript
+import { Link } from "react-router-dom";
+
+function Home() {
+  return (
+    <div>
+
+      <Link to="/user/anil">Anil</Link>
+
+      <Link to="/user/peter">Peter</Link>
+
+      <Link to="/user/russia">Russia</Link>
+
+    </div>
+  );
+}
+
+export default Home;
+```
+
+---
+
+### User.js
+
+```javascript
+import { useParams } from "react-router-dom";
+
+function User() {
+
+  const params = useParams();
+
+  return <h1>User Name: {params.name}</h1>;
+}
+
+export default User;
+```
+
+---
+
+# 16️⃣ Key Concepts Summary
+
+**Teacher:** Is video me kya kya seekha?
+
+**Student:**
+
+1️⃣ **Dynamic Routing concept**
+2️⃣ **Route parameters (`:param`)**
+3️⃣ **useParams() hook**
+4️⃣ **Dynamic URLs**
+5️⃣ **Real-world examples**
+
+---
+
+✅ After this video you understand:
+
+* **Dynamic Routing**
+* **Route Params**
+* **useParams() Hook**
+* **Dynamic URL handling**
+
+---
+
+If you want, I can also create **next video notes (#5 Nested Routing)** in the same **teacher-student format with diagrams**, which will make **React Router 100% clear for interviews and projects.**
+
+==========================================================================================================
+
+Below are **detailed Q&A-style notes** for the video:
+**“React Router v6 Tutorial #5 – Link and NavLink Style”** explained in **simple Hindi-style English (Hinglish)** as **Teacher → Student conversation**, step-by-step with examples.
+
+---
+
+# React Router v6 – Link and NavLink Style
+
+---
+
+# 1️⃣ Styling ka importance kya hai?
+
+**Teacher:** Website me styling aur design kyun important hai?
+
+**Student:**
+Website me **UI (User Interface)** important hota hai. Agar navigation links achhe design ke ho to user ko **website use karna easy lagta hai**.
+
+Example navigation bar:
+
+```
+Home   About   Contact
+```
+
+Agar styling na ho to links **plain text** lagte hain.
+
+Isliye React Router ke **Link aur NavLink ko style karna important hota hai**.
+
+---
+
+# 2️⃣ React Router me navigation kaise banate hain?
+
+**Teacher:** React Router me navigation kaise banate hain?
+
+**Student:**
+Navigation ke liye **Link component** use karte hain.
+
+Example:
+
+```javascript
+import { Link } from "react-router-dom";
+
+function Navbar() {
+  return (
+    <div>
+
+      <Link to="/">Home</Link>
+
+      <Link to="/about">About</Link>
+
+      <Link to="/contact">Contact</Link>
+
+    </div>
+  );
+}
+```
+
+Output:
+
+```
+Home   About   Contact
+```
+
+---
+
+# 3️⃣ Link ko style kaise karte hain?
+
+**Teacher:** Link component ko CSS style kaise apply karte hain?
+
+**Student:**
+Hum **CSS class apply karte hain**.
+
+Example:
+
+```javascript
+<Link className="nav-link" to="/">Home</Link>
+```
+
+---
+
+### CSS Example
+
+```css
+.nav-link{
+  color: green;
+  text-decoration: none;
+  padding: 10px;
+}
+```
+
+Output:
+
+```
+Home   About   Contact
+```
+
+Green color links with spacing.
+
+---
+
+# 4️⃣ Navigation bar ka design kaise banate hain?
+
+**Teacher:** Navigation bar ko proper layout kaise dete hain?
+
+**Student:**
+Hum **CSS display property** use karte hain.
+
+Example:
+
+```css
+.navbar{
+  display: flex;
+  background-color: lightgray;
+  padding: 10px;
+}
+```
+
+React component:
+
+```javascript
+<div className="navbar">
+
+   <Link className="nav-link" to="/">Home</Link>
+
+   <Link className="nav-link" to="/about">About</Link>
+
+   <Link className="nav-link" to="/contact">Contact</Link>
+
+</div>
+```
+
+Output:
+
+```
+Home | About | Contact
+```
+
+Proper navigation bar.
+
+---
+
+# 5️⃣ Text decoration remove kaise karte hain?
+
+**Teacher:** Links me jo underline hoti hai usko kaise remove karte hain?
+
+**Student:**
+CSS me **text-decoration: none** use karte hain.
+
+Example:
+
+```css
+.nav-link{
+  text-decoration: none;
+}
+```
+
+Result:
+
+❌ Home
+✔ Home (without underline)
+
+---
+
+# 6️⃣ Hover effect kaise add karte hain?
+
+**Teacher:** Link par hover effect kaise add karte hain?
+
+**Student:**
+CSS hover use karte hain.
+
+Example:
+
+```css
+.nav-link:hover{
+  color: darkgreen;
+}
+```
+
+Result:
+
+```
+Hover → color change
+```
+
+User experience better ho jata hai.
+
+---
+
+# 7️⃣ NavLink kya hota hai?
+
+**Teacher:** NavLink kya hota hai?
+
+**Student:**
+**NavLink** React Router ka special version hai **Link ka**.
+
+Iska main feature:
+
+👉 **Active link detect karta hai**
+
+Example:
+
+Agar user `/about` page par hai to **About link highlight ho jayega**.
+
+---
+
+# 8️⃣ NavLink ka syntax kya hai?
+
+Example:
+
+```javascript
+import { NavLink } from "react-router-dom";
+
+function Navbar() {
+  return (
+    <div>
+
+      <NavLink to="/">Home</NavLink>
+
+      <NavLink to="/about">About</NavLink>
+
+      <NavLink to="/contact">Contact</NavLink>
+
+    </div>
+  );
+}
+```
+
+---
+
+# 9️⃣ Active link styling kaise karte hain?
+
+**Teacher:** Active page ka link highlight kaise karte hain?
+
+**Student:**
+NavLink me **active class** automatically apply hoti hai.
+
+Example CSS:
+
+```css
+.active{
+  color: red;
+  font-weight: bold;
+}
+```
+
+Result:
+
+User `/about` page par hai:
+
+```
+Home   About   Contact
+       ↑
+     highlighted
+```
+
+---
+
+# 🔟 NavLink me dynamic style kaise dete hain?
+
+React Router v6 me style function use karte hain.
+
+Example:
+
+```javascript
+<NavLink
+  to="/about"
+  style={({ isActive }) => ({
+    color: isActive ? "red" : "black"
+  })}
+>
+  About
+</NavLink>
+```
+
+Explanation:
+
+| Condition   | Color |
+| ----------- | ----- |
+| Active page | Red   |
+| Other links | Black |
+
+---
+
+# 11️⃣ Real Navbar Example
+
+```javascript
+import { NavLink } from "react-router-dom";
+
+function Navbar(){
+  return(
+
+    <div className="navbar">
+
+      <NavLink to="/">Home</NavLink>
+
+      <NavLink to="/about">About</NavLink>
+
+      <NavLink to="/contact">Contact</NavLink>
+
+    </div>
+
+  )
+}
+```
+
+---
+
+### CSS
+
+```css
+.navbar{
+  background: lightgray;
+  padding: 10px;
+}
+
+.navbar a{
+  margin: 10px;
+  text-decoration: none;
+  color: black;
+}
+
+.navbar a.active{
+  color: green;
+  font-weight: bold;
+}
+```
+
+Output:
+
+```
+Home   About   Contact
+```
+
+Active page:
+
+```
+Home   ABOUT   Contact
+```
+
+---
+
+# 12️⃣ Link vs NavLink
+
+**Teacher:** Link aur NavLink me kya difference hai?
+
+**Student:**
+
+| Feature        | Link  | NavLink |
+| -------------- | ----- | ------- |
+| Navigation     | ✔ Yes | ✔ Yes   |
+| Active style   | ❌ No  | ✔ Yes   |
+| Menu highlight | ❌ No  | ✔ Yes   |
+
+---
+
+# 13️⃣ Navigation Flow
+
+User click karta hai:
+
+```
+About
+```
+
+Flow:
+
+```
+Click NavLink
+      ↓
+URL change → /about
+      ↓
+Route match
+      ↓
+About component render
+      ↓
+NavLink active style apply
+```
+
+---
+
+# 14️⃣ Real Website Example
+
+Imagine ek website:
+
+```
+Home | Products | Blog | Contact
+```
+
+User click kare:
+
+```
+Products
+```
+
+Navbar:
+
+```
+Home | PRODUCTS | Blog | Contact
+```
+
+Active page highlight ho jata hai.
+
+---
+
+# 15️⃣ Key Concepts Summary
+
+**Teacher:** Is video me kya kya seekha?
+
+**Student:**
+
+1️⃣ **Link styling using CSS**
+2️⃣ **Navigation bar design**
+3️⃣ **Text decoration remove karna**
+4️⃣ **NavLink concept**
+5️⃣ **Active link styling**
+
+---
+
+✅ After this video you understand:
+
+* **Link styling**
+* **NavLink**
+* **Active navigation**
+* **Navbar design**
+
+---
+
+If you want, I can also make the **next video notes (#6 Nested Routing)** in the same **teacher-student style with diagrams and real project examples**, which makes **React Router fully clear very fast.**
+
+==========================================================================================================
+Below are **detailed Q&A-style notes** for the video:
+**“React Router v6 Tutorial #6 – Active Link”** explained in **simple Hindi-style English (Hinglish)** in **Teacher → Student conversation style**, step-by-step with examples.
+
+---
+
+# React Router v6 – Active Link
+
+---
+
+# 1️⃣ Active Link kya hota hai?
+
+**Teacher:** Active Link kya hota hai?
+
+**Student:**
+**Active Link** ka matlab hai **jo navigation link currently open page ko represent karta hai usko highlight karna**.
+
+Example navigation menu:
+
+```text
+Home | About | Contact
+```
+
+Agar user **About page par hai**, to:
+
+```text
+Home | ABOUT | Contact
+```
+
+👉 About link **highlight** ho jata hai.
+
+**Important Term:**
+**Active Link = Current page ka highlighted navigation link**
+
+---
+
+# 2️⃣ Active Link kyun use karte hain?
+
+**Teacher:** Active link ka use kyun karte hain?
+
+**Student:**
+Active link se **user ko pata chalta hai ki wo website ke kis page par hai**.
+
+Example:
+
+Website menu:
+
+```text
+Home | About | Contact
+```
+
+User click karta hai:
+
+```text
+About
+```
+
+Navbar show karega:
+
+```text
+Home | ABOUT | Contact
+```
+
+Isse user ko clear ho jata hai ki **About page open hai**.
+
+---
+
+# 3️⃣ React Router me Active Link kaise banate hain?
+
+**Teacher:** React Router me active link kaise implement karte hain?
+
+**Student:**
+React Router me **NavLink component** use karte hain.
+
+`NavLink` automatically **active class apply karta hai**.
+
+---
+
+# 4️⃣ NavLink ka basic syntax
+
+Example:
+
+```javascript
+import { NavLink } from "react-router-dom";
+
+function Navbar(){
+  return(
+    <div>
+
+      <NavLink to="/">Home</NavLink>
+
+      <NavLink to="/about">About</NavLink>
+
+      <NavLink to="/contact">Contact</NavLink>
+
+    </div>
+  );
+}
+```
+
+---
+
+# 5️⃣ Active class kaise add hoti hai?
+
+**Teacher:** Active class automatically kaise add hoti hai?
+
+**Student:**
+Jab user kisi link par click karta hai, React Router automatically **`active` class add kar deta hai**.
+
+Example:
+
+User click kare:
+
+```text
+/about
+```
+
+HTML inspect karoge to milega:
+
+```html
+<a class="active">About</a>
+```
+
+---
+
+# 6️⃣ Active link ko CSS se style kaise karte hain?
+
+**Teacher:** Active link ko style kaise karte hain?
+
+**Student:**
+CSS me **`.active` class style karte hain**.
+
+Example:
+
+```css
+.active{
+  color: red;
+  font-weight: bold;
+}
+```
+
+Result:
+
+```text
+Home | ABOUT | Contact
+```
+
+About link highlight ho jayega.
+
+---
+
+# 7️⃣ Navbar styling example
+
+### Navbar Component
+
+```javascript
+import { NavLink } from "react-router-dom";
+
+function Navbar(){
+  return(
+    <div className="navbar">
+
+      <NavLink to="/">Home</NavLink>
+
+      <NavLink to="/about">About</NavLink>
+
+      <NavLink to="/contact">Contact</NavLink>
+
+    </div>
+  )
+}
+```
+
+---
+
+### CSS
+
+```css
+.navbar a{
+  margin: 10px;
+  text-decoration: none;
+  color: black;
+}
+
+.navbar a.active{
+  color: green;
+  font-weight: bold;
+}
+```
+
+---
+
+# 8️⃣ Output
+
+Normal state:
+
+```text
+Home | About | Contact
+```
+
+User About page open kare:
+
+```text
+Home | ABOUT | Contact
+```
+
+---
+
+# 9️⃣ Inline style method (Second Method)
+
+**Teacher:** Active link style karne ka doosra method kya hai?
+
+**Student:**
+React Router v6 me **style function** use kar sakte hain.
+
+Example:
+
+```javascript
+<NavLink
+  to="/about"
+  style={({ isActive }) => ({
+    color: isActive ? "green" : "black"
+  })}
+>
+  About
+</NavLink>
+```
+
+Explanation:
+
+| Condition   | Color |
+| ----------- | ----- |
+| Active link | Green |
+| Normal link | Black |
+
+---
+
+# 🔟 Complete Example
+
+### App.js
+
+```javascript
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./Navbar";
+import Home from "./Home";
+import About from "./About";
+import Contact from "./Contact";
+
+function App(){
+  return(
+
+    <BrowserRouter>
+
+      <Navbar />
+
+      <Routes>
+
+        <Route path="/" element={<Home />} />
+
+        <Route path="/about" element={<About />} />
+
+        <Route path="/contact" element={<Contact />} />
+
+      </Routes>
+
+    </BrowserRouter>
+
+  )
+}
+
+export default App;
+```
+
+---
+
+# 11️⃣ Navigation Flow
+
+User click karta hai:
+
+```text
+About
+```
+
+Flow:
+
+```text
+Click NavLink
+     ↓
+URL change → /about
+     ↓
+Route match
+     ↓
+About component render
+     ↓
+NavLink active class apply
+```
+
+---
+
+# 12️⃣ Real Website Example
+
+Imagine ek website:
+
+```text
+Dashboard | Products | Orders | Profile
+```
+
+User open kare:
+
+```text
+/products
+```
+
+Navbar show karega:
+
+```text
+Dashboard | PRODUCTS | Orders | Profile
+```
+
+Active page highlight ho gaya.
+
+---
+
+# 13️⃣ Link vs NavLink
+
+**Teacher:** Link aur NavLink me kya difference hai?
+
+**Student:**
+
+| Feature          | Link        | NavLink |
+| ---------------- | ----------- | ------- |
+| Navigation       | ✔ Yes       | ✔ Yes   |
+| Active highlight | ❌ No        | ✔ Yes   |
+| Navbar menus     | ❌ Not ideal | ✔ Best  |
+
+---
+
+# 14️⃣ Important Tips
+
+**Teacher:** Active link implement karte waqt kya yaad rakhna chahiye?
+
+**Student:**
+
+1️⃣ Navigation menu me **NavLink use karo**
+
+2️⃣ CSS me **`.active` class style karo**
+
+3️⃣ Ya **style function use karo**
+
+---
+
+# 15️⃣ Key Concepts Summary
+
+**Teacher:** Is video me kya kya seekha?
+
+**Student:**
+
+1️⃣ **Active Link concept**
+2️⃣ **NavLink component**
+3️⃣ **Automatic active class**
+4️⃣ **CSS styling for active links**
+5️⃣ **Inline style method**
+
+---
+
+✅ After this video you understand:
+
+* **Active navigation link**
+* **NavLink vs Link**
+* **Highlight current page**
+* **Active link styling**
+
+---
+
+If you want, I can also create the **next video notes (#7 useNavigate Hook)** in the same **teacher-student style with diagrams and real project examples**, which makes **React Router fully clear for interviews.**
+
+==========================================================================================================
+React Router v6 tutorial in Hindi #7 use SearchParams and setSearchParmas
+
+Below are **detailed Q&A-style notes** for the video:
+**“React Router v6 Tutorial #7 – useSearchParams and setSearchParams”** explained in **simple Hindi-style English (Hinglish)** as **Teacher → Student conversation**, step-by-step with examples.
+
+---
+
+# React Router v6 – useSearchParams & setSearchParams
+
+---
+
+# 1️⃣ useSearchParams kya hota hai?
+
+**Teacher:** useSearchParams kya hota hai?
+
+**Student:**
+**useSearchParams** React Router ka ek **hook** hai jo **URL query parameters ko read aur update karne ke liye use hota hai**.
+
+Example URL:
+
+```text
+/products?price=100
+```
+
+Yaha:
+
+```text
+price=100
+```
+
+ek **query parameter** hai.
+
+**Important Term:**
+**Query Parameter = URL ke end me aane wala data**
+
+---
+
+# 2️⃣ Query parameters kya hote hain?
+
+**Teacher:** Query parameters kya hote hain?
+
+**Student:**
+Query parameters URL ke end me **question mark (`?`) ke baad likhe jaate hain**.
+
+Example:
+
+```text
+/products?price=100&city=delhi
+```
+
+Explanation:
+
+| Parameter | Value |
+| --------- | ----- |
+| price     | 100   |
+| city      | delhi |
+
+Ye data **filtering, searching, sorting** ke liye use hota hai.
+
+---
+
+# 3️⃣ Real-world example
+
+**Teacher:** Real website me query params kaha use hote hain?
+
+**Student:**
+
+Example **E-commerce website**:
+
+User filter apply karta hai:
+
+```text
+Flipkart / Amazon
+```
+
+URL ban sakta hai:
+
+```text
+/products?price=500&brand=nike
+```
+
+Yaha:
+
+* price filter
+* brand filter
+
+URL me store ho jata hai.
+
+---
+
+# 4️⃣ useSearchParams ka syntax kya hai?
+
+**Teacher:** useSearchParams ka syntax kya hai?
+
+**Student:**
+
+```javascript
+const [searchParams, setSearchParams] = useSearchParams();
+```
+
+Explanation:
+
+| Variable        | Purpose                               |
+| --------------- | ------------------------------------- |
+| searchParams    | query parameters read karne ke liye   |
+| setSearchParams | query parameters update karne ke liye |
+
+---
+
+# 5️⃣ useSearchParams import kaise karte hain?
+
+**Teacher:** useSearchParams import kaise karte hain?
+
+**Student:**
+
+```javascript
+import { useSearchParams } from "react-router-dom";
+```
+
+---
+
+# 6️⃣ Query parameter read kaise karte hain?
+
+**Teacher:** URL se query parameter ka value kaise read karte hain?
+
+**Student:**
+`searchParams.get()` method use karte hain.
+
+Example:
+
+```javascript
+const price = searchParams.get("price");
+```
+
+Agar URL ho:
+
+```text
+/products?price=100
+```
+
+Output:
+
+```text
+price = 100
+```
+
+---
+
+# 7️⃣ Complete example
+
+### Component
+
+```javascript
+import { useSearchParams } from "react-router-dom";
+
+function Products(){
+
+  const [searchParams] = useSearchParams();
+
+  const price = searchParams.get("price");
+
+  return(
+    <div>
+
+      <h1>Price Filter: {price}</h1>
+
+    </div>
+  )
+}
+```
+
+---
+
+### URL
+
+```text
+localhost:3000/products?price=100
+```
+
+Output:
+
+```text
+Price Filter: 100
+```
+
+---
+
+# 8️⃣ Multiple query parameters kaise read karte hain?
+
+**Teacher:** Agar multiple parameters ho to kaise read karte hain?
+
+**Student:**
+
+Example URL:
+
+```text
+/products?price=100&city=mumbai
+```
+
+Code:
+
+```javascript
+const price = searchParams.get("price");
+const city = searchParams.get("city");
+```
+
+Output:
+
+```text
+Price: 100
+City: mumbai
+```
+
+---
+
+# 9️⃣ setSearchParams kya hota hai?
+
+**Teacher:** setSearchParams kya hota hai?
+
+**Student:**
+**setSearchParams** function URL ke query parameters **update karne ke liye use hota hai**.
+
+Example:
+
+```javascript
+setSearchParams({ price: 100 });
+```
+
+URL automatically change ho jayega:
+
+```text
+/products?price=100
+```
+
+---
+
+# 🔟 Button click par query params change karna
+
+Example:
+
+```javascript
+import { useSearchParams } from "react-router-dom";
+
+function Products(){
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const setPrice = () => {
+    setSearchParams({ price: 500 });
+  };
+
+  return(
+    <div>
+
+      <button onClick={setPrice}>
+        Set Price Filter
+      </button>
+
+    </div>
+  );
+}
+```
+
+---
+
+### Output
+
+Button click karte hi URL change:
+
+```text
+/products?price=500
+```
+
+---
+
+# 11️⃣ Input field se search param set karna
+
+Example:
+
+```javascript
+import { useSearchParams } from "react-router-dom";
+
+function Search(){
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleSearch = (event) => {
+    setSearchParams({ text: event.target.value });
+  };
+
+  return(
+
+    <div>
+
+      <input
+        type="text"
+        placeholder="Search..."
+        onChange={handleSearch}
+      />
+
+    </div>
+
+  );
+}
+```
+
+---
+
+### User type kare
+
+```text
+Laptop
+```
+
+URL banega:
+
+```text
+/search?text=Laptop
+```
+
+---
+
+# 12️⃣ Navigation flow
+
+User type karta hai:
+
+```text
+phone
+```
+
+Flow:
+
+```text
+Input field
+     ↓
+setSearchParams()
+     ↓
+URL update
+     ↓
+Component read using useSearchParams()
+```
+
+---
+
+# 13️⃣ useSearchParams use cases
+
+**Teacher:** useSearchParams kaha use hota hai?
+
+**Student:**
+
+Common use cases:
+
+1️⃣ **Search filters**
+
+```text
+/products?category=mobile
+```
+
+2️⃣ **Sorting**
+
+```text
+/products?sort=price
+```
+
+3️⃣ **Pagination**
+
+```text
+/products?page=2
+```
+
+4️⃣ **Location filters**
+
+```text
+/jobs?city=pune
+```
+
+---
+
+# 14️⃣ Dynamic filtering example
+
+Example:
+
+```text
+/products?price=500&brand=nike
+```
+
+Output page show karega:
+
+```text
+Products under 500
+Brand: Nike
+```
+
+---
+
+# 15️⃣ Key Concepts Summary
+
+**Teacher:** Is video me kya seekha?
+
+**Student:**
+
+1️⃣ **useSearchParams hook**
+2️⃣ **Query parameters concept**
+3️⃣ **searchParams.get() method**
+4️⃣ **setSearchParams() function**
+5️⃣ **URL filtering system**
+
+---
+
+✅ After this video you understand:
+
+* **Query parameters in URL**
+* **useSearchParams hook**
+* **setSearchParams function**
+* **Filtering using URL**
+
+---
+
+If you want, I can also create **next video notes (#8 useNavigate Hook)** in the same **teacher-student style with diagrams and real examples**, which will make **React Router fully clear for interviews and projects.**
+
+==========================================================================================================
+Aapne **query params set kar liye (`age` aur `city`) using `setSearchParams`**.
+Ab aap pooch rahe ho **“mujhe aage pass karna hai”** — generally iska matlab hota hai:
+
+1️⃣ **Next page par bhejna (navigation ke saath)**
+2️⃣ **Dusre component me read karna**
+
+Main dono simple tarike batata hoon.
+
+---
+
+# 1️⃣ Dusre Page me Query Params Read Karna (Most Common)
+
+Agar aapka URL ho:
+
+```
+/users?age=25&city=pune
+```
+
+To next page par **same `useSearchParams` se read kar sakte ho**.
+
+### Example: `Users.js`
+
+```javascript
+import { useSearchParams } from "react-router-dom";
+
+function Users() {
+
+  const [searchParams] = useSearchParams();
+
+  const age = searchParams.get("age");
+  const city = searchParams.get("city");
+
+  return (
+    <div>
+      <h2>User Filter</h2>
+
+      <p>Age: {age}</p>
+      <p>City: {city}</p>
+
+    </div>
+  );
+}
+
+export default Users;
+```
+
+Output:
+
+```
+Age: 25
+City: pune
+```
+
+---
+
+# 2️⃣ Next Page par Navigate karke Pass Karna
+
+Agar aap **button click par next page par data bhejna chahte ho**.
+
+Use **`useNavigate`**.
+
+### Update Filter Component
+
+```javascript
+import { useSearchParams, useNavigate } from "react-router-dom";
+
+function Filter() {
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const age = searchParams.get("age") || "";
+  const city = searchParams.get("city") || "";
+
+  const goToUsers = () => {
+    navigate(`/users?age=${age}&city=${city}`);
+  };
+
+  return (
+    <div>
+
+      <input
+        type="text"
+        placeholder="age"
+        value={age}
+        onChange={(e) =>
+          setSearchParams({ age: e.target.value, city })
+        }
+      />
+
+      <input
+        type="text"
+        placeholder="city"
+        value={city}
+        onChange={(e) =>
+          setSearchParams({ age, city: e.target.value })
+        }
+      />
+
+      <button onClick={goToUsers}>
+        Go To Users Page
+      </button>
+
+    </div>
+  );
+}
+
+export default Filter;
+```
+
+---
+
+# 3️⃣ URL ka Result
+
+User fill kare:
+
+```
+age = 25
+city = pune
+```
+
+URL banega:
+
+```
+/users?age=25&city=pune
+```
+
+Next page par aap easily read kar sakte ho.
+
+---
+
+# ⚠️ Important Fix in Your Code
+
+Aapke code me ek small issue hai.
+
+City change karte time age remove ho jayega.
+
+Wrong:
+
+```javascript
+setSearchParams({ city: e.target.value })
+```
+
+Correct:
+
+```javascript
+setSearchParams({ age, city: e.target.value })
+```
+
+---
+
+# 4️⃣ Real Life Example (Filters)
+
+Example:
+
+```
+/products?price=500&brand=nike
+```
+
+Filter component:
+
+```
+Price input
+Brand input
+```
+
+Next page:
+
+```
+Filtered Products
+```
+
+---
+
+✅ **Summary**
+
+| Step            | Work               |
+| --------------- | ------------------ |
+| setSearchParams | URL me data set    |
+| useSearchParams | data read          |
+| useNavigate     | next page par pass |
+
+---
+
+💡 Agar chaho to main **React Router ka ek complete real project example (Filter → Product Page → Query Params)** bana ke dikha sakta hoon.
+Isse **useSearchParams 100% clear ho jayega.**
+
+==========================================================================================================
+React Router v6 tutorial in Hindi #8 Navigation on Click | Navigating programmatically
+
+
+==========================================================================================================
+Below are **detailed Q&A-style notes** for the video:
+**“React Router v6 Tutorial #8 – Navigation on Click | Navigating Programmatically”** explained in **simple Hindi-style English (Hinglish)** in **Teacher → Student conversation style**, step-by-step with examples.
+
+---
+
+# React Router v6 – Navigation on Click (Programmatic Navigation)
+
+---
+
+# 1️⃣ Programmatic Navigation kya hota hai?
+
+**Teacher:** Programmatic Navigation kya hota hai?
+
+**Student:**
+**Programmatic Navigation** ka matlab hai **code ke through page change karna**, bina `<Link>` ya `<NavLink>` use kiye.
+
+Normally navigation aise hota hai:
+
+```text
+Click Link → Page Change
+```
+
+Lekin kabhi kabhi hume **button click, form submit, ya condition ke basis par page change karna padta hai**.
+
+Uske liye use hota hai:
+
+👉 **useNavigate hook**
+
+---
+
+# 2️⃣ useNavigate kya hota hai?
+
+**Teacher:** useNavigate kya hai?
+
+**Student:**
+**useNavigate** React Router ka ek **hook** hai jo **programmatically page navigate karne ke liye use hota hai**.
+
+Example:
+
+```javascript
+navigate("/about")
+```
+
+Iska matlab:
+
+```text
+Go to About Page
+```
+
+---
+
+# 3️⃣ useNavigate import kaise karte hain?
+
+**Teacher:** useNavigate ko import kaise karte hain?
+
+**Student:**
+
+```javascript
+import { useNavigate } from "react-router-dom";
+```
+
+---
+
+# 4️⃣ Basic navigation example
+
+**Teacher:** Button click par page kaise change karte hain?
+
+**Student:**
+
+### Example
+
+```javascript
+import { useNavigate } from "react-router-dom";
+
+function Home() {
+
+  const navigate = useNavigate();
+
+  return (
+    <div>
+
+      <button onClick={() => navigate("/about")}>
+        Go To About Page
+      </button>
+
+    </div>
+  );
+}
+
+export default Home;
+```
+
+---
+
+### Output
+
+User click kare:
+
+```text
+Go To About Page
+```
+
+Browser open karega:
+
+```text
+localhost:3000/about
+```
+
+---
+
+# 5️⃣ Multiple buttons navigation example
+
+Example:
+
+```javascript
+import { useNavigate } from "react-router-dom";
+
+function Home(){
+
+  const navigate = useNavigate();
+
+  return(
+
+    <div>
+
+      <button onClick={() => navigate("/about")}>
+        Go To About Page
+      </button>
+
+      <button onClick={() => navigate("/contact")}>
+        Go To Contact Page
+      </button>
+
+    </div>
+
+  )
+}
+```
+
+---
+
+### Output
+
+```text
+Go To About Page
+Go To Contact Page
+```
+
+---
+
+# 6️⃣ Function ke through navigation
+
+**Teacher:** Agar navigation logic function ke andar likhna ho to?
+
+**Student:**
+
+Example:
+
+```javascript
+import { useNavigate } from "react-router-dom";
+
+function Home(){
+
+  const navigate = useNavigate();
+
+  const goToAbout = () => {
+    navigate("/about");
+  };
+
+  return(
+
+    <div>
+
+      <button onClick={goToAbout}>
+        Go To About Page
+      </button>
+
+    </div>
+
+  )
+}
+```
+
+---
+
+# 7️⃣ Conditional navigation
+
+**Teacher:** Condition ke basis par navigation kaise karte hain?
+
+**Student:**
+
+Example:
+
+```javascript
+const goToPage = (page) => {
+
+  if(page === "about"){
+    navigate("/about");
+  } else {
+    navigate("/contact");
+  }
+
+};
+```
+
+Use in button:
+
+```javascript
+<button onClick={() => goToPage("about")}>
+  About
+</button>
+
+<button onClick={() => goToPage("contact")}>
+  Contact
+</button>
+```
+
+---
+
+# 8️⃣ Real-world example
+
+**Teacher:** Real application me useNavigate kaha use hota hai?
+
+**Student:**
+
+Common scenarios:
+
+1️⃣ **Login success**
+
+```text
+Login Successful → Dashboard page
+```
+
+Example:
+
+```javascript
+if(loginSuccess){
+  navigate("/dashboard");
+}
+```
+
+---
+
+2️⃣ **Form submit**
+
+```text
+Submit form → Thank You Page
+```
+
+Example:
+
+```javascript
+navigate("/thank-you");
+```
+
+---
+
+3️⃣ **Unauthorized user**
+
+```text
+User not logged in → Redirect to Login
+```
+
+Example:
+
+```javascript
+navigate("/login");
+```
+
+---
+
+# 9️⃣ Navigation Flow
+
+User click karta hai:
+
+```text
+Button
+```
+
+Flow:
+
+```text
+Button Click
+     ↓
+onClick event
+     ↓
+navigate("/about")
+     ↓
+URL change
+     ↓
+About component render
+```
+
+---
+
+# 🔟 Link vs useNavigate
+
+**Teacher:** Link aur useNavigate me kya difference hai?
+
+**Student:**
+
+| Feature                 | Link  | useNavigate |
+| ----------------------- | ----- | ----------- |
+| Navigation              | ✔ Yes | ✔ Yes       |
+| Button click navigation | ❌ No  | ✔ Yes       |
+| Conditional navigation  | ❌ No  | ✔ Yes       |
+| Form submit navigation  | ❌ No  | ✔ Yes       |
+
+---
+
+# 11️⃣ Complete Example
+
+### App.js
+
+```javascript
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import About from "./About";
+import Contact from "./Contact";
+
+function App(){
+
+  return(
+
+    <BrowserRouter>
+
+      <Routes>
+
+        <Route path="/" element={<Home />} />
+
+        <Route path="/about" element={<About />} />
+
+        <Route path="/contact" element={<Contact />} />
+
+      </Routes>
+
+    </BrowserRouter>
+
+  )
+
+}
+
+export default App;
+```
+
+---
+
+### Home.js
+
+```javascript
+import { useNavigate } from "react-router-dom";
+
+function Home(){
+
+  const navigate = useNavigate();
+
+  return(
+
+    <div>
+
+      <button onClick={() => navigate("/about")}>
+        About
+      </button>
+
+      <button onClick={() => navigate("/contact")}>
+        Contact
+      </button>
+
+    </div>
+
+  )
+
+}
+
+export default Home;
+```
+
+---
+
+# 12️⃣ Key Concepts Summary
+
+**Teacher:** Is video me kya kya seekha?
+
+**Student:**
+
+1️⃣ **Programmatic navigation concept**
+2️⃣ **useNavigate hook**
+3️⃣ **Button click navigation**
+4️⃣ **Function-based navigation**
+5️⃣ **Conditional navigation**
+
+---
+
+✅ After this video you understand:
+
+* **useNavigate hook**
+* **Programmatic navigation**
+* **Navigation using button click**
+* **Conditional routing**
+
+---
+
+If you want, I can also make a **single-page React Router Cheat Sheet (Link + NavLink + Params + SearchParams + Navigate)** which will help you **revise the entire React Router in 5 minutes before interview.**
+
+==========================================================================================================
+Main aapko **Link vs useNavigate** ke har case ka **simple React example** de raha hoon. Isse clear ho jayega **kab Link use karna hai aur kab useNavigate**.
+
+---
+
+# 1️⃣ Normal Navigation (Link Example)
+
+**Use case:** Menu ya navbar navigation
+
+### Code
+
+```javascript
+import { Link } from "react-router-dom";
+
+function Navbar() {
+  return (
+    <div>
+      <Link to="/">Home</Link>
+      <br />
+      <Link to="/about">About</Link>
+    </div>
+  );
+}
+
+export default Navbar;
+```
+
+### Flow
+
+```
+User clicks Link
+      ↓
+URL change
+      ↓
+Page open
+```
+
+Example URL:
+
+```
+/about
+```
+
+---
+
+# 2️⃣ Button Click Navigation (useNavigate)
+
+**Use case:** Button click par page change karna.
+
+### Code
+
+```javascript
+import { useNavigate } from "react-router-dom";
+
+function Home() {
+
+  const navigate = useNavigate();
+
+  return (
+    <div>
+      <button onClick={() => navigate("/about")}>
+        Go To About Page
+      </button>
+    </div>
+  );
+}
+
+export default Home;
+```
+
+### Flow
+
+```
+Button Click
+     ↓
+navigate("/about")
+     ↓
+About page open
+```
+
+---
+
+# 3️⃣ Conditional Navigation Example
+
+**Use case:** Login success / failure.
+
+### Code
+
+```javascript
+import { useNavigate } from "react-router-dom";
+
+function Login() {
+
+  const navigate = useNavigate();
+
+  const loginUser = () => {
+
+    const isLoggedIn = true;
+
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    } else {
+      navigate("/login");
+    }
+
+  };
+
+  return (
+    <div>
+      <button onClick={loginUser}>
+        Login
+      </button>
+    </div>
+  );
+}
+
+export default Login;
+```
+
+### Flow
+
+```
+Login Button Click
+        ↓
+Check Condition
+        ↓
+navigate("/dashboard")
+```
+
+---
+
+# 4️⃣ Form Submit Navigation
+
+**Use case:** Form submit hone ke baad next page open.
+
+### Code
+
+```javascript
+import { useNavigate } from "react-router-dom";
+
+function ContactForm() {
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // form submit logic
+
+    navigate("/thank-you");
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+
+      <input type="text" placeholder="Name" />
+
+      <button type="submit">
+        Submit
+      </button>
+
+    </form>
+  );
+}
+
+export default ContactForm;
+```
+
+### Flow
+
+```
+Form Submit
+     ↓
+handleSubmit()
+     ↓
+navigate("/thank-you")
+```
+
+---
+
+# 5️⃣ Real Website Example
+
+### Navbar (Link)
+
+```
+Home | Products | Contact
+```
+
+### Button Navigation (useNavigate)
+
+```
+Add to Cart → Cart Page
+Login → Dashboard
+Submit Form → Thank You Page
+```
+
+---
+
+# 🧠 Simple Rule (Very Important)
+
+| Situation               | Use             |
+| ----------------------- | --------------- |
+| Menu navigation         | **Link**        |
+| Button click navigation | **useNavigate** |
+| Login redirect          | **useNavigate** |
+| Form submit redirect    | **useNavigate** |
+
+---
+
+✅ **Short Memory Trick**
+
+```
+Menu → Link
+Logic / Button / Condition → useNavigate
+```
+
+---
+
+If you want, I can also show **1 complete mini project (Login + Dashboard + Filter + Routing)** using:
+
+* Link
+* NavLink
+* useNavigate
+* useParams
+* useSearchParams
+
+This will make **React Router 100% clear in one diagram.**
+
+==========================================================================================================
+React Router v6 tutorial in Hindi #9 Nested Routing
+
+Below are **detailed Q&A-style notes** for the video:
+**“React Router v6 Tutorial #9 – Nested Routing”** explained in **simple Hindi-style English (Hinglish)** as **Teacher → Student conversation**, step-by-step with examples.
+
+---
+
+# React Router v6 – Nested Routing
+
+---
+
+# 1️⃣ Nested Routing kya hota hai?
+
+**Teacher:** Nested Routing kya hota hai?
+
+**Student:**
+**Nested Routing** ka matlab hai **ek route ke andar aur routes banana**.
+
+Matlab:
+
+```
+Main Route
+   ↓
+Child Routes
+```
+
+Example:
+
+```
+/contact
+/contact/company
+/contact/channel
+/contact/other
+```
+
+Yaha:
+
+* **/contact** → Parent Route
+* **company, channel, other** → Child Routes
+
+**Important Term:**
+**Nested Routing = Parent route ke andar child routes**
+
+---
+
+# 2️⃣ Real-world example
+
+**Teacher:** Real website me nested routing kaha use hota hai?
+
+**Student:**
+
+Example **Dashboard website**:
+
+```
+/dashboard
+/dashboard/profile
+/dashboard/settings
+/dashboard/orders
+```
+
+Yaha:
+
+* Dashboard → Parent page
+* Profile / Settings / Orders → Child pages
+
+---
+
+# 3️⃣ Nested routing ka concept kaise samjhe?
+
+**Teacher:** Simple example se samjhao.
+
+**Student:**
+
+Imagine ek **Contact page** hai.
+
+Contact page ke andar 3 sections hain:
+
+```
+Contact
+ ├ Company
+ ├ Channel
+ └ Other
+```
+
+URLs:
+
+```
+/contact/company
+/contact/channel
+/contact/other
+```
+
+Ye **nested routing** hai.
+
+---
+
+# 4️⃣ Nested routing banane ke liye kya chahiye?
+
+**Teacher:** Nested routing banane ke liye kya required hai?
+
+**Student:**
+
+React Router me nested routing ke liye 3 cheeze chahiye:
+
+1️⃣ **Parent Route**
+2️⃣ **Child Routes**
+3️⃣ **Outlet component**
+
+---
+
+# 5️⃣ Parent Route ka example
+
+### App.js
+
+```javascript
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Contact from "./Contact";
+import Company from "./Company";
+import Channel from "./Channel";
+
+function App() {
+  return (
+    <BrowserRouter>
+
+      <Routes>
+
+        <Route path="/contact" element={<Contact />}>
+
+          <Route path="company" element={<Company />} />
+
+          <Route path="channel" element={<Channel />} />
+
+        </Route>
+
+      </Routes>
+
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+---
+
+# 6️⃣ URL structure
+
+| URL                | Page         |
+| ------------------ | ------------ |
+| `/contact`         | Contact Page |
+| `/contact/company` | Company Page |
+| `/contact/channel` | Channel Page |
+
+---
+
+# 7️⃣ Outlet component kya hota hai?
+
+**Teacher:** Outlet kya hota hai?
+
+**Student:**
+**Outlet ek placeholder component hai jaha child routes render hote hain.**
+
+Example:
+
+Parent component:
+
+```javascript
+<Contact />
+```
+
+Child pages **Outlet ke andar render hote hain**.
+
+---
+
+# 8️⃣ Outlet ka example
+
+### Contact.js
+
+```javascript
+import { Outlet, Link } from "react-router-dom";
+
+function Contact(){
+
+  return(
+    <div>
+
+      <h1>Contact Page</h1>
+
+      <Link to="company">Company</Link>
+
+      <Link to="channel">Channel</Link>
+
+      <Link to="other">Other</Link>
+
+      <Outlet />
+
+    </div>
+  )
+
+}
+
+export default Contact;
+```
+
+---
+
+# 9️⃣ Outlet ka role
+
+Flow:
+
+```
+Contact Page
+     ↓
+Outlet
+     ↓
+Company / Channel / Other component
+```
+
+---
+
+# 🔟 Child Component example
+
+### Company.js
+
+```javascript
+function Company(){
+
+  return(
+
+    <div>
+
+      <h2>This is Company Page</h2>
+
+    </div>
+
+  )
+
+}
+
+export default Company;
+```
+
+---
+
+### Channel.js
+
+```javascript
+function Channel(){
+
+  return(
+
+    <div>
+
+      <h2>This is Channel Page</h2>
+
+    </div>
+
+  )
+
+}
+
+export default Channel;
+```
+
+---
+
+# 11️⃣ Navigation Example
+
+User click karta hai:
+
+```
+Contact → Company
+```
+
+URL change:
+
+```
+/contact/company
+```
+
+Output:
+
+```
+Contact Page
+This is Company Page
+```
+
+---
+
+# 12️⃣ Navigation Flow
+
+```
+User clicks Company
+        ↓
+URL → /contact/company
+        ↓
+Parent Route → /contact
+        ↓
+Child Route → company
+        ↓
+Outlet render
+```
+
+---
+
+# 13️⃣ Folder Structure Example
+
+```
+src
+ ├ App.js
+ ├ Contact.js
+ ├ Company.js
+ ├ Channel.js
+ └ Other.js
+```
+
+---
+
+# 14️⃣ Real project example
+
+Imagine ek **Admin Dashboard**:
+
+```
+/admin
+/admin/users
+/admin/orders
+/admin/products
+```
+
+Admin page me menu hoga:
+
+```
+Users
+Orders
+Products
+```
+
+Child pages **Outlet me render honge**.
+
+---
+
+# 15️⃣ Nested Routing ka benefit
+
+**Teacher:** Nested routing ka benefit kya hai?
+
+**Student:**
+
+✔ Code **clean rehta hai**
+✔ UI **structured rehta hai**
+✔ Layout **reuse ho sakta hai**
+✔ Complex apps me useful
+
+Example:
+
+```
+Dashboard layout
+   ↓
+Child pages inside layout
+```
+
+---
+
+# 16️⃣ Complete Example
+
+### App.js
+
+```javascript
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Contact from "./Contact";
+import Company from "./Company";
+import Channel from "./Channel";
+
+function App() {
+
+  return(
+
+    <BrowserRouter>
+
+      <Routes>
+
+        <Route path="/contact" element={<Contact />}>
+
+          <Route path="company" element={<Company />} />
+
+          <Route path="channel" element={<Channel />} />
+
+        </Route>
+
+      </Routes>
+
+    </BrowserRouter>
+
+  )
+
+}
+
+export default App;
+```
+
+---
+
+# 17️⃣ Key Concepts Summary
+
+**Teacher:** Is video me kya kya seekha?
+
+**Student:**
+
+1️⃣ **Nested Routing concept**
+2️⃣ **Parent and Child routes**
+3️⃣ **Outlet component**
+4️⃣ **Nested URL structure**
+5️⃣ **Contact → Company / Channel example**
+
+---
+
+✅ After this video you understand:
+
+* **Nested Routing**
+* **Outlet component**
+* **Parent & Child routes**
+* **Nested URL structure**
+
+---
+
+If you want, I can also make the **next video notes (#10 React Router Layout Routing)** which is **very important for real React projects**, and it will make **React Router fully clear in one roadmap.**
+
+==========================================================================================================
+Bahut acha question hai 👍
+**`Outlet` automatic kaise kaam karta hai** ye samajhna React Router ka important concept hai.
+
+Main simple flow me samjhata hoon.
+
+---
+
+# 1️⃣ Pehle Router kya karta hai
+
+Jab browser me URL open hota hai:
+
+```
+/users
+```
+
+React Router kya karta hai?
+
+1️⃣ URL read karta hai
+2️⃣ Route match karta hai
+3️⃣ Component render karta hai
+
+---
+
+# 2️⃣ Nested routing example
+
+Routes:
+
+```jsx
+<Route path="/" element={<Layout />}>
+
+  <Route path="dashboard" element={<Dashboard />} />
+
+  <Route path="users" element={<Users />} />
+
+  <Route path="orders" element={<Orders />} />
+
+</Route>
+```
+
+---
+
+# 3️⃣ Jab user `/users` open karta hai
+
+Browser URL:
+
+```
+http://localhost:3000/users
+```
+
+React Router matching karta hai:
+
+```
+Parent Route  → /
+Child Route   → users
+```
+
+Matched components:
+
+```
+Layout
+Users
+```
+
+---
+
+# 4️⃣ Layout component render hota hai
+
+Layout component:
+
+```jsx
+function Layout(){
+  return(
+    <>
+      <Navbar />
+      <Sidebar />
+      <Outlet />
+    </>
+  )
+}
+```
+
+Ab React Router kya karta hai:
+
+```
+Layout render
+   ↓
+Navbar
+Sidebar
+Outlet
+```
+
+---
+
+# 5️⃣ Outlet ka role
+
+`Outlet` ek **placeholder** hai.
+
+React Router internally bolta hai:
+
+```
+Matched child route = Users
+```
+
+Isliye:
+
+```
+Outlet → Users component render karega
+```
+
+Final UI:
+
+```
+Navbar
+Sidebar
+--------
+Users Page
+```
+
+---
+
+# 6️⃣ Visual flow
+
+```
+URL → /users
+      ↓
+Route match
+      ↓
+Parent = Layout
+Child = Users
+      ↓
+Render Layout
+      ↓
+Outlet replace with Users
+```
+
+---
+
+# 7️⃣ Final output example
+
+Layout:
+
+```
+-------------------
+Navbar
+-------------------
+Sidebar | Users Page
+-------------------
+```
+
+---
+
+# 8️⃣ Agar `/orders` open kare
+
+URL:
+
+```
+/orders
+```
+
+Outlet render karega:
+
+```
+Orders component
+```
+
+UI:
+
+```
+Navbar
+Sidebar
+Orders Page
+```
+
+---
+
+# 9️⃣ Simple analogy
+
+`Outlet` ko aise samjho:
+
+```
+Layout = Frame
+Outlet = Empty Space
+```
+
+Example:
+
+```
+Frame
+  ↓
+Content change hota hai
+```
+
+---
+
+# 🔟 Real industry reason
+
+Isliye companies use karti hain:
+
+```
+Navbar
+Sidebar
+Footer
+```
+
+Same rehta hai.
+
+Sirf:
+
+```
+Outlet content change hota hai
+```
+
+---
+
+✅ **Short answer**
+
+`Outlet` automatic kaam karta hai because **React Router internally matched child route component ko Outlet me inject karta hai.**
+
+---
+
+💡 Agar chaho to main tumhe **React Router ka internal working diagram (kaise match karta hai routes)** bhi samjha sakta hoon — jo **senior React developers ko pata hota hai**.
+
+==========================================================================================================
+React Router v6 tutorial in Hindi #10 useLocation Hooks | use Location
+
+Below are **detailed Q&A-style notes** for the video:
+**“React Router v6 Tutorial #10 – useLocation Hook”** explained in **simple Hindi-style English (Hinglish)** as **Teacher → Student conversation**, step-by-step with examples.
+
+---
+
+# React Router v6 – useLocation Hook
+
+---
+
+# 1️⃣ useLocation Hook kya hota hai?
+
+**Teacher:** useLocation hook kya hota hai?
+
+**Student:**
+**useLocation** React Router ka ek **hook** hai jo current **URL ki information** deta hai.
+
+Is hook se hume pata chalta hai:
+
+* current **path**
+* **query parameters**
+* **state data**
+* **hash**
+* **unique key**
+
+Simple words me:
+
+👉 **useLocation = current page ki URL details lene ka hook**
+
+---
+
+# 2️⃣ useLocation kab use karte hain?
+
+**Teacher:** useLocation kab use hota hai?
+
+**Student:**
+Jab hume **current route ki information check karni ho** tab useLocation use karte hain.
+
+Example:
+
+* current page check karna
+* query params read karna
+* state data read karna
+* analytics tracking
+
+---
+
+# 3️⃣ useLocation ka syntax
+
+**Teacher:** useLocation ka syntax kya hai?
+
+**Student:**
+
+```javascript
+import { useLocation } from "react-router-dom";
+
+const location = useLocation();
+```
+
+Ab `location` object me **URL related data milta hai**.
+
+---
+
+# 4️⃣ useLocation kya return karta hai?
+
+**Teacher:** useLocation se kya kya data milta hai?
+
+**Student:**
+useLocation ek **location object** return karta hai.
+
+Example:
+
+```javascript
+console.log(location)
+```
+
+Output:
+
+```text
+{
+  pathname: "/about",
+  search: "",
+  hash: "",
+  state: null,
+  key: "abc123"
+}
+```
+
+---
+
+# 5️⃣ location object properties
+
+| Property     | Meaning                 |
+| ------------ | ----------------------- |
+| **pathname** | current URL path        |
+| **search**   | query parameters        |
+| **hash**     | hash value              |
+| **state**    | route state data        |
+| **key**      | unique route identifier |
+
+---
+
+# 6️⃣ Example – pathname use karna
+
+### Code
+
+```javascript
+import { useLocation } from "react-router-dom";
+
+function Example(){
+
+  const location = useLocation();
+
+  return(
+    <h1>Current Path: {location.pathname}</h1>
+  )
+}
+```
+
+---
+
+### URL
+
+```text
+/about
+```
+
+Output:
+
+```text
+Current Path: /about
+```
+
+---
+
+# 7️⃣ location.search kya hota hai?
+
+**Teacher:** location.search kya hota hai?
+
+**Student:**
+Ye **query parameters** deta hai.
+
+Example URL:
+
+```text
+/products?price=100
+```
+
+Code:
+
+```javascript
+const location = useLocation();
+
+console.log(location.search);
+```
+
+Output:
+
+```text
+?price=100
+```
+
+---
+
+# 8️⃣ location.state kya hota hai?
+
+**Teacher:** location.state kya hota hai?
+
+**Student:**
+`state` me **data pass kar sakte hain ek route se dusre route me**.
+
+Example:
+
+```javascript
+<Link
+  to="/about"
+  state={{ name: "Anil" }}
+>
+  Go to About
+</Link>
+```
+
+---
+
+# 9️⃣ state ko kaise read karte hain?
+
+About page me:
+
+```javascript
+import { useLocation } from "react-router-dom";
+
+function About(){
+
+  const location = useLocation();
+
+  return(
+    <h1>Name: {location.state.name}</h1>
+  )
+
+}
+```
+
+Output:
+
+```text
+Name: Anil
+```
+
+---
+
+# 🔟 Navigation example
+
+User click karta hai:
+
+```text
+Go to About
+```
+
+Flow:
+
+```text
+Link click
+   ↓
+State pass
+   ↓
+URL change
+   ↓
+useLocation read state
+```
+
+---
+
+# 11️⃣ location.key kya hota hai?
+
+**Teacher:** location.key kya hota hai?
+
+**Student:**
+`key` ek **unique identifier** hota hai jo har navigation ke time generate hota hai.
+
+Example:
+
+```text
+key: "x93ks"
+```
+
+Ye mostly **internal use** ke liye hota hai.
+
+---
+
+# 12️⃣ Real use case
+
+Example **analytics tracking**
+
+```javascript
+import { useLocation } from "react-router-dom";
+
+function Tracker(){
+
+  const location = useLocation();
+
+  useEffect(()=>{
+     console.log("Page visited:", location.pathname);
+  },[location]);
+
+}
+```
+
+Isse pata chalta hai user **kaunsa page open kar raha hai**.
+
+---
+
+# 13️⃣ Real world example
+
+Imagine **E-commerce site**
+
+User open karta hai:
+
+```text
+/products
+```
+
+useLocation se track kar sakte hain:
+
+```text
+User visited Products page
+```
+
+---
+
+# 14️⃣ Navigation flow
+
+```text
+User click route
+      ↓
+URL change
+      ↓
+useLocation update
+      ↓
+Component render
+```
+
+---
+
+# 15️⃣ Key concepts summary
+
+**Teacher:** Is video me kya kya seekha?
+
+**Student:**
+
+1️⃣ **useLocation hook**
+2️⃣ **location object**
+3️⃣ **pathname property**
+4️⃣ **search query parameters**
+5️⃣ **state data passing**
+
+---
+
+# 16️⃣ Complete Example
+
+```javascript
+import { useLocation } from "react-router-dom";
+
+function Page(){
+
+  const location = useLocation();
+
+  return(
+
+    <div>
+
+      <h1>Path: {location.pathname}</h1>
+
+      <h2>Query: {location.search}</h2>
+
+    </div>
+
+  )
+
+}
+```
+
+---
+
+✅ **After this video you understand:**
+
+* **useLocation hook**
+* **Location object**
+* **Reading current route**
+* **Passing data using state**
+
+---
+
+If you want, I can also create **React Router complete interview notes (10 most asked questions)** which helps a lot in **React developer interviews.**
+
+==========================================================================================================
+React Router v6 tutorial in Hindi #11 Protected Route
+
+Below are **detailed Q&A-style notes** for the video:
+**“React Router v6 Tutorial #11 – Protected Route”** explained in **simple Hindi-style English (Hinglish)** as a **Teacher → Student conversation**, step-by-step with examples.
+
+---
+
+# React Router v6 – Protected Route
+
+---
+
+# 1️⃣ Protected Route kya hota hai?
+
+**Teacher:** Protected Route kya hota hai?
+
+**Student:**
+**Protected Route** ek **logical implementation** hota hai jisme kuch pages **sirf logged-in users ke liye accessible hote hain**.
+
+Matlab:
+
+```text
+Agar user login nahi hai
+→ page access nahi kar sakta
+→ login page par redirect ho jayega
+```
+
+**Important Term:**
+**Protected Route = login ke bina access na hone wala route**
+
+---
+
+# 2️⃣ Real-world example
+
+**Teacher:** Real websites me protected routes kaha use hote hain?
+
+**Student:**
+
+Example:
+
+| Website     | Protected Page    |
+| ----------- | ----------------- |
+| Banking app | Account dashboard |
+| E-commerce  | Order history     |
+| Admin panel | Admin dashboard   |
+
+Example URL:
+
+```text
+/dashboard
+/orders
+/profile
+```
+
+Ye pages **login ke bina open nahi honge**.
+
+---
+
+# 3️⃣ Protected Route ka logic kya hota hai?
+
+**Teacher:** Protected route ka logic kaise kaam karta hai?
+
+**Student:**
+Protected route me **condition check hoti hai**.
+
+Example logic:
+
+```text
+If user logged in
+   → show page
+Else
+   → redirect to login
+```
+
+---
+
+# 4️⃣ Login page banana
+
+Sabse pehle ek **Login Page** banate hain.
+
+### Example: Login.js
+
+```javascript
+function Login(){
+
+  return(
+    <div>
+
+      <h1>Login Page</h1>
+
+      <button>Login</button>
+
+    </div>
+  )
+
+}
+
+export default Login;
+```
+
+---
+
+# 5️⃣ Login state kaise store karte hain?
+
+**Teacher:** Login status kaise store karte hain?
+
+**Student:**
+Is example me **localStorage** use kiya gaya hai.
+
+Example:
+
+```javascript
+localStorage.setItem("login", true);
+```
+
+Ye browser me login status store karta hai.
+
+---
+
+# 6️⃣ Login button ka example
+
+```javascript
+function Login(){
+
+  const handleLogin = () => {
+
+    localStorage.setItem("login", true);
+
+  }
+
+  return(
+
+    <div>
+
+      <button onClick={handleLogin}>
+        Login
+      </button>
+
+    </div>
+
+  )
+
+}
+```
+
+---
+
+# 7️⃣ ProtectedRoute component banana
+
+Ab ek **ProtectedRoute component** banate hain.
+
+### Example
+
+```javascript
+import { Navigate } from "react-router-dom";
+
+function ProtectedRoute({children}){
+
+  const login = localStorage.getItem("login");
+
+  if(!login){
+    return <Navigate to="/login" />
+  }
+
+  return children;
+
+}
+
+export default ProtectedRoute;
+```
+
+---
+
+# 8️⃣ ProtectedRoute ka explanation
+
+| Code                          | Meaning                |
+| ----------------------------- | ---------------------- |
+| localStorage.getItem("login") | check login status     |
+| !login                        | agar login nahi hai    |
+| Navigate                      | redirect to login page |
+| children                      | protected component    |
+
+---
+
+# 9️⃣ Protected route use karna
+
+### App.js
+
+```javascript
+import ProtectedRoute from "./ProtectedRoute";
+
+<Route
+  path="/about"
+  element={
+    <ProtectedRoute>
+      <About />
+    </ProtectedRoute>
+  }
+/>
+```
+
+---
+
+# 🔟 Flow samjho
+
+User open karta hai:
+
+```text
+/about
+```
+
+React Router check karega:
+
+```text
+Is user logged in?
+```
+
+Case 1:
+
+```text
+Yes
+→ About page open
+```
+
+Case 2:
+
+```text
+No
+→ Redirect to /login
+```
+
+---
+
+# 11️⃣ Navigation flow diagram
+
+```text
+User open /about
+        ↓
+ProtectedRoute check
+        ↓
+Login status
+   ↓         ↓
+Yes         No
+ ↓           ↓
+About       Redirect → Login
+```
+
+---
+
+# 12️⃣ Logout example
+
+Logout karne ke liye:
+
+```javascript
+localStorage.removeItem("login");
+```
+
+User logout hone ke baad protected pages access nahi kar payega.
+
+---
+
+# 13️⃣ Complete example
+
+### App.js
+
+```javascript
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./Login";
+import About from "./About";
+import ProtectedRoute from "./ProtectedRoute";
+
+function App(){
+
+  return(
+
+    <BrowserRouter>
+
+      <Routes>
+
+        <Route path="/login" element={<Login />} />
+
+        <Route
+          path="/about"
+          element={
+            <ProtectedRoute>
+              <About />
+            </ProtectedRoute>
+          }
+        />
+
+      </Routes>
+
+    </BrowserRouter>
+
+  )
+
+}
+
+export default App;
+```
+
+---
+
+# 14️⃣ Real project example
+
+Imagine **Admin Panel**
+
+```text
+/admin/dashboard
+/admin/users
+/admin/orders
+```
+
+Logic:
+
+```text
+If admin logged in
+ → allow access
+Else
+ → redirect to login
+```
+
+---
+
+# 15️⃣ Important interview point
+
+**Teacher:** React Router me protected route built-in feature hai kya?
+
+**Student:**
+❌ **No**
+
+Protected route **React Router ka built-in feature nahi hai**.
+
+Ye **developer ka custom logic hota hai**.
+
+---
+
+# 16️⃣ Key concepts summary
+
+**Teacher:** Is video me kya seekha?
+
+**Student:**
+
+1️⃣ **Protected Route concept**
+2️⃣ **Login condition check**
+3️⃣ **localStorage use**
+4️⃣ **Navigate component**
+5️⃣ **Redirect to login**
+
+---
+
+✅ **After this video you understand:**
+
+* Protected route concept
+* Login authentication check
+* Redirect using Navigate
+* Route security
+
+---
+
+💡 If you want, I can also make **React Router Complete Cheat Sheet (All Hooks + Routing Patterns used in industry)** which makes the entire topic **very easy for interviews and real projects**.
+
+==========================================================================================================
+Koi problem nahi 👍
+Main **bahut simple step-by-step flow me samjhata hoon** ki ye code kaise kaam karta hai.
+
+---
+
+# 1️⃣ Sabse pehle problem samjho
+
+Maan lo tumhare app me ek page hai:
+
+```
+/about
+```
+
+Tum chahte ho:
+
+```
+Agar user login hai → About page open ho
+Agar login nahi hai → Login page par bhej do
+```
+
+Isko hi **Protected Route** bolte hain.
+
+---
+
+# 2️⃣ Login status kaha store hai
+
+Tumhare code me login status store ho raha hai:
+
+```javascript
+localStorage.setItem("login", true)
+```
+
+Browser me store hota hai.
+
+Example:
+
+```
+localStorage
+  login = true
+```
+
+---
+
+# 3️⃣ ProtectedRoute component kya karta hai
+
+Code:
+
+```javascript
+function ProtectedRoute({children}){
+
+  const login = localStorage.getItem("login");
+
+  if(!login){
+    return <Navigate to="/login" />
+  }
+
+  return children;
+
+}
+```
+
+Iska matlab:
+
+### Step 1
+
+Login check karo
+
+```javascript
+const login = localStorage.getItem("login");
+```
+
+---
+
+### Step 2
+
+Agar login **nahi hai**
+
+```javascript
+if(!login)
+```
+
+to user ko bhej do:
+
+```javascript
+return <Navigate to="/login" />
+```
+
+Matlab:
+
+```
+redirect → login page
+```
+
+---
+
+### Step 3
+
+Agar login **hai**
+
+```javascript
+return children
+```
+
+Matlab:
+
+```
+jo page diya hai use show karo
+```
+
+---
+
+# 4️⃣ App.js me kya ho raha hai
+
+Code:
+
+```javascript
+<Route
+  path="/about"
+  element={
+    <ProtectedRoute>
+      <About />
+    </ProtectedRoute>
+  }
+/>
+```
+
+Iska matlab:
+
+```
+/about open karne se pehle
+ProtectedRoute check karo
+```
+
+---
+
+# 5️⃣ Flow samjho
+
+User open karta hai:
+
+```
+http://localhost:3000/about
+```
+
+React Router karega:
+
+```
+ProtectedRoute run
+```
+
+---
+
+## Case 1️⃣ Login nahi hai
+
+```
+localStorage login = null
+```
+
+Condition:
+
+```
+if(!login) true
+```
+
+Result:
+
+```
+Navigate → /login
+```
+
+User ko dikhega:
+
+```
+Login Page
+```
+
+---
+
+## Case 2️⃣ Login hai
+
+```
+localStorage login = true
+```
+
+Condition:
+
+```
+if(!login) false
+```
+
+Result:
+
+```
+return children
+```
+
+Children kya hai?
+
+```
+<About />
+```
+
+User ko dikhega:
+
+```
+About Page
+```
+
+---
+
+# 6️⃣ Visual flow
+
+```
+User → /about
+        ↓
+ProtectedRoute
+        ↓
+Check login
+    ↓        ↓
+   No       Yes
+    ↓        ↓
+ /login    About Page
+```
+
+---
+
+# 7️⃣ children kya hai?
+
+Yaha:
+
+```javascript
+<ProtectedRoute>
+   <About />
+</ProtectedRoute>
+```
+
+Iska matlab:
+
+```
+children = <About />
+```
+
+Isliye code:
+
+```javascript
+return children
+```
+
+Matlab:
+
+```
+About page render karo
+```
+
+---
+
+# 8️⃣ Real life example
+
+Maan lo:
+
+```
+Bank app
+```
+
+Routes:
+
+```
+/login
+/dashboard
+```
+
+Rule:
+
+```
+login nahi → dashboard nahi dekh sakte
+```
+
+To:
+
+```
+dashboard = protected route
+```
+
+---
+
+# 9️⃣ Short version
+
+ProtectedRoute code ka meaning:
+
+```
+Agar login nahi
+   → login page bhejo
+Agar login hai
+   → page open karo
+```
+
+---
+
+✅ **Sabse simple line**
+
+```
+ProtectedRoute = gatekeeper
+```
+
+```
+Login hai → andar jao
+Login nahi → login karo
+```
+
+---
+
+💡 Agar chaho to main **Protected Route ka ek simple diagram + working demo code** bhi bana kar samjha sakta hoon (jo 100% clear kar deta hai).
+
+==========================================================================================================
+React tutorial in Hindi #51 fetch API | GET method
+
+Below are **detailed Q&A-style notes** for the video:
+**“React Tutorial #51 – Fetch API (GET Method)”** explained in **simple Hindi-style English (Hinglish)** as **Teacher → Student conversation**, step-by-step with examples.
+
+---
+
+# React – Fetch API (GET Method)
+
+---
+
+# 1️⃣ API kya hoti hai?
+
+**Teacher:** API kya hoti hai?
+
+**Student:**
+**API** ka full form hota hai **Application Programming Interface**.
+
+API ka kaam hota hai:
+
+👉 **Server se data lekar frontend application ko dena**
+
+Example:
+
+```text
+Server (Database)
+       ↓
+API
+       ↓
+React Application
+```
+
+Frontend directly **database access nahi kar sakta**, isliye API use hoti hai.
+
+---
+
+# 2️⃣ React me API kyun use karte hain?
+
+**Teacher:** React me API kyun use karte hain?
+
+**Student:**
+React frontend framework hai.
+
+Data usually **backend se aata hai**, jaise:
+
+* Node.js
+* PHP
+* Python
+* Java
+
+API ke through data milta hai.
+
+Example:
+
+```text
+Users data
+Products data
+Orders data
+```
+
+---
+
+# 3️⃣ API ka response format kya hota hai?
+
+**Teacher:** API ka data kis format me aata hai?
+
+**Student:**
+Mostly APIs **JSON format** me data return karti hain.
+
+Example JSON:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Anil",
+    "email": "anil@gmail.com"
+  },
+  {
+    "id": 2,
+    "name": "Mukesh",
+    "email": "mukesh@gmail.com"
+  }
+]
+```
+
+React me isi data ko show karte hain.
+
+---
+
+# 4️⃣ API ke important HTTP methods
+
+**Teacher:** API me kaun kaun se methods use hote hain?
+
+**Student:**
+
+| Method     | Purpose           |
+| ---------- | ----------------- |
+| **GET**    | Data read karna   |
+| **POST**   | Data create karna |
+| **PUT**    | Data update karna |
+| **DELETE** | Data delete karna |
+
+Is video me **GET method** use ho raha hai.
+
+---
+
+# 5️⃣ GET method kya karta hai?
+
+**Teacher:** GET method ka kya kaam hai?
+
+**Student:**
+**GET method server se data fetch karta hai.**
+
+Example:
+
+```text
+API URL
+https://api.example.com/users
+```
+
+React is API ko call karega aur data milega.
+
+---
+
+# 6️⃣ Fetch API kya hai?
+
+**Teacher:** Fetch API kya hai?
+
+**Student:**
+**Fetch API JavaScript ka built-in function hai jo API request bhejne ke liye use hota hai.**
+
+Example syntax:
+
+```javascript
+fetch("API_URL")
+```
+
+---
+
+# 7️⃣ Basic fetch example
+
+```javascript
+fetch("https://api.example.com/users")
+.then((response) => response.json())
+.then((data) => console.log(data));
+```
+
+Explanation:
+
+| Step              | Meaning      |
+| ----------------- | ------------ |
+| fetch()           | API call     |
+| response.json()   | JSON convert |
+| console.log(data) | data print   |
+
+---
+
+# 8️⃣ React me API kab call karte hain?
+
+**Teacher:** React me API kab call karte hain?
+
+**Student:**
+API call usually **component load hone par** karte hain.
+
+Iske liye **useEffect hook** use karte hain.
+
+---
+
+# 9️⃣ useEffect example
+
+```javascript
+import { useEffect } from "react";
+
+useEffect(() => {
+
+   fetch("API_URL")
+
+}, []);
+```
+
+`[]` ka matlab:
+
+```text
+component load hone par ek baar run hoga
+```
+
+---
+
+# 🔟 useState ka role
+
+**Teacher:** API data store kaha karte hain?
+
+**Student:**
+API data **useState** me store karte hain.
+
+Example:
+
+```javascript
+const [data, setData] = useState([]);
+```
+
+---
+
+# 1️⃣1️⃣ Complete fetch example
+
+```javascript
+import { useEffect, useState } from "react";
+
+function Users(){
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+
+    fetch("https://api.example.com/users")
+      .then((response) => response.json())
+      .then((result) => setData(result));
+
+  }, []);
+
+}
+```
+
+Explanation:
+
+| Code            | Meaning      |
+| --------------- | ------------ |
+| fetch()         | API call     |
+| response.json() | JSON convert |
+| setData()       | state update |
+
+---
+
+# 1️⃣2️⃣ API data ko table me show karna
+
+React me data show karne ke liye **map()** use karte hain.
+
+Example:
+
+```javascript
+<table border="1">
+
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Email</th>
+  </tr>
+
+  {
+    data.map((item) => (
+
+      <tr key={item.id}>
+        <td>{item.id}</td>
+        <td>{item.name}</td>
+        <td>{item.email}</td>
+      </tr>
+
+    ))
+  }
+
+</table>
+```
+
+---
+
+# 1️⃣3️⃣ map() kya karta hai?
+
+**Teacher:** map() ka use kyun karte hain?
+
+**Student:**
+map() array ke har element ko **UI component me convert karta hai**.
+
+Example:
+
+```text
+Users array
+   ↓
+map()
+   ↓
+table rows
+```
+
+---
+
+# 1️⃣4️⃣ Example output
+
+UI me table dikhega:
+
+| ID | Name   | Email                                       |
+| -- | ------ | ------------------------------------------- |
+| 1  | Anil   | [anil@gmail.com](mailto:anil@gmail.com)     |
+| 2  | Mukesh | [mukesh@gmail.com](mailto:mukesh@gmail.com) |
+
+---
+
+# 1️⃣5️⃣ Complete React example
+
+```javascript
+import React, { useEffect, useState } from "react";
+
+function App(){
+
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+
+    fetch("https://api.example.com/users")
+      .then((response) => response.json())
+      .then((data) => setUsers(data));
+
+  }, []);
+
+  return(
+
+    <table border="1">
+
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+
+      {
+        users.map((item) => (
+
+          <tr key={item.id}>
+            <td>{item.id}</td>
+            <td>{item.name}</td>
+            <td>{item.email}</td>
+          </tr>
+
+        ))
+      }
+
+    </table>
+
+  )
+
+}
+
+export default App;
+```
+
+---
+
+# 1️⃣6️⃣ API flow
+
+```text
+React Component Load
+        ↓
+useEffect run
+        ↓
+fetch() API call
+        ↓
+Server response
+        ↓
+JSON convert
+        ↓
+State update
+        ↓
+UI render
+```
+
+---
+
+# 1️⃣7️⃣ Key concepts summary
+
+**Teacher:** Is video me kya seekha?
+
+**Student:**
+
+1️⃣ **API concept**
+2️⃣ **Fetch API**
+3️⃣ **GET method**
+4️⃣ **useEffect for API call**
+5️⃣ **useState for storing data**
+6️⃣ **map() for rendering list**
+
+---
+
+✅ **After this video you understand:**
+
+* API kya hoti hai
+* Fetch API ka use
+* GET request
+* React me API data show karna
+
+---
+
+If you want, I can also create **next notes (#52 POST API in React)** where you will learn:
+
+```text
+Create new data
+Form submit
+API POST request
+```
+
+which is **very important for real projects and interviews.**
+
+==========================================================================================================
+React tutorial in Hindi #53 POST Method in Rest API
+
+Below are **Q&A-style detailed notes** for the video
+**“React Tutorial #53 – POST Method in REST API”** in **simple Hindi-style English (Hinglish)** as **Teacher → Student conversation**, step-by-step with examples.
+
+---
+
+# React – POST Method in REST API
+
+---
+
+# 1️⃣ POST Method kya hota hai?
+
+**Teacher:** **POST Method** kya hota hai?
+
+**Student:**
+**POST method** ka use **server me naya data send karne (create karne)** ke liye hota hai.
+
+Example:
+
+```text
+User form submit karta hai
+        ↓
+Data server ko bheja jata hai
+        ↓
+Database me store ho jata hai
+```
+
+Example:
+
+```text
+Name: Anil
+Email: anil@gmail.com
+Mobile: 9999999999
+```
+
+Ye data **POST request ke through server ko bheja jata hai.**
+
+---
+
+# 2️⃣ REST API me methods
+
+**Teacher:** REST API me kaun-kaun se HTTP methods use hote hain?
+
+**Student:**
+
+| Method     | Use               |
+| ---------- | ----------------- |
+| **GET**    | Data read karna   |
+| **POST**   | Data create karna |
+| **PUT**    | Data update karna |
+| **DELETE** | Data delete karna |
+
+Is video me **POST method** use ho raha hai.
+
+---
+
+# 3️⃣ POST request ka example
+
+Example request:
+
+```text
+POST /users
+```
+
+Body me data:
+
+```json
+{
+ "name":"Anil",
+ "email":"anil@gmail.com",
+ "mobile":"9999999999"
+}
+```
+
+Server response:
+
+```json
+{
+ "id":101,
+ "name":"Anil",
+ "email":"anil@gmail.com",
+ "mobile":"9999999999"
+}
+```
+
+---
+
+# 4️⃣ POST request test kaise karte hain?
+
+**Teacher:** API POST request test kaise karte hain?
+
+**Student:**
+POST request **Postman tool** se test kar sakte hain.
+
+Steps:
+
+1️⃣ Method select karo **POST**
+2️⃣ API URL add karo
+3️⃣ Body me **JSON data** bhejo
+
+Example:
+
+```json
+{
+ "name":"Iron Man",
+ "email":"ironman@gmail.com",
+ "mobile":"9999999999"
+}
+```
+
+Server response:
+
+```text
+Status: 201 Created
+```
+
+Iska matlab data successfully save ho gaya.
+
+---
+
+# 5️⃣ React me POST method ka use
+
+**Teacher:** React me POST method kab use karte hain?
+
+**Student:**
+React me POST method use karte hain jab:
+
+* Form submit ho
+* User create karna ho
+* Data server ko bhejna ho
+
+Example:
+
+```text
+Registration form
+Contact form
+Add user form
+```
+
+---
+
+# 6️⃣ Form create karna
+
+Example form fields:
+
+* Name
+* Email
+* Mobile
+
+```html
+<input type="text" placeholder="Enter Name" />
+<input type="email" placeholder="Enter Email" />
+<input type="text" placeholder="Enter Mobile" />
+
+<button>Save User</button>
+```
+
+---
+
+# 7️⃣ Form data store karne ke liye useState
+
+**Teacher:** Form values store kaha karte hain?
+
+**Student:**
+React me **useState hook** use karte hain.
+
+Example:
+
+```javascript
+const [name,setName] = useState("")
+const [email,setEmail] = useState("")
+const [mobile,setMobile] = useState("")
+```
+
+---
+
+# 8️⃣ Input field ko state se connect karna
+
+```javascript
+<input
+ type="text"
+ value={name}
+ onChange={(e)=>setName(e.target.value)}
+/>
+```
+
+Same pattern:
+
+```javascript
+<input
+ value={email}
+ onChange={(e)=>setEmail(e.target.value)}
+/>
+
+<input
+ value={mobile}
+ onChange={(e)=>setMobile(e.target.value)}
+/>
+```
+
+---
+
+# 9️⃣ Submit function banana
+
+Form submit hone par function run hota hai.
+
+Example:
+
+```javascript
+function saveUser(){
+
+ console.log(name,email,mobile)
+
+}
+```
+
+Button:
+
+```javascript
+<button onClick={saveUser}>Save User</button>
+```
+
+---
+
+# 🔟 POST request send karna
+
+React me **fetch API** use karte hain.
+
+Example:
+
+```javascript
+fetch("API_URL",{
+
+ method:"POST",
+
+ headers:{
+   "Content-Type":"application/json"
+ },
+
+ body: JSON.stringify({
+   name:name,
+   email:email,
+   mobile:mobile
+ })
+
+})
+```
+
+---
+
+# 1️⃣1️⃣ Code explanation
+
+| Code              | Meaning             |
+| ----------------- | ------------------- |
+| **method:"POST"** | POST request        |
+| **headers**       | request type define |
+| **Content-Type**  | JSON data           |
+| **body**          | data send           |
+
+---
+
+# 1️⃣2️⃣ Response handle karna
+
+API response ko handle karne ke liye:
+
+```javascript
+fetch(url,options)
+.then((res)=>res.json())
+.then((data)=>console.log(data))
+```
+
+Server response example:
+
+```json
+{
+ "id": 5,
+ "name": "Batman",
+ "email": "batman@gmail.com",
+ "mobile": "1111111111"
+}
+```
+
+---
+
+# 1️⃣3️⃣ Complete React POST example
+
+```javascript
+import {useState} from "react";
+
+function App(){
+
+ const [name,setName]=useState("")
+ const [email,setEmail]=useState("")
+ const [mobile,setMobile]=useState("")
+
+ function saveUser(){
+
+   fetch("API_URL",{
+
+     method:"POST",
+
+     headers:{
+       "Content-Type":"application/json"
+     },
+
+     body:JSON.stringify({
+       name,
+       email,
+       mobile
+     })
+
+   })
+
+ }
+
+ return(
+
+   <div>
+
+     <input value={name} onChange={(e)=>setName(e.target.value)} />
+
+     <input value={email} onChange={(e)=>setEmail(e.target.value)} />
+
+     <input value={mobile} onChange={(e)=>setMobile(e.target.value)} />
+
+     <button onClick={saveUser}>Save User</button>
+
+   </div>
+
+ )
+
+}
+
+export default App
+```
+
+---
+
+# 1️⃣4️⃣ POST request flow
+
+```text
+User form fill karta hai
+        ↓
+Submit button click
+        ↓
+saveUser() function call
+        ↓
+fetch POST request
+        ↓
+Server ko data bheja
+        ↓
+Database me store
+        ↓
+Response return
+```
+
+---
+
+# 1️⃣5️⃣ PUT vs PATCH difference
+
+**Teacher:** **PUT aur PATCH** me difference kya hai?
+
+**Student:**
+
+| Method    | Meaning                              |
+| --------- | ------------------------------------ |
+| **PUT**   | pura data replace karta hai          |
+| **PATCH** | sirf specific field update karta hai |
+
+Example:
+
+Original data:
+
+```json
+{
+ "name":"Anil",
+ "email":"anil@gmail.com"
+}
+```
+
+PUT request:
+
+```json
+{
+ "name":"Rahul",
+ "email":"rahul@gmail.com"
+}
+```
+
+PATCH request:
+
+```json
+{
+ "email":"rahul@gmail.com"
+}
+```
+
+---
+
+# 1️⃣6️⃣ Key concepts summary
+
+**Teacher:** Is video me kya seekha?
+
+**Student:**
+
+1️⃣ **POST method concept**
+2️⃣ **Postman se testing**
+3️⃣ **React form create karna**
+4️⃣ **useState for input values**
+5️⃣ **fetch POST request**
+6️⃣ **JSON body send karna**
+
+---
+
+✅ **After this video you understand:**
+
+* POST request kaise bhejte hain
+* React form data kaise handle karte hain
+* Server ko JSON data kaise send karte hain
+
+---
+
+If you want, I can also create the **next notes (#54 PUT Method – Update API)** which is **very important in real projects (edit forms)**.
+
+==========================================================================================================
+React tutorial in Hindi #54 Delete Method in React API
+
+Below are **Q&A-style detailed notes** for the video
+**“React Tutorial #54 – Delete Method in React API”** in **simple Hindi-style English (Hinglish)** as **Teacher → Student conversation**, step-by-step with examples.
+
+---
+
+# React – DELETE Method in API
+
+---
+
+# 1️⃣ Delete Method kya hota hai?
+
+**Teacher:** **DELETE method** kya hota hai?
+
+**Student:**
+**DELETE method** ka use **server/database se record delete karne** ke liye hota hai.
+
+Example database table:
+
+| ID | Name  |
+| -- | ----- |
+| 1  | Anil  |
+| 2  | Peter |
+| 3  | Tony  |
+
+Agar **ID = 2 delete karna hai**, to **DELETE API call** karte hain.
+
+---
+
+# 2️⃣ DELETE method kab use hota hai?
+
+**Teacher:** React application me DELETE method kab use hota hai?
+
+**Student:**
+
+DELETE method use hota hai jab:
+
+* User delete karna ho
+* Product remove karna ho
+* Record delete karna ho
+
+Example:
+
+```text
+User list page
+```
+
+User ke saamne **Delete button** hota hai.
+
+```
+Anil   Delete
+Peter  Delete
+Tony   Delete
+```
+
+---
+
+# 3️⃣ React me Delete button kaise add karte hain?
+
+**Teacher:** Table me delete button kaise add karte hain?
+
+**Student:**
+
+Example:
+
+```javascript
+<button>Delete</button>
+```
+
+Table row example:
+
+```javascript
+<tr>
+  <td>{item.id}</td>
+  <td>{item.name}</td>
+  <td>
+     <button>Delete</button>
+  </td>
+</tr>
+```
+
+---
+
+# 4️⃣ Delete button par function call
+
+**Teacher:** Button click par function kaise call karte hain?
+
+**Student:**
+
+```javascript
+<button onClick={()=>deleteUser(item.id)}>Delete</button>
+```
+
+Yaha:
+
+```text
+item.id
+```
+
+delete hone wale record ki **ID** hai.
+
+---
+
+# 5️⃣ deleteUser function banana
+
+**Teacher:** Delete ke liye function kaise banate hain?
+
+**Student:**
+
+```javascript
+function deleteUser(id){
+
+ alert(id)
+
+}
+```
+
+Isse pata chalega kaunsa record delete karna hai.
+
+Example output:
+
+```text
+ID: 3
+```
+
+---
+
+# 6️⃣ DELETE API call ka syntax
+
+**Teacher:** DELETE API kaise call karte hain?
+
+**Student:**
+React me **fetch API** use karte hain.
+
+Example:
+
+```javascript
+fetch(`API_URL/${id}`,{
+
+ method:"DELETE"
+
+})
+```
+
+Example API:
+
+```text
+https://api.example.com/users/3
+```
+
+---
+
+# 7️⃣ Complete deleteUser function
+
+```javascript
+function deleteUser(id){
+
+ fetch(`https://api.example.com/users/${id}`,{
+
+   method:"DELETE"
+
+ })
+
+}
+```
+
+---
+
+# 8️⃣ Response handle karna
+
+API response ko JSON me convert karte hain.
+
+```javascript
+fetch(url,{
+ method:"DELETE"
+})
+.then((res)=>res.json())
+.then((data)=>console.log(data))
+```
+
+Server response example:
+
+```json
+{
+ "status":"deleted"
+}
+```
+
+---
+
+# 9️⃣ Table refresh problem
+
+**Teacher:** Record delete ho gaya, lekin table me abhi bhi dikh raha hai. Kyun?
+
+**Student:**
+Kyuki **React UI automatically refresh nahi hua**.
+
+Solution:
+
+Delete ke baad **data dobara fetch karna**.
+
+---
+
+# 🔟 getList function banana
+
+List load karne ke liye function banate hain.
+
+```javascript
+function getList(){
+
+ fetch(API_URL)
+ .then(res=>res.json())
+ .then(data=>setData(data))
+
+}
+```
+
+---
+
+# 1️⃣1️⃣ Page load par list load karna
+
+```javascript
+useEffect(()=>{
+
+ getList()
+
+},[])
+```
+
+---
+
+# 1️⃣2️⃣ Delete ke baad list refresh
+
+```javascript
+function deleteUser(id){
+
+ fetch(`API_URL/${id}`,{
+
+   method:"DELETE"
+
+ })
+ .then(()=>{
+
+   getList()
+
+ })
+
+}
+```
+
+Ab delete ke baad **table automatically update ho jayega.**
+
+---
+
+# 1️⃣3️⃣ Network tab me kya hota hai?
+
+Delete button click karte hi:
+
+Browser **Network tab** me requests dikhti hain.
+
+Example:
+
+```text
+OPTIONS request (preflight)
+DELETE request
+```
+
+DELETE request me:
+
+```text
+Method: DELETE
+URL: /users/3
+```
+
+---
+
+# 1️⃣4️⃣ Preflight request kya hoti hai?
+
+**Teacher:** Preflight request kya hoti hai?
+
+**Student:**
+Browser pehle check karta hai:
+
+```text
+Server allowed hai ya nahi
+```
+
+Isliye ek **OPTIONS request** bhejta hai.
+
+Uske baad **actual DELETE request** bhejta hai.
+
+---
+
+# 1️⃣5️⃣ Backend ka role
+
+**Teacher:** Kya DELETE method se hi delete hota hai?
+
+**Student:**
+Nahi.
+
+Ye **backend implementation par depend karta hai**.
+
+Example:
+
+Agar backend developer ne delete logic **POST method** par likha ho:
+
+```text
+POST /delete-user
+```
+
+To POST request bhi delete kar sakti hai.
+
+HTTP methods mostly **convention** hote hain.
+
+---
+
+# 1️⃣6️⃣ Interview question
+
+**Teacher:** Kya **GET request me body send kar sakte hain?**
+
+**Student:**
+❌ **Nahi**
+
+GET request me **body nahi hoti**.
+
+Body sirf:
+
+* POST
+* PUT
+* PATCH
+
+me hoti hai.
+
+---
+
+# 1️⃣7️⃣ Complete example
+
+```javascript
+function deleteUser(id){
+
+ fetch(`https://api.example.com/users/${id}`,{
+
+   method:"DELETE"
+
+ })
+ .then((res)=>res.json())
+ .then((data)=>{
+
+   console.log("Deleted",data)
+
+   getList()
+
+ })
+
+}
+```
+
+Button:
+
+```javascript
+<button onClick={()=>deleteUser(item.id)}>
+ Delete
+</button>
+```
+
+---
+
+# 1️⃣8️⃣ Delete API flow
+
+```text
+User click Delete button
+        ↓
+deleteUser(id)
+        ↓
+fetch DELETE request
+        ↓
+Server delete record
+        ↓
+Response return
+        ↓
+getList() call
+        ↓
+UI refresh
+```
+
+---
+
+# 1️⃣9️⃣ Key concepts summary
+
+**Teacher:** Is video me kya seekha?
+
+**Student:**
+
+1️⃣ **DELETE method concept**
+2️⃣ **Delete button add karna**
+3️⃣ **ID pass karna**
+4️⃣ **fetch DELETE request**
+5️⃣ **UI refresh using getList()**
+
+---
+
+✅ **After this video you understand**
+
+* React me delete API kaise call karte hain
+* Record delete hone ke baad list refresh kaise hoti hai
+
+---
+
+If you want, I can also make **next notes (#55 Update API – Edit record)** because **CRUD (Create Read Update Delete)** ka **last important part update hota hai** jo **real projects me bahut use hota hai**.
+
+==========================================================================================================
+React tutorial in Hindi #55 Pre-filled form Data
+
+Below are **Q&A-style detailed notes** for the video
+**“React Tutorial #55 – Pre-filled Form Data”** explained in **simple Hindi-style English (Hinglish)** like **Teacher → Student conversation**, step-by-step with examples.
+
+---
+
+# React – Pre-filled Form Data (Edit Form Preparation)
+
+---
+
+# 1️⃣ Pre-filled form data kya hota hai?
+
+**Teacher:** **Pre-filled form data** kya hota hai?
+
+**Student:**
+**Pre-filled form** ka matlab hai:
+
+👉 Form open hone par **fields already filled ho**.
+
+Example:
+
+User table:
+
+| ID | Name | Email                                   |
+| -- | ---- | --------------------------------------- |
+| 1  | Anil | [anil@gmail.com](mailto:anil@gmail.com) |
+
+Agar **Edit button click kare** to form open hoga:
+
+```text
+Name:  Anil
+Email: anil@gmail.com
+Mobile: 9999999999
+```
+
+Ye data automatically fill ho jata hai.
+
+Isi ko **Pre-filled form data** kehte hain.
+
+---
+
+# 2️⃣ Pre-filled form kyun use karte hain?
+
+**Teacher:** Pre-filled form kyun use karte hain?
+
+**Student:**
+
+Pre-filled form mostly **update/edit feature** ke liye use hota hai.
+
+Example:
+
+```text
+User Management System
+```
+
+Features:
+
+* Add user
+* Edit user
+* Delete user
+
+Edit karte time form **auto fill hota hai**.
+
+---
+
+# 3️⃣ Example UI
+
+User list:
+
+| Name | Email                                   | Action |
+| ---- | --------------------------------------- | ------ |
+| Anil | [anil@gmail.com](mailto:anil@gmail.com) | Update |
+| Tony | [tony@gmail.com](mailto:tony@gmail.com) | Update |
+
+User **Update button** click karega.
+
+---
+
+# 4️⃣ Form create karna
+
+Example simple form:
+
+```html id="sk03sn"
+<input type="text" />
+<input type="text" />
+<input type="text" />
+
+<button>Update</button>
+```
+
+Fields:
+
+```text id="cjeem6"
+Name
+Email
+Mobile
+```
+
+---
+
+# 5️⃣ Form values store karne ke liye state
+
+**Teacher:** Form values store kaha karte hain?
+
+**Student:**
+React me **useState hook** use karte hain.
+
+Example:
+
+```javascript id="necr55"
+const [name,setName] = useState("")
+const [email,setEmail] = useState("")
+const [mobile,setMobile] = useState("")
+```
+
+---
+
+# 6️⃣ Input fields ko state se connect karna
+
+```javascript id="ghqtiu"
+<input
+ value={name}
+ onChange={(e)=>setName(e.target.value)}
+/>
+```
+
+Same for email:
+
+```javascript id="xxy4pt"
+<input
+ value={email}
+ onChange={(e)=>setEmail(e.target.value)}
+/>
+```
+
+Mobile:
+
+```javascript id="71dhkm"
+<input
+ value={mobile}
+ onChange={(e)=>setMobile(e.target.value)}
+/>
+```
+
+---
+
+# 7️⃣ Update button add karna
+
+Table me button add karte hain.
+
+```javascript id="bd8c7u"
+<button onClick={()=>selectUser(item)}>
+ Update
+</button>
+```
+
+Ye function call karega:
+
+```text id="1cey5l"
+selectUser()
+```
+
+---
+
+# 8️⃣ selectUser function ka role
+
+**Teacher:** selectUser function kya karta hai?
+
+**Student:**
+Ye function **selected user ka data form me set karta hai**.
+
+Example:
+
+```javascript id="q0fc38"
+function selectUser(user){
+
+ console.log(user)
+
+}
+```
+
+User object example:
+
+```json id="jv7h63"
+{
+ "id":1,
+ "name":"Anil",
+ "email":"anil@gmail.com",
+ "mobile":"9999999999"
+}
+```
+
+---
+
+# 9️⃣ State update karna
+
+selectUser function me:
+
+```javascript id="96nha8"
+function selectUser(user){
+
+ setName(user.name)
+ setEmail(user.email)
+ setMobile(user.mobile)
+
+}
+```
+
+---
+
+# 🔟 Form automatically fill ho jayega
+
+Kyuki input fields state se connected hain.
+
+Flow:
+
+```text id="g1qzt0"
+Update button click
+        ↓
+selectUser(user)
+        ↓
+setName()
+setEmail()
+setMobile()
+        ↓
+State update
+        ↓
+Form fields auto fill
+```
+
+---
+
+# 1️⃣1️⃣ Complete example
+
+```javascript id="7y1xgu"
+function selectUser(user){
+
+ setName(user.name)
+ setEmail(user.email)
+ setMobile(user.mobile)
+
+}
+```
+
+Inputs:
+
+```javascript id="iq0hgr"
+<input value={name} />
+
+<input value={email} />
+
+<input value={mobile} />
+```
+
+Output:
+
+```text id="smp85h"
+Name: Anil
+Email: anil@gmail.com
+Mobile: 9999999999
+```
+
+---
+
+# 1️⃣2️⃣ Important concept (index vs id problem)
+
+Video me ek issue discuss hua tha.
+
+Array index:
+
+```text id="22oqf7"
+0
+1
+2
+3
+```
+
+But user id:
+
+```text id="h9hw6k"
+1
+2
+3
+4
+```
+
+Isliye kabhi kabhi:
+
+```javascript id="wd8q0x"
+id-1
+```
+
+use karna padta hai.
+
+Better approach:
+
+```javascript id="p7y8c6"
+direct user object pass karo
+```
+
+---
+
+# 1️⃣3️⃣ Better solution
+
+Instead of index:
+
+```javascript id="bfa60h"
+selectUser(item)
+```
+
+Then:
+
+```javascript id="kwo42q"
+setName(item.name)
+setEmail(item.email)
+setMobile(item.mobile)
+```
+
+Ye **industry recommended way** hai.
+
+---
+
+# 1️⃣4️⃣ Pre-filled form ka real use
+
+Real applications:
+
+```text id="e9pkgi"
+Admin Dashboard
+User Management
+Product Management
+Profile Edit Page
+```
+
+Example:
+
+```text id="ffg5x2"
+Edit Profile
+```
+
+Form open hoga:
+
+```text
+Name: Vishnu
+Email: vishnu@gmail.com
+Mobile: 9876543210
+```
+
+---
+
+# 1️⃣5️⃣ Key concepts summary
+
+**Teacher:** Is video me kya seekha?
+
+**Student:**
+
+1️⃣ **Pre-filled form concept**
+2️⃣ **Edit button logic**
+3️⃣ **State update using selectUser**
+4️⃣ **Form auto fill using state**
+5️⃣ **Passing user object**
+
+---
+
+# 1️⃣6️⃣ Important interview question
+
+Video me ek question poocha gaya tha:
+
+**Teacher:**
+Kya **3 alag states** lene ki jagah **ek single state object** use kar sakte hain?
+
+Example:
+
+Instead of:
+
+```javascript id="57pc3p"
+const [name,setName]
+const [email,setEmail]
+const [mobile,setMobile]
+```
+
+We can do:
+
+```javascript id="7q0j0a"
+const [user,setUser] = useState({
+ name:"",
+ email:"",
+ mobile:""
+})
+```
+
+This is **cleaner approach**.
+
+---
+
+✅ **After this video you understand**
+
+* Pre-filled form concept
+* Edit button logic
+* State se form auto fill karna
+
+---
+
+If you want, I can also create **one final CRUD flow notes (React API CRUD full flow)** because now you have learned:
+
+```text
+GET
+POST
+DELETE
+Prefill Form
+```
+
+Next step is **UPDATE (PUT API)** which completes **React CRUD project**.
+
+==========================================================================================================
+Vishnudas, main tumhe **React me Prefilled Form ka complete working example** deta hoon. Ye exactly wahi concept hai jo video me hai: **list → update button → form auto fill**.
+
+Main simple **step-by-step example** de raha hoon.
+
+---
+
+# 1️⃣ Problem Statement
+
+Hamare paas ek **user list** hai.
+
+| ID | Name | Email                                   | Mobile     | Action |
+| -- | ---- | --------------------------------------- | ---------- | ------ |
+| 1  | Anil | [anil@gmail.com](mailto:anil@gmail.com) | 9999999999 | Update |
+| 2  | Tony | [tony@gmail.com](mailto:tony@gmail.com) | 8888888888 | Update |
+
+Agar user **Update button** click kare → form me data **auto fill ho jana chahiye**.
+
+---
+
+# 2️⃣ Complete React Example
+
+```javascript
+import React, { useState } from "react";
+
+function App(){
+
+  // list of users
+  const [users,setUsers] = useState([
+    {id:1,name:"Anil",email:"anil@gmail.com",mobile:"9999999999"},
+    {id:2,name:"Tony",email:"tony@gmail.com",mobile:"8888888888"},
+    {id:3,name:"Peter",email:"peter@gmail.com",mobile:"7777777777"}
+  ])
+
+  // form state
+  const [name,setName] = useState("")
+  const [email,setEmail] = useState("")
+  const [mobile,setMobile] = useState("")
+
+  // when update button clicked
+  function selectUser(user){
+
+    setName(user.name)
+    setEmail(user.email)
+    setMobile(user.mobile)
+
+  }
+
+  return(
+
+    <div>
+
+      <h2>User List</h2>
+
+      <table border="1">
+
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Mobile</th>
+          <th>Action</th>
+        </tr>
+
+        {
+          users.map((item)=>(
+            <tr key={item.id}>
+
+              <td>{item.id}</td>
+              <td>{item.name}</td>
+              <td>{item.email}</td>
+              <td>{item.mobile}</td>
+
+              <td>
+                <button onClick={()=>selectUser(item)}>
+                  Update
+                </button>
+              </td>
+
+            </tr>
+          ))
+        }
+
+      </table>
+
+      <h2>Update User Form</h2>
+
+      <input
+        type="text"
+        placeholder="Enter Name"
+        value={name}
+        onChange={(e)=>setName(e.target.value)}
+      />
+
+      <br/><br/>
+
+      <input
+        type="text"
+        placeholder="Enter Email"
+        value={email}
+        onChange={(e)=>setEmail(e.target.value)}
+      />
+
+      <br/><br/>
+
+      <input
+        type="text"
+        placeholder="Enter Mobile"
+        value={mobile}
+        onChange={(e)=>setMobile(e.target.value)}
+      />
+
+    </div>
+
+  )
+
+}
+
+export default App
+```
+
+---
+
+# 3️⃣ Code Flow (Important)
+
+## Step 1
+
+User table render hoti hai.
+
+```javascript
+users.map()
+```
+
+---
+
+## Step 2
+
+Update button click
+
+```javascript
+<button onClick={()=>selectUser(item)}>
+```
+
+---
+
+## Step 3
+
+Function call
+
+```javascript
+selectUser(user)
+```
+
+---
+
+## Step 4
+
+Form state update
+
+```javascript
+setName(user.name)
+setEmail(user.email)
+setMobile(user.mobile)
+```
+
+---
+
+## Step 5
+
+Form auto fill
+
+```javascript
+<input value={name}/>
+<input value={email}/>
+<input value={mobile}/>
+```
+
+React automatically **UI update kar deta hai**.
+
+---
+
+# 4️⃣ Visual Flow
+
+```
+User clicks Update button
+          ↓
+selectUser(user)
+          ↓
+setName()
+setEmail()
+setMobile()
+          ↓
+React State Update
+          ↓
+Form fields auto fill
+```
+
+---
+
+# 5️⃣ Output Example
+
+User click:
+
+```
+Update (Tony)
+```
+
+Form auto fill:
+
+```
+Name: Tony
+Email: tony@gmail.com
+Mobile: 8888888888
+```
+
+---
+
+# 6️⃣ Industry Best Practice (Better Way)
+
+Instead of 3 states:
+
+```javascript
+name
+email
+mobile
+```
+
+Industry me usually **single object state** use hota hai.
+
+Example:
+
+```javascript
+const [user,setUser] = useState({
+  name:"",
+  email:"",
+  mobile:""
+})
+```
+
+Then:
+
+```javascript
+setUser(item)
+```
+
+---
+
+# 7️⃣ Real Project Use Case
+
+Prefilled form use hota hai:
+
+```
+Edit Profile
+Edit Product
+Edit User
+Edit Order
+Admin Dashboard
+```
+
+---
+
+✅ **Ab tumne React CRUD ka ye part seekh liya:**
+
+```
+GET API
+POST API
+DELETE API
+Prefilled Form
+```
+
+Next step hota hai:
+
+```
+PUT API (Update API)
+```
+
+---
+
+Agar chaho to main tumhe **React CRUD ka complete project (industry level)** bhi bana kar dikha sakta hoon jisme:
+
+```
+GET
+POST
+UPDATE
+DELETE
+Prefilled form
+Loader
+Error handling
+```
+
+sab ek hi project me hoga.
+
+==========================================================================================================
+React tutorial in Hindi #56 Update Data with API | Put Method
+
+Below are **Q&A-style detailed notes** for the video:
+**“React Tutorial #56 – Update Data with API (PUT Method)”** explained in **simple Hindi-style English (Hinglish)** like a **Teacher → Student conversation** with examples.
+
+---
+
+# React API – Update Data using PUT Method
+
+---
+
+# 1️⃣ PUT Method kya hota hai?
+
+**Teacher:** **PUT Method** kya hota hai?
+
+**Student:**
+**PUT Method API me existing data ko update karne ke liye use hota hai.**
+
+Example:
+
+Database me user data hai:
+
+```json
+{
+ "id": 1,
+ "name": "Tony",
+ "email": "tony@gmail.com",
+ "mobile": "1111"
+}
+```
+
+Agar hum name change kare:
+
+```json
+{
+ "id": 1,
+ "name": "Tony Stark",
+ "email": "tony@gmail.com",
+ "mobile": "1111"
+}
+```
+
+To ye **PUT request se update hota hai**.
+
+---
+
+# 2️⃣ React application me update ka use case
+
+**Teacher:** React application me **data update kab karte hain?**
+
+**Student:**
+Jab user:
+
+* Profile update kare
+* Email change kare
+* Mobile number change kare
+* Product edit kare
+
+Example UI:
+
+```text
+User List
+----------------
+Tony       Edit
+Batman     Edit
+Peter      Edit
+```
+
+User **Edit button click kare → Form open ho → Data update kare → Save**.
+
+---
+
+# 3️⃣ Update process ka flow
+
+**Teacher:** React me update ka process kya hota hai?
+
+**Student:**
+
+Step by step flow:
+
+```text
+1 Select record
+2 Data form me show hota hai
+3 User changes values
+4 Update button click
+5 PUT API call
+6 Database update
+```
+
+---
+
+# 4️⃣ Form me data kaise aata hai?
+
+**Teacher:** Form me **existing data kaise fill hota hai?**
+
+**Student:**
+Data **React state me store hota hai**.
+
+Example state:
+
+```javascript
+const [name,setName] = useState("");
+const [email,setEmail] = useState("");
+const [mobile,setMobile] = useState("");
+```
+
+Jab user **Edit click kare**, tab data state me set karte hain.
+
+Example:
+
+```javascript
+setName(user.name)
+setEmail(user.email)
+setMobile(user.mobile)
+```
+
+---
+
+# 5️⃣ Form fields editable kaise banate hain?
+
+**Teacher:** Agar input field change nahi ho rahi to kya problem hai?
+
+**Student:**
+Agar **onChange event** nahi lagaya hai to input editable nahi hoga.
+
+Example:
+
+```javascript
+<input value={name} onChange={(e)=>setName(e.target.value)} />
+```
+
+Same email aur mobile ke liye bhi.
+
+---
+
+# 6️⃣ Update function kaise banate hain?
+
+**Teacher:** Update button click hone par kya function call hota hai?
+
+**Student:**
+Ek function banate hain:
+
+```javascript
+function updateUser(){
+   console.log(name,email,mobile)
+}
+```
+
+Ye function **updated values check karne ke liye** use hota hai.
+
+---
+
+# 7️⃣ Update ke liye ID kyun zaruri hai?
+
+**Teacher:** Update karte waqt **ID kyun zaruri hoti hai?**
+
+**Student:**
+Database me multiple users hote hain.
+
+Example:
+
+```text
+ID   Name
+1    Tony
+2    Batman
+3    Peter
+```
+
+Agar ID nahi hogi to API ko nahi pata chalega:
+
+👉 **kaunsa record update karna hai**
+
+Isliye:
+
+```javascript
+const [userId,setUserId] = useState(null)
+```
+
+---
+
+# 8️⃣ ID kaise set hoti hai?
+
+**Teacher:** Jab user select kare tab ID kaise store hoti hai?
+
+**Student:**
+
+Example:
+
+```javascript
+function selectUser(item){
+ setUserId(item.id)
+ setName(item.name)
+ setEmail(item.email)
+ setMobile(item.mobile)
+}
+```
+
+Ab form me correct data fill ho jayega.
+
+---
+
+# 9️⃣ PUT API request kaise bhejte hain?
+
+**Teacher:** React me **PUT API call kaise karte hain?**
+
+**Student:**
+`fetch()` method use karte hain.
+
+Example:
+
+```javascript
+fetch("http://localhost:3000/users/"+userId,{
+ method:"PUT",
+ headers:{
+   "Content-Type":"application/json"
+ },
+ body: JSON.stringify({
+   name:name,
+   email:email,
+   mobile:mobile
+ })
+})
+```
+
+---
+
+# 🔟 PUT API explanation
+
+**Teacher:** Is code me kya ho raha hai?
+
+**Student:**
+
+```javascript
+method:"PUT"
+```
+
+👉 Server ko bata rahe hain **update request hai**
+
+---
+
+```javascript
+headers:{
+ "Content-Type":"application/json"
+}
+```
+
+👉 Data **JSON format me send ho raha hai**
+
+---
+
+```javascript
+body: JSON.stringify({...})
+```
+
+👉 JavaScript object ko **JSON string me convert kar rahe hain**
+
+---
+
+# 1️⃣1️⃣ Example update flow
+
+User list:
+
+```text
+Tony
+Batman
+Peter
+```
+
+User **Tony edit kare**
+
+Form:
+
+```text
+Name: Tony Stark
+Email: stark@gmail.com
+Mobile: 5555
+```
+
+Update button click →
+
+API call:
+
+```text
+PUT /users/1
+```
+
+Database update ho jayega.
+
+---
+
+# 1️⃣2️⃣ Network request kya hoti hai?
+
+Update click karte hi browser **Network tab me request dikhata hai**.
+
+Example:
+
+```text
+Request Type: PUT
+Status: 200 OK
+```
+
+Iska matlab:
+
+👉 **Update successfully ho gaya**
+
+---
+
+# 1️⃣3️⃣ PUT vs POST difference
+
+| Method | Use                  |
+| ------ | -------------------- |
+| GET    | Data fetch           |
+| POST   | New data create      |
+| PUT    | Existing data update |
+| DELETE | Data remove          |
+
+---
+
+# 1️⃣4️⃣ Important React concepts used
+
+Is video me ye React concepts use hue:
+
+* **useState**
+* **Form inputs**
+* **onChange event**
+* **fetch API**
+* **PUT method**
+* **JSON data**
+
+---
+
+# 1️⃣5️⃣ Complete update example
+
+Simple example:
+
+```javascript
+function updateUser(){
+
+ fetch("http://localhost:3000/users/"+userId,{
+   method:"PUT",
+   headers:{
+     "Content-Type":"application/json"
+   },
+   body:JSON.stringify({
+     name,
+     email,
+     mobile
+   })
+ })
+ .then((res)=>res.json())
+ .then((data)=>{
+   console.log("Updated Successfully")
+ })
+}
+```
+
+---
+
+# 1️⃣6️⃣ UI flow example
+
+```text
+User List
+--------------
+Tony     Edit
+Batman   Edit
+Peter    Edit
+```
+
+Edit click →
+
+```text
+Name   Tony
+Email  tony@gmail.com
+Mobile 1111
+```
+
+User change kare →
+
+```text
+Name   Tony Stark
+Mobile 5555
+```
+
+Click **Update**
+
+→ PUT request
+→ Database update
+
+---
+
+# 1️⃣7️⃣ Interview question
+
+**Teacher:** PUT aur PATCH me difference kya hai?
+
+**Student:**
+
+**PUT**
+
+👉 Full object update karta hai.
+
+Example:
+
+```json
+{
+"name":"Tony",
+"email":"tony@gmail.com",
+"mobile":"1111"
+}
+```
+
+---
+
+**PATCH**
+
+👉 Sirf specific field update karta hai.
+
+Example:
+
+```json
+{
+"mobile":"9999"
+}
+```
+
+---
+
+# 1️⃣8️⃣ Video summary
+
+Is video me humne sikha:
+
+1️⃣ Form me existing data show karna
+2️⃣ Input fields editable banana
+3️⃣ ID store karna
+4️⃣ PUT API call bhejna
+5️⃣ Database record update karna
+
+---
+
+✅ **Short definition**
+
+👉 **PUT method API ka use existing data ko update karne ke liye hota hai.**
+
+---
+
+If you want, I can also give you **Complete CRUD React Example (GET + POST + PUT + DELETE in one project)** — which is **very important for React interviews and real projects**.
+
+==========================================================================================================
+React tutorial in Hindi #57 Previous state in functional component
+
+Below are **Q&A-style detailed notes** for the video
+**“React Tutorial #57 – Previous State in Functional Component”** explained in **simple Hindi-style English (Hinglish)** like **Teacher → Student conversation**, with examples.
+
+---
+
+# React – Previous State in Functional Component
+
+---
+
+# 1️⃣ Previous State kya hota hai?
+
+**Teacher:** React me **Previous State** kya hota hai?
+
+**Student:**
+**Previous State** ka matlab hai:
+
+👉 **Current state update hone se pehle wali state value**
+
+Example:
+
+```text
+Current State = 5
+Previous State = 4
+```
+
+Agar counter increment hua:
+
+```text
+4 → 5
+```
+
+To:
+
+* Previous state = **4**
+* Current state = **5**
+
+---
+
+# 2️⃣ Previous State ki zarurat kyun padti hai?
+
+**Teacher:** Previous state ki zarurat kyun padti hai?
+
+**Student:**
+Kabhi-kabhi hume **current state aur previous state compare karna hota hai**.
+
+Example:
+
+```text
+Previous count < 5 → show alert
+Previous count > 5 → run another logic
+```
+
+Example use cases:
+
+* Counter comparison
+* Performance check
+* Conditional logic
+* State difference calculation
+
+---
+
+# 3️⃣ Simple Counter Example
+
+React me ek simple counter banate hain.
+
+```javascript
+import { useState } from "react";
+
+function App(){
+
+ const [count,setCount] = useState(0);
+
+ function updateCounter(){
+   setCount(count + 1);
+ }
+
+ return(
+   <>
+     <h1>{count}</h1>
+     <button onClick={updateCounter}>Update Counter</button>
+   </>
+ )
+}
+
+export default App;
+```
+
+Output:
+
+```text
+0 → 1 → 2 → 3 → 4
+```
+
+---
+
+# 4️⃣ Problem kya hai?
+
+**Teacher:** Agar hume previous value chahiye to problem kya hai?
+
+**Student:**
+Normal state update me **React previous value directly nahi deta**.
+
+Example:
+
+```javascript
+setCount(count + 1)
+```
+
+Isme hume **previous value accessible nahi hoti**.
+
+---
+
+# 5️⃣ React solution kya deta hai?
+
+**Teacher:** React previous state ka solution kaise deta hai?
+
+**Student:**
+React me **callback function** use karte hain.
+
+Syntax:
+
+```javascript
+setState((previousState) => newState)
+```
+
+Example:
+
+```javascript
+setCount((prev)=>prev+1)
+```
+
+---
+
+# 6️⃣ Previous State ka Example
+
+```javascript
+function updateCounter(){
+
+ setCount((prev)=>{
+   console.log("Previous:",prev)
+   return prev+1
+ })
+
+}
+```
+
+Output console:
+
+```text
+Previous:0
+Previous:1
+Previous:2
+Previous:3
+```
+
+---
+
+# 7️⃣ Current vs Previous State
+
+Example:
+
+```text
+Button Click
+```
+
+State flow:
+
+```text
+Previous = 2
+Current = 3
+```
+
+React internally:
+
+```javascript
+setCount((prev)=>prev+1)
+```
+
+---
+
+# 8️⃣ Example: Difference between values
+
+Teacher example:
+
+Random number generate karte hain:
+
+```javascript
+let random = Math.floor(Math.random()*10)
+```
+
+State update:
+
+```javascript
+setCount((prev)=>{
+ console.log("Previous:",prev)
+ console.log("New:",random)
+ return random
+})
+```
+
+Ab hum difference calculate kar sakte hain.
+
+Example:
+
+```javascript
+if(random - prev > 5){
+ alert("High Difference")
+}
+```
+
+---
+
+# 9️⃣ Condition Example
+
+Example:
+
+```javascript
+setCount((prev)=>{
+
+ let random = Math.floor(Math.random()*10)
+
+ if(prev < 5){
+   alert("Low Value")
+ }
+
+ return random
+
+})
+```
+
+Explanation:
+
+```text
+Previous < 5 → Alert
+```
+
+---
+
+# 🔟 Important concept
+
+Previous state **React automatically callback parameter me deta hai**.
+
+Example:
+
+```javascript
+setCount((prev)=>{
+ return prev+1
+})
+```
+
+Yaha:
+
+```text
+prev = previous state
+```
+
+---
+
+# 1️⃣1️⃣ Loop problem example
+
+Teacher ek interesting problem batate hain.
+
+Example:
+
+```javascript
+for(let i=0;i<5;i++){
+ setCount(count+1)
+}
+```
+
+Expected:
+
+```text
+0 → 5
+```
+
+But actual output:
+
+```text
+1
+```
+
+---
+
+# 1️⃣2️⃣ Yeh problem kyun hoti hai?
+
+React **asynchronous state update** karta hai.
+
+Isliye loop me **same state value use hoti hai**.
+
+Example:
+
+```text
+count = 0
+
+loop 5 times
+0 + 1
+0 + 1
+0 + 1
+0 + 1
+0 + 1
+```
+
+Result:
+
+```text
+1
+```
+
+---
+
+# 1️⃣3️⃣ Solution using previous state
+
+Correct way:
+
+```javascript
+for(let i=0;i<5;i++){
+ setCount((prev)=>prev+1)
+}
+```
+
+Output:
+
+```text
+0 → 5
+```
+
+---
+
+# 1️⃣4️⃣ Final Correct Example
+
+```javascript
+function updateCounter(){
+
+ for(let i=0;i<5;i++){
+   setCount((prev)=>prev+1)
+ }
+
+}
+```
+
+Ab result correct milega.
+
+---
+
+# 1️⃣5️⃣ Previous state ka real use case
+
+Example: Cart system
+
+```text
+Previous Cart Items = 3
+New Cart Items = 4
+```
+
+Logic:
+
+```text
+if(previousItems < newItems)
+ → show notification
+```
+
+---
+
+# 1️⃣6️⃣ Key React concept
+
+Previous state use hota hai jab:
+
+* Multiple updates ho
+* Loop update ho
+* State dependency ho
+* Async update ho
+
+---
+
+# 1️⃣7️⃣ Syntax Summary
+
+Basic state update:
+
+```javascript
+setCount(count+1)
+```
+
+Previous state update:
+
+```javascript
+setCount((prev)=>prev+1)
+```
+
+---
+
+# 1️⃣8️⃣ Important Interview Question
+
+**Teacher:** React me state update karte waqt previous state kab use karte hain?
+
+**Student:**
+
+Jab:
+
+1️⃣ State multiple times update ho
+2️⃣ Loop me state change ho
+3️⃣ Current value previous value par depend ho
+
+Tab use karte hain:
+
+```javascript
+setState((prev)=>newState)
+```
+
+---
+
+# 1️⃣9️⃣ Quick summary
+
+Is video me humne seekha:
+
+1️⃣ Previous state kya hota hai
+2️⃣ React me callback state update
+3️⃣ Random value example
+4️⃣ Loop update problem
+5️⃣ Previous state solution
+
+---
+
+✅ **Short definition**
+
+👉 **Previous state ka matlab hai state update hone se pehle wali value, jise React callback function ke through access karta hai.**
+
+---
+
+If you want, I can also show **3 interview-level tricky examples of previous state (very commonly asked in React interviews)**.
+
+==========================================================================================================
+React tutorial in Hindi #58 Previous Props with Hooks
+
+Chalo Vishnudas, isko **step-by-step simple tareeke se samjhte hain**.
+Ye example **Previous Props** samjhane ke liye hai.
+
+Main pehle **simple flow**, phir **render sequence**, phir **visual example** bataunga.
+
+---
+
+# 1️⃣ Parent component kya karta hai
+
+Maan lo parent component hai:
+
+```javascript
+import { useState } from "react";
+import User from "./User";
+
+function App(){
+
+ const [count,setCount] = useState(0)
+
+ return(
+  <>
+   <button onClick={()=>setCount(count+1)}>Increase</button>
+
+   <User counter={count}/>
+  </>
+ )
+}
+
+export default App;
+```
+
+Yaha:
+
+```
+count = 0
+```
+
+Child component ko prop bheja:
+
+```
+<User counter={count}/>
+```
+
+---
+
+# 2️⃣ Child component me kya ho raha hai
+
+Tumhara code:
+
+```javascript
+const lastValue = useRef()
+```
+
+Ye ek **memory box** jaisa hai jisme value store hoti hai.
+
+Example:
+
+```
+lastValue.current = stored value
+```
+
+---
+
+# 3️⃣ useEffect kya kar raha hai
+
+```javascript
+useEffect(()=>{
+ lastValue.current = props.counter
+})
+```
+
+Ye code **component render hone ke baad run hota hai**.
+
+Matlab:
+
+```
+Current value ko lastValue me store kar do
+```
+
+---
+
+# 4️⃣ Important point
+
+Render order samajhna bahut zaruri hai.
+
+React me order hota hai:
+
+```
+1 Render UI
+2 useEffect run
+```
+
+---
+
+# 5️⃣ First render
+
+Parent:
+
+```
+count = 0
+```
+
+Child receive karega:
+
+```
+props.counter = 0
+```
+
+UI render hoga:
+
+```
+Current Value: 0
+Previous Value: undefined
+```
+
+kyuki:
+
+```
+lastValue.current abhi empty hai
+```
+
+Phir useEffect run hoga:
+
+```
+lastValue.current = 0
+```
+
+---
+
+# 6️⃣ Second render (button click)
+
+Button click:
+
+```
+count = 1
+```
+
+Child ko props milte hain:
+
+```
+props.counter = 1
+```
+
+Ab UI render hoga:
+
+```
+Current Value: 1
+Previous Value: 0
+```
+
+kyuki:
+
+```
+lastValue.current = 0
+```
+
+Phir useEffect run karega:
+
+```
+lastValue.current = 1
+```
+
+---
+
+# 7️⃣ Third render
+
+Button click again:
+
+```
+count = 2
+```
+
+UI:
+
+```
+Current Value: 2
+Previous Value: 1
+```
+
+---
+
+# 8️⃣ Final output
+
+Click sequence:
+
+```
+Click 1
+Current:1
+Previous:0
+
+Click 2
+Current:2
+Previous:1
+
+Click 3
+Current:3
+Previous:2
+```
+
+---
+
+# 9️⃣ Visual Diagram
+
+```
+Parent state change
+        ↓
+Props send to child
+        ↓
+Child render
+        ↓
+Show previous value
+        ↓
+useEffect store current value
+```
+
+---
+
+# 🔟 Key concept
+
+`useRef` use karte hain:
+
+```
+Value store karne ke liye
+WITHOUT re-render
+```
+
+Isliye previous value store kar sakte hain.
+
+---
+
+# 1️⃣1️⃣ Code simplified
+
+```javascript
+const lastValue = useRef()
+
+useEffect(()=>{
+ lastValue.current = props.counter
+})
+
+console.log("Previous:", lastValue.current)
+console.log("Current:", props.counter)
+```
+
+---
+
+# 🎯 Simple line me
+
+```
+useRef me hum previous value store karte hain
+aur next render me usko previous props ke roop me use karte hain
+```
+
+---
+
+✅ Agar chaho to mai **iska ek animated step diagram bhi bana ke samjha sakta hoon**, jisse **previous props aur useEffect tumhe permanently clear ho jayega**.
+
+==========================================================================================================
+React tutorial in Hindi #58 State with Object | Reactjs Hooks
+
+Below are **Q&A-style detailed notes** for the video
+**“React Tutorial – State with Object (React Hooks)”** explained in **simple Hindi-style English (Hinglish)** like **Teacher → Student conversation**, step-by-step with examples.
+
+---
+
+# React – State with Object (Hooks)
+
+---
+
+# 1️⃣ State with Object kya hota hai?
+
+**Teacher:** React me **State with Object** kya hota hai?
+
+**Student:**
+Normally React me state **single value** hoti hai.
+
+Example:
+
+```javascript
+const [name,setName] = useState("Anil")
+```
+
+Lekin kabhi-kabhi **multiple values ek object me store karte hain**.
+
+Example:
+
+```javascript
+const [data,setData] = useState({
+ name:"Anil",
+ age:20
+})
+```
+
+Yaha **state ek object hai**.
+
+---
+
+# 2️⃣ Object state kyun use karte hain?
+
+**Teacher:** Object state kyun use karte hain?
+
+**Student:**
+Jab **related data ek saath store karna ho**.
+
+Example:
+
+User information:
+
+```javascript
+{
+ name:"Anil",
+ age:20,
+ email:"anil@gmail.com"
+}
+```
+
+Isse **data manage karna easy ho jata hai**.
+
+---
+
+# 3️⃣ Object state ka simple example
+
+```javascript
+import {useState} from "react"
+
+function App(){
+
+ const [data,setData] = useState({
+  name:"Anil",
+  age:20
+ })
+
+ return(
+  <>
+   <h1>Name: {data.name}</h1>
+   <h1>Age: {data.age}</h1>
+  </>
+ )
+}
+
+export default App
+```
+
+Output:
+
+```
+Name: Anil
+Age: 20
+```
+
+---
+
+# 4️⃣ Problem kya aati hai?
+
+**Teacher:** Object state update karte waqt problem kya aati hai?
+
+**Student:**
+Agar hum **directly object update karein**, to **baaki properties remove ho sakti hain**.
+
+Example:
+
+```javascript
+setData({name:"Sam"})
+```
+
+Result:
+
+```javascript
+{
+ name:"Sam"
+}
+```
+
+Problem:
+
+```
+age property delete ho gayi
+```
+
+---
+
+# 5️⃣ Yeh problem kyun hoti hai?
+
+**Teacher:** Yeh problem kyun hoti hai?
+
+**Student:**
+React **object ko merge nahi karta**,
+balki **poora object replace kar deta hai**.
+
+Example:
+
+Old state:
+
+```javascript
+{
+ name:"Anil",
+ age:20
+}
+```
+
+New state:
+
+```javascript
+{name:"Sam"}
+```
+
+Final state:
+
+```javascript
+{name:"Sam"}
+```
+
+Age remove ho gaya.
+
+---
+
+# 6️⃣ Form example
+
+Teacher example:
+
+User form:
+
+```text
+Name: Anil
+Age: 20
+```
+
+Inputs:
+
+```javascript
+<input value={data.name}/>
+<input value={data.age}/>
+```
+
+Agar name change karein:
+
+```
+Name → Rahul
+```
+
+Incorrect update:
+
+```javascript
+setData({name:"Rahul"})
+```
+
+Output:
+
+```
+Age disappear ho jayega
+```
+
+---
+
+# 7️⃣ First solution
+
+**Teacher:** Is problem ka pehla solution kya hai?
+
+**Student:**
+State update karte waqt **existing values bhi add karo**.
+
+Example:
+
+```javascript
+setData({
+ name:e.target.value,
+ age:data.age
+})
+```
+
+Isse:
+
+```javascript
+{
+ name:"Rahul",
+ age:20
+}
+```
+
+Age preserve rahega.
+
+---
+
+# 8️⃣ Problem with first solution
+
+**Teacher:** Pehla solution perfect kyun nahi hai?
+
+**Student:**
+Agar object me **bahut properties ho**:
+
+```javascript
+{
+ name,
+ age,
+ email,
+ phone,
+ address,
+ city
+}
+```
+
+Tab har property manually add karni padegi.
+
+Ye **difficult aur messy code** ho jata hai.
+
+---
+
+# 9️⃣ Best solution – Spread operator
+
+**Teacher:** Best solution kya hai?
+
+**Student:**
+Use **spread operator (`...`)**
+
+Example:
+
+```javascript
+setData({
+ ...data,
+ name:e.target.value
+})
+```
+
+Explanation:
+
+```
+...data → purana object copy kar lo
+name → new value set karo
+```
+
+Result:
+
+```javascript
+{
+ name:"Rahul",
+ age:20
+}
+```
+
+---
+
+# 🔟 Complete example
+
+```javascript
+import {useState} from "react"
+
+function App(){
+
+ const [data,setData] = useState({
+  name:"Anil",
+  age:20
+ })
+
+ return(
+  <>
+   <input
+    value={data.name}
+    onChange={(e)=>setData({
+      ...data,
+      name:e.target.value
+    })}
+   />
+
+   <input
+    value={data.age}
+    onChange={(e)=>setData({
+      ...data,
+      age:e.target.value
+    })}
+   />
+
+   <h1>{data.name}</h1>
+   <h1>{data.age}</h1>
+  </>
+ )
+}
+
+export default App
+```
+
+---
+
+# 1️⃣1️⃣ Output behavior
+
+Initial:
+
+```
+Name: Anil
+Age: 20
+```
+
+User type:
+
+```
+Name: Rahul
+```
+
+Output:
+
+```
+Name: Rahul
+Age: 20
+```
+
+Age safe rahega.
+
+---
+
+# 1️⃣2️⃣ Spread operator kya karta hai?
+
+**Teacher:** Spread operator kya karta hai?
+
+**Student:**
+
+```
+...data
+```
+
+Matlab:
+
+```
+existing object ki sab properties copy kar lo
+```
+
+Example:
+
+```javascript
+{
+ ...data,
+ name:"Rahul"
+}
+```
+
+Result:
+
+```javascript
+{
+ name:"Rahul",
+ age:20
+}
+```
+
+---
+
+# 1️⃣3️⃣ State update flow
+
+```
+User input change
+      ↓
+onChange event
+      ↓
+setData()
+      ↓
+new state create
+      ↓
+component re-render
+```
+
+---
+
+# 1️⃣4️⃣ Real project example
+
+User profile object:
+
+```javascript
+{
+ name:"Vishnu",
+ email:"vishnu@gmail.com",
+ phone:"9876543210",
+ city:"Pune"
+}
+```
+
+Update city:
+
+```javascript
+setUser({
+ ...user,
+ city:"Mumbai"
+})
+```
+
+---
+
+# 1️⃣5️⃣ Important interview question
+
+**Teacher:** React me object state update karte waqt kya problem hoti hai?
+
+**Student:**
+
+Problem:
+
+```
+State replace ho jata hai
+merge nahi hota
+```
+
+Solution:
+
+```
+Spread operator (...) use karo
+```
+
+Example:
+
+```javascript
+setState({
+ ...state,
+ newProperty:value
+})
+```
+
+---
+
+# 1️⃣6️⃣ Key concepts used
+
+Is video me use hua:
+
+* **useState Hook**
+* **Object State**
+* **onChange Event**
+* **Spread Operator**
+* **State Replacement Problem**
+
+---
+
+# 1️⃣7️⃣ Quick summary
+
+Is video me humne seekha:
+
+1️⃣ Object ke saath state ka use
+2️⃣ State replace problem
+3️⃣ Manual solution
+4️⃣ Spread operator solution
+
+---
+
+✅ **Short definition**
+
+👉 **React me jab state object hota hai to update karte waqt purani properties lose ho sakti hain, isliye spread operator (`...state`) use karna zaruri hota hai.**
+
+---
+
+If you want, I can also show **3 advanced patterns of object state updates used in real React industry projects**, which will help you understand **forms and API data handling** better.
+
+==========================================================================================================
+Achha question hai 👍
+**React Context Provider** first time thoda confusing lagta hai.
+Main tumhe **simple step-by-step flow + example** se samjhata hoon.
+
+---
+
+# 1️⃣ Sabse pehle Context create hota hai
+
+File: **CommonContext.js**
+
+```javascript
+import {createContext} from "react"
+
+export const CommonContext = createContext()
+```
+
+Is line se ek **global container** create hota hai jisme data store ho sakta hai.
+
+So ab hamare paas ek **Context object** hai:
+
+```
+CommonContext
+```
+
+---
+
+# 2️⃣ Provider ka role kya hai?
+
+Provider ka kaam hai:
+
+👉 **Context ke andar data provide karna**
+
+Yeh data **sab child components** use kar sakte hain.
+
+Example:
+
+```javascript
+<CommonContext.Provider value={{color,updateColor}}>
+```
+
+Yaha:
+
+```
+value = jo data share karna hai
+```
+
+So provider bol raha hai:
+
+```
+mere andar jitne bhi components hain
+unko yeh data mil sakta hai
+```
+
+---
+
+# 3️⃣ Tumhara code samjhte hain
+
+```javascript
+<CommonContext.Provider value={{color,updateColor}}>
+
+     <Header/>
+     <Main/>
+     <Footer/>
+
+</CommonContext.Provider>
+```
+
+Iska matlab:
+
+```
+Header
+Main
+Footer
+```
+
+yeh **3 components directly color aur updateColor access kar sakte hain**
+
+---
+
+# 4️⃣ Diagram se samjho
+
+Tumhara component tree:
+
+```
+App
+ ├ Header
+ ├ Main
+ └ Footer
+```
+
+Provider lagane ke baad:
+
+```
+App
+ │
+ │ Provider (color, updateColor)
+ │
+ ├ Header
+ ├ Main
+ └ Footer
+```
+
+Ab:
+
+```
+Header → color use kar sakta hai
+Main → color change kar sakta hai
+Footer → color read kar sakta hai
+```
+
+---
+
+# 5️⃣ Header component example
+
+```javascript
+import {useContext} from "react"
+import {CommonContext} from "./Context/CommonContext"
+
+function Header(){
+
+ const {color} = useContext(CommonContext)
+
+ return(
+  <h1 style={{color:color}}>Header</h1>
+ )
+}
+
+export default Header
+```
+
+Yaha:
+
+```
+useContext(CommonContext)
+```
+
+Provider ke value ko access karta hai.
+
+---
+
+# 6️⃣ Button se color change karna
+
+Example:
+
+```javascript
+import {useContext} from "react"
+import {CommonContext} from "./Context/CommonContext"
+
+function Main(){
+
+ const {updateColor} = useContext(CommonContext)
+
+ return(
+  <button onClick={()=>updateColor("red")}>
+   Change Color
+  </button>
+ )
+}
+
+export default Main
+```
+
+Button click:
+
+```
+updateColor("red")
+```
+
+App state change:
+
+```
+color = red
+```
+
+Then:
+
+```
+Header
+Footer
+Main
+```
+
+sab re-render ho jayenge.
+
+---
+
+# 7️⃣ Simple real life example
+
+Socho:
+
+```
+Provider = WiFi Router
+Components = Mobile devices
+```
+
+Router internet provide karta hai.
+
+Mobile devices directly use karte hain.
+
+```
+Router (Provider)
+     ↓
+Mobile 1
+Mobile 2
+Mobile 3
+```
+
+Exactly same concept.
+
+---
+
+# 8️⃣ Without Provider kya hota?
+
+Without provider:
+
+```
+App
+ └ Header
+    └ Main
+       └ Footer
+```
+
+Data pass karna padega:
+
+```javascript
+<Header color={color}>
+
+<Main color={color}>
+
+<Footer color={color}>
+```
+
+Isko bolte hain:
+
+⚠ **Prop Drilling**
+
+---
+
+# 9️⃣ Provider ka summary
+
+Provider:
+
+```
+1 Data store karta hai
+2 Data children ko deta hai
+3 Global sharing possible banata hai
+```
+
+---
+
+# 🔟 Flow of Context API
+
+```
+createContext()
+       ↓
+Provider value pass karta hai
+       ↓
+Components useContext() se data lete hain
+```
+
+---
+
+# 1️⃣1️⃣ Short definition
+
+👉 **Provider ek wrapper hota hai jo context ka data sab child components ko provide karta hai.**
+
+---
+
+Agar chaho to main tumhe **React Context API ka complete working example (App + Header + Button + Footer)** bana ke dikha sakta hoon jo **real project jaisa hota hai**.
+Usse tumhe **100% clear ho jayega Provider ka flow**.
+
+==========================================================================================================
+==========================================================================================================
+react redux tutorial in hindi #1 introduction
+
+Below are **Q&A-style detailed notes** for the video
+**“React Redux Tutorial #1 – Introduction”** explained in **simple Hindi-style English (Hinglish)** like **Teacher → Student conversation**, step-by-step with examples.
+
+---
+
+# React Redux – Introduction
+
+---
+
+# 1️⃣ Redux kya hota hai?
+
+**Teacher:** **Redux** kya hota hai?
+
+**Student:**
+**Redux ek State Management Library hai**.
+
+Iska kaam hota hai:
+
+👉 **Application ka data ek central place par store aur manage karna**.
+
+Example:
+
+```text
+React Application
+        ↓
+Redux Store
+        ↓
+Components data use karte hain
+```
+
+Redux ko aap **Application ka Store Room** bhi samajh sakte ho.
+
+---
+
+# 2️⃣ Redux kis framework ke saath use hota hai?
+
+**Teacher:** Redux kis framework ke saath use hota hai?
+
+**Student:**
+Redux theoretically kisi bhi framework ke saath use ho sakta hai:
+
+* React
+* Angular
+* Vue
+
+Lekin **95% cases me Redux React ke saath use hota hai**.
+
+Isliye use kehte hain:
+
+```text
+React + Redux
+```
+
+---
+
+# 3️⃣ Redux ko database samajhna chahiye?
+
+**Teacher:** Kya Redux ek database hai?
+
+**Student:**
+❌ **Nahi**
+
+Redux database nahi hai.
+
+Redux **frontend state management tool** hai.
+
+Example:
+
+```text
+Database → Server side
+
+Redux → Frontend application data store
+```
+
+Redux sirf **temporary application state** manage karta hai.
+
+---
+
+# 4️⃣ State management kya hota hai?
+
+**Teacher:** **State Management** kya hota hai?
+
+**Student:**
+State management ka matlab hai:
+
+👉 Application ke **data ko control aur manage karna**.
+
+Example:
+
+```text
+Cart items
+User login data
+Product list
+```
+
+Ye sab **application state** hote hain.
+
+Redux unhe manage karta hai.
+
+---
+
+# 5️⃣ React me state ka problem kya hai?
+
+**Teacher:** React me state to hoti hi hai. Fir Redux kyun?
+
+**Student:**
+React me state normally **component ke andar hoti hai**.
+
+Example:
+
+```text
+Component A
+Component B
+Component C
+```
+
+Agar data A se B aur B se C bhejna ho to:
+
+```text
+Props drilling
+```
+
+karna padta hai.
+
+Example:
+
+```text
+A → B → C
+```
+
+Ye process complex ho jata hai.
+
+---
+
+# 6️⃣ Props drilling kya hota hai?
+
+**Teacher:** Props drilling kya hota hai?
+
+**Student:**
+Jab data **parent component se multiple child components tak pass karna padta hai**.
+
+Example:
+
+```text
+App
+ ↓
+Product
+ ↓
+Cart
+ ↓
+Total
+```
+
+Har component me props pass karna padta hai.
+
+Ye **complex aur messy code** bana deta hai.
+
+---
+
+# 7️⃣ Redux problem ka solution kaise deta hai?
+
+**Teacher:** Redux is problem ko kaise solve karta hai?
+
+**Student:**
+Redux me **ek central store hota hai**.
+
+Example:
+
+```text
+Redux Store
+```
+
+Saare components directly store se data le sakte hain.
+
+Example:
+
+```text
+Component A → Store
+Component B → Store
+Component C → Store
+```
+
+Isliye props drilling ki zarurat nahi hoti.
+
+---
+
+# 8️⃣ Real life example
+
+Imagine **Shopping Cart System**
+
+Product Page:
+
+```text
+Add Item
+```
+
+Cart Page:
+
+```text
+Total Items
+```
+
+Agar user **item add kare**:
+
+```text
+Product Page → Cart Page update hona chahiye
+```
+
+Redux me:
+
+```text
+Product Page
+       ↓
+Redux Store update
+       ↓
+Cart Page automatically update
+```
+
+---
+
+# 9️⃣ Redux architecture basic idea
+
+Redux ka main concept hai:
+
+```text
+Store
+Actions
+Reducers
+```
+
+Flow:
+
+```text
+Component
+   ↓
+Action
+   ↓
+Reducer
+   ↓
+Store Update
+   ↓
+Component re-render
+```
+
+---
+
+# 🔟 Redux store kya hota hai?
+
+**Teacher:** Redux store kya hota hai?
+
+**Student:**
+Redux store ek **central container hota hai jisme application ka saara data store hota hai**.
+
+Example:
+
+```text
+Store
+ ├ User data
+ ├ Cart data
+ ├ Products data
+```
+
+Saare components isi store ko access karte hain.
+
+---
+
+# 1️⃣1️⃣ Redux ka simple diagram
+
+```text
+React Components
+       ↓
+     Action
+       ↓
+     Reducer
+       ↓
+      Store
+       ↓
+React Components update
+```
+
+---
+
+# 1️⃣2️⃣ Redux ka advantage
+
+**Teacher:** Redux use karne ke benefits kya hain?
+
+**Student:**
+
+1️⃣ Centralized state
+2️⃣ Easy data sharing between components
+3️⃣ Predictable state updates
+4️⃣ Debugging easy
+
+---
+
+# 1️⃣3️⃣ Redux me data flow
+
+Redux me data **one direction** me flow karta hai.
+
+```text
+Component
+   ↓
+Action
+   ↓
+Reducer
+   ↓
+Store
+   ↓
+Component update
+```
+
+Isko kehte hain:
+
+👉 **Unidirectional Data Flow**
+
+---
+
+# 1️⃣4️⃣ Redux kaha use hota hai?
+
+Redux mostly use hota hai:
+
+```text
+Large Applications
+Complex state management
+Multiple component communication
+```
+
+Example:
+
+* E-commerce website
+* Admin dashboard
+* Social media apps
+
+---
+
+# 1️⃣5️⃣ Redux vs normal React state
+
+| React State            | Redux             |
+| ---------------------- | ----------------- |
+| Component level        | Global level      |
+| Small apps             | Large apps        |
+| Props drilling problem | No props drilling |
+
+---
+
+# 1️⃣6️⃣ Redux ka real life analogy
+
+Redux ko samjho:
+
+```text
+Warehouse / Store Room
+```
+
+Application ka saara data:
+
+```text
+Warehouse me stored
+```
+
+Jab kisi component ko data chahiye:
+
+```text
+Store se le lo
+```
+
+---
+
+# 1️⃣7️⃣ Redux series me kya seekhenge?
+
+Video series me ye topics cover honge:
+
+1️⃣ Redux architecture
+2️⃣ Props concept
+3️⃣ Redux installation
+4️⃣ First Redux project
+5️⃣ Reducers
+6️⃣ Actions
+7️⃣ Middleware
+8️⃣ Interview questions
+
+---
+
+# 1️⃣8️⃣ Key concepts summary
+
+**Teacher:** Is video me kya seekha?
+
+**Student:**
+
+1️⃣ **Redux introduction**
+2️⃣ **State management concept**
+3️⃣ **Props drilling problem**
+4️⃣ **Redux store concept**
+5️⃣ **Centralized data storage**
+
+---
+
+✅ **Short definition**
+
+👉 **Redux ek state management library hai jo React applications me centralized data store provide karta hai.**
+
+---
+
+If you want, I can also explain **Redux Architecture (Store, Action, Reducer) with diagrams**, which is the **most important concept in Redux interviews**.
+
+==========================================================================================================
+Below are **Q&A-style notes (Teacher → Student)** for the video
+**React Redux Tutorial #2 – Redux Architecture**
+Written in **simple Hindi-style English (Hinglish)** with **step-by-step explanation and examples**.
+
+---
+
+# React Redux – Architecture
+
+---
+
+# 1️⃣ Redux Architecture kya hota hai?
+
+**Teacher:** Redux Architecture kya hota hai?
+
+**Student:**
+Redux Architecture ek **pattern hai jisme application ka data flow manage kiya jata hai**.
+
+Redux me **4 main parts (pillars)** hote hain:
+
+1️⃣ **View (React Components)**
+2️⃣ **Action**
+3️⃣ **Reducer**
+4️⃣ **Store**
+
+Ye sab milkar **application state manage karte hain**.
+
+---
+
+# 2️⃣ Redux me View kya hota hai?
+
+**Teacher:** Redux me **View** kya hota hai?
+
+**Student:**
+View matlab **React components** jo browser me dikhte hain.
+
+Example:
+
+```text
+Button
+Input Box
+Checkbox
+Color Selector
+Message
+```
+
+Example React component:
+
+```javascript
+<button>Search</button>
+<input type="text" />
+```
+
+User jab koi **event perform karta hai** (button click etc.), tab Redux process start hota hai.
+
+---
+
+# 3️⃣ Redux me Action kya hota hai?
+
+**Teacher:** Redux me **Action** kya hota hai?
+
+**Student:**
+Action ek **JavaScript object hota hai jo event ke baare me information bhejta hai**.
+
+Example:
+
+User button click karta hai:
+
+```javascript
+{
+ type:"ADD_USER"
+}
+```
+
+Yaha:
+
+```text
+type → action ka naam
+```
+
+Action ka kaam:
+
+👉 **Data collect karna aur reducer ko bhejna**
+
+---
+
+# 4️⃣ Action ka example
+
+Example:
+
+User signup form submit karta hai.
+
+Form data:
+
+```text
+Name
+Email
+Mobile
+```
+
+Action:
+
+```javascript
+{
+ type:"ADD_USER",
+ payload:{
+  name:"Vishnu",
+  email:"vishnu@gmail.com",
+  mobile:"9876543210"
+ }
+}
+```
+
+Yeh action **Reducer ko bheja jata hai**.
+
+---
+
+# 5️⃣ Reducer kya hota hai?
+
+**Teacher:** Redux me **Reducer** kya karta hai?
+
+**Student:**
+Reducer ek **function hota hai jo action receive karke state update karta hai**.
+
+Reducer ka kaam:
+
+```text
+Action se data lena
+State update karna
+Store me bhejna
+```
+
+Example:
+
+```javascript
+function userReducer(state=[],action){
+
+ switch(action.type){
+
+  case "ADD_USER":
+   return [...state,action.payload]
+
+  default:
+   return state
+ }
+}
+```
+
+Yaha reducer:
+
+```text
+naya user list me add karta hai
+```
+
+---
+
+# 6️⃣ Store kya hota hai?
+
+**Teacher:** Redux me **Store** kya hota hai?
+
+**Student:**
+Store ek **central storage hota hai jahan application ka poora data store hota hai**.
+
+Isko **single source of truth** bhi bolte hain.
+
+Example data:
+
+```text
+Users
+Products
+Login user
+Cart items
+Theme
+```
+
+Sab data **store me rehta hai**.
+
+Example:
+
+```javascript
+const store = createStore(userReducer)
+```
+
+---
+
+# 7️⃣ Store ka simple example
+
+Example:
+
+User list:
+
+```javascript
+[
+ {name:"Vishnu"},
+ {name:"Anil"},
+ {name:"Rahul"}
+]
+```
+
+Ye sab **Redux store me store hota hai**.
+
+Phir koi bhi component:
+
+```text
+Header
+Dashboard
+Profile
+```
+
+store se data access kar sakta hai.
+
+---
+
+# 8️⃣ Redux data flow kaise hota hai?
+
+Redux me **data flow always one direction me hota hai**.
+
+Isko bolte hain:
+
+👉 **Unidirectional Data Flow**
+
+Flow:
+
+```text
+View
+ ↓
+Action
+ ↓
+Reducer
+ ↓
+Store
+ ↓
+View
+```
+
+---
+
+# 9️⃣ Example Flow
+
+Example:
+
+User search button click karta hai.
+
+Step-by-step:
+
+### Step 1
+
+User click:
+
+```text
+Search Button
+```
+
+---
+
+### Step 2
+
+Action create hota hai
+
+```javascript
+{
+ type:"SEARCH_PRODUCT",
+ payload:"Mobile"
+}
+```
+
+---
+
+### Step 3
+
+Reducer receive karta hai
+
+```javascript
+if(action.type==="SEARCH_PRODUCT"){
+ return filteredProducts
+}
+```
+
+---
+
+### Step 4
+
+Reducer data store me save karta hai.
+
+```text
+Store updated
+```
+
+---
+
+### Step 5
+
+React component updated data show karta hai.
+
+```text
+Search Results
+```
+
+---
+
+# 🔟 Redux Store important rule
+
+**Teacher:** Redux store ka important rule kya hai?
+
+**Student:**
+
+Redux me:
+
+```text
+1 Application
+=
+1 Store
+```
+
+Agar:
+
+```text
+2 Store
+```
+
+to technically **2 applications ho jayengi**.
+
+Isliye Redux architecture me **sirf ek store hota hai**.
+
+---
+
+# 1️⃣1️⃣ Redux architecture diagram
+
+```text
+User Interaction
+      ↓
+React Component (View)
+      ↓
+Action
+      ↓
+Reducer
+      ↓
+Store
+      ↓
+Component Update
+```
+
+---
+
+# 1️⃣2️⃣ Real world example
+
+Example:
+
+Shopping App
+
+User add to cart button click karta hai.
+
+Flow:
+
+```text
+Button Click
+ ↓
+Action (ADD_TO_CART)
+ ↓
+Reducer
+ ↓
+Store (Cart Updated)
+ ↓
+Cart Component Update
+```
+
+---
+
+# 1️⃣3️⃣ Redux me State kya hota hai?
+
+**Teacher:** Redux me **State** kya hota hai?
+
+**Student:**
+State matlab **application ka current data**.
+
+Example:
+
+```javascript
+{
+ user:"Vishnu",
+ cartItems:3,
+ theme:"dark"
+}
+```
+
+Ye sab **Redux store me stored state** hai.
+
+---
+
+# 1️⃣4️⃣ Redux ke main benefits
+
+Redux use karne ke benefits:
+
+1️⃣ **Centralized state management**
+
+2️⃣ **Predictable data flow**
+
+3️⃣ **Debugging easy**
+
+4️⃣ **Large applications me useful**
+
+---
+
+# 1️⃣5️⃣ Redux Architecture summary
+
+Redux ke **4 pillars**:
+
+```text
+View → React components
+Action → Event info object
+Reducer → State update logic
+Store → Global state storage
+```
+
+---
+
+# 1️⃣6️⃣ Important Interview Questions
+
+**Question:** Redux me kitne store hote hain?
+
+**Answer:**
+
+```text
+Ek application me sirf ek store hota hai
+```
+
+---
+
+**Question:** Redux data flow kis direction me hota hai?
+
+**Answer:**
+
+```text
+Unidirectional
+```
+
+---
+
+# 1️⃣7️⃣ Quick Summary
+
+Redux architecture me:
+
+```text
+User event
+   ↓
+Action
+   ↓
+Reducer
+   ↓
+Store
+   ↓
+UI Update
+```
+
+---
+
+✅ **Short Definition**
+
+👉 **Redux ek state management library hai jisme application ka data centralized store me manage hota hai aur data flow always unidirectional hota hai.**
+
+---
+
+If you want, I can also explain **Redux architecture in the simplest diagram used in real interviews (5-step flow)** so you will **never forget Redux again**.
+
+==========================================================================================================
+Below are **Q&A-style notes (Teacher → Student)** for the video
+**React Redux Tutorial #3 – Install Redux in React App**
+Written in **simple Hindi-style English (Hinglish)** with **step-by-step explanation and examples**.
+
+---
+
+# React Redux – Installation in React App
+
+---
+
+# 1️⃣ Redux install karne se pehle kya check karna chahiye?
+
+**Teacher:** Redux install karne se pehle sabse pehle kya check karna chahiye?
+
+**Student:**
+Sabse pehle **Node.js installed hai ya nahi** check karna chahiye.
+
+Terminal me command run karte hain:
+
+```bash
+node -v
+```
+
+Agar output aata hai:
+
+```
+v18.x.x
+```
+
+toh matlab **Node.js successfully install hai**.
+
+---
+
+# 2️⃣ React project kaise create karte hain?
+
+**Teacher:** Redux use karne se pehle React project kaise create karte hain?
+
+**Student:**
+Terminal me command run karte hain:
+
+```bash
+npx create-react-app products-tut
+```
+
+Explanation:
+
+| Part                 | Meaning                 |
+| -------------------- | ----------------------- |
+| **npx**              | Node package runner     |
+| **create-react-app** | React project generator |
+| **products-tut**     | Project name            |
+
+Is command se **React project automatically create ho jata hai**.
+
+---
+
+# 3️⃣ React project create hone ke baad kya hota hai?
+
+**Teacher:** React project create hone ke baad kya hota hai?
+
+**Student:**
+React automatically project ke andar folder structure create karta hai.
+
+Example structure:
+
+```
+products-tut
+ ├ node_modules
+ ├ public
+ ├ src
+ ├ package.json
+ └ README.md
+```
+
+Important folders:
+
+| Folder           | Purpose            |
+| ---------------- | ------------------ |
+| **src**          | React components   |
+| **public**       | Static files       |
+| **node_modules** | Installed packages |
+
+---
+
+# 4️⃣ Project ko VS Code me kaise open karte hain?
+
+**Teacher:** React project ko VS Code me kaise open karte hain?
+
+**Student:**
+Terminal me command run karte hain:
+
+```bash
+code .
+```
+
+Ya manually:
+
+```
+File → Open Folder → Select Project Folder
+```
+
+Ab project **VS Code me open ho jayega**.
+
+---
+
+# 5️⃣ React app run kaise karte hain?
+
+**Teacher:** React project run kaise karte hain?
+
+**Student:**
+
+Terminal me command run karte hain:
+
+```bash
+npm start
+```
+
+Result:
+
+Browser me automatically open hoga:
+
+```
+http://localhost:3000
+```
+
+Ab React application run ho raha hai.
+
+---
+
+# 6️⃣ Redux install kaise karte hain?
+
+**Teacher:** React project me Redux kaise install karte hain?
+
+**Student:**
+
+Terminal me command run karte hain:
+
+```bash
+npm install redux
+```
+
+Explanation:
+
+```
+redux → state management library
+```
+
+Is command se **Redux library project me install ho jati hai**.
+
+---
+
+# 7️⃣ React Redux kyun install karte hain?
+
+**Teacher:** Redux ke saath React Redux kyun install karte hain?
+
+**Student:**
+Redux ko **React components ke saath connect karne ke liye** React Redux library use hoti hai.
+
+Install command:
+
+```bash
+npm install react-redux
+```
+
+---
+
+# 8️⃣ Redux installation verify kaise kare?
+
+**Teacher:** Redux install hua hai ya nahi kaise check kare?
+
+**Student:**
+
+Do tarike hain:
+
+### Method 1 – package.json check karo
+
+```
+package.json
+```
+
+Example:
+
+```json
+"dependencies": {
+  "redux": "^4.2.1",
+  "react-redux": "^8.0.5"
+}
+```
+
+---
+
+### Method 2 – node_modules folder check karo
+
+```
+node_modules
+   ├ redux
+   ├ react-redux
+```
+
+Agar ye folders present hain → Redux install ho gaya.
+
+---
+
+# 9️⃣ Redux project ko GitHub par kaise push kare?
+
+**Teacher:** Project ko GitHub par kaise upload karte hain?
+
+**Student:**
+
+Step-by-step:
+
+### Step 1 – GitHub repository create karo
+
+Example name:
+
+```
+react-redux
+```
+
+---
+
+### Step 2 – Git initialize karo
+
+```bash
+git init
+```
+
+---
+
+### Step 3 – files add karo
+
+```bash
+git add .
+```
+
+---
+
+### Step 4 – commit karo
+
+```bash
+git commit -m "first commit"
+```
+
+---
+
+### Step 5 – GitHub repository connect karo
+
+```bash
+git remote add origin <repo-link>
+```
+
+---
+
+### Step 6 – push karo
+
+```bash
+git push origin master
+```
+
+Ab project **GitHub par upload ho jayega**.
+
+---
+
+# 🔟 Redux install hone ke baad next step kya hota hai?
+
+**Teacher:** Redux install hone ke baad next step kya hota hai?
+
+**Student:**
+Redux architecture follow karke ye files banate hain:
+
+```
+src
+ ├ redux
+ │   ├ actions
+ │   ├ reducers
+ │   └ store
+```
+
+Next videos me yeh topics cover honge:
+
+```
+Actions
+Reducers
+Store
+Props
+```
+
+---
+
+# 1️⃣1️⃣ Installation Flow Summary
+
+Redux installation process:
+
+```
+Check Node
+      ↓
+Create React App
+      ↓
+Open Project
+      ↓
+npm install redux
+      ↓
+npm install react-redux
+      ↓
+Run project
+```
+
+---
+
+# 1️⃣2️⃣ Simple Example
+
+Install commands:
+
+```bash
+npx create-react-app redux-demo
+cd redux-demo
+npm install redux
+npm install react-redux
+npm start
+```
+
+Ab React + Redux environment ready hai.
+
+---
+
+# 1️⃣3️⃣ Important Interview Question
+
+**Teacher:** Redux install karne ke liye kaunse packages install karte hain?
+
+**Student:**
+
+```
+redux
+react-redux
+```
+
+---
+
+# 1️⃣4️⃣ Quick Summary
+
+Redux setup steps:
+
+```
+1 Node check
+2 React app create
+3 Redux install
+4 React Redux install
+5 Project run
+```
+
+---
+
+✅ **Short definition**
+
+👉 **Redux install karne ke liye React project ke andar `redux` aur `react-redux` packages npm se install kiye jate hain taaki application state manage ki ja sake.**
+
+---
+
+If you want, I can also show **the complete folder structure used in real Redux projects (actions, reducers, store, constants)** so Redux **bahut easily samajh aa jayega.**
+
+==========================================================================================================
+Below are **Q&A-style detailed notes (Teacher → Student)** for the video
+**React Redux Tutorial #4 – Props Revision**
+Written in **simple Hindi-style English (Hinglish)** with examples and clear explanations.
+
+---
+
+# React – Props Revision (Before Redux)
+
+---
+
+# 1️⃣ Props kya hote hain?
+
+**Teacher:** React me **Props** kya hote hain?
+
+**Student:**
+**Props (Properties)** React me ek component se doosre component me **data transfer karne ka tarika** hai.
+
+Matlab:
+
+```text
+Parent Component → Child Component
+```
+
+Data send karne ke liye **props use hote hain**.
+
+---
+
+# 2️⃣ Props ki zarurat kyun padti hai?
+
+**Teacher:** Props ki zarurat kyun padti hai?
+
+**Student:**
+Jab application me **multiple components hote hain**, tab unke beech data share karna padta hai.
+
+Example:
+
+Shopping app:
+
+```text
+Product list
+Cart
+Total Price
+```
+
+Agar user **cart me product add kare**, to:
+
+```text
+Cart items increase
+Total price increase
+```
+
+Iske liye **components ko connect karna padta hai**, aur yeh props se hota hai.
+
+---
+
+# 3️⃣ React ka thumb rule
+
+**Teacher:** React ka ek important thumb rule kya hai?
+
+**Student:**
+
+👉 **Component ke andar data use karna ho → State use karo**
+
+👉 **Component se component data bhejna ho → Props use karo**
+
+---
+
+# 4️⃣ Simple Props Example
+
+Parent Component:
+
+```javascript
+<App>
+```
+
+Child Component:
+
+```javascript
+<User />
+```
+
+Parent se child me data bhejna:
+
+```javascript
+<User name="Anil" />
+```
+
+---
+
+# 5️⃣ Props child component me kaise milte hain?
+
+**Teacher:** Child component me props kaise milte hain?
+
+**Student:**
+Child component ke function parameter me **props receive hote hain**.
+
+Example:
+
+```javascript
+function User(props){
+ console.log(props)
+}
+```
+
+---
+
+# 6️⃣ Complete Props Example
+
+### Parent Component (App.js)
+
+```javascript
+import User from "./User"
+
+function App(){
+
+ return(
+  <>
+   <User name="Anil Sidhu"/>
+  </>
+ )
+}
+
+export default App
+```
+
+---
+
+### Child Component (User.js)
+
+```javascript
+function User(props){
+
+ return(
+  <>
+   <h1>User Name: {props.name}</h1>
+  </>
+ )
+}
+
+export default User
+```
+
+Output:
+
+```text
+User Name: Anil Sidhu
+```
+
+---
+
+# 7️⃣ Props object ka structure
+
+Props ek **object** hota hai.
+
+Example:
+
+```javascript
+<User name="Anil" age={19}/>
+```
+
+Props object:
+
+```javascript
+{
+ name:"Anil",
+ age:19
+}
+```
+
+---
+
+# 8️⃣ Props access kaise karte hain?
+
+Child component me:
+
+```javascript
+props.name
+props.age
+```
+
+Example:
+
+```javascript
+function User(props){
+
+ return(
+  <>
+   <h1>{props.name}</h1>
+   <h2>{props.age}</h2>
+  </>
+ )
+}
+```
+
+---
+
+# 9️⃣ Destructuring props
+
+Props ko aur clean tarike se bhi use kar sakte hain.
+
+Example:
+
+```javascript
+function User({name,age}){
+
+ return(
+  <>
+   <h1>{name}</h1>
+   <h2>{age}</h2>
+  </>
+ )
+}
+```
+
+---
+
+# 🔟 Props data flow direction
+
+React me **props ka data flow always one direction me hota hai**.
+
+```text
+Parent → Child
+```
+
+Isko bolte hain:
+
+👉 **Unidirectional Data Flow**
+
+---
+
+# 1️⃣1️⃣ Props with multiple data
+
+Example:
+
+Parent component:
+
+```javascript
+<User name="Anil" age={19} city="Pune"/>
+```
+
+Child component:
+
+```javascript
+function User(props){
+
+ return(
+  <>
+   <h1>{props.name}</h1>
+   <h2>{props.age}</h2>
+   <h3>{props.city}</h3>
+  </>
+ )
+}
+```
+
+Output:
+
+```text
+Anil
+19
+Pune
+```
+
+---
+
+# 1️⃣2️⃣ Redux me props kyun important hain?
+
+**Teacher:** Redux me props kyun important hote hain?
+
+**Student:**
+Redux architecture me bhi data **components ke beech pass hota hai**.
+
+Example flow:
+
+```text
+Component
+ ↓
+Action
+ ↓
+Reducer
+ ↓
+Store
+ ↓
+Component
+```
+
+Redux me bhi **data component tak props ke through aata hai**.
+
+Isliye props ka concept clear hona zaruri hai.
+
+---
+
+# 1️⃣3️⃣ Props ka real world example
+
+Example:
+
+E-commerce app:
+
+```text
+Product Component
+Cart Component
+Total Price Component
+```
+
+Flow:
+
+```text
+Add Product
+ ↓
+Cart Update
+ ↓
+Total Price Update
+```
+
+Yeh communication **props se hota hai**.
+
+---
+
+# 1️⃣4️⃣ Props flow diagram
+
+```text
+App
+ │
+ └ User
+      │
+      └ Profile
+```
+
+Data flow:
+
+```text
+App → User → Profile
+```
+
+---
+
+# 1️⃣5️⃣ Important interview question
+
+**Question:** Props kya hote hain?
+
+**Answer:**
+
+👉 Props React me **parent component se child component me data transfer karne ke liye use hote hain**.
+
+---
+
+# 1️⃣6️⃣ Props key features
+
+Props ke important points:
+
+```text
+Read-only hote hain
+Parent → Child data flow
+Component communication ke liye use hote hain
+```
+
+---
+
+# 1️⃣7️⃣ Quick Summary
+
+Is video me humne seekha:
+
+```text
+Props kya hote hain
+Props ka use
+Parent to child data flow
+Props object
+Redux me props ka role
+```
+
+---
+
+✅ **Short Definition**
+
+👉 **Props React me parent component se child component ko data pass karne ka mechanism hai.**
+
+---
+
+If you want, I can also show you **the 5 most asked React Props interview questions (with tricky examples)** that **even experienced developers sometimes get wrong.**
+
 ==========================================================================================================
 ==========================================================================================================
 ==========================================================================================================
 ==========================================================================================================
-==========================================================================================================
-==========================================================================================================
-==========================================================================================================
-==========================================================================================================
-==========================================================================================================
-==========================================================================================================
-==========================================================================================================
-==========================================================================================================
-==========================================================================================================
+
