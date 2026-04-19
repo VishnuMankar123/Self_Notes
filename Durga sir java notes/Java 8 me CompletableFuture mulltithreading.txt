@@ -559,7 +559,65 @@ CompletableFuture<String> future =
 System.out.println(future.get());
 ```
 
----
+-------------------------------------------------------------------------------------------------
+Core Difference
+✅ thenApply
+
+👉 Used when next step is NORMAL (non-async)
+
+✅ thenCompose
+
+👉 Used when next step is ASYNC (returns another CompletableFuture)
+
+🧠 Simple Analogy
+thenApply
+
+👉 Like:
+
+“Take result → transform it”
+
+thenCompose
+
+👉 Like:
+
+“Take result → call another async API”
+
+Code Example
+
+🔹 thenApply (WRONG for async)
+CompletableFuture<CompletableFuture<String>> future =
+    CompletableFuture.supplyAsync(() -> "userId")
+        .thenApply(id -> getUserNameAsync(id)); // returns CF
+
+// Nested future 😬
+
+👉 Problem:
+
+You get nested future
+Hard to handle
+
+🔹 thenCompose (CORRECT)
+CompletableFuture<String> future =
+    CompletableFuture.supplyAsync(() -> "userId")
+        .thenCompose(id -> getUserNameAsync(id));
+
+System.out.println(future.get());
+
+👉 Output:
+
+Clean → CompletableFuture<String>
+
+No nesting
+🧠 Visual Understanding
+thenApply
+Future<A> → function → Future<Future<B>>
+thenCompose
+Future<A> → async function → Future<B>
+
+Interview One-Liner
+
+thenApply is used for synchronous transformation, while thenCompose is used to chain asynchronous operations and avoids nested futures.
+-------------------------------------------------------------------------------------------------
 
 ### 🧠 Real-life Example
 
@@ -622,6 +680,7 @@ Hello World
 ### 🔑 One-liner
 
 > **thenCombine = parallel + merge result**
+
 
 ---
 
