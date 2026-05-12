@@ -1,0 +1,120 @@
+{
+  "name": "Job Finder AI Agent (Advanced)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "job-search",
+        "responseMode": "lastNode"
+      },
+      "id": "webhook",
+      "name": "Webhook Input",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://remotive.com/api/remote-jobs?search={{$json[\"job_title\"]}}",
+        "responseFormat": "json"
+      },
+      "id": "fetch",
+      "name": "Fetch Jobs API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "return items[0].json.jobs.slice(0,5).map(job => ({ json: job }));"
+      },
+      "id": "split",
+      "name": "Split Top Jobs",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are a smart job assistant"
+          },
+          {
+            "role": "user",
+            "content": "Extract key info:\nTitle: {{$json.title}}\nCompany: {{$json.company_name}}\nDescription: {{$json.description}}\n\nReturn summary + required skills."
+          }
+        ]
+      },
+      "id": "ai-clean",
+      "name": "AI Job Cleaner",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [800, 200],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_ID",
+          "name": "OpenAI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are an expert resume writer"
+          },
+          {
+            "role": "user",
+            "content": "Write a personalized cover letter for:\nJob: {{$json.title}}\nCompany: {{$json.company_name}}\n\nCandidate: Java Backend Developer (Spring Boot, Microservices, 3+ years)"
+          }
+        ]
+      },
+      "id": "cover",
+      "name": "Generate Cover Letter",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [800, 400],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_ID",
+          "name": "OpenAI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex"
+      },
+      "id": "merge",
+      "name": "Merge Results",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 1,
+      "position": [1000, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Input": {
+      "main": [[{ "node": "Fetch Jobs API", "type": "main", "index": 0 }]]
+    },
+    "Fetch Jobs API": {
+      "main": [[{ "node": "Split Top Jobs", "type": "main", "index": 0 }]]
+    },
+    "Split Top Jobs": {
+      "main": [
+        [{ "node": "AI Job Cleaner", "type": "main", "index": 0 }],
+        [{ "node": "Generate Cover Letter", "type": "main", "index": 0 }]
+      ]
+    },
+    "AI Job Cleaner": {
+      "main": [[{ "node": "Merge Results", "type": "main", "index": 0 }]]
+    },
+    "Generate Cover Letter": {
+      "main": [[{ "node": "Merge Results", "type": "main", "index": 1 }]]
+    }
+  }
+}
