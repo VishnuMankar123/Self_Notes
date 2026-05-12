@@ -1,5 +1,902 @@
+microservies self project docker file to k8s deployment :
 
-to Delete the deployment object
-kubectl delete deployment spring-boot-k8s
+quiz servie : EXPOSE 8081
+servic registroy : EXPOSE 8761
+api gateway : EXPOSE 8083
+Question servcie : EXPOSE 8082
+
+
+server.port=8082
+spring.datasource.url=${SPRING_DATASOURCE_URL}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
+
+
+eureka.client.service-url.defaultZone=${EUREKA_SERVER_URL}
+
+
+docker push 
+/microservices:tagname
+
+
+api-gateway
+question-service
+quiz-service
+service-registry
+
+
+docker tag api-gateway vishnumankar123/api-gateway:v1
+
+
+PS C:\Users\Pratiti_Users> docker tag api-gateway vishnumankar123/api-gateway:v1
+PS C:\Users\Pratiti_Users> docker tag question-service vishnumankar123/question-service:v1   
+PS C:\Users\Pratiti_Users> docker tag question-service vishnumankar123/question-service:v1   
+PS C:\Users\Pratiti_Users> docker tag quiz-service vishnumankar123/quiz-service:v1   
+PS C:\Users\Pratiti_Users> docker tag quiz-service vishnumankar123/quiz-service:v1
+
+docker tag service-registry vishnumankar123/service-registry:v1
+
+
+minikube start --driver=docker
+
+kubectl port-forward svc/api-gateway 8083:8083 -n microservices
+
+PS C:\Users\Pratiti_Users> kubectl get svc -n microservices
+NAME               TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+api-gateway        LoadBalancer   10.100.173.111   <pending>     8083:32726/TCP   17h
+mysql              ClusterIP      10.107.71.101    <none>        3306/TCP         17h
+question-service   ClusterIP      10.108.44.197    <none>        8082/TCP         17h
+quiz-service       ClusterIP      10.109.129.158   <none>        8081/TCP         17h
+service-registry   ClusterIP      10.109.104.35    <none>        8761/TCP         17h
+PS C:\Users\Pratiti_Users>
+
+
+
+
+kubectl logs deployment/question-service -n microservices
+
+
+PS C:\Users\Pratiti_Users> kubectl get deployments -n microservices
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+api-gateway        1/1     1            1           16h
+mysql              1/1     1            1           16h
+question-service   1/1     1            1           16h
+quiz-service       1/1     1            1           16h
+service-registry   1/1     1            1           16h
+PS C:\Users\Pratiti_Users>
+
+
+mvn clean package -DskipTests
+docker build --no-cache -t vishnumankar123/quiz-service:v3 .
+docker push vishnumankar123/quiz-service:v3
+
+image: vishnumankar123/quiz-service:v3
+
+
+kubectl apply -f k8s/quiz-deployment.yaml
+
+
+kubectl rollout restart deployment/question-service -n microservices
+
+kubectl delete pod -l app=api-gateway -n microservices
+
+=======================================================
+with the help of we can check which image is using for deployemnt
+
+kubectl describe deployment quiz-service -n microservices
+
+kubernates Notes while we are deploying microservices in docker and kubernates 
+================================================================================
+Perfect. Main tumhare liye **teacher + student style complete notes** bana raha hoon — from **Spring Boot microservices → Docker → Docker Compose → Kubernetes deployment**, based on jo humne actually kiya + standard Kubernetes concepts. Kubernetes uses Deployments to manage stateless app pods declaratively, and higher-level workload abstractions instead of managing pods manually ([Kubernetes][1])
+
+---
+
+# Complete DevOps Learning Notes (Microservices to Kubernetes)
+
+# 1. Project Architecture
+
+Humara project:
+
+```text
+API Gateway
+Question Service
+Quiz Service
+Service Registry (Eureka)
+MySQL
+```
+
+Flow:
+
+```text
+User
+ ↓
+API Gateway
+ ↓
+Eureka Service Discovery
+ ↓
+Question Service / Quiz Service
+ ↓
+MySQL
+```
+
+---
+
+# 2. Local Development Setup
+
+Run services locally:
+
+```bash
+mvn spring-boot:run
+```
+
+Ports:
+
+```text
+Service Registry → 8761
+Question Service → 8082
+Quiz Service → 8081
+API Gateway → 8083
+MySQL → 3306
+```
+
+Problem:
+
+```text
+Works only on local machine
+Not portable
+Manual setup required
+```
+
+Need containerization.
+
+---
+
+# 3. Dockerization
+
+## Why Docker?
+
+Without Docker:
+
+```text
+Java version mismatch
+Maven mismatch
+OS dependency issues
+Manual environment setup
+```
+
+Docker solves:
+
+```text
+Build once
+Run anywhere
+```
+
+---
+
+# 4. Dockerfile Creation
+
+Each microservice needs Dockerfile.
+
+Example:
+
+## Question Service Dockerfile
+
+```dockerfile
+FROM eclipse-temurin:17-jdk-alpine
+
+WORKDIR /app
+
+COPY target/*.jar app.jar
+
+EXPOSE 8082
+
+ENTRYPOINT ["java","-jar","app.jar"]
+```
+
+Same pattern:
+
+```text
+Question → 8082
+Quiz → 8081
+Gateway → 8083
+Registry → 8761
+```
+
+---
+
+# 5. Build JAR
+
+Before Docker build:
+
+```bash
+mvn clean package -DskipTests
+```
+
+Generates:
+
+```text
+target/question-service.jar
+```
+
+---
+
+# 6. Build Docker Images
+
+Example:
+
+```bash
+docker build -t question-service .
+```
+
+For all:
+
+```bash
+docker build -t question-service .
+docker build -t quiz-service .
+docker build -t api-gateway .
+docker build -t service-registry .
+```
+
+Check:
+
+```bash
+docker images
+```
+
+---
+
+# 7. Run Individual Containers
+
+Example:
+
+```bash
+docker run -p 8082:8082 question-service
+```
+
+Problem:
+
+Microservices need networking.
+
+Need compose.
+
+---
+
+# 8. Docker Compose
+
+Why?
+
+Instead of:
+
+```bash
+docker run ...
+docker run ...
+docker run ...
+```
+
+One command:
+
+```bash
+docker compose up
+```
+
+---
+
+# 9. Docker Compose File
+
+```yaml
+version: '3.8'
+services:
+```
+
+---
+
+## MySQL
+
+```yaml
+mysql:
+  image: mysql:8
+```
+
+Meaning:
+
+Use official MySQL image.
+
+---
+
+### Environment
+
+```yaml
+environment:
+  MYSQL_ROOT_PASSWORD: root
+  MYSQL_DATABASE: micro_yt
+```
+
+Creates DB automatically.
+
+---
+
+### Ports
+
+```yaml
+ports:
+  - "3307:3306"
+```
+
+Meaning:
+
+```text
+Host:3307 → Container:3306
+```
+
+---
+
+### Volume
+
+```yaml
+volumes:
+  - mysql_data:/var/lib/mysql
+```
+
+Persistent DB data.
+
+---
+
+# 10. Service Registry Compose
+
+```yaml
+service-registry:
+  build: ./ServiceRegistry
+```
+
+Build Docker image from folder.
+
+---
+
+# 11. Microservice Networking
+
+Docker Compose auto DNS:
+
+Use:
+
+```text
+mysql
+service-registry
+```
+
+NOT:
+
+```text
+localhost
+```
+
+Wrong:
+
+```properties
+jdbc:mysql://localhost:3306/micro_yt
+```
+
+Correct:
+
+```properties
+jdbc:mysql://mysql:3306/micro_yt
+```
+
+---
+
+# 12. Environment Variables
+
+Question Service:
+
+```yaml
+environment:
+  SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/micro_yt
+  EUREKA_SERVER_URL: http://service-registry:8761/eureka
+```
+
+Properties:
+
+```properties
+spring.datasource.url=${SPRING_DATASOURCE_URL}
+eureka.client.serviceUrl.defaultZone=${EUREKA_SERVER_URL}
+```
+
+---
+
+# 13. Docker Compose Run
+
+```bash
+docker compose up --build
+```
+
+Check:
+
+```bash
+docker ps
+```
+
+---
+
+# 14. Docker Hub
+
+Need for Kubernetes.
+
+Tag:
+
+```bash
+docker tag question-service vishnumankar123/question-service:v1
+```
+
+Push:
+
+```bash
+docker push vishnumankar123/question-service:v1
+```
+
+Repeat:
+
+```bash
+quiz-service
+api-gateway
+service-registry
+```
+
+---
+
+# 15. Kubernetes Basics
+
+---
+
+## Pod
+
+Smallest deployable unit.
+
+Contains container.
+
+Example:
+
+```text
+Question Service Pod
+```
+
+---
+
+## Deployment
+
+Manages pods.
+
+Responsibilities:
+
+```text
+Create pods
+Restart failed pods
+Rolling update
+Scaling
+```
+
+---
+
+## Service
+
+Stable network endpoint.
+
+Without service:
+
+Pod IP changes.
+
+Service gives fixed DNS:
+
+```text
+mysql
+question-service
+quiz-service
+```
+
+---
+
+## Namespace
+
+Logical grouping.
+
+Example:
+
+```yaml
+kind: Namespace
+metadata:
+  name: microservices
+```
+
+Separates:
+
+```text
+dev
+test
+prod
+```
+
+---
+
+## Secret
+
+Stores sensitive data.
+
+Example:
+
+```yaml
+MYSQL_ROOT_PASSWORD
+```
+
+---
+
+# 16. Minikube Setup
+
+Install:
+
+```bash
+minikube start
+```
+
+Check:
+
+```bash
+kubectl get nodes
+```
+
+---
+
+# 17. Namespace YAML
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: microservices
+```
+
+Apply:
+
+```bash
+kubectl apply -f namespace.yaml
+```
+
+---
+
+# 18. Secret YAML
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+  namespace: microservices
+type: Opaque
+stringData:
+  MYSQL_ROOT_PASSWORD: root
+```
+
+Apply:
+
+```bash
+kubectl apply -f mysql-secret.yaml
+```
+
+---
+
+# 19. MySQL Deployment
+
+```yaml
+kind: Deployment
+```
+
+Container:
+
+```yaml
+image: mysql:8
+```
+
+Password from secret:
+
+```yaml
+valueFrom:
+  secretKeyRef:
+```
+
+---
+
+# 20. MySQL Service
+
+```yaml
+kind: Service
+```
+
+```yaml
+port: 3306
+targetPort: 3306
+```
+
+---
+
+# 21. Question Service Deployment
+
+Image:
+
+```yaml
+image: vishnumankar123/question-service:v3
+```
+
+---
+
+Container port:
+
+```yaml
+containerPort: 8082
+```
+
+---
+
+Environment:
+
+```yaml
+SPRING_DATASOURCE_URL
+SPRING_DATASOURCE_USERNAME
+SPRING_DATASOURCE_PASSWORD
+EUREKA_SERVER_URL
+```
+
+---
+
+# 22. Question Service Service
+
+```yaml
+kind: Service
+```
+
+```yaml
+port: 8082
+targetPort: 8082
+```
+
+---
+
+# 23. Quiz Service
+
+Same pattern.
+
+---
+
+# 24. Service Registry
+
+Deployment:
+
+```yaml
+image: vishnumankar123/service-registry:v1
+```
+
+Service:
+
+```yaml
+8761
+```
+
+---
+
+# 25. API Gateway
+
+Deployment:
+
+```yaml
+image: vishnumankar123/api-gateway:v1
+```
+
+Service:
+
+```yaml
+type: LoadBalancer
+```
+
+---
+
+# 26. Apply Everything
+
+```bash
+kubectl apply -f k8s/
+```
+
+Check:
+
+```bash
+kubectl get all -n microservices
+```
+
+---
+
+# 27. Access Application
+
+Minikube:
+
+```bash
+kubectl port-forward svc/api-gateway 8083:8083 -n microservices
+```
+
+Access:
+
+```text
+http://localhost:8083/question/
+```
+
+---
+
+Eureka:
+
+```bash
+kubectl port-forward svc/service-registry 8761:8761 -n microservices
+```
+
+Access:
+
+```text
+http://localhost:8761
+```
+
+---
+
+# 28. Common Problems
+
+## ImagePullBackOff
+
+Reason:
+
+```text
+Image not on Docker Hub
+```
+
+Fix:
+
+```bash
+docker push ...
+```
+
+---
+
+## Connection Refused
+
+Reason:
+
+```text
+localhost used inside container
+```
+
+Fix:
+
+Use service names:
+
+```text
+mysql
+service-registry
+```
+
+---
+
+## Old Image Running
+
+Fix:
+
+```yaml
+imagePullPolicy: Always
+```
+
+Then:
+
+```bash
+kubectl delete pod -l app=quiz-service -n microservices
+```
+
+---
+
+## Gateway Routing Error
+
+Cause:
+
+Eureka hostname registration issue.
+
+---
+
+# 29. Kubernetes Commands
+
+Pods:
+
+```bash
+kubectl get pods -n microservices
+```
+
+Services:
+
+```bash
+kubectl get svc -n microservices
+```
+
+Logs:
+
+```bash
+kubectl logs deployment/question-service -n microservices
+```
+
+Describe:
+
+```bash
+kubectl describe pod <pod>
+```
+
+Restart:
+
+```bash
+kubectl rollout restart deployment/question-service -n microservices
+```
+
+Delete pod:
+
+```bash
+kubectl delete pod -l app=question-service -n microservices
+```
+
+---
+
+# 30. Industry Best Practices
+
+Use:
+
+```text
+ConfigMap
+Secret
+Persistent Volume
+Ingress
+Helm
+CI/CD
+Readiness Probe
+Liveness Probe
+Resource Limits
+Horizontal Pod Autoscaler
+```
+
+---
+
+# Final Learning Flow
+
+```text
+Spring Boot app
+   ↓
+Create Dockerfile
+   ↓
+Build jar
+   ↓
+Build Docker image
+   ↓
+Run locally
+   ↓
+Docker Compose
+   ↓
+Push to Docker Hub
+   ↓
+Create K8s YAML
+   ↓
+Namespace
+Secret
+Deployment
+Service
+   ↓
+kubectl apply
+   ↓
+Verify pods
+   ↓
+Port forward
+   ↓
+Access application
+```
+
+---
+
+This is your complete **DevOps beginner → practical microservices deployment notes** 🚀
+
+[1]: https://v1-32.docs.kubernetes.io/docs/concepts/workloads/controllers/deployment/?utm_source=chatgpt.com "Deployments | Kubernetes"
+======================================================================================================================================
 
 

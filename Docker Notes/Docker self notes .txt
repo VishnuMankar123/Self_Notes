@@ -1600,6 +1600,182 @@ Output shows:
 * **Reclaimable space** you can clean up.
 
 Use it to manage disk space effectively!
+
+========================================================================
+PS C:\Users\Pratiti_Users> docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          62        28        40.84GB   12.94GB (31%)
+Containers      42        0         33.57MB   33.57MB (100%)
+Local Volumes   50        24        7.474GB   322.7MB (4%)
+Build Cache     348       0         21.55GB   16.06GB
+PS C:\Users\Pratiti_Users> ^C
+
+
+`docker system df` output me har column ka meaning ye hai:
+
+```bash
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          62        28        40.84GB   12.94GB (31%)
+```
+
+## 1. TOTAL
+
+Total number of Docker objects.
+
+Example:
+
+```bash
+Images 62
+```
+
+Matlab system me total **62 Docker images** stored hain.
+
+---
+
+## 2. ACTIVE
+
+Currently used objects.
+
+Example:
+
+```bash
+ACTIVE 28
+```
+
+Matlab:
+
+* 28 images abhi kisi running/stopped container ke through use ho rahi hain.
+* Inhe directly delete nahi kar sakte jab tak dependent container exist karta hai.
+
+---
+
+## 3. SIZE
+
+Total disk space used.
+
+Example:
+
+```bash
+SIZE 40.84GB
+```
+
+Matlab:
+
+* Sare images milake total 40.84GB storage use kar rahe hain.
+
+---
+
+## 4. RECLAIMABLE
+
+Unused space jo clean kiya ja sakta hai.
+
+Example:
+
+```bash
+RECLAIMABLE 12.94GB (31%)
+```
+
+Matlab:
+
+* 12.94GB data unused hai.
+* `docker image prune` ya `docker system prune` se remove ho sakta hai.
+* `(31%)` means total image space ka 31% reclaim ho sakta hai.
+
+---
+
+# Tumhare Output ka Breakdown
+
+```bash
+Images          62        28        40.84GB   12.94GB (31%)
+```
+
+* Total images = 62
+* Active images = 28
+* Total image storage = 40.84GB
+* Unused removable image storage = 12.94GB
+
+---
+
+```bash
+Containers      42        0         33.57MB   33.57MB (100%)
+```
+
+* Total containers = 42
+* Active containers = 0
+* Sab stopped hain
+* Pure 33.57MB reclaim ho sakta hai
+
+---
+
+```bash
+Local Volumes   50        24        7.474GB   322.7MB (4%)
+```
+
+* Total volumes = 50
+* 24 volumes use me hain
+* Total volume storage = 7.4GB
+* Sirf 322MB unused hai
+
+---
+
+```bash
+Build Cache     348       0         21.55GB   16.06GB
+```
+
+Ye important hai 👇
+
+* Docker build layers cache ho rakhi hain
+* Total cache = 21.55GB
+* 16GB safely clean ho sakta hai
+
+---
+
+# Space Clean Karne Ke Commands
+
+## Stopped containers remove
+
+```bash
+docker container prune
+```
+
+---
+
+## Unused images remove
+
+```bash
+docker image prune -a
+```
+
+---
+
+## Build cache clean
+
+```bash
+docker builder prune
+```
+
+Sab cache clean:
+
+```bash
+docker builder prune -a
+```
+
+---
+
+## Everything unused clean
+
+```bash
+docker system prune -a
+```
+
+Volumes bhi remove karne hain:
+
+```bash
+docker system prune -a --volumes
+```
+
+⚠️ Ye dangerous ho sakta hai agar important data volume me ho.
+
 =========================================================================
 The command `docker system prune -a` is used to **remove unused Docker resources** (images, containers, volumes, and networks) in order to free up disk space.
 
