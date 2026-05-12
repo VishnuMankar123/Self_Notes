@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment        # Deployment name
+  labels:
+    app: myapp
+spec:
+  replicas: 2                   # Number of pod replicas
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp-container
+          image: vishnumankar123/filegenerator:latest   # Replace with your Docker image
+          ports:
+            - containerPort: 8080
+
