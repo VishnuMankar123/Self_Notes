@@ -1,36 +1,51 @@
-package com.example;
+package com.example.service;
+
+import com.example.entity.EmailTracking;
+import com.example.repository.EmailTrackingRepository;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
-public class VishnudasBulkMailSender {
-    // Sender credentials
-    /*private static final String USERNAME = "vishnudasmankar25@gmail.com";
+@Service
+public class VishnuEmailTrackingService {
+
+    private final EmailTrackingRepository emailTrackingRepository;
+
+    private static final String USERNAME = "vishnudasmankar25@gmail.com";
     private static final String PASSWORD = "jqhd rotj wygl vvtu"; // Gmail App Password
 
-    public static void main(String[] args) {
+    public VishnuEmailTrackingService(EmailTrackingRepository emailTrackingRepository) {
+        this.emailTrackingRepository = emailTrackingRepository;
+    }
 
-        // List of email IDs
-        List<String> recipients = Arrays.asList(
-
-
-        );
-
-        // Resume file path
+    public List<String> vishnuSaveEmail(List<String> recipients) {
         String resumePath = "C:\\Users\\Pratiti_Users\\Downloads\\Resume\\Vishnudas Mankar Resume.pdf";
-
+        List<String> sentEmails = new ArrayList<>();
         for (String email : recipients) {
             sendEmail(email, resumePath);
+            EmailTracking emailTracking = new EmailTracking();
+            emailTracking.setEmailId(email);
+            emailTracking.setCreatedDate(LocalDateTime.now());
+            emailTracking.setUser("Vishnudas Mankar");
+            emailTrackingRepository.save(emailTracking);
+            sentEmails.add(email);
         }
+
+        return sentEmails;
     }
+
+
 
     private static void sendEmail(String toEmail, String resumePath) {
 
@@ -107,6 +122,5 @@ public class VishnudasBulkMailSender {
             System.out.println("Failed for: " + toEmail);
             e.printStackTrace();
         }
-    }*/
+    }
 }
-
