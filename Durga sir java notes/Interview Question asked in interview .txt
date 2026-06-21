@@ -2449,6 +2449,516 @@ Used with	Any SELECT	Must be used with GROUP BY
 Can use aggregates?	❌ No (SUM(), COUNT() not allowed)	✅ Yes (SUM(), COUNT() allowed)
 
 =====================================================================================
+@Transactional Spring Framework ka annotation hai. Ye Hibernate ke saath use hota hai taaki database transaction ko manage kiya ja sake.
+
+Simple language me:
+
+Transaction = Database operations ka ek group jo ya to sab successfully execute hoga ya agar ek bhi fail hua to sab rollback ho jayega.
+
+Transaction kya hota hai?
+
+Maan lo tumhare paas banking application hai.
+
+Without Transaction
+public void transferMoney() {
+
+    withdraw(1000);   // Success
+
+    deposit(1000);    // Exception aa gaya
+}
+
+Result:
+
+Account A = -1000
+Account B = 0
+
+Money gayab ho gaya.
+
+With @Transactional
+@Transactional
+public void transferMoney() {
+
+    withdraw(1000);
+
+    deposit(1000);
+}
+
+Agar deposit fail hua
+
+Withdraw bhi rollback ho jayega.
+
+Final Result
+
+Account A = Same
+Account B = Same
+
+Data safe rahega.
+
+ACID Properties
+
+Transaction ACID follow karta hai.
+
+Property	Meaning
+Atomicity	Sab hoga ya kuch bhi nahi
+Consistency	Database consistent rahega
+Isolation	Multiple transactions ek dusre ko affect nahi karenge
+Durability	Commit hone ke baad data permanent
+@Transactional kahan lagate hain?
+
+Mostly Service Layer me.
+
+Controller
+     ↓
+Service   ← @Transactional
+     ↓
+Repository
+     ↓
+Database
+
+Example
+
+@Service
+public class UserService {
+
+    @Transactional
+    public void createUser() {
+
+        userRepository.save(user);
+
+        roleRepository.save(role);
+
+    }
+
+}
+
+Agar second save fail hua
+
+Pehla save bhi rollback ho jayega.
+Hibernate internally kya karta hai?
+
+Normally
+
+Session
+↓
+
+Begin Transaction
+
+↓
+
+SQL Execute
+
+↓
+
+Commit
+
+↓
+
+Close Session
+
+Exception aayi
+
+Session
+
+↓
+
+Begin Transaction
+
+↓
+
+SQL
+
+↓
+
+Rollback
+
+↓
+
+Close Session
+
+Spring ye sab automatically handle karta hai.
+
+Example
+
+Suppose
+
+Employee Table
+
+1
+2
+3
+
+Salary Table
+
+1
+2
+3
+@Transactional
+public void addEmployee(){
+
+    employeeRepository.save(emp);
+
+    salaryRepository.save(salary);
+
+}
+
+Generated SQL
+
+BEGIN
+
+INSERT INTO employee
+
+INSERT INTO salary
+
+COMMIT
+
+Agar
+
+salaryRepository.save()
+
+Exception de
+
+BEGIN
+
+INSERT employee
+
+Exception
+
+ROLLBACK
+
+Employee insert bhi remove ho jayega.
+
+@Transactional Attributes
+
+Spring me bahut saare attributes hote hain.
+
+@Transactional(
+    propagation = Propagation.REQUIRED,
+    isolation = Isolation.READ_COMMITTED,
+    readOnly = false,
+    timeout = 30,
+    rollbackFor = Exception.class,
+    noRollbackFor = IOException.class
+)
+
+Ab ek-ek samajhte hain.
+
+
+Har attribute ka alag purpose hota hai. Ek-ek ko simple example ke saath samajhte hain.
+
+```java
+@Transactional(
+    isolation = Isolation.READ_COMMITTED,
+    readOnly = false,
+    timeout = 30,
+    rollbackFor = Exception.class,
+    noRollbackFor = IOException.class
+)
+```
+
+---
+
+# 1. `isolation = Isolation.READ_COMMITTED`
+
+### Use
+
+Ye control karta hai ki **ek transaction dusre transaction ka data kab dekh sakta hai**.
+
+### Example
+
+#### Transaction A
+
+```sql
+UPDATE account
+SET balance = 5000
+WHERE id = 1;
+```
+
+Abhi **COMMIT nahi hua**.
+
+#### Transaction B
+
+```sql
+SELECT balance
+FROM account
+WHERE id = 1;
+```
+
+Agar isolation `READ_COMMITTED` hai to
+
+```text
+Transaction B ko purana balance dikhega.
+```
+
+Commit hone ke baad hi naya balance dikhega.
+
+### Kab use kare?
+
+* Banking applications
+* Order management
+* Inventory systems
+
+Ye sabse common isolation level hai.
+
+---
+
+# 2. `readOnly = false`
+
+### Use
+
+Batata hai ki transaction **data modify karega ya sirf read karega**.
+
+### Example 1 (Read Only)
+
+```java
+@Transactional(readOnly = true)
+public List<Employee> getEmployees() {
+    return employeeRepository.findAll();
+}
+```
+
+Sirf data read hoga.
+
+---
+
+### Example 2 (Update)
+
+```java
+@Transactional(readOnly = false)
+public void updateEmployee(Employee employee) {
+    employeeRepository.save(employee);
+}
+```
+
+Insert, Update aur Delete allowed hai.
+
+### Benefit
+
+`readOnly=true` se Hibernate unnecessary dirty checking avoid karta hai aur performance improve hoti hai.
+
+---
+
+# 3. `timeout = 30`
+
+### Use
+
+Maximum **30 seconds** tak transaction chal sakta hai.
+
+### Example
+
+```java
+@Transactional(timeout = 30)
+public void processLargeData() {
+
+    // bahut bada processing
+}
+```
+
+Agar processing
+
+```text
+20 sec
+```
+
+me complete ho gayi
+
+```text
+Commit
+```
+
+Agar
+
+```text
+35 sec
+```
+
+lag gaye
+
+```text
+Rollback
+```
+
+Ho jayega.
+
+### Kab use kare?
+
+* Long-running database operations
+* Deadlock se bachne ke liye
+
+---
+
+# 4. `rollbackFor = Exception.class`
+
+### Use
+
+Default me Spring sirf **RuntimeException** par rollback karta hai.
+
+Agar checked exception par bhi rollback chahiye to use karte hain.
+
+Example:
+
+```java
+@Transactional(rollbackFor = Exception.class)
+public void saveEmployee() throws Exception {
+
+    employeeRepository.save(employee);
+
+    throw new Exception("Some Error");
+}
+```
+
+Output
+
+```text
+Rollback
+```
+
+Agar `rollbackFor` nahi hota
+
+```text
+Commit
+```
+
+Ho jata (kyunki `Exception` checked exception hai).
+
+---
+
+# 5. `noRollbackFor = IOException.class`
+
+### Use
+
+Kuch exception aaye to bhi rollback nahi karna.
+
+Example
+
+```java
+@Transactional(noRollbackFor = IOException.class)
+public void saveEmployee() throws IOException {
+
+    employeeRepository.save(employee);
+
+    throw new IOException();
+}
+```
+
+Output
+
+```text
+Employee Save
+
+Commit
+
+IOException throw
+```
+
+Rollback nahi hoga.
+
+### Kab use kare?
+
+Jaise database save ho gaya ho aur email bhejna fail ho gaya.
+
+```java
+@Transactional(noRollbackFor = EmailException.class)
+public void registerUser() {
+
+    userRepository.save(user);
+
+    emailService.sendEmail();
+}
+```
+
+Email fail hua
+
+```text
+User Database me save rahega.
+```
+
+Kyuki email optional hai.
+
+---
+
+# Ek Real Project Example
+
+```java
+@Transactional(
+    isolation = Isolation.READ_COMMITTED,
+    readOnly = false,
+    timeout = 30,
+    rollbackFor = Exception.class,
+    noRollbackFor = IOException.class
+)
+public void placeOrder(Order order) throws Exception {
+
+    inventoryRepository.reduceStock(order);
+
+    paymentRepository.makePayment(order);
+
+    orderRepository.save(order);
+
+}
+```
+
+### Agar payment fail ho
+
+```text
+rollbackFor = Exception.class
+```
+
+Output
+
+```text
+Stock Restore
+
+Order Save Cancel
+
+Rollback
+```
+
+---
+
+### Agar sirf invoice PDF generate karte waqt `IOException` aa jaye
+
+```text
+noRollbackFor = IOException.class
+```
+
+Output
+
+```text
+Stock Reduced ✅
+
+Payment Done ✅
+
+Order Saved ✅
+
+Invoice Generate Failed ❌
+
+Transaction Commit
+```
+
+Order cancel nahi hoga.
+
+---
+
+# Summary
+
+| Attribute       | Purpose                                               | Example                                               |
+| --------------- | ----------------------------------------------------- | ----------------------------------------------------- |
+| `isolation`     | Concurrent transactions ka behavior control karta hai | `READ_COMMITTED` me sirf committed data read hota hai |
+| `readOnly`      | Sirf read ya read-write transaction                   | `true` for `findAll()`, `false` for `save()`          |
+| `timeout`       | Maximum transaction execution time                    | `30` = 30 seconds ke baad rollback                    |
+| `rollbackFor`   | Kin exceptions par rollback karna hai                 | `Exception.class` par bhi rollback                    |
+| `noRollbackFor` | Kin exceptions par rollback nahi karna                | `IOException.class` aaye to bhi commit                |
+
+**Interview Tip:** Ye saare attributes daily use me nahi aate. Real projects me sabse zyada ye use hote hain:
+
+1. `propagation`
+2. `readOnly`
+3. `rollbackFor`
+
+`timeout`, `isolation`, aur `noRollbackFor` specific business requirements me use kiye jaate hain.
+
+=====================================================================================
+
 
 
 
