@@ -1,0 +1,1396 @@
+
+# Kafka Interview Questions & Answers (Basic to Intermediate)
+
+## Q1. Kafka kya hai?
+
+**Answer:**
+
+Kafka ek **distributed event streaming platform** hai jo real-time me data ko **publish (produce)** aur **consume** karne ke liye use hota hai.
+
+Iska use high throughput, fault tolerance aur scalable messaging ke liye hota hai.
+
+**One Line Interview Answer**
+
+> Kafka is a distributed event streaming platform used for building real-time data pipelines and event-driven applications.
+
+---
+
+=================================================================================
+1. High Throughput kya hota hai?
+
+Simple Meaning:
+Ek second me bahut saare messages process karne ki capability.
+
+Real-life Example
+
+Maan lo Flipkart ki Big Billion Days sale chal rahi hai.
+
+Ek second me:
+
+1 lakh orders aaye
+50,000 payments aaye
+20,000 notifications bhejne hain
+
+Agar normal application hai to slow ho sakti hai.
+
+Lekin Kafka ek second me lakhs ya millions of messages handle kar sakta hai.
+
+Interview Answer:
+
+High Throughput means Kafka can process a very large number of messages in a very short time.
+
+2. Fault Tolerance kya hota hai?
+
+Simple Meaning:
+Agar system ka koi part fail ho jaye, tab bhi application chalti rahe aur data loss na ho.
+
+Example
+
+Maan lo tumhare paas 3 Kafka Brokers hain.
+
+Broker-1
+Broker-2
+Broker-3
+
+Aur Broker-1 achanak band ho gaya.
+
+Agar replication enabled hai to Broker-2 ya Broker-3 data serve karte rahenge.
+
+User ko pata bhi nahi chalega ki ek broker down ho gaya.
+
+Isko kehte hain Fault Tolerance.
+
+Interview Answer:
+
+Fault Tolerance means Kafka continues working even if a broker fails, without losing data (when replication is configured).
+
+3. Scalable Messaging kya hota hai?
+
+Simple Meaning:
+Jab users badh jaye to system ko easily bada (scale) kiya ja sake.
+
+Example
+
+Aaj:
+
+1 Broker
+1000 Messages/sec
+
+Kal traffic badh gaya.
+
+Ab tum aur brokers add kar sakte ho.
+
+Broker-1
+Broker-2
+Broker-3
+Broker-4
+
+Ab Kafka aur jyada messages handle karega.
+
+Isko Scalability kehte hain.
+
+Interview Answer:
+
+Scalability means Kafka can handle increasing traffic by adding more brokers and partitions.
+=================================================================================
+
+## Q2. Kafka ka use kahan hota hai?
+
+**Answer**
+
+* Live Tracking Applications
+* Banking Transactions
+* Order Processing
+* Payment Systems
+* Notification Services
+* Log Collection
+* IoT Applications
+
+---
+
+## Q3. Kafka ke main components kaun kaun se hain?
+
+**Answer**
+
+* Producer
+* Consumer
+* Topic
+* Partition
+* Broker
+* Consumer Group
+* ZooKeeper (Old Kafka)
+* KRaft (Latest Kafka)
+
+---
+
+## Q4. Producer kya hota hai?
+
+**Answer**
+
+Producer wo application hoti hai jo Kafka Topic me messages bhejti hai.
+
+**Example**
+
+Order Service → Kafka Topic
+
+---
+
+## Q5. Consumer kya hota hai?
+
+**Answer**
+
+Consumer wo application hoti hai jo Kafka Topic se messages read karti hai.
+
+**Example**
+
+Inventory Service Order Topic se message read karti hai.
+
+---
+
+## Q6. Topic kya hota hai?
+
+**Answer**
+
+Topic ek logical channel hai jisme Producer messages bhejta hai aur Consumer wahi se messages read karta hai.
+
+Example:
+
+```
+orders
+payments
+notifications
+```
+
+---
+
+## Q7. Partition kya hota hai?
+
+**Answer**
+
+Topic ko multiple parts me divide kiya jata hai jise Partition kehte hain.
+
+Benefits
+
+* Parallel Processing
+* High Throughput
+* Scalability
+
+---
+
+## Q8. Broker kya hota hai?
+
+**Answer**
+
+Broker Kafka Server hota hai jo messages ko store karta hai.
+
+Ek Kafka Cluster me multiple brokers ho sakte hain.
+
+---
+
+## Q9. Consumer Group kya hota hai?
+
+**Answer**
+
+Consumer Group ek group hota hai jisme multiple consumers milkar partitions ko consume karte hain.
+
+Har partition ek time par sirf ek consumer hi consume karta hai.
+
+---
+
+## Q10. Kafka me message flow kaise hota hai?
+
+**Answer**
+
+```
+Producer
+     |
+     V
+ Topic
+     |
+Partition
+     |
+ Broker
+     |
+ Consumer
+```
+
+---
+
+## Q11. Topic create kaise karte hain?
+
+**Answer**
+
+```bash
+kafka-topics.bat --create --topic my-first-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+```
+
+---
+
+## Q12. Producer kaise start karte hain?
+
+**Answer**
+
+```bash
+kafka-console-producer.bat --broker-list localhost:9092 --topic my-first-topic
+```
+
+---
+
+## Q13. Consumer kaise start karte hain?
+
+**Answer**
+
+```bash
+kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic my-first-topic --from-beginning
+```
+
+---
+
+## Q14. --from-beginning ka matlab kya hota hai?
+
+**Answer**
+
+Consumer topic ke saare purane messages bhi read karega.
+
+Agar ye option nahi denge to sirf naye messages read honge.
+
+---
+
+# ZooKeeper Interview Questions
+
+---
+
+## Q15. ZooKeeper kya hai?
+
+**Answer**
+
+ZooKeeper Kafka ka coordination service tha jo multiple brokers ko manage karta tha.
+
+Ye Leader Election, Metadata Management aur Cluster Coordination karta tha.
+
+---
+
+## Q16. ZooKeeper ke main responsibilities kya thi?
+
+**Answer**
+
+* Leader Election
+* Broker Health Monitoring
+* Metadata Store
+* Topic Management
+* Distributed Locking
+
+---
+
+## Q17. Leader Election kya hota hai?
+
+**Answer**
+
+Har partition ka ek leader hota hai.
+
+ZooKeeper decide karta tha
+
+* Kaun leader hoga
+* Kaun follower hoga
+* Leader fail ho jaye to naya leader kaun banega
+
+---
+
+## Q18. Broker Health Monitoring kya hota hai?
+
+**Answer**
+
+ZooKeeper brokers ki heartbeat monitor karta tha.
+
+Heartbeat missing hone par broker ko dead mark karta tha aur naya leader select karta tha.
+
+---
+
+## Q19. ZooKeeper metadata me kya store karta tha?
+
+**Answer**
+
+* Broker Information
+* Topic Information
+* Partition Details
+* Replication Information
+* ISR List
+
+---
+
+## Q20. ZooKeeper me heartbeat kya hoti hai?
+
+**Answer**
+
+Heartbeat ek periodic signal hota hai jo broker ZooKeeper ko bhejta hai.
+
+Agar heartbeat nahi aaye to broker dead mana jata hai.
+
+---
+
+## Q21. Distributed Locking kya hota hai?
+
+**Answer**
+
+Distributed Locking ensure karta hai ki ek hi resource ko ek time par sirf ek broker modify kare.
+
+Isse data corruption nahi hota.
+
+---
+
+## Q22. ZooKeeper ko Kafka se kyun remove kiya gaya?
+
+**Answer**
+
+Reasons
+
+* Performance Bottleneck
+* Complex Architecture
+* Extra Component
+* More Network Calls
+* Cloud Scalability Issues
+
+---
+
+## Q23. KRaft kya hai?
+
+**Answer**
+
+KRaft (Kafka Raft Metadata Mode) Kafka ka naya metadata management system hai jo ZooKeeper ki jagah use hota hai.
+
+---
+
+## Q24. KRaft kya kya manage karta hai?
+
+**Answer**
+
+* Leader Election
+* Metadata Management
+* Topic Management
+* Broker Monitoring
+
+Sab kuch Kafka ke andar hi hota hai.
+
+---
+
+## Q25. Kya latest Kafka me ZooKeeper required hai?
+
+**Answer**
+
+Nahi.
+
+Kafka 3.x versions me KRaft use hota hai aur ZooKeeper optional/deprecated hai.
+
+---
+
+# Scenario Based Questions
+
+---
+
+## Q26. Producer aur Consumer me difference?
+
+| Producer                 | Consumer                 |
+| ------------------------ | ------------------------ |
+| Message send karta hai   | Message read karta hai   |
+| Topic me data likhta hai | Topic se data padhta hai |
+
+---
+
+## Q27. Real-time example batao.
+
+**Answer**
+
+Flipkart
+
+```
+Order Service
+        |
+        V
+     Kafka Topic
+        |
+        V
+Inventory Service
+
+Payment Service
+
+Notification Service
+```
+
+Ek order ke liye multiple services ek hi event consume kar sakti hain.
+
+---
+
+## Q28. Kafka ko messaging queue kyu kehte hain?
+
+**Answer**
+
+Kyuki Producer message bhejta hai aur Consumer asynchronously receive karta hai.
+
+Producer aur Consumer directly communicate nahi karte.
+
+---
+
+## Q29. Agar Consumer band ho jaye to kya hoga?
+
+**Answer**
+
+Message Kafka Topic me store rahega.
+
+Consumer restart hone ke baad offset ke according messages read kar lega (retention period ke andar).
+
+---
+
+## Q30. Kafka itna fast kyu hai?
+
+**Answer**
+
+* Sequential Disk Writes
+* Partitioning
+* Zero Copy
+* Batch Processing
+* Compression
+* Distributed Architecture
+=================================================================================
+Bilkul. Hum **previous Q1–Q30** ko **repeat nahi karenge**. Ye **Part-2** hai, isliye numbering **Q31 se start** hogi. Isme sirf naye interview questions hain jo tumhare naye notes se nikle hain.
+
+---
+
+# Kafka Interview Questions & Answers (Part-2)
+
+## Q31. Kafka Broker kya hota hai?
+
+**Answer:**
+
+Kafka Broker ek server hota hai jisme Kafka install hota hai. Ye producer se messages receive karta hai, unhe disk par store karta hai aur consumers ko serve karta hai.
+
+**Interview One-Liner:**
+
+> A Kafka Broker is a Kafka server responsible for storing and serving messages.
+
+---
+
+## Q32. Producer aur Consumer direct communicate kyun nahi karte?
+
+**Answer:**
+
+Producer aur Consumer ke beech Kafka Broker hota hai.
+
+Iske benefits:
+
+* Producer ko Consumer ki information nahi chahiye.
+* Consumer kabhi bhi baad me messages read kar sakta hai.
+* System loosely coupled rehta hai.
+* High traffic ko easily handle kiya ja sakta hai.
+
+---
+
+## Q33. Kafka asynchronous communication kaise provide karta hai?
+
+**Answer:**
+
+Producer message ko Kafka Topic me store kar deta hai aur turant apna kaam continue karta hai.
+
+Consumer baad me apni speed se message read karta hai.
+
+Dono ko ek dusre ka wait nahi karna padta.
+
+---
+
+## Q34. Kafka me Pull Model kya hota hai?
+
+**Answer:**
+
+Kafka me Consumer khud Broker se message request karta hai.
+
+Broker automatically message push nahi karta.
+
+**Example**
+
+Consumer bolta hai:
+
+> "Mujhe naye messages do."
+
+Broker messages return kar deta hai.
+
+---
+
+## Q35. Kafka Pull Model kyun use karta hai?
+
+**Answer:**
+
+Pull Model ke advantages:
+
+* Consumer apni speed se data read karta hai.
+* Slow consumer par overload nahi hota.
+* Better scalability milti hai.
+* Consumer apna offset manage kar sakta hai.
+
+---
+
+## Q36. RabbitMQ aur Kafka me message delivery ka difference kya hai?
+
+**Answer:**
+
+Kafka generally **Pull Model** use karta hai.
+
+RabbitMQ mostly **Push Model** use karta hai.
+
+**Interview One-Liner:**
+
+> Kafka consumers pull messages, whereas RabbitMQ typically pushes messages to consumers.
+
+---
+
+## Q37. Kafka Cluster kya hota hai?
+
+**Answer:**
+
+Multiple Kafka Brokers milkar Kafka Cluster banate hain.
+
+Cluster ka purpose:
+
+* High Availability
+* Load Distribution
+* Fault Tolerance
+* Scalability
+
+---
+
+## Q38. Kafka Cluster ki zarurat kyun padti hai?
+
+**Answer:**
+
+Single Broker ki limitation hoti hai.
+
+Cluster use karne se:
+
+* Load distribute hota hai.
+* Data replicate hota hai.
+* Broker failure ke baad bhi application chalti rehti hai.
+* Performance improve hoti hai.
+
+---
+
+## Q39. High Availability kya hoti hai?
+
+**Answer:**
+
+High Availability ka matlab hai ki agar ek Broker fail ho jaye to bhi system continuously available rahe.
+
+Users ko service interruption na ho.
+
+---
+
+## Q40. Kafka by default kitne Brokers ke saath start hota hai?
+
+**Answer:**
+
+Kafka by default sirf **1 Broker** ke saath start hota hai.
+
+Learning aur development ke liye ye sufficient hota hai.
+
+---
+
+## Q41. Kafka me default Broker ID kya hoti hai?
+
+**Answer:**
+
+Default configuration me Broker ID hoti hai:
+
+```properties
+broker.id=0
+```
+
+Har Broker ki ID unique honi chahiye.
+
+---
+
+## Q42. Kafka me default configuration kya hoti hai?
+
+**Answer:**
+
+Default setup:
+
+* 1 Broker
+* 1 Partition
+* Replication Factor = 1
+
+Ye local development ke liye hota hai.
+
+---
+
+## Q43. Kafka me Cluster kaise banaya jata hai?
+
+**Answer:**
+
+Cluster banane ke liye multiple Kafka Brokers start kiye jate hain.
+
+Har Broker ka:
+
+* Broker ID alag hota hai.
+* Configuration alag hoti hai.
+* Port alag hota hai.
+
+Sab Brokers milkar Cluster banate hain.
+
+---
+
+## Q44. Single Broker aur Kafka Cluster me kya difference hai?
+
+| Single Broker       | Kafka Cluster     |
+| ------------------- | ----------------- |
+| Sirf ek server      | Multiple servers  |
+| Low availability    | High availability |
+| Development         | Production        |
+| Limited scalability | Highly scalable   |
+
+---
+
+## Q45. Local machine par Kafka me sirf ek Broker kyun use kiya jata hai?
+
+**Answer:**
+
+Kyuki:
+
+* Setup simple hota hai.
+* Kam RAM aur CPU lagta hai.
+* Learning aur testing ke liye enough hota hai.
+* Cluster configuration ki zarurat nahi hoti.
+
+---
+
+## Q46. Production environment me generally kitne Brokers use hote hain?
+
+**Answer:**
+
+Production me commonly:
+
+* 3 Brokers
+* 5 Brokers
+* 7 Brokers
+
+Use kiye jate hain.
+
+Odd number Brokers rakhna leader election aur reliability ke liye common practice hai.
+
+---
+
+## Q47. Bootstrap Server kya hota hai?
+
+**Answer:**
+
+Bootstrap Server Kafka Cluster ka entry point hota hai.
+
+Producer aur Consumer sabse pehle isi Broker se connect karte hain.
+
+Uske baad Kafka Cluster ki metadata information mil jati hai.
+
+**Interview One-Liner:**
+
+> Bootstrap Server is the initial Kafka Broker that clients use to connect to the Kafka cluster.
+
+---
+
+## Q48. Kya Bootstrap Server poora Kafka Cluster hota hai?
+
+**Answer:**
+
+Nahi.
+
+Bootstrap Server sirf initial connection ke liye hota hai.
+
+Connection establish hone ke baad client ko Cluster ke baaki Brokers ki information mil jati hai.
+
+---
+
+## Q49. Bootstrap Server me localhost:9092 ka kya matlab hai?
+
+**Answer:**
+
+* localhost → Kafka local machine par chal raha hai.
+* 9092 → Kafka Broker ka default port.
+
+---
+
+## Q50. Agar Bootstrap Server down ho jaye to kya hoga?
+
+**Answer:**
+
+Agar client ke paas Cluster metadata already hai to wo dusre Brokers se communicate kar sakta hai.
+
+Lekin naye clients Bootstrap Server se connect nahi kar paayenge jab tak koi available Bootstrap Broker na ho.
+
+---
+
+==============================================================================================================
+Bilkul Vishnudas. Main **Q1–Q50 ko repeat nahi karunga**. Ye **Part-3** hai aur numbering **Q51 se** start hogi. Isme sirf naye concepts cover kiye gaye hain jo tumhare latest notes me hain.
+
+---
+
+# Kafka Interview Questions & Answers (Part-3)
+
+## Q51. Kya Topic messages ko directly store karta hai?
+
+**Answer:**
+
+Nahi.
+
+Topic ek logical entity hai. Messages actually **Partitions** ke andar store hote hain.
+
+**Interview One-Liner:**
+
+> A Kafka Topic is a logical abstraction, while the actual data is stored inside partitions.
+
+---
+
+## Q52. Kafka me Partitions ki zarurat kyun padti hai?
+
+**Answer:**
+
+Agar saare messages ek hi jagah store honge to performance aur storage dono par load badh jayega.
+
+Isliye Kafka Topic ko multiple Partitions me divide karta hai.
+
+Benefits:
+
+* Better Performance
+* Parallel Processing
+* Load Distribution
+* Scalability
+
+---
+
+## Q53. Real-life example se Partition samjhao.
+
+**Answer:**
+
+Suppose Indian Railways ki 200 trains har 30 seconds me GPS location bhej rahi hain.
+
+Agar sabhi messages ek hi Partition me jayenge to bottleneck create hoga.
+
+Kafka Topic ko multiple Partitions me divide karta hai jisse load distribute ho jata hai.
+
+---
+
+## Q54. Partition ka main purpose kya hai?
+
+**Answer:**
+
+Partition ka purpose hai:
+
+* Topic ko multiple parts me divide karna.
+* Parallel message processing karna.
+* Storage load distribute karna.
+* Scalability improve karna.
+
+---
+
+## Q55. Kya ek Topic ke saare Partitions same Broker me hote hain?
+
+**Answer:**
+
+Nahi.
+
+Production environment me Partitions alag-alag Brokers par distribute kiye ja sakte hain.
+
+Isse system ki performance aur availability improve hoti hai.
+
+---
+
+## Q56. Partitions ko different Brokers me distribute karne ka benefit kya hai?
+
+**Answer:**
+
+Benefits:
+
+* Load Balancing
+* High Availability
+* Better Performance
+* Scalability
+* Fault Tolerance
+
+---
+
+## Q57. Multi-Broker Partition Distribution kya hota hai?
+
+**Answer:**
+
+Ek Topic ke different Partitions alag Brokers par store kiye ja sakte hain.
+
+Example:
+
+* Partition 0 → Broker 1
+* Partition 1 → Broker 2
+* Partition 2 → Broker 3
+* Partition 3 → Broker 4
+
+Isse workload distribute ho jata hai.
+
+---
+
+## Q58. Kafka server start karte waqt meta.properties missing error kyun aata hai?
+
+**Answer:**
+
+Ye error tab aata hai jab Kafka ka storage directory delete ya clean ho jata hai.
+
+Kafka ko Cluster Metadata ke liye **meta.properties** file chahiye hoti hai.
+
+---
+
+## Q59. meta.properties file ka purpose kya hota hai?
+
+**Answer:**
+
+meta.properties file Kafka ke storage ki metadata information store karti hai.
+
+Isme Cluster ID aur Broker ki important information hoti hai.
+
+---
+
+## Q60. Kafka me Cluster ID kya hoti hai?
+
+**Answer:**
+
+Cluster ID ek unique identifier hota hai jo Kafka Cluster ko identify karta hai.
+
+Har Kafka Cluster ki apni unique Cluster ID hoti hai.
+
+---
+
+## Q61. Kafka me Cluster ID kaise generate karte hain?
+
+**Answer:**
+
+Command:
+
+```bash
+kafka-storage.sh random-uuid
+```
+
+Ye ek unique Cluster ID generate karta hai.
+
+---
+
+## Q62. Kafka Storage Format command ka use kya hai?
+
+**Answer:**
+
+Command:
+
+```bash
+kafka-storage.sh format -t <cluster-id> -c server.properties
+```
+
+Ye Kafka Storage ko initialize karta hai aur required metadata files create karta hai.
+
+---
+
+## Q63. Kafka Topic create karne par default kitne Partitions bante hain?
+
+**Answer:**
+
+Agar Partition specify nahi karte to default **1 Partition** create hota hai.
+
+---
+
+## Q64. Multiple Partitions ke saath Topic kaise create karte hain?
+
+**Answer:**
+
+Example:
+
+```bash
+kafka-topics.sh --create --topic orders --partitions 3 --bootstrap-server localhost:9092
+```
+
+Ye Topic ko 3 Partitions ke saath create karega.
+
+---
+
+## Q65. Kafka me Topic Describe command ka use kya hai?
+
+**Answer:**
+
+Command:
+
+```bash
+kafka-topics.sh --describe --topic orders --bootstrap-server localhost:9092
+```
+
+Ye Topic ki complete information show karti hai.
+
+Jaise:
+
+* Partition Count
+* Replication Factor
+* Leader
+* Replicas
+* ISR
+
+---
+
+## Q66. TopicId kya hota hai?
+
+**Answer:**
+
+Kafka har Topic ko internally ek unique Topic ID assign karta hai.
+
+Ye internal identification ke liye use hoti hai.
+
+---
+
+## Q67. Topic Description me PartitionCount ka kya matlab hota hai?
+
+**Answer:**
+
+PartitionCount batata hai ki Topic me total kitne Partitions hain.
+
+Example:
+
+```
+PartitionCount: 3
+```
+
+Matlab Topic me 3 Partitions hain.
+
+---
+
+## Q68. Topic Description me ReplicationFactor ka kya matlab hota hai?
+
+**Answer:**
+
+Replication Factor batata hai ki har Partition ki kitni copies maintain ki ja rahi hain.
+
+Example:
+
+```
+ReplicationFactor: 3
+```
+
+Matlab har Partition ki 3 copies hongi.
+
+---
+
+## Q69. Topic Description me Configs kya hota hai?
+
+**Answer:**
+
+Configs Topic ki configuration settings hoti hain.
+
+Example:
+
+```
+segment.bytes=1073741824
+```
+
+Iska matlab ek log segment file ka maximum size 1 GB hai.
+
+---
+
+## Q70. segment.bytes configuration ka purpose kya hai?
+
+**Answer:**
+
+Ye define karta hai ki Kafka ek log segment file ko maximum kitne size tak store karega.
+
+Default value approximately **1 GB** hoti hai.
+
+---
+
+## Q71. Topic Description me Leader field kya batati hai?
+
+**Answer:**
+
+Leader field batati hai ki kisi Partition ka Leader Broker kaunsa hai.
+
+Producer aur Consumer Leader Broker ke through hi communicate karte hain.
+
+---
+
+## Q72. Topic Description me Replicas field kya batati hai?
+
+**Answer:**
+
+Replicas field batati hai ki kisi Partition ki copies kin Brokers par available hain.
+
+---
+
+## Q73. Topic Description me ISR kya hota hai?
+
+**Answer:**
+
+ISR ka full form hai **In-Sync Replicas**.
+
+Ye un Replicas ki list hoti hai jo Leader ke saath fully synchronized hain.
+
+---
+
+## Q74. Agar Replication Factor = 1 ho to Replicas aur ISR me kya dikhega?
+
+**Answer:**
+
+Agar Replication Factor 1 hai to:
+
+* Sirf ek Replica hoga.
+* Wahi Leader hoga.
+* Wahi ISR me bhi hoga.
+
+Example:
+
+```
+Leader : 1001
+Replicas : 1001
+ISR : 1001
+```
+
+---
+
+## Q75. Agar Replication Factor = 1 ho aur Broker down ho jaye to kya hoga?
+
+**Answer:**
+
+Partition unavailable ho jayega.
+
+Kyuki backup Replica available nahi hoga.
+
+Isi wajah se Production me generally Replication Factor 3 rakha jata hai.
+
+==============================================================================================================
+Bilkul Vishnudas. Main **Q1–Q75 ko repeat nahi karunga**. Ye **Part-4** hai, isliye numbering **Q76 se Q100** tak hogi. Maine sirf **naye interview questions** nikale hain jo tumhare latest notes me hain.
+
+---
+
+# Kafka Interview Questions & Answers (Part-4)
+
+## Q76. Kafka Consumer me partition information kaise dekh sakte hain?
+
+**Answer:**
+
+Consumer run karte waqt ye properties use karte hain:
+
+```bash
+--property print.partition=true --property print.value=true
+```
+
+Isse har message ke saath uska Partition Number bhi print hota hai.
+
+---
+
+## Q77. `print.partition=true` property ka use kya hai?
+
+**Answer:**
+
+Ye property batati hai ki message kis Partition se read hua hai.
+
+Interview me debugging aur verification ke liye iska use hota hai.
+
+---
+
+## Q78. `print.value=true` property ka use kya hai?
+
+**Answer:**
+
+Ye actual message value ko console par print karti hai.
+
+Agar ye property na ho to sirf metadata dikh sakta hai.
+
+---
+
+## Q79. Kafka me saare messages ek hi Partition me kyun chale jaate hain?
+
+**Answer:**
+
+Kyuki Kafka ka default partitioner **Sticky Partitioner** hota hai.
+
+Ye kuch time ya data threshold tak messages ko ek hi Partition me bhejta hai, phir doosre Partition par switch karta hai.
+
+---
+
+## Q80. Sticky Partitioner kya hota hai?
+
+**Answer:**
+
+Sticky Partitioner Kafka ka default partitioning strategy hai.
+
+Ye consecutive messages ko temporarily ek hi Partition me bhejta hai taaki batching improve ho aur performance better mile.
+
+**Interview One-Liner:**
+
+> Sticky Partitioner improves batching by sending consecutive messages to the same partition for a short period.
+
+---
+
+## Q81. Kafka Sticky Partitioner ka benefit kya hai?
+
+**Answer:**
+
+Benefits:
+
+* Better Batch Processing
+* Network Calls kam hoti hain.
+* Producer Performance improve hoti hai.
+* Throughput increase hota hai.
+
+---
+
+## Q82. Round Robin Partitioner kya hota hai?
+
+**Answer:**
+
+Round Robin Partitioner messages ko sequentially sabhi Partitions me equally distribute karta hai.
+
+Example:
+
+* Message 1 → Partition 0
+* Message 2 → Partition 1
+* Message 3 → Partition 2
+* Message 4 → Partition 0
+
+---
+
+## Q83. Round Robin Partitioner ka use kab karte hain?
+
+**Answer:**
+
+Jab hume sabhi Partitions me equal load distribution chahiye ho.
+
+Ye workload ko evenly spread karta hai.
+
+---
+
+## Q84. Round Robin Partitioner kaise configure karte hain?
+
+**Answer:**
+
+Producer start karte waqt ye property pass karte hain:
+
+```bash
+--producer-property partitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner
+```
+
+---
+
+## Q85. Sticky Partitioner aur Round Robin Partitioner me difference kya hai?
+
+| Sticky Partitioner                                  | Round Robin Partitioner                     |
+| --------------------------------------------------- | ------------------------------------------- |
+| Default Partitioner                                 | Optional Configuration                      |
+| Same Partition me kuch time tak messages bhejta hai | Har message ko next Partition me bhejta hai |
+| Better Batching                                     | Equal Distribution                          |
+| Performance optimized                               | Load balancing optimized                    |
+
+---
+
+## Q86. Kaise verify karoge ki Round Robin Partitioner properly kaam kar raha hai?
+
+**Answer:**
+
+Consumer me Partition print enable karenge.
+
+Agar messages alag-alag Partitions se aa rahe hain to Round Robin correctly kaam kar raha hai.
+
+---
+
+## Q87. Kafka me message kis Partition me gaya, ye kaise check karte hain?
+
+**Answer:**
+
+Consumer run karte waqt:
+
+```bash
+--property print.partition=true
+```
+
+Isse har message ke saath uska Partition Number display hota hai.
+
+---
+
+## Q88. Kafka Train GPS Tracking System me kaise use hota hai?
+
+**Answer:**
+
+Flow:
+
+* Train ka GPS location generate karta hai.
+* IoT Device Producer ka role play karta hai.
+* Producer Kafka Topic me location bhejta hai.
+* Consumer location read karta hai.
+* Dashboard par live location update hoti hai.
+
+---
+
+## Q89. Train Tracking use case me Kafka Topic ka naam kya ho sakta hai?
+
+**Answer:**
+
+Example:
+
+```text
+current_location
+```
+
+Is Topic me sabhi trains ki latest GPS updates store hoti hain.
+
+---
+
+## Q90. Train Tracking System me Producer ka role kya hota hai?
+
+**Answer:**
+
+GPS Device ya IoT Device Producer hota hai.
+
+Ye continuously Kafka Topic me location updates bhejta hai.
+
+---
+
+## Q91. Train Tracking System me Consumer ka role kya hota hai?
+
+**Answer:**
+
+Consumer Kafka Topic se latest location read karta hai aur Dashboard ya Mobile Application ko update karta hai.
+
+---
+
+## Q92. Kafka IoT Applications ke liye suitable kyun hai?
+
+**Answer:**
+
+Kyuki IoT Devices continuously data generate karte hain.
+
+Kafka high throughput ke saath continuously streaming data process kar sakta hai.
+
+---
+
+## Q93. Kafka me parallel data processing kaise hoti hai?
+
+**Answer:**
+
+Multiple Partitions aur Multiple Consumers ki wajah se messages parallel process hote hain.
+
+Isse processing fast ho jati hai.
+
+---
+
+## Q94. Kafka thousands of messages per second kaise handle karta hai?
+
+**Answer:**
+
+Reasons:
+
+* Partitioning
+* Batch Processing
+* Distributed Brokers
+* Efficient Disk Writes
+* Parallel Consumers
+
+---
+
+## Q95. Local machine par multiple Kafka Brokers kaise create karte hain?
+
+**Answer:**
+
+Har Broker ke liye alag configuration file banate hain.
+
+Example:
+
+* server.properties
+* server-1.properties
+* server-2.properties
+
+Har file me unique Broker ID aur Port configure karte hain.
+
+---
+
+## Q96. Multiple Brokers create karte waqt kaun-kaun si configurations unique honi chahiye?
+
+**Answer:**
+
+Har Broker ke liye:
+
+* broker.id
+* listeners (Port)
+* log.dirs
+
+Unique hone chahiye.
+
+---
+
+## Q97. Kafka me `broker.id` unique kyun hona chahiye?
+
+**Answer:**
+
+Har Broker ki unique identity hoti hai.
+
+Agar do Brokers ki same ID hogi to Cluster me conflict create hoga.
+
+---
+
+## Q98. Kafka me `log.dirs` configuration ka purpose kya hai?
+
+**Answer:**
+
+Ye directory define karti hai jahan Kafka apne logs aur messages store karega.
+
+Har Broker ka alag `log.dirs` hona chahiye.
+
+---
+
+## Q99. Docker Compose me Kafka Cluster kaise banate hain?
+
+**Answer:**
+
+Docker Compose file me multiple Kafka services define karte hain.
+
+Example:
+
+* kafka1
+* kafka2
+* kafka3
+
+Har service ek alag Broker represent karti hai.
+
+---
+
+## Q100. Kubernetes me Kafka Brokers kaise increase karte hain?
+
+**Answer:**
+
+Deployment ya StatefulSet me replicas count badha dete hain.
+
+Example:
+
+```yaml
+replicas: 3
+```
+
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================

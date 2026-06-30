@@ -16,13 +16,108 @@ Lekin ye alag-alag frameworks se aate hain aur unka behavior thoda different hai
 
 ### 📘 **Comparison Table**
 
-| Annotation   | Package / Origin                                                           | Injection Type                                            | How It Resolves Dependency                                                        | Extra Features / Notes                                                 |
-| ------------ | -------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `@Autowired` | `org.springframework.beans.factory.annotation.Autowired` (Spring-specific) | By **Type** (default), can use `@Qualifier` for by-name   | First matches **type**, then (if multiple beans) checks `@Qualifier` or bean name | Can be used on **constructor**, **field**, or **setter**               |
-| `@Resource`  | `jakarta.annotation.Resource` (J2EE / Java EE standard)                    | By **Name** (default), then by **Type** if name not found | First looks for **bean name** same as variable, then tries **type** match         | Optional attributes: `name` and `type`                                 |
-| `@Inject`    | `jakarta.inject.Inject` (JSR-330 standard)                                 | By **Type**                                               | Works like `@Autowired`, but **doesn’t support `required=false`**                 | Needs additional qualifier via `@Named` if multiple beans of same type |
+===============================================================
+@Autowired vs @Resource vs @Inject
+===============================================================
 
----
+1. @Autowired
+---------------------------------------------------------------
+Package:
+org.springframework.beans.factory.annotation.Autowired
+
+Origin:
+Spring Framework
+
+Injection Type:
+By Type (default)
+
+How Dependency is Resolved:
+- First searches bean by type.
+- If multiple beans of the same type exist,
+  use @Qualifier or bean name to resolve.
+
+Extra Features:
+- Spring-specific annotation.
+- Can be used on:
+  * Constructor
+  * Field
+  * Setter
+- Supports required = false.
+
+
+2. @Resource
+---------------------------------------------------------------
+Package:
+jakarta.annotation.Resource
+
+Origin:
+Jakarta EE (Java EE)
+
+Injection Type:
+By Name (default)
+
+How Dependency is Resolved:
+- First searches bean using the variable name.
+- If bean name is not found,
+  then searches by type.
+
+Extra Features:
+- Standard Java annotation.
+- Supports:
+  * name
+  * type
+- Commonly used when bean name matters.
+
+
+3. @Inject
+---------------------------------------------------------------
+Package:
+jakarta.inject.Inject
+
+Origin:
+JSR-330 (Dependency Injection Standard)
+
+Injection Type:
+By Type
+
+How Dependency is Resolved:
+- Searches bean by type.
+- If multiple beans exist,
+  use @Named or @Qualifier.
+
+Extra Features:
+- Standard DI annotation.
+- Similar to @Autowired.
+- Does NOT support required = false.
+
+
+===============================================================
+Quick Comparison
+===============================================================
+
+@Autowired
+------------
+Package     : Spring
+Inject By   : Type
+Priority    : Type -> @Qualifier/Bean Name
+Supports    : Constructor, Field, Setter
+Special     : required=false supported
+
+@Resource
+----------
+Package     : Jakarta EE
+Inject By   : Name
+Priority    : Name -> Type
+Supports    : Field, Setter
+Special     : Supports name and type attributes
+
+@Inject
+--------
+Package     : JSR-330
+Inject By   : Type
+Priority    : Type -> @Named/@Qualifier
+Supports    : Constructor, Field, Setter
+Special     : No required=false
 
 ### 🧩 **Example**
 
@@ -774,6 +869,341 @@ public class MyService {
 
 Agar chaho to main **@ConfigurationProperties + @Value + @EnableConfigurationProperties ka short comparison table** bana du, taaki notes me ek hi jagah clear ho.
 Banau Vishnudas?
+
+=============================================================================================================
+Ye confusion bahut common hai. Dono annotations **saath me use hote hain**, lekin **unka kaam alag hai**.
+
+Ek simple example se samajhte hain.
+
+---
+
+# Real Life Example
+
+Maan lo tumhare `application.properties` me ye data hai.
+
+```properties
+app.name=Energy Digital Twin
+app.version=1.0
+app.max-users=100
+```
+
+Tum chahte ho ye values ek Java object me automatically aa jaye.
+
+```
+application.properties
+        │
+        ▼
+app.name=Energy Digital Twin
+app.version=1.0
+app.max-users=100
+        │
+        ▼
+AppProperties Object
+```
+
+---
+
+# Step 1 : POJO banao
+
+```java
+@ConfigurationProperties(prefix = "app")
+public class AppProperties {
+
+    private String name;
+    private String version;
+    private int maxUsers;
+
+    // Getter Setter
+}
+```
+
+Yaha sirf itna bataya hai ki
+
+> "Is class me `app.*` wali properties bhar dena."
+
+Matlab
+
+```
+app.name
+        │
+        ▼
+name
+
+app.version
+        │
+        ▼
+version
+
+app.max-users
+        │
+        ▼
+maxUsers
+```
+
+**Lekin...**
+
+Spring ko abhi tak ye class dikhi hi nahi.
+
+Ye sirf ek normal Java class hai.
+
+---
+
+# Step 2 : Spring ko bolo is class ko register karo
+
+```java
+@Configuration
+@EnableConfigurationProperties(AppProperties.class)
+public class AppConfig {
+
+}
+```
+
+Ab Spring bolega
+
+> "Achha, AppProperties naam ki class ko bhi manage karna hai."
+
+Ab startup ke time
+
+```
+Spring Start
+      │
+      ▼
+AppProperties Bean Create
+      │
+      ▼
+application.properties Read
+      │
+      ▼
+Data Fill
+```
+
+---
+
+# Fir use kar sakte ho
+
+```java
+@Service
+public class UserService {
+
+    private final AppProperties appProperties;
+
+    public UserService(AppProperties appProperties) {
+        this.appProperties = appProperties;
+    }
+
+    public void print() {
+        System.out.println(appProperties.getName());
+    }
+}
+```
+
+Output
+
+```
+Energy Digital Twin
+```
+
+---
+
+# Agar @ConfigurationProperties laga diya...
+
+```java
+@ConfigurationProperties(prefix="app")
+public class AppProperties {
+
+}
+```
+
+Aur
+
+```java
+@EnableConfigurationProperties(AppProperties.class)
+```
+
+Nahi lagaya...
+
+to Spring bolega
+
+> "Mujhe ye class pata hi nahi hai."
+
+Error aa sakta hai
+
+```
+No qualifying bean of type 'AppProperties'
+```
+
+Kyuki bean create hi nahi hua.
+
+---
+
+# Agar sirf @EnableConfigurationProperties laga diya...
+
+```java
+@EnableConfigurationProperties(AppProperties.class)
+```
+
+Aur class me
+
+```java
+public class AppProperties {
+
+}
+```
+
+likh diya...
+
+to Spring ko bean mil gaya.
+
+Lekin
+
+```
+Kaunsi properties bind karni hai?
+```
+
+Ye pata hi nahi.
+
+Isliye values bind nahi hongi.
+
+---
+
+# Dono saath me
+
+```java
+@ConfigurationProperties(prefix="app")
+```
+
+Batata hai
+
+> Kis prefix ki properties leni hai.
+
+Aur
+
+```java
+@EnableConfigurationProperties(AppProperties.class)
+```
+
+Batata hai
+
+> Is class ko Spring Bean bana do aur binding enable karo.
+
+---
+
+# Easy Analogy
+
+Socho tum office me naye employee ho.
+
+### `@ConfigurationProperties`
+
+Ye employee ka **Job Description** hai.
+
+```
+Tum Sales department ka data handle karoge.
+```
+
+Bas itna.
+
+Employee office join nahi hua.
+
+---
+
+### `@EnableConfigurationProperties`
+
+Ye HR ko bolna hai
+
+```
+Is employee ko hire kar lo.
+```
+
+Ab employee office me aa gaya.
+
+---
+
+Dono milke
+
+```
+HR hires employee
+        +
+Job description assign
+```
+
+Tabhi employee kaam karega.
+
+---
+
+# Flow Diagram
+
+```
+application.properties
+
+app.name=Energy
+app.version=1.0
+
+          │
+          ▼
+
+@ConfigurationProperties(prefix="app")
+
+          │
+          ▼
+
+Spring knows
+"app.* ko is class me bharna hai"
+
+          │
+          ▼
+
+@EnableConfigurationProperties(AppProperties.class)
+
+          │
+          ▼
+
+Spring Bean Create
+
+          │
+          ▼
+
+Properties Bind
+
+          │
+          ▼
+
+@Autowired
+AppProperties
+```
+
+---
+
+# Spring Boot 2.2+ (Modern Approach)
+
+Aajkal zyadatar projects me `@EnableConfigurationProperties` explicitly likhne ki zarurat nahi padti. Agar tum class ko component scan me la dete ho (e.g. `@Component` ke saath) ya `@ConfigurationPropertiesScan` use karte ho, to Spring Boot khud us class ko bean bana deta hai.
+
+```java
+@Component
+@ConfigurationProperties(prefix = "app")
+public class AppProperties {
+    // fields
+}
+```
+
+Ya
+
+```java
+@SpringBootApplication
+@ConfigurationPropertiesScan
+public class Application {
+}
+```
+
+Isliye modern Spring Boot projects me tum aksar sirf `@ConfigurationProperties` dekhoge.
+
+---
+
+**Interview me yaad rakhne ka shortcut:**
+
+* **`@ConfigurationProperties` = "Kya bind karna hai?"** (Which properties?)
+* **`@EnableConfigurationProperties` = "Is class ko Spring manage kare."** (Register the bean and enable binding)
+
+Ye distinction yaad rakhoge to kabhi confusion nahi hoga.
 
 =============================================================================================================
 Bilkul Vishnudas 👌 — Spring aur Spring Boot me **bohot saari annotations** hote hain. Notes ke liye main **categorical list** de raha hoon, short aur concise, taaki tum directly use kar sako.
