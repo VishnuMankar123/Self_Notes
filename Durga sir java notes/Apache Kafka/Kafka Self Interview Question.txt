@@ -1365,9 +1365,1284 @@ replicas: 3
 ```
 
 ==============================================================================================================
+Bilkul Vishnudas. 👍
+Main **Q1–Q100 ko repeat nahi karunga**. Ye **Part-5** hai aur numbering **Q101 se Q125** tak hogi. Maine sirf **naye interview questions** nikale hain jo tumhare latest notes me hain.
+
+---
+
+# Kafka Interview Questions & Answers (Part-5)
+
+## Q101. Kafka Cluster me Load Distribution kya hota hai?
+
+**Answer:**
+
+Load Distribution ka matlab hai messages aur storage load ko multiple Brokers me divide karna taaki koi ek Broker overloaded na ho.
+
+**Interview One-Liner:**
+
+> Kafka distributes partitions across multiple brokers to balance the workload.
+
+---
+
+## Q102. Kafka me Load Distribution Broker level par hota hai ya Partition level par?
+
+**Answer:**
+
+Kafka me Load Distribution **Partition level** par hota hai.
+
+Producer messages ko Partitions me bhejta hai aur Partitions alag-alag Brokers par distribute hote hain.
+
+---
+
+## Q103. Kafka Partitions ko multiple Brokers par kyun distribute karta hai?
+
+**Answer:**
+
+Benefits:
+
+* Load Balancing
+* Better Performance
+* High Availability
+* Scalability
+* Fault Tolerance
+
+---
+
+## Q104. Ek Topic ke Partitions Brokers par kaise distribute hote hain?
+
+**Answer:**
+
+Example:
+
+Topic = `orders`
+
+* Partition 0 → Broker 1
+* Partition 1 → Broker 2
+* Partition 2 → Broker 3
+
+Isse har Broker apne assigned Partition ka load handle karta hai.
+
+---
+
+## Q105. Kafka Producer message kis Partition me bhejta hai?
+
+**Answer:**
+
+Ye depend karta hai:
+
+* Message Key di hai ya nahi.
+* Kaunsa Partitioner use ho raha hai.
+* Producer ki configuration kya hai.
+
+---
+
+## Q106. Kafka Producer Partition ka selection kaise karta hai?
+
+**Answer:**
+
+Kafka Producer mainly 3 tarike se Partition select karta hai:
+
+1. Key-based Partitioning
+2. Round Robin / Sticky Partitioner (configuration ke hisab se)
+3. Custom Partitioner
+
+---
+
+## Q107. Key-based Partitioning kya hoti hai?
+
+**Answer:**
+
+Agar Producer message ke saath Key bhejta hai to Kafka us Key ke basis par Partition decide karta hai.
+
+Isse same Key ke saare messages hamesha same Partition me jate hain.
+
+---
+
+## Q108. Kafka me Key-based Partitioning ka formula kya hai?
+
+**Answer:**
+
+Kafka generally ye formula use karta hai:
+
+```text
+partition = hash(key) % number_of_partitions
+```
+
+Ye hash value ke basis par target Partition select karta hai.
+
+---
+
+## Q109. Same Key ke messages hamesha same Partition me kyun jate hain?
+
+**Answer:**
+
+Kyuki Kafka Key ka hash calculate karta hai.
+
+Same Key ka hash same hota hai, isliye Partition bhi same select hota hai.
+
+---
+
+## Q110. Same Key ko same Partition me bhejne ka benefit kya hai?
+
+**Answer:**
+
+Sabse bada benefit **Message Ordering** hai.
+
+Ek hi Key ke messages sequence me process hote hain.
+
+Example:
+
+Customer-101 ke saare Order Events ek hi Partition me rahenge.
+
+---
+
+## Q111. Key-based Partitioning ka real-life example bataiye.
+
+**Answer:**
+
+Suppose Banking Application hai.
+
+Account Number = Key
+
+Account Number 1001 ke saare Transactions ek hi Partition me jayenge.
+
+Isse transaction order maintain rahega.
+
+---
+
+## Q112. Agar Producer Key nahi bheje to Partition kaise select hota hai?
+
+**Answer:**
+
+Agar Key nahi di gayi hai to Producer configured partitioning strategy ke according Partition select karta hai.
+
+Jaise Round Robin ya Sticky Partitioner.
+
+---
+
+## Q113. Custom Partitioner kya hota hai?
+
+**Answer:**
+
+Custom Partitioner me developer apna khud ka Partition selection logic likhta hai.
+
+Ye special business requirements ke liye use hota hai.
+
+---
+
+## Q114. Custom Partitioner kab use kiya jata hai?
+
+**Answer:**
+
+Jab business rule ke hisab se messages ko specific Partitions me bhejna ho.
+
+Example:
+
+* VIP Customers
+* Premium Orders
+* Region-wise Data
+
+---
+
+## Q115. Kafka me Leader Partition kya hota hai?
+
+**Answer:**
+
+Har Partition ka ek Leader hota hai.
+
+Producer aur Consumer dono Leader ke saath communicate karte hain.
+
+Leader hi Read aur Write operations handle karta hai.
+
+---
+
+## Q116. Follower Replica ka role kya hota hai?
+
+**Answer:**
+
+Follower Replica Leader ke data ki copy maintain karta hai.
+
+Ye backup ke liye hota hai aur normally Read/Write requests handle nahi karta.
+
+---
+
+## Q117. Kafka me Producer aur Consumer kis Replica se communicate karte hain?
+
+**Answer:**
+
+Producer aur Consumer hamesha **Leader Replica** ke saath communicate karte hain.
+
+Follower Replica directly requests serve nahi karta.
+
+---
+
+## Q118. Leader Replica ki responsibilities kya hoti hain?
+
+**Answer:**
+
+Leader Replica:
+
+* Producer se messages receive karta hai.
+* Consumers ko messages serve karta hai.
+* Followers ko data replicate karta hai.
+
+---
+
+## Q119. Follower Replica ki responsibilities kya hoti hain?
+
+**Answer:**
+
+Follower Replica:
+
+* Leader se data copy karta hai.
+* Backup maintain karta hai.
+* Failure hone par Leader ban sakta hai.
+
+---
+
+## Q120. Agar Leader Broker fail ho jaye to kya hota hai?
+
+**Answer:**
+
+Kafka automatically ek healthy Follower ko naya Leader bana deta hai.
+
+Producer aur Consumer us naye Leader se communicate karna start kar dete hain.
+
+---
+
+## Q121. Broker Failure ke baad Kafka service kaise continue rehti hai?
+
+**Answer:**
+
+Replication ki wajah se.
+
+Leader fail hone par Follower Leader ban jata hai.
+
+Isse downtime minimum hota hai.
+
+---
+
+## Q122. Kafka me Automatic Leader Election kya hota hai?
+
+**Answer:**
+
+Leader fail hone par Kafka automatically ISR me available Follower ko Leader promote kar deta hai.
+
+Is process ko Leader Election kehte hain.
+
+---
+
+## Q123. Load Redistribution kya hota hai?
+
+**Answer:**
+
+Broker failure ke baad jis Broker par naya Leader banta hai, us Broker par traffic shift ho jata hai.
+
+Is process ko Load Redistribution kehte hain.
+
+---
+
+## Q124. Kafka me Message Ordering kab guarantee hoti hai?
+
+**Answer:**
+
+Kafka sirf **same Partition** ke andar Message Ordering guarantee karta hai.
+
+Agar same Key use karte hain to messages same Partition me jayenge aur order maintain rahega.
+
+---
+
+## Q125. Kafka me Load Balancing aur Fault Tolerance ek saath kaise achieve hote hain?
+
+**Answer:**
+
+* Partitions ko multiple Brokers me distribute karke **Load Balancing** achieve hota hai.
+* Replication aur Leader Election ki wajah se **Fault Tolerance** achieve hota hai.
+
 ==============================================================================================================
+Bilkul Vishnudas. 👍
+Main **Q1–Q125 ko repeat nahi karunga**. Ye **Part-6** hai aur numbering **Q126 se Q150** tak hogi. Isme sirf **naye interview questions** hain jo tumhare latest IoT + MQTT + Kafka Bridge notes se nikle hain.
+
+---
+
+# Kafka Interview Questions & Answers (Part-6)
+
+## Q126. Kya Kafka directly IoT devices par run karta hai?
+
+**Answer:**
+
+Nahi.
+
+Kafka directly IoT devices par run nahi karta kyunki Kafka ko Java JVM, zyada RAM, storage aur CPU resources ki zarurat hoti hai.
+
+**Interview One-Liner:**
+
+> Kafka runs on servers, not on resource-constrained IoT devices.
+
+---
+
+## Q127. Kafka IoT devices par kyun nahi chal sakta?
+
+**Answer:**
+
+Reasons:
+
+* Java JVM required hota hai.
+* High RAM requirement hoti hai.
+* Disk-based storage chahiye.
+* Multiple threads use karta hai.
+* Continuous network communication karta hai.
+
+Ye requirements chhote IoT devices fulfill nahi kar pate.
+
+---
+
+## Q128. IoT devices generally kaun se protocols use karte hain?
+
+**Answer:**
+
+Common IoT Protocols:
+
+* MQTT
+* CoAP
+* HTTP
+* LoRa
+* Zigbee
+* BLE (Bluetooth Low Energy)
+
+---
+
+## Q129. MQTT IoT me itna popular kyun hai?
+
+**Answer:**
+
+MQTT lightweight protocol hai.
+
+Iske benefits:
+
+* Kam bandwidth use karta hai.
+* Battery-friendly hai.
+* Low latency hai.
+* Resource-constrained devices ke liye suitable hai.
+
+---
+
+## Q130. IoT devices generally kis Broker se connect hote hain?
+
+**Answer:**
+
+Common MQTT Brokers:
+
+* HiveMQ
+* Eclipse Mosquitto
+* EMQX
+* AWS IoT Core
+* Azure IoT Hub
+
+---
+
+## Q131. Kya IoT Device directly Kafka Broker se connect karta hai?
+
+**Answer:**
+
+Generally nahi.
+
+IoT Device pehle MQTT Broker se connect karta hai.
+
+Uske baad MQTT Broker ya Bridge data Kafka tak pahunchata hai.
+
+---
+
+## Q132. IoT Architecture me Kafka ka role kya hota hai?
+
+**Answer:**
+
+Kafka cloud side par use hota hai.
+
+Kafka ka role:
+
+* Event Streaming
+* Analytics
+* Real-Time Processing
+* Data Pipeline
+* Machine Learning
+* Dashboard Updates
+
+---
+
+## Q133. IoT Device se Kafka tak data ka typical flow kya hota hai?
+
+**Answer:**
+
+Flow:
+
+```text
+IoT Device
+     ↓
+MQTT
+     ↓
+HiveMQ / Mosquitto
+     ↓
+Kafka Bridge
+     ↓
+Kafka
+     ↓
+Database / Analytics / Dashboard
+```
+
+---
+
+## Q134. MQTT Broker aur Kafka Broker me kya difference hai?
+
+| MQTT Broker                         | Kafka Broker                                      |
+| ----------------------------------- | ------------------------------------------------- |
+| IoT communication ke liye optimized | High-throughput event streaming ke liye optimized |
+| Lightweight protocol support        | Distributed log storage                           |
+| MQTT clients handle karta hai       | Kafka Producers aur Consumers handle karta hai    |
+
+---
+
+## Q135. Kafka Bridge kya hota hai?
+
+**Answer:**
+
+Kafka Bridge ek application ya connector hota hai jo MQTT messages ko Kafka Topics me forward karta hai.
+
+---
+
+## Q136. MQTT se Kafka Bridge ka purpose kya hota hai?
+
+**Answer:**
+
+Purpose:
+
+* MQTT messages ko Kafka Topics me publish karna.
+* IoT data ko Kafka ecosystem me lana.
+* Real-time processing enable karna.
+
+---
+
+## Q137. Java MQTT Subscriber + Kafka Producer Bridge kya hota hai?
+
+**Answer:**
+
+Ek Java application:
+
+* MQTT Broker se messages subscribe karti hai.
+* Wahi messages Kafka Producer ke through Kafka Topic me publish karti hai.
+
+---
+
+## Q138. Java Bridge me MQTT Client aur Kafka Producer ek saath kyun use hote hain?
+
+**Answer:**
+
+MQTT Client data receive karta hai.
+
+Kafka Producer usi data ko Kafka Topic me publish karta hai.
+
+Isliye dono ek hi application me use kiye ja sakte hain.
+
+---
+
+## Q139. Java Bridge ka basic message flow kya hota hai?
+
+**Answer:**
+
+Flow:
+
+```text
+MQTT Message Receive
+        ↓
+Java Application
+        ↓
+Kafka Producer
+        ↓
+Kafka Topic
+```
+
+---
+
+## Q140. Java Bridge approach ke kya advantages hain?
+
+**Answer:**
+
+Advantages:
+
+* Free
+* Full Control
+* Easy Customization
+* Java Developers ke liye simple
+* Business Logic add kar sakte hain.
+
+---
+
+## Q141. HiveMQ Kafka Extension kya hota hai?
+
+**Answer:**
+
+HiveMQ Kafka Extension ek Enterprise Plugin hai jo MQTT Topics ko directly Kafka Topics se connect karta hai.
+
+Custom coding ki zarurat nahi hoti.
+
+---
+
+## Q142. HiveMQ Kafka Extension ka main advantage kya hai?
+
+**Answer:**
+
+Advantages:
+
+* Zero Coding
+* High Performance
+* Enterprise Ready
+* Automatic MQTT to Kafka Mapping
+
+---
+
+## Q143. Kafka Connect MQTT Source Connector kya hota hai?
+
+**Answer:**
+
+Kafka Connect ka ek Source Connector jo MQTT Broker se data read karke Kafka Topics me publish karta hai.
+
+---
+
+## Q144. Kafka Connect use karne ka benefit kya hai?
+
+**Answer:**
+
+Benefits:
+
+* No Custom Coding
+* Easy Integration
+* Scalable
+* Production Ready
+* Large Kafka Clusters ke liye suitable
+
+---
+
+## Q145. Apache NiFi ka use Kafka ke saath kyun kiya jata hai?
+
+**Answer:**
+
+Apache NiFi GUI-based data flow tool hai.
+
+Ye data ko:
+
+* Read
+* Transform
+* Route
+* Filter
+* Kafka me publish
+
+kar sakta hai.
+
+---
+
+## Q146. Node-RED ka Kafka Integration me kya role hai?
+
+**Answer:**
+
+Node-RED drag-and-drop programming tool hai.
+
+IoT Devices aur Kafka ke beech integration aur workflows banana easy ho jata hai.
+
+---
+
+## Q147. MQTT se Kafka Bridge banane ke common approaches kaun si hain?
+
+**Answer:**
+
+Common approaches:
+
+1. Java MQTT Subscriber + Kafka Producer
+2. HiveMQ Kafka Extension
+3. Kafka Connect MQTT Source Connector
+4. Apache NiFi / Node-RED / Logstash
+
+---
+
+## Q148. Chhote Java Project ke liye kaunsa MQTT-Kafka Bridge approach best hai?
+
+**Answer:**
+
+Java MQTT Subscriber + Kafka Producer.
+
+Kyuki:
+
+* Free hai.
+* Easy hai.
+* Flexible hai.
+* Java Developers ke liye suitable hai.
+
+---
+
+## Q149. Enterprise Production me kaunsa MQTT-Kafka Integration approach prefer kiya jata hai?
+
+**Answer:**
+
+Generally:
+
+* Kafka Connect
+* HiveMQ Enterprise Kafka Extension
+
+Ye scalable aur production-ready solutions hote hain.
+
+---
+
+## Q150. Real-time IoT Analytics me Kafka ka use kaise hota hai?
+
+**Answer:**
+
+Flow:
+
+* Sensors data generate karte hain.
+* MQTT Broker data receive karta hai.
+* Bridge data Kafka me publish karta hai.
+* Kafka se Analytics, Machine Learning aur Dashboards real-time update hote hain.
+
 ==============================================================================================================
+Bilkul Vishnudas. 👍
+Main **Q1–Q154 ko repeat nahi karunga**. Ye **Part-7** hai aur numbering **Q155 se Q180** tak hogi. Isme sirf **naye interview questions** hain jo tumhare latest notes (Multiple Partitions, Parallel Consumers, Consumer Scaling) se nikle hain.
+
+---
+
+# Kafka Interview Questions & Answers (Part-7)
+
+## Q155. Existing Kafka Topic me Partitions kaise increase karte hain?
+
+**Answer:**
+
+`kafka-topics --alter` command ka use karke.
+
+Example:
+
+```bash
+kafka-topics.sh --alter --topic weather-data --partitions 3 --bootstrap-server localhost:9092
+```
+
+Ye Topic ke Partitions ko increase kar deta hai.
+
+---
+
+## Q156. Kya Kafka me Partitions ko decrease kar sakte hain?
+
+**Answer:**
+
+Nahi.
+
+Kafka existing Topic ke Partitions ko **increase** karne ki permission deta hai, lekin **decrease** nahi.
+
+Agar kam Partitions chahiye to naya Topic create karna padta hai.
+
+---
+
+## Q157. Existing Topic me Partitions badhane ki zarurat kab padti hai?
+
+**Answer:**
+
+Jab:
+
+* Message volume increase ho.
+* Parallel processing chahiye.
+* Zyada Consumers add karne ho.
+* Throughput improve karna ho.
+
+---
+
+## Q158. Multiple Partitions hone ke baad Kafka kya automatically karta hai?
+
+**Answer:**
+
+Kafka automatically Partitions ko available Consumers ke beech assign karta hai.
+
+Is process ko **Partition Assignment** kehte hain.
+
+---
+
+## Q159. Kya hume manually Partition assign karna padta hai?
+
+**Answer:**
+
+Normally nahi.
+
+Kafka Consumer Group Coordinator automatically Partition Assignment karta hai.
+
+---
+
+## Q160. Parallel Processing ka matlab kya hota hai?
+
+**Answer:**
+
+Jab multiple Consumers ek hi time par alag-alag Partitions ke messages process karte hain, use Parallel Processing kehte hain.
+
+---
+
+## Q161. Multiple Partitions se Parallel Processing kaise achieve hoti hai?
+
+**Answer:**
+
+Har Partition ko alag Consumer assign hota hai.
+
+Sab Consumers ek saath processing karte hain.
+
+Isse overall processing speed badh jati hai.
+
+---
+
+## Q162. Kafka me Throughput kaise improve hota hai?
+
+**Answer:**
+
+Throughput improve hota hai:
+
+* Multiple Partitions
+* Multiple Consumers
+* Parallel Processing
+* Load Distribution
+
+ki wajah se.
+
+---
+
+## Q163. Single Partition ko Single Lane Road kyun bola jata hai?
+
+**Answer:**
+
+Kyuki ek hi Consumer active hota hai.
+
+Saare messages sequentially process hote hain.
+
+Isliye speed limited hoti hai.
+
+---
+
+## Q164. Multiple Partitions ko Multi-Lane Highway kyun bola jata hai?
+
+**Answer:**
+
+Kyuki multiple Consumers ek saath kaam kar sakte hain.
+
+Jaise highway ki multiple lanes par gaadiyan parallel chalti hain.
+
+---
+
+## Q165. Multiple Partitions ka sabse bada advantage kya hai?
+
+**Answer:**
+
+Parallel Processing.
+
+Ye Kafka ki scalability aur performance ka foundation hai.
+
+---
+
+## Q166. Kafka me High Throughput kaise achieve hota hai?
+
+**Answer:**
+
+Multiple Partitions aur Multiple Consumers milkar parallel data process karte hain.
+
+Isse millions of messages efficiently process kiye ja sakte hain.
+
+---
+
+## Q167. Agar ek hi Consumer ho aur millions of messages aa jaye to kya problem hogi?
+
+**Answer:**
+
+Consumer bottleneck ban jayega.
+
+Processing slow ho jayegi aur backlog create ho sakta hai.
+
+---
+
+## Q168. Kafka me Load Balancing kaise hoti hai?
+
+**Answer:**
+
+Kafka automatically Partitions ko Consumers ke beech distribute karta hai.
+
+Har Consumer apna assigned Partition process karta hai.
+
+---
+
+## Q169. Consumer overload kyun nahi hota?
+
+**Answer:**
+
+Kyuki Kafka workload ko multiple Consumers me divide kar deta hai.
+
+Har Consumer sirf assigned Partitions process karta hai.
+
+---
+
+## Q170. Consumer fail hone par Kafka kya karta hai?
+
+**Answer:**
+
+Kafka us Consumer ke Partitions ko automatically kisi doosre active Consumer ko assign kar deta hai.
+
+Is process ko **Rebalancing** kehte hain.
+
+---
+
+## Q171. Kafka Rebalancing kya hoti hai?
+
+**Answer:**
+
+Jab Consumer Group me Consumer add ya remove hota hai ya koi Consumer fail hota hai, tab Kafka Partitions ko dobara assign karta hai.
+
+Is process ko Rebalancing kehte hain.
+
+---
+
+## Q172. Horizontal Scaling kya hoti hai?
+
+**Answer:**
+
+Horizontal Scaling ka matlab hai zyada Consumers ya zyada Application Instances add karke processing capacity badhana.
+
+---
+
+## Q173. Vertical Scaling aur Horizontal Scaling me kya difference hai?
+
+| Vertical Scaling                | Horizontal Scaling                  |
+| ------------------------------- | ----------------------------------- |
+| Same machine ko powerful banana | Naye Consumers ya Servers add karna |
+| CPU/RAM increase                | Multiple instances increase         |
+
+---
+
+## Q174. Kafka me Horizontal Scaling kaise karte hain?
+
+**Answer:**
+
+* Partitions increase karte hain.
+* Same Consumer Group me naye Consumers add karte hain.
+
+Kafka automatically workload distribute kar deta hai.
+
+---
+
+## Q175. Kafka me Backlog kya hota hai?
+
+**Answer:**
+
+Jab Producer messages bhej raha ho aur Consumers unhe time par process na kar pa rahe hon, to pending messages ko Backlog kehte hain.
+
+---
+
+## Q176. Multiple Consumers Backlog ko kaise reduce karte hain?
+
+**Answer:**
+
+Multiple Consumers parallel processing karte hain.
+
+Isliye pending messages jaldi process ho jate hain.
+
+---
+
+## Q177. Kafka me Processing Speed kis cheez par depend karti hai?
+
+**Answer:**
+
+Main factors:
+
+* Number of Partitions
+* Number of Active Consumers
+* Consumer Processing Speed
+* Hardware Resources
+
+---
+
+## Q178. Kya Partitions badhane se hamesha Performance improve hoti hai?
+
+**Answer:**
+
+Nahi.
+
+Performance tab improve hoti hai jab additional Partitions ko process karne ke liye enough Consumers aur resources available hon.
+
+---
+
+## Q179. Multiple Partitions ka Fault Tolerance se kya relation hai?
+
+**Answer:**
+
+Multiple Partitions ke saath Replication use karne par Broker ya Consumer failure hone par bhi processing continue reh sakti hai.
+
+---
+
+## Q180. Kafka me Parallel Processing aur Load Balancing ek saath kaise achieve hote hain?
+
+**Answer:**
+
+* Multiple Partitions workload ko divide karte hain.
+* Consumer Group ke Multiple Consumers un Partitions ko parallel process karte hain.
+* Kafka automatically Partition Assignment aur Rebalancing handle karta hai.
+
+
 ==============================================================================================================
+Bilkul Vishnudas. 👍
+Maine **Q1–Q180** ko dhyan me rakha hai. **Koi bhi question repeat nahi karunga.** Ye **Part-8** hai aur numbering **Q181 se Q205** tak hogi.
+
+> **Note:** Tumhare latest notes me `groupId` wala concept pehle hi **Q151–Q154** me cover ho chuka hai, isliye usko repeat nahi kar raha hoon. Yaha sirf **naye interview questions** diye gaye hain.
+
+---
+
+# Kafka Interview Questions & Answers (Part-8)
+
+## Q181. Ek Producer multiple Topics par data kaise bhej sakta hai?
+
+**Answer:**
+
+Ek Producer business logic ke basis par different Topics par messages publish kar sakta hai.
+
+Example:
+
+* Plant Data → `plant-topic`
+* Weather Data → `weather-topic`
+* Log Data → `log-topic`
+
+---
+
+## Q182. Multiple Topics use karne ka benefit kya hai?
+
+**Answer:**
+
+Benefits:
+
+* Better Data Separation
+* Easy Maintenance
+* Independent Consumers
+* Better Scalability
+* Different Retention Policies
+
+---
+
+## Q183. Kafka me different data types ke liye alag Topics kyun banaye jate hain?
+
+**Answer:**
+
+Har data type ka purpose aur consumers alag ho sakte hain.
+
+Example:
+
+* Plant Data → Monitoring Team
+* Weather Data → Analytics Team
+* Logs → Monitoring System
+
+Isliye alag Topics banana best practice hai.
+
+---
+
+## Q184. Small Project me multiple Topics handle karne ka simple approach kya hai?
+
+**Answer:**
+
+`switch-case` ya `if-else` use kar sakte hain.
+
+Ye simple aur readable hota hai.
+
+---
+
+## Q185. Medium-size Project me Topic Selection ka recommended approach kya hai?
+
+**Answer:**
+
+`Map<String, String>` use karna.
+
+Ye dynamic aur maintainable approach hoti hai.
+
+---
+
+## Q186. Enterprise Project me Topic Names hardcode kyun nahi karne chahiye?
+
+**Answer:**
+
+Hardcoded Topic Names maintain karna difficult hota hai.
+
+Production me Topic Names configuration file (`application.yml`) se load karna best practice hai.
+
+---
+
+## Q187. Kafka Topics ko `application.yml` me configure karne ka advantage kya hai?
+
+**Answer:**
+
+Advantages:
+
+* No Hardcoding
+* Easy Configuration Change
+* Different Environment Support
+* Better Maintainability
+
+---
+
+## Q188. Kafka me Configuration-based Topic Management kya hota hai?
+
+**Answer:**
+
+Topic Names configuration file me define kiye jate hain aur application runtime par unhe read karti hai.
+
+---
+
+## Q189. Kafka Producer message bhejte waqt Key optional hoti hai ya mandatory?
+
+**Answer:**
+
+Key optional hoti hai.
+
+Producer bina Key ke bhi message bhej sakta hai.
+
+Lekin Key dene se Partitioning aur Ordering control ki ja sakti hai.
+
+---
+
+## Q190. Kafka Message Key kya hoti hai?
+
+**Answer:**
+
+Message Key ek identifier hoti hai jo Kafka ko decide karne me help karti hai ki message kis Partition me jana chahiye.
+
+---
+
+## Q191. Kafka Key ko "Message Address" kyun kaha jata hai?
+
+**Answer:**
+
+Kyuki Kafka Key ke basis par target Partition select karta hai.
+
+Isliye Key indirectly message ka destination decide karti hai.
+
+---
+
+## Q192. Kafka Message Key ka sabse bada advantage kya hai?
+
+**Answer:**
+
+Message Ordering maintain hoti hai.
+
+Same Key ke saare messages same Partition me jate hain.
+
+---
+
+## Q193. Device-wise Ordering maintain karni ho to Kafka Key kya honi chahiye?
+
+**Answer:**
+
+Device ID ko Key banana chahiye.
+
+Example:
+
+```text
+Key = device-101
+```
+
+Isse us Device ke saare messages same Partition me jayenge.
+
+---
+
+## Q194. Plant-wise Ordering maintain karni ho to Kafka Key kya honi chahiye?
+
+**Answer:**
+
+Plant ID ko Message Key banana chahiye.
+
+Isse ek hi Plant ke saare events ordered rahenge.
+
+---
+
+## Q195. Same Key ke saare messages same Consumer tak kaise pahunchte hain?
+
+**Answer:**
+
+Same Key → Same Partition
+
+Aur ek Partition ek time par Consumer Group ke andar sirf ek Consumer ko assign hota hai.
+
+Isliye same Key ke messages same Consumer process karta hai.
+
+---
+
+## Q196. Kafka me Stateful Processing ke liye Message Key kyun important hai?
+
+**Answer:**
+
+Kyuki same entity (User, Device, Plant) ka saara data same Partition me rehta hai.
+
+Isse state maintain karna easy ho jata hai.
+
+---
+
+## Q197. Agar Message Key na di jaye to Ordering guarantee hoti hai kya?
+
+**Answer:**
+
+Nahi.
+
+Different messages alag Partitions me ja sakte hain.
+
+Global Ordering guarantee nahi hoti.
+
+---
+
+## Q198. Kafka me Business Entity ko Key banana kyun recommended hai?
+
+**Answer:**
+
+Business Entity jaise:
+
+* Customer ID
+* Device ID
+* Plant ID
+* Order ID
+
+Same Key ke saare Events ko same Partition me rakhti hai.
+
+---
+
+## Q199. Weather Monitoring System me best Kafka Key kya ho sakti hai?
+
+**Answer:**
+
+Generally:
+
+* Device ID
+* Station ID
+* Sensor ID
+
+Ye business requirement par depend karta hai.
+
+---
+
+## Q200. IoT System me Device ID ko Key kyun banaya jata hai?
+
+**Answer:**
+
+Taaki us Device ke saare Sensor Readings ordered rahen aur same Consumer unhe process kare.
+
+---
+
+## Q201. Large Enterprise Projects me Topic Selection Strategy kaise design ki jati hai?
+
+**Answer:**
+
+Business Domain ke hisab se.
+
+Example:
+
+* plant-topic
+* weather-topic
+* log-topic
+* alert-topic
+* notification-topic
+
+---
+
+## Q202. Kafka me Domain-based Topic Design kya hota hai?
+
+**Answer:**
+
+Har Business Domain ke liye alag Topic banana.
+
+Example:
+
+Manufacturing:
+
+* Plant Topic
+* Machine Topic
+* Alert Topic
+* Maintenance Topic
+
+---
+
+## Q203. Topic Naming Strategy ka importance kya hai?
+
+**Answer:**
+
+Proper Topic Naming se:
+
+* Management easy hota hai.
+* Monitoring easy hoti hai.
+* Consumers ko identify karna easy hota hai.
+* Future Scaling easy hoti hai.
+
+---
+
+## Q204. Kafka Topic Design karte waqt kin baaton ka dhyan rakhna chahiye?
+
+**Answer:**
+
+* Business Domain
+* Expected Traffic
+* Number of Consumers
+* Retention Requirement
+* Scalability
+* Naming Convention
+
+---
+
+## Q205. Production Kafka Projects me Topic Design kyun important hota hai?
+
+**Answer:**
+
+Kyuki Topic Design directly impact karta hai:
+
+* Performance
+* Scalability
+* Maintainability
+* Consumer Architecture
+* Future Expansion
+
+---
+
+# ⭐ Most Important Questions (Part-8)
+
+Ye questions interviews me frequently pooche ja sakte hain:
+
+1. Ek Producer multiple Topics par data kaise bhejta hai?
+2. Multiple Topics use karne ke kya benefits hain?
+3. Topic Names hardcode kyun nahi karne chahiye?
+4. `application.yml` se Topics configure karne ka advantage kya hai?
+5. Kafka Message Key kya hoti hai?
+6. Message Key optional hai ya mandatory?
+7. Same Key same Partition me kyun jati hai?
+8. Stateful Processing ke liye Key kyun important hai?
+9. IoT me Device ID ko Key kyun banate hain?
+10. Domain-based Topic Design kya hota hai?
+11. Topic Naming Strategy ka importance kya hai?
+12. Production me Topic Design karte waqt kin baaton ka dhyan rakhna chahiye?
+
+---
+
+# 📚 Complete Kafka Interview Progress
+
+* ✅ **Part-1:** Q1–Q30 (Kafka Basics, ZooKeeper, KRaft)
+* ✅ **Part-2:** Q31–Q50 (Broker, Cluster, Bootstrap Server)
+* ✅ **Part-3:** Q51–Q75 (Topic, Partition, Leader, ISR)
+* ✅ **Part-4:** Q76–Q100 (Partitioners, Producer/Consumer, Multi-Broker)
+* ✅ **Part-5:** Q101–Q125 (Load Distribution, Leader Election)
+* ✅ **Part-6:** Q126–Q150 (IoT, MQTT, Kafka Bridge)
+* ✅ **Part-7:** Q155–Q180 (Partition Scaling, Rebalancing, Parallel Processing)
+* ✅ **Part-8:** Q181–Q205 (Topic Strategy, Message Keys, Topic Design)
+
+---
+
+### ⚠️ Ek important correction
+
+Tumhare notes me ye line hai:
+
+> **"Key = Message ka address"**
+
+Interview me ise thoda aur technically sahi tarike se bolna:
+
+> **"A Kafka message key is used by the producer's partitioner to determine the target partition. It also helps maintain ordering for messages with the same key."**
+
+Ye answer interviewer ke saamne zyada professional aur technically accurate lagega.
+
 ==============================================================================================================
 ==============================================================================================================
 ==============================================================================================================

@@ -2107,6 +2107,410 @@ Because:
 
 बस बोलो!
 ========================================================================================================================
+Ye Kafka ka **sabse important interview topic** hai. 90% interviews me **Consumer Group** aur **group.id** par question aata hai.
+
+Main tumhe bilkul basic se samjhata hoon.
+
+---
+
+# Sabse pehle Group ID kya hai?
+
+**Definition:**
+
+**Group ID ek unique naam hota hai jo batata hai ki kaun-kaun se consumers ek hi team (Consumer Group) me kaam kar rahe hain.**
+
+Example:
+
+```java
+@KafkaListener(
+    topics = "orders",
+    groupId = "order-group"
+)
+```
+
+Yaha
+
+```text
+groupId = order-group
+```
+
+Ye batata hai ki ye consumer **order-group** ka member hai.
+
+---
+
+# Real Life Example
+
+Maan lo tumhare paas Amazon ka Warehouse hai.
+
+1000 Orders aa rahe hain.
+
+3 Employees kaam kar rahe hain.
+
+```text
+Employee A
+Employee B
+Employee C
+```
+
+Ye teeno ek hi team me hain.
+
+Team ka naam hai
+
+```text
+Order Team
+```
+
+Yahi Kafka me
+
+```text
+Group ID = order-group
+```
+
+hai.
+
+---
+
+# Agar Same Group ID ho to kya hota hai?
+
+Suppose Topic me 3 Partitions hain.
+
+```text
+Orders Topic
+
+Partition-0
+Partition-1
+Partition-2
+```
+
+Aur 3 Consumers hain.
+
+```text
+Consumer-A
+Consumer-B
+Consumer-C
+
+Group = order-group
+```
+
+Kafka automatically Partition assign karega.
+
+```text
+Partition-0 ---> Consumer-A
+
+Partition-1 ---> Consumer-B
+
+Partition-2 ---> Consumer-C
+```
+
+Har Consumer apna-apna Partition read karega.
+
+**Koi bhi message duplicate process nahi hoga.**
+
+---
+
+# Diagram
+
+```text
+             Orders Topic
+
+       ------------------------
+       | P0 | P1 | P2 |
+       ------------------------
+
+             |
+             |
+
+      Group : order-group
+
+      ---------------------
+      Consumer A --> P0
+
+      Consumer B --> P1
+
+      Consumer C --> P2
+      ---------------------
+```
+
+---
+
+# Agar sirf 1 Partition ho?
+
+Topic
+
+```text
+Orders
+
+Partition-0
+```
+
+Consumers
+
+```text
+Consumer A
+Consumer B
+Consumer C
+```
+
+Same Group
+
+```text
+order-group
+```
+
+Kafka Rule:
+
+> **1 Partition = 1 Active Consumer per Group**
+
+Result
+
+```text
+Partition-0 ---> Consumer A
+
+Consumer B ---> Idle
+
+Consumer C ---> Idle
+```
+
+Sirf ek Consumer kaam karega.
+
+---
+
+# Interview Question
+
+## Q. Sirf ek Consumer hi active kyun hai?
+
+**Answer**
+
+Kyuki Topic me sirf ek Partition hai.
+
+Kafka me ek Partition ko ek Group ke andar ek hi Consumer consume kar sakta hai.
+
+---
+
+# Agar 3 Partitions aur 2 Consumers ho?
+
+Topic
+
+```text
+P0
+P1
+P2
+```
+
+Consumers
+
+```text
+Consumer A
+Consumer B
+```
+
+Kafka assign karega
+
+```text
+Consumer A
+
+P0
+
+P1
+
+Consumer B
+
+P2
+```
+
+Ya
+
+```text
+Consumer A --> P0
+
+Consumer B --> P1
+
+Consumer A --> P2
+```
+
+Assignment Kafka automatically karta hai (rebalance ke through). Zaroori baat ye hai ki **har partition sirf ek consumer ko assign hota hai**.
+
+---
+
+# Agar Consumers zyada ho?
+
+Partitions
+
+```text
+P0
+P1
+```
+
+Consumers
+
+```text
+A
+B
+C
+D
+```
+
+Result
+
+```text
+P0 --> A
+
+P1 --> B
+
+C --> Idle
+
+D --> Idle
+```
+
+Extra Consumers idle rahenge.
+
+---
+
+# Different Group ID dene par kya hoga?
+
+Consumer-1
+
+```java
+groupId = group-A
+```
+
+Consumer-2
+
+```java
+groupId = group-B
+```
+
+Topic
+
+```text
+Orders
+```
+
+Ab
+
+```text
+Group A
+
+Consumer-1
+
+sab messages
+```
+
+Aur
+
+```text
+Group B
+
+Consumer-2
+
+sab messages
+```
+
+Dono ko **same messages** milenge.
+
+Isko **Broadcast** bolte hain.
+
+---
+
+# Diagram
+
+```text
+              Orders Topic
+
+          ----------------
+          | P0 | P1 | P2 |
+          ----------------
+
+          /             \
+
+Group-A                 Group-B
+
+Consumer-1              Consumer-2
+
+Sab messages            Sab messages
+```
+
+---
+
+# Group ID ka actual kaam kya hai?
+
+Group ID Kafka ko batata hai:
+
+* Kaun se Consumers ek team me hain.
+* Partitions kis Consumer ko assign karne hain.
+* Load balancing kaise karni hai.
+* Offset kis Group ke liye maintain karna hai.
+
+---
+
+# Offset aur Group ID ka relation
+
+Maan lo Topic me 100 Messages hain.
+
+Consumer ne 60 messages read kar liye.
+
+Kafka save karega
+
+```text
+Group ID
+
+order-group
+
+Current Offset = 60
+```
+
+Kal agar application restart hui to Kafka kahega:
+
+> "Is Group ne 60 tak read kar liya hai, ab 61 se start karo."
+
+Isliye **Offset hamesha Consumer Group ke hisab se maintain hota hai, individual consumer ke hisab se nahi.**
+
+---
+
+# Interview Questions
+
+### Q151. Group ID kya hota hai?
+
+**Answer:**
+Group ID ek unique identifier hai jo batata hai ki kaun se consumers ek hi Consumer Group ka hissa hain. Kafka isi ke basis par partition assignment aur offset management karta hai.
+
+---
+
+### Q152. Group ID ka purpose kya hai?
+
+**Answer:**
+
+* Consumer Group identify karna.
+* Load balancing karna.
+* Partition assign karna.
+* Offsets maintain karna.
+
+---
+
+### Q153. Same Group ID dene par kya hota hai?
+
+**Answer:**
+Consumers ek hi Consumer Group ka hissa ban jate hain aur Kafka messages ko unke beech distribute karta hai. Ek partition ko group ke andar sirf ek consumer consume karta hai.
+
+---
+
+### Q154. Different Group ID dene par kya hota hai?
+
+**Answer:**
+Har Consumer Group ko topic ke saare messages milte hain. Isse broadcast behavior milta hai.
+
+---
+
+## ⭐ Interview me yaad rakhne layak 4 rules
+
+1. **Same Group ID = Load Balancing**
+2. **Different Group ID = Broadcast**
+3. **1 Partition = 1 Active Consumer per Group**
+4. **Offset Consumer Group ke naam (group.id) se store hota hai**
+
+Ye 4 points agar samajh gaye, to Consumer Group ka concept interview me confidently explain kar paoge.
+
+========================================================================================================================
 Aap **multiple consumers** 3 tariko se bana sakte hain —
 *depend karta hai aapka goal kya hai.*
 Neeche sabko simple, example ke saath explain kiya hai 👇

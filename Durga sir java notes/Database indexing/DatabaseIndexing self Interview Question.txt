@@ -1,0 +1,1519 @@
+
+# DBMS Indexing Interview Questions & Answers
+
+## (Question 7 onwards)
+
+### Q7. Why is Indexing considered one of the most important topics in DBMS interviews?
+
+**Answer:**
+
+Indexing is important because databases generally contain millions of records. Searching every record one by one is slow. Indexing helps the database locate required records quickly by reducing the number of disk blocks accessed, which improves query performance.
+
+---
+
+### Q8. Explain the architecture involved in database query execution.
+
+**Answer:**
+
+Database query execution follows this flow:
+
+```
+User Query
+      ↓
+     CPU
+      ↓
+     RAM
+      ↓
+ Hard Disk
+```
+
+* CPU executes the query.
+* RAM temporarily stores required data.
+* Database is permanently stored on Hard Disk.
+* CPU never reads data directly from Hard Disk.
+
+---
+
+### Q9. Why is RAM required between CPU and Hard Disk?
+
+**Answer:**
+
+CPU is extremely fast, while Hard Disk is much slower.
+
+CPU communicates with RAM because:
+
+* RAM is much faster than Hard Disk.
+* CPU can directly access RAM.
+* Data is first copied from Hard Disk to RAM and then processed by CPU.
+
+---
+
+### Q10. What happens when a SELECT query is executed?
+
+**Answer:**
+
+Example:
+
+```sql
+SELECT *
+FROM Student
+WHERE Roll_No = 10;
+```
+
+Execution Steps:
+
+1. CPU receives the query.
+2. CPU requests data from RAM.
+3. If data is not available in RAM, RAM loads it from Hard Disk.
+4. CPU searches the required record.
+5. Result is returned to the user.
+
+---
+
+### Q11. Why can't the CPU directly communicate with the Hard Disk?
+
+**Answer:**
+
+Because of the huge speed difference.
+
+| CPU         | Hard Disk    |
+| ----------- | ------------ |
+| Nanoseconds | Milliseconds |
+
+If CPU waits for Hard Disk every time, system performance becomes very poor.
+
+Hence RAM acts as an intermediate layer.
+
+---
+
+### Q12. Where is the actual database stored?
+
+**Answer:**
+
+Database is permanently stored on the Hard Disk (Secondary Storage).
+
+Reason:
+
+* Permanent storage
+* Non-volatile
+* Data remains even after power failure
+
+RAM cannot be used because it is volatile.
+
+---
+
+### Q13. What are Blocks (Pages) in DBMS?
+
+**Answer:**
+
+Blocks (or Pages) are fixed-size storage units of the Hard Disk.
+
+Each block contains multiple records.
+
+Example:
+
+```
+Block 1
+
+Student 1
+Student 2
+Student 3
+...
+Student 100
+```
+
+Database reads data block-by-block, not record-by-record.
+
+---
+
+### Q14. Is there any difference between Block and Page?
+
+**Answer:**
+
+Generally, both terms represent the same storage unit.
+
+* Operating System usually uses the term **Page**.
+* Database systems often use the term **Block**.
+
+In interviews, both are usually considered equivalent.
+
+---
+
+### Q15. How do you calculate the number of blocks required?
+
+**Answer:**
+
+Formula:
+
+```
+Number of Blocks =
+Total Records
+---------------
+Records per Block
+```
+
+Example:
+
+Total Records = 10,000
+
+Records per Block = 100
+
+```
+10000 / 100 = 100 Blocks
+```
+
+---
+
+### Q16. How does searching happen when data is unordered?
+
+**Answer:**
+
+Database checks one block after another.
+
+Example:
+
+```
+Block1
+↓
+
+Block2
+↓
+
+Block3
+↓
+
+...
+```
+
+This continues until the required record is found.
+
+This is similar to **Linear Search**.
+
+---
+
+### Q17. What is a Hit in DBMS?
+
+**Answer:**
+
+A **Hit** occurs when the required record is found in the current block loaded into RAM.
+
+Example:
+
+```
+Block3
+
+Roll No = 50 Found
+
+→ Hit
+```
+
+---
+
+### Q18. What is a Miss in DBMS?
+
+**Answer:**
+
+A **Miss** occurs when the required record is not found in the current block.
+
+The database then loads the next block into RAM.
+
+---
+
+### Q19. Why is every block first loaded into RAM?
+
+**Answer:**
+
+Because CPU cannot directly read data from the Hard Disk.
+
+Process:
+
+```
+Hard Disk
+      ↓
+     RAM
+      ↓
+     CPU
+```
+
+Every required block must first be copied into RAM before processing.
+
+---
+
+### Q20. What is I/O Cost?
+
+**Answer:**
+
+I/O Cost (Input/Output Cost) is the cost of transferring data between Hard Disk and RAM.
+
+Higher number of block transfers means:
+
+* More Disk Reads
+* Higher I/O Cost
+* Slower Query Performance
+
+---
+
+### Q21. Why is I/O Cost considered expensive?
+
+**Answer:**
+
+Because accessing the Hard Disk is much slower than processing data in RAM.
+
+Most database query execution time is spent waiting for disk reads rather than CPU computation.
+
+---
+
+### Q22. Does Indexing reduce searching inside a block?
+
+**Answer:**
+
+No.
+
+This is a common interview trick question.
+
+Indexing does **not** directly reduce searching inside a block.
+
+Instead, it reduces the **number of blocks that need to be accessed**, which lowers I/O Cost.
+
+---
+
+### Q23. How does Indexing improve query performance?
+
+**Answer:**
+
+Without Index:
+
+```
+Read Block1
+↓
+
+Read Block2
+↓
+
+Read Block3
+↓
+
+...
+↓
+
+Read Block100
+```
+
+With Index:
+
+```
+Index
+
+↓
+
+Required Block
+
+↓
+
+Read Only One Block
+```
+
+Thus,
+
+* Less Disk Access
+* Lower I/O Cost
+* Faster Query Execution
+
+---
+
+### Q24. Explain Database Indexing using a book example.
+
+**Answer:**
+
+Without Book Index:
+
+You search every page manually.
+
+```
+Page1
+
+↓
+
+Page2
+
+↓
+
+...
+
+↓
+
+Page1000
+```
+
+With Book Index:
+
+```
+Index
+
+↓
+
+Topic → Page 421
+
+↓
+
+Open Page 421 Directly
+```
+
+Database Index works exactly the same way.
+
+---
+
+### Q25. What is the biggest benefit of Indexing?
+
+**Answer:**
+
+The biggest advantage is reducing the number of disk blocks accessed.
+
+This results in:
+
+* Lower I/O Cost
+* Faster Search
+* Better Query Performance
+* Improved Database Efficiency
+
+---
+
+## ⭐ Quick Interview Trick Question
+
+**Q26. What exactly does Indexing reduce?**
+
+**Answer:**
+
+✅ Number of Blocks Accessed
+
+✅ I/O Cost
+
+❌ It does NOT directly reduce searching inside a block.
+
+==============================================================================================================
+Bilkul. Main ab ek **Interview Revision Series** banaunga.
+
+### Rules jo main follow karunga:
+
+* ✅ Sirf interview me pooche jane wale questions.
+* ✅ Pichhle lecture ke questions repeat nahi honge.
+* ✅ Numbering continue hogi.
+* ✅ Short + Interview Ready Answers.
+* ✅ Har lecture ke baad sirf Questions & Answers dekhkar revision ho jayega.
+
+Pichhle lecture tak hum **Q1–Q26** cover kar chuke hain. Isliye is lecture se **Q27** start karte hain. Ye questions Lecture-108 se nikale gaye hain.
+
+---
+
+# DBMS Indexing Interview Questions (Lecture-108)
+
+## Q27. What is the first step while solving an Indexing numerical?
+
+**Answer:**
+
+Sabse pehle calculate karte hain **Records Per Block**.
+
+Formula:
+
+```
+Records Per Block = Block Size / Record Size
+```
+
+---
+
+## Q28. How do you calculate Records Per Block?
+
+**Answer:**
+
+Formula:
+
+```
+Records Per Block = Block Size / Record Size
+```
+
+Example:
+
+```
+Block Size = 1000 Bytes
+Record Size = 250 Bytes
+
+1000 / 250 = 4 Records
+```
+
+---
+
+## Q29. What is a Record in DBMS?
+
+**Answer:**
+
+Table ki ek complete row ko **Record** kehte hain.
+
+Example:
+
+| Roll_No | Name  | Age |
+| ------- | ----- | --- |
+| 101     | Rahul | 20  |
+
+Ye poori row ek Record hai.
+
+---
+
+## Q30. How do you calculate the total number of Blocks?
+
+**Answer:**
+
+Formula:
+
+```
+Number of Blocks =
+Total Records / Records Per Block
+```
+
+Example:
+
+```
+10000 / 4 = 2500 Blocks
+```
+
+---
+
+## Q31. Why is the Hard Disk divided into Blocks?
+
+**Answer:**
+
+Hard Disk ko directly access karna efficient nahi hota.
+
+Blocks ki wajah se:
+
+* Data management easy hota hai.
+* Data transfer efficient hota hai.
+* Database block-by-block read karta hai.
+
+---
+
+## Q32. What is the relationship between Block Size and Record Size?
+
+**Answer:**
+
+Block Size decide karti hai ki ek block me kitne records store honge.
+
+Formula:
+
+```
+Records Per Block =
+Block Size / Record Size
+```
+
+Agar Record Size badhegi to ek block me kam records aayenge.
+
+---
+
+## Q33. What happens when data is unordered?
+
+**Answer:**
+
+Database **Linear Search** perform karta hai.
+
+Ek-ek block RAM me load hota hai aur search hoti hai jab tak record mil na jaye.
+
+---
+
+## Q34. Why can't all blocks be loaded into RAM together?
+
+**Answer:**
+
+RAM ki capacity limited hoti hai.
+
+Example:
+
+* RAM = 8 GB
+* Hard Disk = 1 TB
+
+Isliye database ek time par sirf required block hi RAM me load karta hai.
+
+---
+
+## Q35. What is one I/O Operation?
+
+**Answer:**
+
+Jab ek block Hard Disk se RAM me transfer hota hai to usse **One I/O Operation** kehte hain.
+
+```
+Hard Disk
+      ↓
+     RAM
+```
+
+Ek block transfer = 1 I/O.
+
+---
+
+## Q36. What is the Best Case I/O Cost in Linear Search?
+
+**Answer:**
+
+Best Case tab hota hai jab required record pehle block me mil jaye.
+
+```
+Best Case = 1 Block Read
+```
+
+---
+
+## Q37. What is the Worst Case I/O Cost in Linear Search?
+
+**Answer:**
+
+Worst Case tab hota hai jab required record last block me mile.
+
+Example:
+
+```
+Total Blocks = 2500
+
+Worst Case = 2500 Block Reads
+```
+
+---
+
+## Q38. How is Average I/O Cost calculated in Linear Search?
+
+**Answer:**
+
+Formula:
+
+```
+Average = Worst Case / 2
+```
+
+Example:
+
+```
+2500 / 2 = 1250 Blocks
+```
+
+---
+
+## Q39. Why is Linear Search used in this numerical?
+
+**Answer:**
+
+Kyunki data **Unordered** tha.
+
+Linear Search unordered data ke liye use hota hai.
+
+---
+
+## Q40. What is the time complexity of Linear Search?
+
+**Answer:**
+
+* Best Case = **O(1)**
+* Average Case = **O(N)**
+* Worst Case = **O(N)**
+
+---
+
+## Q41. Under what condition can Binary Search be used?
+
+**Answer:**
+
+Binary Search tabhi use ho sakta hai jab data **Sorted (Ascending ya Descending)** ho.
+
+---
+
+## Q42. What is the time complexity of Binary Search?
+
+**Answer:**
+
+```
+O(log₂N)
+```
+
+Ye Linear Search se kaafi fast hota hai.
+
+---
+
+## Q43. In the given example, why does Binary Search require only about 12 block reads?
+
+**Answer:**
+
+Total Blocks = **2500**
+
+Binary Search Complexity:
+
+```
+log₂(2500) ≈ 12
+```
+
+Isliye sirf lagbhag **12 blocks** access karne padte hain.
+
+---
+
+## Q44. Compare Linear Search and Binary Search based on block access.
+
+**Answer:**
+
+| Linear Search         | Binary Search       |
+| --------------------- | ------------------- |
+| Average = 1250 Blocks | Average ≈ 12 Blocks |
+| O(N)                  | O(log₂N)            |
+| Unordered Data        | Sorted Data         |
+
+---
+
+## Q45. Was Indexing used in this lecture?
+
+**Answer:**
+
+**No.**
+
+Ye lecture sirf **Without Indexing I/O Cost** calculate karne ke liye tha.
+
+Indexing ka comparison next lecture me aata hai.
+
+---
+
+## Q46. What is the main objective of this numerical?
+
+**Answer:**
+
+Ye numerical ye dikhata hai ki **Without Indexing searching kitni costly hoti hai**, taaki baad me Indexing ke benefits ko compare kiya ja sake.
+
+---
+
+### 📌 Numbering Status
+
+* **Lecture 107:** Q1 – Q26 ✅
+* **Lecture 108:** Q27 – Q46 ✅
+
+Agle lecture se main **Q47** se continue karunga. Kisi bhi lecture me pehle diye gaye questions repeat nahi honge. Is tarah tumhare paas end me **300–500 unique DBMS interview questions** ka complete revision set tayar ho jayega.
+
+==============================================================================================================
+Perfect. 👍 Ye approach interview ke liye best hai.
+
+Main **pichhle lecture ke Q1–Q46 repeat nahi karunga**. Is lecture (Lecture-109) se **Q47** se continue kar raha hoon. Main sirf naye interview questions nikal raha hoon jo previous lectures me cover nahi hue. Source:
+
+---
+
+# DBMS Indexing Interview Questions (Lecture-109)
+
+## (Question No. 47 Onwards)
+
+---
+
+## Q47. What additional information is required to calculate I/O Cost with Indexing?
+
+**Answer:**
+
+With Indexing, along with Block Size, Record Size, and Total Records, we also need:
+
+* **Index Entry Size**
+
+Because it helps calculate how many index entries fit in one index block.
+
+---
+
+## Q48. What is an Index Table?
+
+**Answer:**
+
+An Index Table is a separate data structure that stores searchable keys and pointers to the actual data blocks.
+
+It helps the database locate records quickly without scanning the entire table.
+
+---
+
+## Q49. Where is the Index Table stored?
+
+**Answer:**
+
+The Index Table is also stored on the **Hard Disk**, not in RAM.
+
+During query execution:
+
+```
+CPU
+ ↓
+RAM
+ ↓
+Index Table
+ ↓
+Actual Data Block
+```
+
+The required index blocks are loaded into RAM when needed.
+
+---
+
+## Q50. Does an Index Table store complete records?
+
+**Answer:**
+
+No.
+
+An Index Table stores only:
+
+* Key Value
+* Pointer (Block/Page Address)
+
+It does **not** store the complete row.
+
+---
+
+## Q51. What is a Pointer in an Index?
+
+**Answer:**
+
+A Pointer stores the address of the block/page where the actual record is located.
+
+It helps the database directly access the required data block.
+
+---
+
+## Q52. What is the structure of an Index Entry?
+
+**Answer:**
+
+An Index Entry contains two fields:
+
+```
+Key Value
++
+Pointer
+```
+
+Example:
+
+```
+101  → Page 5
+102  → Page 8
+103  → Page 11
+```
+
+---
+
+## Q53. Why are Index Entries much smaller than Data Records?
+
+**Answer:**
+
+Because an Index Entry stores only:
+
+* Key
+* Pointer
+
+A Data Record stores all column values.
+
+Therefore, index entries occupy much less space.
+
+---
+
+## Q54. How do you calculate the number of Index Entries per Block?
+
+**Answer:**
+
+Formula:
+
+```
+Entries Per Block =
+Block Size / Index Entry Size
+```
+
+Example:
+
+```
+1000 / 20 = 50 Entries
+```
+
+---
+
+## Q55. Why can one Index Block store more entries than one Data Block?
+
+**Answer:**
+
+Because Index Entries are much smaller than Data Records.
+
+Example:
+
+* Data Record = 250 Bytes
+* Index Entry = 20 Bytes
+
+Hence, more entries fit into one block.
+
+---
+
+## Q56. What is a Dense Index?
+
+**Answer:**
+
+A Dense Index contains one index entry for **every record** in the table.
+
+Example:
+
+```
+101 → Page1
+102 → Page1
+103 → Page2
+104 → Page2
+```
+
+Every record has its own index entry.
+
+---
+
+## Q57. What is a Sparse Index?
+
+**Answer:**
+
+A Sparse Index contains only **one index entry per data block** (usually the first key of the block).
+
+Example:
+
+```
+101 → Block1
+201 → Block2
+301 → Block3
+```
+
+---
+
+## Q58. Which index requires more storage: Dense or Sparse?
+
+**Answer:**
+
+**Dense Index** requires more storage because it stores an entry for every record.
+
+Sparse Index stores only one entry per block.
+
+---
+
+## Q59. Why does Sparse Index consume less storage?
+
+**Answer:**
+
+Because it stores only one entry for each block instead of one entry for every record.
+
+Hence, fewer index entries are created.
+
+---
+
+## Q60. On which type of data can a Sparse Index be created?
+
+**Answer:**
+
+Sparse Index can only be created when the data is **sorted (ordered).**
+
+It cannot work on unordered data.
+
+---
+
+## Q61. Can a Sparse Index be created on unordered data?
+
+**Answer:**
+
+No.
+
+Sparse Index requires sorted data because each entry represents the first record of a block.
+
+---
+
+## Q62. How are total Sparse Index entries calculated?
+
+**Answer:**
+
+Since Sparse Index stores one entry per block:
+
+```
+Total Sparse Entries =
+Total Data Blocks
+```
+
+Example:
+
+```
+2500 Blocks
+
+↓
+
+2500 Sparse Entries
+```
+
+---
+
+## Q63. How do you calculate the number of Sparse Index Blocks?
+
+**Answer:**
+
+Formula:
+
+```
+Sparse Index Blocks =
+Total Sparse Entries
+/
+Entries Per Index Block
+```
+
+Example:
+
+```
+2500 / 50 = 50 Blocks
+```
+
+---
+
+## Q64. Why is Binary Search used on the Index Table?
+
+**Answer:**
+
+Because the Index Table is maintained in sorted order.
+
+Therefore Binary Search can be applied to search the required key efficiently.
+
+---
+
+## Q65. Why is '+1' added in the Index Search Cost formula?
+
+**Answer:**
+
+Formula:
+
+```
+log₂(N) + 1
+```
+
+Reason:
+
+* `log₂(N)` = Search inside the Index Table.
+* `+1` = One additional I/O to fetch the actual Data Block using the pointer.
+
+---
+
+## Q66. How is Dense Index Search Cost calculated?
+
+**Answer:**
+
+Formula:
+
+```
+log₂(Index Blocks) + 1
+```
+
+Example:
+
+```
+log₂(200) + 1
+
+≈ 8 + 1
+
+= 9 I/O
+```
+
+---
+
+## Q67. How is Sparse Index Search Cost calculated?
+
+**Answer:**
+
+Formula:
+
+```
+log₂(Index Blocks) + 1
+```
+
+Example:
+
+```
+log₂(50) + 1
+
+≈ 6 + 1
+
+= 7 I/O
+```
+
+---
+
+## Q68. Compare the I/O Cost of different searching techniques.
+
+| Searching Method | Approximate I/O Cost |
+| ---------------- | -------------------: |
+| Linear Search    |                 1250 |
+| Binary Search    |                   12 |
+| Dense Index      |                    9 |
+| Sparse Index     |                    7 |
+
+---
+
+## Q69. Why does Indexing improve database performance?
+
+**Answer:**
+
+Indexing improves performance because it:
+
+* Reduces the number of disk block accesses.
+* Reduces I/O Cost.
+* Finds the required block quickly.
+* Reduces overall query execution time.
+
+---
+
+## Q70. Which Index performed better in this numerical example?
+
+**Answer:**
+
+According to this numerical:
+
+* Sparse Index = **7 I/O**
+* Dense Index = **9 I/O**
+
+Therefore, **Sparse Index performed better in this specific example.**
+
+> **Interview Note:** Real-world databases often use **B+ Tree indexes**, so Dense vs Sparse performance depends on the database implementation and workload.
+
+---
+
+# 📌 Progress Tracker
+
+* ✅ Lecture-107 → **Q1–Q26**
+* ✅ Lecture-108 → **Q27–Q46**
+* ✅ Lecture-109 → **Q47–Q70**
+
+Main isi format me aage bhi **question numbering continue** rakhunga aur pehle diye gaye interview questions dobara repeat nahi karunga. Is tarah end tak tumhare paas **300–500 unique DBMS Indexing interview questions** ka complete revision set ready ho jayega.
+
+==============================================================================================================
+Bilkul. Main **Q1–Q70 repeat nahi karunga**. Is lecture (Lecture-110) se **Q71** se continue kar raha hoon. Maine sirf naye interview questions nikale hain jo previous lectures me cover nahi hue. Source:
+
+---
+
+# DBMS Indexing Interview Questions (Lecture-110)
+
+## (Question No. 71 Onwards)
+
+---
+
+## Q71. What are the different types of Indexes in DBMS?
+
+**Answer:**
+
+There are three main types of indexes:
+
+1. Primary Index
+2. Clustered Index
+3. Secondary Index
+
+---
+
+## Q72. What are the two factors to consider before selecting an Index?
+
+**Answer:**
+
+Before selecting an index, check:
+
+1. Whether the data is **Ordered or Unordered**.
+2. Whether the attribute is **Key or Non-Key**.
+
+These two factors decide which index should be used.
+
+---
+
+## Q73. What is Ordered Data?
+
+**Answer:**
+
+Ordered Data means the records are stored in **sorted order**.
+
+It can be:
+
+* Ascending Order
+* Descending Order
+
+Example:
+
+```text
+10
+20
+30
+40
+50
+```
+
+or
+
+```text
+50
+40
+30
+20
+10
+```
+
+Both are Ordered Data.
+
+---
+
+## Q74. What is Unordered Data?
+
+**Answer:**
+
+Unordered Data means records are **not stored in sorted order**.
+
+Example:
+
+```text
+40
+10
+80
+25
+5
+```
+
+Searching unordered data generally requires more I/O operations.
+
+---
+
+## Q75. What is a Key Attribute?
+
+**Answer:**
+
+A Key Attribute is an attribute whose values are **unique**.
+
+Duplicate values are **not allowed**.
+
+Examples:
+
+* Employee ID
+* Roll Number
+* Aadhaar Number
+* Passport Number
+
+---
+
+## Q76. What is a Non-Key Attribute?
+
+**Answer:**
+
+A Non-Key Attribute is an attribute in which duplicate values are allowed.
+
+Example:
+
+```text
+Department
+
+HR
+HR
+IT
+Sales
+Sales
+```
+
+---
+
+## Q77. What are the conditions required for a Primary Index?
+
+**Answer:**
+
+Primary Index requires:
+
+* Data must be Ordered.
+* Attribute must be a Key (Unique).
+
+Condition:
+
+```text
+Ordered + Key = Primary Index
+```
+
+---
+
+## Q78. Give a real-life example of a Primary Index.
+
+**Answer:**
+
+Roll Number in a Student Table.
+
+Example:
+
+```text
+1
+2
+3
+4
+5
+```
+
+Since Roll Numbers are sorted and unique, Primary Index can be created.
+
+---
+
+## Q79. Does creating a PRIMARY KEY automatically create an Index?
+
+**Answer:**
+
+Yes.
+
+In most relational databases, creating a **PRIMARY KEY** automatically creates a unique index.
+
+Example:
+
+```sql
+CREATE TABLE Student(
+Roll_No INT PRIMARY KEY,
+Name VARCHAR(100)
+);
+```
+
+---
+
+## Q80. What are the conditions required for a Clustered Index?
+
+**Answer:**
+
+Clustered Index requires:
+
+* Data must be Ordered.
+* Duplicate values are allowed (Non-Key).
+
+Condition:
+
+```text
+Ordered + Non-Key = Clustered Index
+```
+
+---
+
+## Q81. Give a practical example of a Clustered Index.
+
+**Answer:**
+
+Marks of students.
+
+Example:
+
+```text
+40
+40
+50
+50
+60
+60
+70
+```
+
+The data is sorted but contains duplicate values.
+
+Hence, Clustered Index is suitable.
+
+---
+
+## Q82. When is a Secondary Index used?
+
+**Answer:**
+
+Secondary Index is used whenever the data is **Unordered**, regardless of whether the attribute is Key or Non-Key.
+
+Condition:
+
+```text
+Unordered + Key = Secondary
+
+Unordered + Non-Key = Secondary
+```
+
+---
+
+## Q83. Can a Secondary Index be created on a Key Attribute?
+
+**Answer:**
+
+Yes.
+
+If the data is unordered and the attribute is unique, a Secondary Index can still be used.
+
+---
+
+## Q84. Can a Secondary Index be created on a Non-Key Attribute?
+
+**Answer:**
+
+Yes.
+
+If the data is unordered and duplicate values exist, Secondary Index can also be used.
+
+---
+
+## Q85. Which Index type supports ordered unique data?
+
+**Answer:**
+
+Primary Index.
+
+Condition:
+
+```text
+Ordered + Unique(Key)
+```
+
+---
+
+## Q86. Which Index type supports ordered duplicate data?
+
+**Answer:**
+
+Clustered Index.
+
+Condition:
+
+```text
+Ordered + Duplicate(Non-Key)
+```
+
+---
+
+## Q87. Which Index type supports unordered data?
+
+**Answer:**
+
+Secondary Index.
+
+Whether the attribute is Key or Non-Key does not matter.
+
+---
+
+## Q88. How do you decide which Index should be used?
+
+**Answer:**
+
+Follow this decision process:
+
+```text
+Is Data Ordered?
+
+        │
+   Yes      No
+    │        │
+Check Key    Secondary
+    │
+Key?
+ │      │
+Yes    No
+ │      │
+Primary Clustered
+```
+
+---
+
+## Q89. Why is Ordered Data important while selecting an Index?
+
+**Answer:**
+
+Ordered Data helps determine whether Primary or Clustered Index can be used.
+
+If the data is unordered, Secondary Index is generally used.
+
+---
+
+## Q90. What is the main difference between a Key and a Non-Key Attribute?
+
+| Key Attribute        | Non-Key Attribute        |
+| -------------------- | ------------------------ |
+| Unique Values        | Duplicate Values Allowed |
+| No Duplicate         | Duplicate Allowed        |
+| Example: Employee ID | Example: Department      |
+
+---
+
+## Q91. Compare Primary, Clustered, and Secondary Index.
+
+| Feature           | Primary | Clustered | Secondary      |
+| ----------------- | ------- | --------- | -------------- |
+| Data Ordered      | Yes     | Yes       | No             |
+| Key Required      | Yes     | No        | Key or Non-Key |
+| Duplicate Allowed | No      | Yes       | Depends        |
+| Example           | Roll No | Marks     | Name, City     |
+
+---
+
+## Q92. Which Index is generally created on a Primary Key?
+
+**Answer:**
+
+Primary Index.
+
+Most DBMS automatically create a unique index for the Primary Key.
+
+---
+
+## Q93. Can Clustered Index be created on duplicate values?
+
+**Answer:**
+
+Yes.
+
+Clustered Index is specifically used when ordered data contains duplicate values.
+
+---
+
+## Q94. Why is the "Ordered + Key + Non-Key" table considered important for interviews?
+
+**Answer:**
+
+Because many interview questions are based on identifying the correct index type for a given dataset.
+
+Remember:
+
+```text
+Ordered + Key
+↓
+
+Primary
+
+Ordered + Non-Key
+↓
+
+Clustered
+
+Unordered
+↓
+
+Secondary
+```
+
+---
+
+## Q95. Which Index type would you choose for an Employee table sorted by Employee_ID?
+
+**Answer:**
+
+Employee_ID is:
+
+* Ordered
+* Unique
+
+Therefore,
+
+**Primary Index** should be used.
+
+---
+
+## 📌 Progress Tracker
+
+* ✅ Lecture-107 → **Q1–Q26**
+* ✅ Lecture-108 → **Q27–Q46**
+* ✅ Lecture-109 → **Q47–Q70**
+* ✅ Lecture-110 → **Q71–Q95**
+
+### 💡 Improvement Suggestion
+
+Lecture 110 se questions **scenario-based** bhi banne lage hain. Interview me aise questions bahut pooche jaate hain, jaise:
+
+* "Agar data sorted ho aur duplicate values ho to kaunsa index use karoge?"
+* "Employee_ID aur Department column me kis type ka index use hoga aur kyun?"
+
+Agle lectures me main **theory + scenario-based + tricky interview questions** mix karke dunga. Isse Java Developer (2–5 years) interviews ke liye tumhari preparation aur strong ho jayegi.
+
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
+==============================================================================================================
