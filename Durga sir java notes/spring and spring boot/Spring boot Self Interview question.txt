@@ -1,0 +1,1771 @@
+Command Used for this Notes : ye jo notes hai ye maine self banai hai padhai karne ke liye to mai ye bahut bar badh chuki hai now mere pass interview question jo muze internet pe mila hai mai chahaata hu ki un question ke ans tu muze is self notes se do agar ans hai to nahi to tume muze tum de skate ho koi
+usake karna muze jada mahanat nahi karani padgi remember karne me
+
+Ye bahut achha idea hai. 👍
+
+Interview ke liye **simple language wale notes** hi sabse useful hote hain. Main tumhare original notes ka meaning same rakhunga, bas language easy kar dunga.
+
+1. What is Spring Boot?
+
+Simple Definition
+
+Spring Boot is a framework built on top of the Spring Framework. It helps us quickly develop stand-alone, production-ready applications and microservices with minimal configuration.
+
+Interview Answer
+
+Spring Boot is built on top of the Spring Framework. It reduces configuration using Auto Configuration, provides an embedded server like Tomcat, and helps build stand-alone, production-ready applications.
+
+Easy Trick
+Spring Framework
+       +
+Spring Boot Features
+-------------------------
+Auto Configuration
+Embedded Server
+Starter Dependencies
+Production Ready
+-------------------------
+========================================================================================================================
+2. How Spring Boot differs from Spring?
+
+🟢 NEW QUESTION (Add karo)
+
+Ye bhi abhi tumhare notes me nahi hai.
+
+Simple Comparison
+Spring	Spring Boot
+Manual Configuration	Auto Configuration
+External Tomcat Required	Embedded Tomcat
+More XML/Java Config	Minimal Configuration
+Takes More Time	Faster Development
+Interview One-Liner
+
+Spring Boot is built on top of Spring Framework and reduces configuration by providing auto-configuration, starter dependencies, and embedded servers.
+========================================================================================================================
+5. What are the Key Components of Spring Boot?
+
+🟢 NEW QUESTION (Add karo)
+
+Ye important hai.
+
+Simple Definition
+
+Main components of Spring Boot are:
+
+Auto Configuration
+Starter POMs
+Spring Boot CLI
+Actuator
+Interview One-Liner
+
+The key components of Spring Boot are Auto Configuration, Starter POMs, CLI, and Actuator.
+========================================================================================================================
+6. What are the Spring Boot Annotations?
+
+🟢 NEW QUESTION (Add karo)
+
+Ye bhi bahut common interview question hai.
+
+Simple Definition
+
+Common Spring Boot annotations are:
+
+@SpringBootApplication
+@EnableAutoConfiguration
+@Configuration
+@ComponentScan
+@RestController
+@RequestMapping
+@GetMapping
+@PostMapping
+@Value
+@ConfigurationProperties
+Interview One-Liner
+
+Spring Boot provides annotations for configuration, dependency injection, REST APIs, and auto-configuration.
+
+⚠️ Internet wale answer me @Conditional aur @AutoConfiguration bhi diye hain, lekin interview me upar wale annotations zyada commonly puche jate hain.
+========================================================================================================================
+Agar tum **"Starter POMs kya hai?"** puch rahe ho, to chalo ise bahut simple language me samajhte hain.
+
+---
+
+# What are Starter POMs in Spring Boot?
+
+### Simple Definition
+
+**Starter POMs** Spring Boot dwara diye gaye **predefined dependency packages** hote hain.
+
+Ek Starter add karne se usse related sari required dependencies automatically project me aa jati hain.
+
+> Matlab hume alag-alag dependencies manually add nahi karni padti.
+
+---
+
+## Without Starter POM
+
+Agar Spring Framework use karte ho to tumhe manually add karna padega:
+
+```xml
+Spring Core
+
+Spring MVC
+
+Jackson
+
+Validation
+
+Tomcat
+
+Logging
+
+...
+```
+
+Bahut sari dependencies.
+
+---
+
+## With Starter POM
+
+Sirf ek dependency add karo.
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+
+Bas.
+
+Spring Boot automatically required libraries download kar leta hai.
+
+---
+
+# Real Example
+
+Suppose tum REST API banana chahte ho.
+
+Sirf ye dependency add karo.
+
+```xml
+spring-boot-starter-web
+```
+
+Ye automatically add kar deta hai:
+
+* Spring MVC
+* Jackson (JSON)
+* Validation
+* Embedded Tomcat
+* Logging
+
+Tumhe manually kuch add nahi karna padta.
+
+---
+
+## Common Starter POMs
+
+| Starter                         | Use                          |
+| ------------------------------- | ---------------------------- |
+| `spring-boot-starter-web`       | REST APIs & Web Applications |
+| `spring-boot-starter-data-jpa`  | Database & Hibernate         |
+| `spring-boot-starter-security`  | Security                     |
+| `spring-boot-starter-test`      | Unit Testing                 |
+| `spring-boot-starter-actuator`  | Monitoring                   |
+| `spring-boot-starter-thymeleaf` | HTML Templates               |
+
+---
+
+## Interview Answer (30 sec)
+
+> **Starter POMs are predefined dependency packages provided by Spring Boot. By adding a single starter dependency, all the required libraries for that feature are automatically included, reducing manual configuration and dependency management.**
+
+========================================================================================================================
+How does Spring Boot work?
+🟢 NEW QUESTION ✅
+
+Ye bahut important interview question hai.
+
+Add karo
+Simple Definition
+
+Spring Boot automatically configures the application based on the dependencies available in the project.
+
+When we run the application using
+
+SpringApplication.run()
+
+Spring Boot
+
+scans components
+creates beans
+performs auto-configuration
+starts the embedded Tomcat
+runs the application
+Interview Answer
+
+Spring Boot works by using Auto Configuration, Component Scanning, and Starter Dependencies. It automatically configures the application and starts the embedded server.
+========================================================================================================================
+4. What Spring Boot Starters are available?
+🟡 SIMILAR
+
+Tumhare notes me Starter ka concept already hai.
+
+Bas ek table add kar do.
+
+Starter	Use
+starter-web	REST API
+starter-data-jpa	Hibernate
+starter-security	Security
+starter-test	Testing
+starter-actuator	Monitoring
+starter-thymeleaf	HTML
+
+Alag question mat banao.
+========================================================================================================================
+8. What is @RestController?
+🟢 NEW ✅
+
+Ye bahut important hai.
+
+Add karo
+Simple Definition
+
+@RestController is used to create REST APIs.
+
+It combines
+
+@Controller
++
+@ResponseBody
+
+By default every method returns JSON/XML.
+
+Interview One-Liner
+
+@RestController is a combination of @Controller and @ResponseBody used to build REST APIs.
+========================================================================================================================
+Difference between @RestController and @Controller?
+🟢 NEW ⭐⭐⭐⭐⭐
+
+Bahut important interview question.
+
+Definitely add karo.
+
+Simple Table
+@Controller	@RestController
+Returns View	Returns JSON/XML
+Used for MVC	Used for REST API
+HTML Page	API Response
+Interview One-Liner
+
+@Controller returns a view, whereas @RestController returns JSON or XML data.
+========================================================================================================================
+What are Actuator Endpoints?
+🟢 NEW ⭐⭐⭐⭐
+
+Ye add karo.
+
+Ye interview me bahut poocha jata hai.
+
+Simple Definition
+
+Actuator Endpoints are predefined URLs used to monitor and manage a running Spring Boot application.
+
+Examples
+
+/actuator/health
+
+/actuator/info
+
+/actuator/metrics
+
+/actuator/beans
+Interview One Liner
+
+Actuator endpoints expose monitoring information like health, metrics, beans, and application information.
+========================================================================================================================
+Enable Debug Logging
+🟢 NEW ⭐⭐⭐
+
+Ye add karo.
+
+Simple Definition
+
+Debug logging helps developers see detailed Spring Boot startup logs and bean initialization.
+
+Enable
+
+application.properties
+
+debug=true
+
+or
+
+trace=true
+
+or
+
+java -jar demo.jar --debug
+========================================================================================================================
+Deploy as WAR
+🟢 NEW ⭐⭐⭐⭐
+
+Ye important hai.
+
+Add karo.
+
+Simple Answer
+
+WAR file is deployed on an external server like Tomcat.
+
+Need
+
+<packaging>war</packaging>
+========================================================================================================================
+Deploy as JAR
+🟢 NEW ⭐⭐⭐⭐⭐
+
+Ye bahut important hai.
+
+Simple Definition
+
+Spring Boot applications are generally packaged as JAR because they contain Embedded Tomcat.
+
+<packaging>jar</packaging>
+
+Interview One Liner
+
+JAR is preferred because Spring Boot already contains an embedded server, making deployment easier.
+========================================================================================================================
+What is @PathVariable?
+🟢 NEW ⭐⭐⭐⭐⭐
+
+Very Important.
+
+Definitely add.
+
+Simple Definition
+
+@PathVariable is used to read values from the URL path.
+
+Example
+
+GET
+
+/users/101
+
+101
+
+↓
+
+@PathVariable
+
+@GetMapping("/{id}")
+
+public User getUser(
+@PathVariable Long id)
+
+Interview One Liner
+
+@PathVariable extracts values from the URL path.
+
+12. What is @RequestParam?
+🟢 NEW ⭐⭐⭐⭐⭐
+
+Very Common.
+
+Simple Definition
+
+@RequestParam is used to read query parameters.
+
+Example
+
+GET
+
+/users?name=Rahul
+
+↓
+
+Rahul
+
+↓
+
+@RequestParam
+
+@GetMapping
+
+public User search(
+
+@RequestParam String name)
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+
+
+# 1. Why Profiles in Spring Boot?
+
+### Simple Definition
+
+Spring Profiles ka use **different environments** ke liye different configuration rakhne ke liye hota hai.
+
+Jaise:
+
+* **Dev** → Development
+* **QA** → Testing
+* **UAT/Pre-Prod** → Testing before Production
+* **Prod** → Live Application
+
+Har environment ka apna alag configuration hota hai, isliye Spring Profiles use kiye jate hain.
+
+### Interview Answer
+
+> Spring Profiles are used to manage different configurations for different environments like Dev, QA, Pre-Prod, and Production.
+
+### Easy Trick
+
+```
+One Application
+      |
+--------------------------
+| Dev | QA | Prod | UAT |
+--------------------------
+Different Configurations
+```
+
+---
+
+# 2. How do we define Properties in Spring Boot?
+
+### Simple Definition
+
+Application ki configuration **application.properties** ya **application.yml** file me likhte hain.
+
+Spring Boot application start hote hi in properties ko automatically load kar leta hai.
+
+Examples:
+
+* Database URL
+* Username
+* Password
+* Server Port
+
+### Interview Answer
+
+> Properties are defined in `application.properties` or `application.yml`. Spring Boot automatically loads these properties when the application starts.
+
+### Example
+
+```properties
+server.port=8080
+
+spring.datasource.url=jdbc:mysql://localhost:3306/demo
+
+spring.datasource.username=root
+
+spring.datasource.password=root
+```
+
+---
+
+# 3. What is Spring Boot Actuator?
+
+### Simple Definition
+
+Actuator ka use **running application ko monitor aur manage** karne ke liye hota hai.
+
+Isse hum check kar sakte hain:
+
+* Application Health
+* Metrics
+* Memory Usage
+* Database Status
+* Environment Details
+
+Ye production me application monitor karne ke liye use hota hai.
+
+### Interview Answer
+
+> Spring Boot Actuator provides production-ready endpoints to monitor and manage a running application.
+
+### Easy Trick
+
+```
+Actuator = Health Report of Application
+```
+
+Jaise hospital me patient ka health report hota hai,
+waise Actuator application ka health report dikhata hai.
+
+---
+
+# 4. How to enable Actuator in Spring Boot?
+
+### Simple Definition
+
+Actuator use karne ke liye sirf **spring-boot-starter-actuator** dependency add karni hoti hai.
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+
+Uske baad Actuator endpoints available ho jate hain.
+
+### Interview Answer
+
+> Add the `spring-boot-starter-actuator` dependency in `pom.xml` to enable Actuator.
+
+---
+
+# 5. What is @SpringBootApplication?
+
+### Simple Definition
+
+`@SpringBootApplication` Spring Boot ki **main annotation** hai.
+
+Ye teen annotations ka combination hai:
+
+* `@Configuration`
+* `@EnableAutoConfiguration`
+* `@ComponentScan`
+
+Isliye alag-alag ye teen annotations likhne ki zarurat nahi padti.
+
+### Ye teen kya karte hain?
+
+### 1. @Configuration
+
+Batata hai ki ye class configuration class hai.
+
+```
+@Configuration
+
+↓
+
+Configuration Class
+```
+
+---
+
+### 2. @EnableAutoConfiguration
+
+Spring Boot automatically required configuration kar deta hai.
+
+Example:
+
+Agar project me MySQL dependency hai
+
+↓
+
+Spring Boot automatically
+
+* DataSource
+* JDBC
+* Transaction Manager
+
+configure kar deta hai.
+
+---
+
+### 3. @ComponentScan
+
+Ye project ke andar
+
+* `@Component`
+* `@Service`
+* `@Repository`
+* `@Controller`
+* `@RestController`
+
+ko automatically scan karke Spring Container me register kar deta hai.
+
+---
+
+### Interview Answer
+
+> `@SpringBootApplication` is the main annotation of Spring Boot. It combines `@Configuration`, `@EnableAutoConfiguration`, and `@ComponentScan`.
+
+---
+
+# ⭐ 30 Second Revision
+
+| Question                   | Easy Answer                                                                        |
+| -------------------------- | ---------------------------------------------------------------------------------- |
+| **Profiles**               | Different configuration for Dev, QA, Prod.                                         |
+| **Properties**             | Stored in `application.properties` or `application.yml`.                           |
+| **Actuator**               | Used to monitor the running application.                                           |
+| **Enable Actuator**        | Add `spring-boot-starter-actuator` dependency.                                     |
+| **@SpringBootApplication** | Combination of `@Configuration`, `@EnableAutoConfiguration`, and `@ComponentScan`. |
+
+
+========================================================================================================================
+### **Q. How to change the Embedded Tomcat server in Spring Boot?**
+
+### **Answer**
+
+By default, Spring Boot uses **Embedded Tomcat** as its web server.
+
+Agar hume Tomcat ki jagah **Jetty** ya **Undertow** use karna ho, to hume `spring-boot-starter-web` se Tomcat dependency ko **exclude** karna padta hai aur required server ki dependency add karni padti hai.
+
+**Steps:**
+
+1. Exclude the default Tomcat dependency from `spring-boot-starter-web`.
+2. Add the dependency of the required server (Jetty or Undertow) in `pom.xml`.
+3. Build and run the application. Spring Boot automatically starts with the new embedded server instead of Tomcat.
+
+---
+
+### **Interview One-Liner (30 sec Answer)**
+
+> "Spring Boot uses Embedded Tomcat by default. If we want to use Jetty or Undertow, we exclude the Tomcat dependency from `spring-boot-starter-web` and add the required server dependency in `pom.xml`."
+
+---
+
+### **Follow-up: Why would you replace Tomcat?**
+
+**Answer:**
+
+* **Jetty** → Lightweight and good for high concurrency.
+* **Undertow** → High performance and low memory usage.
+* Choice depends on project requirements.
+
+---
+
+### **Real Interview Question**
+
+**Interviewer:** *Have you ever changed the embedded server in your project?*
+
+**Answer:**
+
+> "No, in my current project we use the default Embedded Tomcat. But I know that if required, we can replace it by excluding Tomcat and adding Jetty or Undertow dependency in `pom.xml`."
+
+✅ **Yaad rakhne ki Trick:**
+
+> **Default = Tomcat** → **Exclude Tomcat** → **Add Jetty/Undertow** → **Run Application**
+
+==============================================================================================================
+Ye answer bhi tumhare **self notes** ke hisab se aur interview-friendly format me hai.
+
+### **Q. What is the difference between `@RequestMapping` and `@GetMapping`?**
+
+### **Answer**
+
+`@RequestMapping` ek generic annotation hai jo **multiple HTTP methods** handle kar sakta hai, jaise **GET, POST, PUT, DELETE**, etc. Isme hum `method` attribute specify karte hain.
+
+`@GetMapping` `@RequestMapping` ka specialized version hai, jo sirf **GET requests** ko handle karta hai. Isse code zyada clean aur readable ho jata hai.
+
+---
+
+### **Interview One-Liner (30 sec Answer)**
+
+> "`@RequestMapping` is a generic annotation that can handle all HTTP methods, whereas `@GetMapping` is a shortcut of `@RequestMapping(method = RequestMethod.GET)` and is used only for GET requests."
+
+---
+
+### **Example**
+
+```java
+// Using @RequestMapping
+@RequestMapping(value = "/users", method = RequestMethod.GET)
+public List<User> getUsers() {
+    return userService.getUsers();
+}
+```
+
+```java
+// Using @GetMapping
+@GetMapping("/users")
+public List<User> getUsers() {
+    return userService.getUsers();
+}
+```
+
+👉 Dono same kaam karte hain, lekin `@GetMapping` zyada concise aur readable hai.
+
+---
+
+### **Follow-up: When should we use `@RequestMapping`?**
+
+Use `@RequestMapping`:
+
+* Class level par common URL define karne ke liye.
+* Jab ek hi annotation se different HTTP methods handle karne hon.
+
+Example:
+
+```java
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    // All APIs start with /api/users
+}
+```
+
+---
+
+### **Follow-up: When should we use `@GetMapping`?**
+
+Use `@GetMapping` jab API sirf data **fetch (GET)** karti ho.
+
+Examples:
+
+* Get all users
+* Get employee by ID
+* Get product list
+
+---
+
+### **Real Interview Question**
+
+**Interviewer:** *Can we use `@RequestMapping` instead of `@GetMapping`?*
+
+**Answer:**
+
+> "Yes. `@GetMapping` is just a shortcut for `@RequestMapping(method = RequestMethod.GET)`. Both work the same, but `@GetMapping` is preferred because it makes the code simpler and more readable."
+
+---
+
+## ✅ Yaad rakhne ki Trick
+
+| Annotation        | Use                                             |
+| ----------------- | ----------------------------------------------- |
+| `@RequestMapping` | All HTTP methods (GET, POST, PUT, DELETE, etc.) |
+| `@GetMapping`     | Only GET requests                               |
+| `@PostMapping`    | Only POST requests                              |
+| `@PutMapping`     | Only PUT requests                               |
+| `@DeleteMapping`  | Only DELETE requests                            |
+
+### **Easy Formula 🧠**
+
+> **`@RequestMapping` = Parent (Generic)**
+> **`@GetMapping` = Child (Only GET)**
+
+==============================================================================================================
+Perfect. Main isi format me deta hoon jisse interview ke time sirf ye Q&A revise karna pade.
+
+---
+
+# **9. What is Thymeleaf in Spring Boot?**
+
+### **Answer**
+
+**Thymeleaf** is a **server-side Java template engine** used to create dynamic web pages. It integrates easily with Spring Boot by adding the **`spring-boot-starter-thymeleaf`** dependency in `pom.xml`.
+
+### **Interview One-Liner**
+
+> "Thymeleaf is a server-side template engine used to generate dynamic HTML pages in Spring Boot."
+
+### **Follow-up**
+
+**Q. When do we use Thymeleaf?**
+
+* To build server-side rendered web applications.
+* Mostly used in Spring MVC applications.
+
+==============================================================================================================
+
+# **10. How to make Custom Application Configuration in Spring Boot?**
+
+### **Answer**
+
+Spring Boot provides two ways to read custom configuration.
+
+* **`@Value`** → Used to read individual property values.
+* **`@ConfigurationProperties`** → Used to bind multiple related properties into a Java class. It is cleaner and recommended for large applications.
+
+### **Interview One-Liner**
+
+> "`@Value` is used for single properties, whereas `@ConfigurationProperties` is preferred for grouping multiple related configuration values."
+
+### **Follow-up**
+
+**Which one is better?**
+
+✅ `@ConfigurationProperties` because it is:
+
+* Cleaner
+* Type-safe
+* Easy to maintain
+
+---
+
+# **11. How to change the default port in Spring Boot?**
+
+### **Answer**
+
+By default Spring Boot runs on **port 8080**.
+
+We can change the port in three ways:
+
+1. Add `server.port` in `application.properties`.
+2. Set `server.port` programmatically in the main application.
+3. Pass the port while running the JAR from the command line.
+
+### **Interview One-Liner**
+
+> "The default port is 8080, and it can be changed using `application.properties`, programmatically, or through command-line arguments."
+
+### **Most Common Way**
+
+```properties
+server.port=9090
+```
+
+==============================================================================================================
+
+# **12. How to configure properties in Spring Boot Application?**
+
+### **Answer**
+
+Spring Boot configuration can be done using:
+
+* **application.properties**
+* **application.yml**
+
+YAML is preferred when there are hierarchical or nested configurations because it is more readable.
+
+### **Interview One-Liner**
+
+> "Spring Boot supports both `.properties` and `.yml` files. YAML is more readable for hierarchical configuration."
+
+### **Follow-up**
+
+**Which one do you use?**
+
+> "Mostly we use `application.yml` in large projects because it is cleaner and easier to manage."
+
+==============================================================================================================
+
+# **13. What is the advantage of Spring Boot DevTools?**
+
+### **Answer**
+
+Spring Boot DevTools improves developer productivity.
+
+Its main advantage is that the application **automatically restarts whenever code changes are detected**, so developers don't need to restart the server manually. To use it, add the **`spring-boot-devtools`** dependency.
+
+### **Interview One-Liner**
+
+> "Spring Boot DevTools automatically restarts the application on code changes, making development faster."
+
+### **Follow-up**
+
+**Other features**
+
+* Automatic restart
+* LiveReload support
+* Faster development
+
+---
+
+# **14. How to ignore null values in JSON response in Spring Boot?**
+
+### **Answer**
+
+According to your notes:
+
+Use **`@JsonIgnore`** to ignore a field while reading or writing JSON.
+
+### **Interview Note (Important)**
+
+👉 **Your notes are slightly inaccurate here.**
+
+If the interviewer asks specifically:
+
+> **"How do you ignore all null values in JSON response?"**
+
+The correct answer is:
+
+```java
+@JsonInclude(JsonInclude.Include.NON_NULL)
+```
+
+This annotation removes **all null fields** from the JSON response.
+
+`@JsonIgnore` hides a specific field regardless of whether it is null or not.
+
+### **Interview One-Liner**
+
+> "`@JsonInclude(Include.NON_NULL)` removes null values from the JSON response, while `@JsonIgnore` completely excludes a specific field."
+
+==============================================================================================================
+
+# **15. What are the basic features of Spring Boot?**
+
+### **Answer**
+
+The main features of Spring Boot are:
+
+* Starter Dependencies
+* Auto Configuration
+* Spring Initializer for quick project creation
+
+### **Interview One-Liner**
+
+> "Spring Boot provides Starter dependencies, Auto-Configuration, and Spring Initializer to simplify application development."
+
+### **Follow-up**
+
+Other popular features:
+
+* Embedded Tomcat
+* Actuator
+* DevTools
+* Production-ready features
+
+==============================================================================================================
+
+# **16. How to exclude Auto-Configuration classes in Spring Boot?**
+
+### **Answer**
+
+If we don't want Spring Boot to automatically configure a particular class, we can exclude it using:
+
+* `exclude` attribute in `@SpringBootApplication`
+* `excludeName`
+* `spring.autoconfigure.exclude` property in `application.properties`
+
+### **Interview One-Liner**
+
+> "Auto-configuration can be excluded using the `exclude` attribute of `@SpringBootApplication` or the `spring.autoconfigure.exclude` property."
+
+### **Example**
+
+```java
+@SpringBootApplication(
+    exclude = {DataSourceAutoConfiguration.class}
+)
+```
+
+---
+
+## 🧠 Quick Revision (30 Seconds)
+
+| Question                       | One-Line Answer                                                                     |
+| ------------------------------ | ----------------------------------------------------------------------------------- |
+| **Thymeleaf**                  | Server-side template engine for dynamic HTML pages.                                 |
+| **Custom Configuration**       | `@Value` for single property, `@ConfigurationProperties` for multiple properties.   |
+| **Default Port**               | Change using `server.port` in properties, code, or command line.                    |
+| **Configure Properties**       | Use `application.properties` or `application.yml`.                                  |
+| **DevTools**                   | Automatically restarts the app on code changes.                                     |
+| **Ignore Null JSON**           | `@JsonInclude(NON_NULL)` removes null values; `@JsonIgnore` hides a specific field. |
+| **Spring Boot Features**       | Starters, Auto-Configuration, Spring Initializer.                                   |
+| **Exclude Auto-Configuration** | Use `exclude` or `spring.autoconfigure.exclude`.                                    |
+
+
+
+==============================================================================================================
+Perfect. Main isi format ko continue karta hoon. Jahan zarurat hogi wahan **notes ke answer ko thoda interview-friendly** banaunga aur agar notes me koi kami hogi to usse bhi mention karunga.
+
+---
+
+# **17. What is the use of Spring Initializer in Spring Boot?**
+
+### **Answer**
+
+Spring Initializer is a tool used to **quickly create a Spring Boot project**. It generates the complete project structure along with the required dependencies, so developers don't need to create the project manually.
+
+### **Interview One-Liner**
+
+> "Spring Initializer is used to generate a Spring Boot project with the required dependencies and project structure."
+
+### **Follow-up**
+
+**What information do you provide in Spring Initializer?**
+
+* Project Name
+* Java Version
+* Spring Boot Version
+* Group ID
+* Artifact ID
+* Dependencies
+
+---
+
+# **18. What is Live Reload in Spring Boot?**
+
+### **Answer**
+
+Live Reload is a feature of **Spring Boot DevTools** that automatically refreshes the browser whenever application resources are changed. It improves the development experience by eliminating manual browser refresh.
+
+### **Interview One-Liner**
+
+> "Live Reload automatically refreshes the browser whenever application resources change."
+
+### **Follow-up**
+
+**What is required?**
+
+* `spring-boot-devtools`
+* LiveReload browser extension (Chrome/Firefox)
+
+---
+
+# **19. How do you handle exceptions in Spring Boot?**
+
+### **Answer**
+
+Spring Boot handles exceptions using:
+
+* `@ExceptionHandler`
+* `@ControllerAdvice`
+
+`@ExceptionHandler` handles specific exceptions, while `@ControllerAdvice` provides **global exception handling** for the entire application.
+
+### **Interview One-Liner**
+
+> "`@ExceptionHandler` handles specific exceptions, while `@ControllerAdvice` provides centralized exception handling across the application."
+
+### **Example**
+
+```java
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+}
+```
+
+---
+
+# **20. How do you generate a Spring Boot Application?**
+
+### **Answer**
+
+A Spring Boot application can be generated in two ways:
+
+1. Using **Spring Initializer (start.spring.io)**.
+2. Using an IDE like **Spring Tools 4 (STS)**, which generates the project directly inside the IDE.
+
+### **Interview One-Liner**
+
+> "The most common way is using Spring Initializer, which creates a ready-to-use Spring Boot project."
+
+### **Real Project Answer**
+
+> "In my projects, I generally use Spring Initializer through IntelliJ IDEA."
+
+---
+
+# **21. How do you create a login page in Spring Boot?**
+
+### **Answer**
+
+A default login page can be created using **Spring Security**.
+
+Steps:
+
+* Add `spring-boot-starter-security` dependency.
+* Spring Boot automatically secures all endpoints.
+* It generates a default username and password for login.
+
+### **Interview One-Liner**
+
+> "By adding the Spring Security dependency, Spring Boot automatically provides a default login page and secures all endpoints."
+
+### **Follow-up**
+
+**Can we customize the login page?**
+
+✅ Yes, by configuring Spring Security and creating a custom HTML login page.
+
+---
+
+# **22. How does bootstrapping happen in Spring Boot?**
+
+### **Answer**
+
+Bootstrapping is the process of starting a Spring Boot application.
+
+It begins by creating the project using Spring Initializer, loading all required dependencies, and then running the application through the `main()` method in the IDE.
+
+### **Interview One-Liner**
+
+> "Bootstrapping is the process of initializing and starting a Spring Boot application."
+
+### **Real Interview**
+
+If asked:
+
+**What starts Spring Boot?**
+
+> "`SpringApplication.run()` starts the Spring Boot application."
+
+---
+
+# **23. Why is Spring Boot used for Microservices?**
+
+### **Answer**
+
+Spring Boot is widely used for microservices because:
+
+* It enables rapid development.
+* It follows **Convention over Configuration**, reducing boilerplate code.
+* Each microservice can focus on a single business functionality.
+* It supports independent development and deployment.
+
+### **Interview One-Liner**
+
+> "Spring Boot is preferred for microservices because it enables rapid development, minimizes configuration, and supports independent services."
+
+### **Real Project Answer**
+
+> "In my project, each microservice like User Service, Site Service, and Telemetry Service is developed independently using Spring Boot."
+
+---
+
+# **24. What is Filter in Spring Boot?**
+
+### **Answer**
+
+A Filter intercepts every HTTP request before it reaches the controller and every HTTP response before it is sent back to the client.
+
+Filters are implemented using:
+
+* `Filter` interface
+* `FilterRegistrationBean`
+
+### **Interview One-Liner**
+
+> "A Filter intercepts incoming requests and outgoing responses before they reach the controller or client."
+
+### **Real Uses**
+
+* Logging
+* Authentication
+* Authorization
+* CORS
+* Request Validation
+
+---
+
+# **25. What is CORS in Spring Boot?**
+
+### **Answer**
+
+CORS (**Cross-Origin Resource Sharing**) is a browser security mechanism that allows or restricts requests coming from different origins (domains).
+
+It enables secure cross-domain communication between frontend and backend applications.
+
+### **Interview One-Liner**
+
+> "CORS allows a web application running on one origin to access resources from another origin securely."
+
+### **Real Example**
+
+Frontend:
+
+```
+http://localhost:4200
+```
+
+Backend:
+
+```
+http://localhost:8080
+```
+
+Without CORS → Browser blocks the request.
+
+---
+
+# **26. What are the advantages of Microservices Architecture?**
+
+### **Answer**
+
+Advantages include:
+
+* Independent deployment
+* Better scalability
+* Technology flexibility
+* Failure of one service does not affect the entire application
+* Faster development and deployment
+* Suitable for both small and large teams
+
+### **Interview One-Liner**
+
+> "Microservices provide scalability, independent deployment, technology flexibility, and fault isolation."
+
+---
+
+# **28. What are the drawbacks of Microservices?**
+
+### **Answer**
+
+Some drawbacks are:
+
+* Complex architecture
+* Higher operational overhead
+* Difficult service coordination
+* Increased infrastructure cost
+* More monitoring and deployment effort
+
+### **Interview One-Liner**
+
+> "Microservices improve scalability but increase operational complexity and infrastructure management."
+
+---
+
+# **29. What is the use of Containers in Microservices?**
+
+### **Answer**
+
+Containers package a microservice along with all its dependencies, making deployment easier and ensuring the application runs consistently across environments.
+
+**Docker** is the most commonly used container platform.
+
+### **Interview One-Liner**
+
+> "Containers package a microservice with its dependencies, making deployment portable and consistent."
+
+### **Real Project**
+
+> "We use Docker containers to package Spring Boot microservices."
+
+---
+
+# **31. How do you access RESTful Microservices?**
+
+### **Answer**
+
+RESTful microservices can communicate using:
+
+* `RestTemplate`
+* A load-balanced `RestTemplate`
+* (Modern approach) `WebClient` for reactive communication.
+
+### **Interview One-Liner**
+
+> "Microservices communicate using REST APIs through `RestTemplate` or, in modern Spring applications, `WebClient`."
+
+==============================================================================================================
+Bahut achcha question hai. Ye dono concepts **pehli baar me lagbhag sabko confuse karte hain**. Chalo **real project example** se samajhte hain.
+
+---
+
+# 35. What is Distributed Transaction in Microservices?
+
+## Pehle Normal Transaction samjho
+
+Suppose tumhare paas ek Spring Boot application hai.
+
+User 1000 Rs transfer karta hai.
+
+Steps:
+
+```
+1. Sender Account -> -1000
+2. Receiver Account -> +1000
+```
+
+Ye dono ek hi database me hote hain.
+
+Agar second step fail ho jaye to
+
+```
+Rollback
+```
+
+Aur sender ka paisa wapas aa jata hai.
+
+Ye normal transaction hai.
+
+```
+BEGIN
+
+Debit
+Credit
+
+COMMIT
+```
+
+Ya
+
+```
+BEGIN
+
+Debit
+
+Error
+
+ROLLBACK
+```
+
+Sab easy hai.
+
+---
+
+# Ab Microservices me kya hota hai?
+
+Suppose Amazon jaisi application hai.
+
+Yahan ek database nahi hai.
+
+Har service ka apna database hai.
+
+```
+Order Service
+      |
+      | Order DB
+      |
+Payment Service
+      |
+      | Payment DB
+      |
+Inventory Service
+      |
+      | Inventory DB
+```
+
+Ab user ne order place kiya.
+
+### Step 1
+
+Order Service
+
+```
+Order Created
+```
+
+✅ Success
+
+---
+
+### Step 2
+
+Payment Service
+
+```
+Payment Deduct
+```
+
+✅ Success
+
+---
+
+### Step 3
+
+Inventory Service
+
+```
+Stock Reduce
+```
+
+❌ Fail
+
+Stock available hi nahi tha.
+
+---
+
+Ab problem kya hai?
+
+Order create ho gaya.
+
+Payment bhi cut gaya.
+
+Lekin stock nahi mila.
+
+Ab kya kare?
+
+Ek database hota to
+
+```
+Rollback
+```
+
+kar dete.
+
+Lekin
+
+```
+Order DB
+Payment DB
+Inventory DB
+```
+
+Teen alag databases hain.
+
+Ab sabko rollback karna bahut difficult hai.
+
+Isi ko bolte hain
+
+# Distributed Transaction
+
+Ek transaction
+
+↓
+
+Multiple Services
+
+↓
+
+Multiple Databases
+
+↓
+
+Rollback difficult
+
+---
+
+## Diagram
+
+```
+Customer
+     |
+     |
+Order Service
+     |
+     | Success
+     |
+Payment Service
+     |
+     | Success
+     |
+Inventory Service
+     |
+     | Failed
+```
+
+Ab
+
+```
+Payment already deducted
+
+Inventory Failed
+
+Order Created
+```
+
+Ab application inconsistent ho gayi.
+
+---
+
+# Iska solution kya hai?
+
+Modern Microservices
+
+Normal Transaction use nahi karte.
+
+Wo use karte hain
+
+# Saga Pattern
+
+Saga me rollback nahi hota.
+
+Compensation hoti hai.
+
+Example
+
+```
+Order Created
+```
+
+↓
+
+```
+Payment Done
+```
+
+↓
+
+Inventory Failed
+
+↓
+
+Saga bolta hai
+
+```
+Refund Payment
+```
+
+↓
+
+```
+Cancel Order
+```
+
+Ab sab wapas normal.
+
+```
+Customer
+
+↓
+
+Order
+
+↓
+
+Payment
+
+↓
+
+Inventory Failed
+
+↓
+
+Refund
+
+↓
+
+Order Cancel
+```
+
+Isliye interview me bolte hain
+
+> Distributed Transactions are difficult.
+
+Aur
+
+> Modern systems use Saga Pattern.
+
+---
+
+# Interview Answer
+
+> A distributed transaction is a transaction that spans multiple microservices and databases. Since each service has its own database, maintaining consistency becomes difficult if one service fails. That's why modern microservice architectures usually use the Saga Pattern instead of traditional distributed transactions.
+
+---
+
+# 39. What are Reactive Extensions (Rx)?
+
+Ye aur bhi easy hai.
+
+---
+
+Suppose tumhara Dashboard hai.
+
+Usme
+
+```
+Weather
+```
+
+```
+Plant Data
+```
+
+```
+Alerts
+```
+
+```
+Users
+```
+
+Sab ek screen par dikhana hai.
+
+Ye data
+
+4 alag services se aa raha hai.
+
+```
+Weather Service
+
+Plant Service
+
+Alert Service
+
+User Service
+```
+
+---
+
+## Method 1 (Old Way)
+
+```
+Call Weather
+
+Wait
+```
+
+↓
+
+```
+Call Plant
+
+Wait
+```
+
+↓
+
+```
+Call Alert
+
+Wait
+```
+
+↓
+
+```
+Call User
+
+Wait
+```
+
+Total Time
+
+```
+2 sec
+
++
+
+2 sec
+
++
+
+2 sec
+
++
+
+2 sec
+
+=
+
+8 sec
+```
+
+Bahut slow.
+
+---
+
+## Method 2 (Reactive)
+
+Sabko ek saath call karo.
+
+```
+Weather
+       |
+
+Plant
+       |
+
+Alert
+       |
+
+User
+```
+
+Ek hi time par
+
+```
+Weather --------|
+
+Plant ----------|
+
+Alert ----------|----> Combine
+
+User -----------|
+```
+
+Total
+
+```
+2 sec
+```
+
+Sab parallel chal raha hai.
+
+Isi ko bolte hain
+
+Reactive Programming
+
+Ya
+
+Reactive Extensions (Rx)
+
+---
+
+## Real Example
+
+Tumhare project me
+
+Dashboard open hua.
+
+Ek hi time par
+
+```
+GET /site
+
+GET /device
+
+GET /telemetry
+
+GET /alerts
+```
+
+Sab parallel execute honge.
+
+Jis service ka response aa jaye
+
+Usko combine karke frontend ko bhej diya.
+
+---
+
+## Diagram
+
+Old Way
+
+```
+A
+
+↓
+
+B
+
+↓
+
+C
+
+↓
+
+D
+```
+
+Reactive
+
+```
+A ----|
+
+B ----|----> Result
+
+C ----|
+
+D ----|
+```
+
+---
+
+# Interview Answer
+
+> Reactive Extensions (Rx) allow multiple service calls to execute asynchronously and combine their responses into a single result. This improves application performance and responsiveness because services run in parallel instead of one after another.
+
+---
+
+## 🧠 Easy Trick to Remember
+
+### Distributed Transaction
+
+> **One Transaction ➜ Many Services ➜ Many Databases ➜ Hard to Rollback ➜ Use Saga Pattern**
+
+### Reactive Extensions (Rx)
+
+> **Many APIs ➜ Parallel Calls ➜ Combine Results ➜ Faster Response**
+
+---
+
+### ⭐ Mere hisab se interview me in dono ko yaad rakhne ka sabse easy formula:
+
+* **Distributed Transaction = "Ek kaam, bahut saare databases."**
+* **Reactive = "Bahut saare APIs, ek saath call."**
+
+Bas ye do lines yaad rakhoge, to interviewer ke follow-up questions bhi aasani se handle kar paoge.
+
+==============================================================================================================
