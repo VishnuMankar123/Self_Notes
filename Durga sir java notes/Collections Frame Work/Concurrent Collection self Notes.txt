@@ -1,0 +1,648 @@
+
+> **Topic:** Concurrent Collections (Important Interview Q&A)
+
+---
+
+# Q1. Why were Concurrent Collections introduced in Java?
+
+### Answer
+
+Concurrent Collections were introduced in **Java 1.5** to solve the problems of traditional collections in multithreaded applications.
+
+Problems with traditional collections:
+
+* They are **not thread-safe** (ArrayList, HashMap).
+* Old thread-safe collections (Vector, Hashtable) have **poor performance** because the whole collection is locked even for read operations.
+* They throw **ConcurrentModificationException** if one thread modifies while another is iterating.
+
+Concurrent Collections solve all these problems.
+
+---
+
+# Q2. What are the advantages of Concurrent Collections?
+
+### Answer
+
+1. Thread-safe.
+2. Better performance than Vector and Hashtable.
+3. Multiple threads can read and update safely.
+4. No `ConcurrentModificationException`.
+5. Suitable for scalable multithreaded applications.
+
+---
+
+# Q3. Why are Vector and Hashtable slower than Concurrent Collections?
+
+### Answer
+
+Vector and Hashtable use **one lock for the entire collection**.
+
+Even if one thread is only reading, other threads must wait.
+
+Concurrent Collections use a better locking mechanism, so multiple threads can work simultaneously, giving better performance.
+
+---
+
+# Q4. Why does ConcurrentModificationException occur?
+
+### Answer
+
+It occurs when:
+
+* One thread is iterating over a collection.
+* Another thread modifies the same collection simultaneously.
+
+Example:
+
+```java
+ArrayList al = new ArrayList();
+Iterator itr = al.iterator();
+al.add("D");
+```
+
+This throws:
+
+```
+ConcurrentModificationException
+```
+
+---
+
+# Q5. Why doesn't ConcurrentHashMap throw ConcurrentModificationException?
+
+### Answer
+
+Because its iterator works on a **read-only copy (snapshot)** of the map.
+
+If another thread updates the map while iteration is going on, the iterator is not affected.
+
+Hence no `ConcurrentModificationException`.
+
+---
+
+# Q6. What is ConcurrentHashMap?
+
+### Answer
+
+ConcurrentHashMap is a thread-safe implementation of `ConcurrentMap`.
+
+Features:
+
+* Allows concurrent read operations.
+* Allows thread-safe write operations.
+* Better performance than Hashtable.
+* Does not throw `ConcurrentModificationException`.
+
+---
+
+# Q7. How does ConcurrentHashMap achieve better performance?
+
+### Answer
+
+ConcurrentHashMap does **not lock the entire map**.
+
+Instead, it locks **only a particular bucket (Bucket Level Lock)** during update operations.
+
+* Read operation → No lock required.
+* Write operation → Only bucket-level lock.
+
+Hence multiple threads can work simultaneously.
+
+> **Interview Keyword:** Bucket Level Lock
+
+---
+
+# Q8. What is the default concurrency level of ConcurrentHashMap?
+
+### Answer
+
+Default concurrency level is **16**.
+
+This means the map is internally divided into **16 smaller portions**, allowing multiple write operations simultaneously.
+
+---
+
+# Q9. Are null keys and null values allowed in ConcurrentHashMap?
+
+### Answer
+
+No.
+
+ConcurrentHashMap does **not allow**
+
+* null key
+* null value
+
+---
+
+# Q10. What are the special methods of ConcurrentMap?
+
+### Answer
+
+### 1. putIfAbsent()
+
+Adds an entry only if the key is not already present.
+
+If key exists, old value remains unchanged.
+
+---
+
+### 2. remove(key, value)
+
+Removes the entry only if both key and value match.
+
+---
+
+### 3. replace(key, oldValue, newValue)
+
+Replaces the value only if the existing value matches the old value.
+
+---
+
+# Q11. Difference between put() and putIfAbsent()?
+
+| put()                            | putIfAbsent()                           |
+| -------------------------------- | --------------------------------------- |
+| Replaces old value if key exists | Does not replace existing value         |
+| Returns old value                | Returns existing value without updating |
+
+---
+
+# Q12. HashMap vs ConcurrentHashMap (Very Important)
+
+| HashMap                                | ConcurrentHashMap                            |
+| -------------------------------------- | -------------------------------------------- |
+| Not thread-safe                        | Thread-safe                                  |
+| Allows null key/value                  | Does not allow null                          |
+| Throws ConcurrentModificationException | Never throws ConcurrentModificationException |
+| No synchronization                     | Bucket-level locking                         |
+| Poor choice for multithreading         | Best for multithreading                      |
+
+---
+
+# ⭐ Most Expected Interview Questions (Revision)
+
+1. Why were Concurrent Collections introduced?
+2. What problems do Concurrent Collections solve?
+3. Why are Vector and Hashtable slower?
+4. What is ConcurrentHashMap?
+5. How is ConcurrentHashMap different from HashMap?
+6. Why doesn't ConcurrentHashMap throw ConcurrentModificationException?
+7. What is Bucket Level Lock?
+8. What is the default concurrency level?
+9. Can ConcurrentHashMap store null keys or values?
+10. Explain `putIfAbsent()`, `remove(key,value)`, and `replace()`.
+
+---
+
+## 🎯 Interview Tip
+
+Agar interviewer sirf ek question poochhe:
+
+**"Why should we use ConcurrentHashMap instead of HashMap?"**
+
+Toh ye 4 points bol do:
+
+* It is **thread-safe**.
+* It uses **bucket-level locking**, so performance is better than Hashtable.
+* It allows **concurrent read and safe write** operations.
+* It **never throws `ConcurrentModificationException`** during concurrent iteration.
+
+Ye answer 90% interviews mein sufficient hota hai.
+=======================================================================================================================
+Bilkul 👍. Is topic me bhi **bahut saare notes** hain, lekin interview me **sirf 8–10 questions** hi repeat hote hain. Ye questions yaad kar lo, pura chapter revise ho jayega.
+
+---
+
+# Topic: HashMap vs ConcurrentHashMap vs CopyOnWriteArrayList (Important Interview Q&A)
+
+---
+
+# Q13. Difference between HashMap and ConcurrentHashMap? ⭐⭐⭐⭐⭐
+
+| HashMap                                | ConcurrentHashMap                            |
+| -------------------------------------- | -------------------------------------------- |
+| Not Thread Safe                        | Thread Safe                                  |
+| Allows null key and null value         | Does not allow null key or null value        |
+| Iterator is Fail-Fast                  | Iterator is Fail-Safe                        |
+| Throws ConcurrentModificationException | Never throws ConcurrentModificationException |
+| Introduced in Java 1.2                 | Introduced in Java 1.5                       |
+
+### Interview Answer
+
+**HashMap**
+
+* Not thread-safe
+* Allows null key/value
+* Fail-Fast iterator
+* Throws ConcurrentModificationException
+
+**ConcurrentHashMap**
+
+* Thread-safe
+* No null key/value
+* Fail-Safe iterator
+* Uses bucket-level locking
+* Better for multithreading
+
+---
+
+# Q14. Difference between ConcurrentHashMap and Hashtable? ⭐⭐⭐⭐⭐
+
+### Answer
+
+| ConcurrentHashMap                   | Hashtable                     |
+| ----------------------------------- | ----------------------------- |
+| Bucket-level locking                | Whole map locking             |
+| Better performance                  | Slower                        |
+| Multiple threads can work together  | Only one thread at a time     |
+| Read operation doesn't require lock | Every operation requires lock |
+| Fail-Safe iterator                  | Fail-Fast iterator            |
+
+### One-line Interview Answer
+
+> **ConcurrentHashMap locks only one bucket, whereas Hashtable locks the entire map. Therefore ConcurrentHashMap performs much better.**
+
+---
+
+# Q15. Difference between ConcurrentHashMap and synchronizedMap()? ⭐⭐⭐⭐
+
+### Answer
+
+**ConcurrentHashMap**
+
+* Bucket-level lock
+* Better performance
+* Multiple threads can access simultaneously
+* Fail-Safe iterator
+
+**Collections.synchronizedMap()**
+
+* Whole map lock
+* Only one thread at a time
+* Fail-Fast iterator
+* Slower
+
+---
+
+# Q16. What is CopyOnWriteArrayList? ⭐⭐⭐⭐⭐
+
+### Answer
+
+CopyOnWriteArrayList is a **thread-safe version of ArrayList**.
+
+Whenever an update operation (add, remove, update) happens, it creates a **new cloned copy** of the list.
+
+Read operations continue on the old copy without blocking.
+
+---
+
+# Q17. Why is it called CopyOnWriteArrayList?
+
+### Answer
+
+Because **every write operation creates a copy** of the underlying ArrayList.
+
+The modification is performed on the copied list.
+
+---
+
+# Q18. When should we use CopyOnWriteArrayList?
+
+### Answer
+
+Use CopyOnWriteArrayList when:
+
+* Read operations are very frequent.
+* Write operations are very few.
+
+Because every write creates a new copy, frequent writes reduce performance.
+
+---
+
+# Q19. Why is CopyOnWriteArrayList costly?
+
+### Answer
+
+Every update operation creates a **new cloned copy** of the list.
+
+Therefore write operations consume extra memory and CPU.
+
+---
+
+# Q20. What are the features of CopyOnWriteArrayList?
+
+### Answer
+
+* Thread-safe
+* Insertion order preserved
+* Duplicate objects allowed
+* Heterogeneous objects allowed
+* Null values allowed
+* Fail-Safe iterator
+* No ConcurrentModificationException
+
+---
+
+# Q21. Does CopyOnWriteArrayList throw ConcurrentModificationException?
+
+### Answer
+
+No.
+
+While one thread is iterating, another thread can safely modify the list.
+
+Iterator works on a separate copy, so no `ConcurrentModificationException` occurs.
+
+---
+
+# Q22. Can Iterator remove elements from CopyOnWriteArrayList? ⭐⭐⭐⭐
+
+### Answer
+
+No.
+
+Calling `iterator.remove()` throws:
+
+```java
+UnsupportedOperationException
+```
+
+Unlike ArrayList, CopyOnWriteArrayList iterator does not support the remove operation.
+
+---
+
+# Q23. Difference between ArrayList and CopyOnWriteArrayList?
+
+| ArrayList                              | CopyOnWriteArrayList                         |
+| -------------------------------------- | -------------------------------------------- |
+| Not Thread Safe                        | Thread Safe                                  |
+| Fail-Fast iterator                     | Fail-Safe iterator                           |
+| Throws ConcurrentModificationException | Never throws ConcurrentModificationException |
+| No copy created on update              | Creates new copy on every update             |
+| Iterator supports remove()             | Iterator does not support remove()           |
+
+---
+
+# Q24. What is addIfAbsent()?
+
+### Answer
+
+`addIfAbsent()` adds an element only if it is not already present in the list.
+
+Example:
+
+```java
+list.addIfAbsent("A");
+```
+
+If `"A"` already exists, it will not be added again.
+
+---
+
+# Q25. What is addAllAbsent()?
+
+### Answer
+
+`addAllAbsent()` adds only those elements from another collection that are not already present.
+
+It also returns the number of newly added elements.
+
+---
+
+# ⭐ Interview Favourite Question
+
+### Why doesn't CopyOnWriteArrayList throw ConcurrentModificationException?
+
+### Answer
+
+Because every update operation happens on a **separate cloned copy** of the list.
+
+The iterator continues to iterate over the old copy.
+
+Therefore, modifications do not affect the iterator and no `ConcurrentModificationException` is thrown.
+
+---
+
+# ⭐ Most Expected Interview Questions (Revision)
+
+1. Difference between HashMap and ConcurrentHashMap.
+2. Difference between ConcurrentHashMap and Hashtable.
+3. Difference between ConcurrentHashMap and synchronizedMap().
+4. What is CopyOnWriteArrayList?
+5. Why is it called CopyOnWriteArrayList?
+6. When should we use CopyOnWriteArrayList?
+7. Why is CopyOnWriteArrayList costly?
+8. Why doesn't CopyOnWriteArrayList throw ConcurrentModificationException?
+9. Can we call `iterator.remove()` on CopyOnWriteArrayList?
+10. Difference between ArrayList and CopyOnWriteArrayList.
+
+---
+
+## 🎯 Interview Tip (30-second Answer)
+
+Agar interviewer pooche:
+
+**"Why do we use CopyOnWriteArrayList?"**
+
+Toh ye answer bol do:
+
+> "CopyOnWriteArrayList is a thread-safe version of ArrayList. Every write operation creates a new copy of the list, so read operations are not blocked. It is best suited for applications with **many reads and few writes**. Its iterator is **Fail-Safe**, so it never throws `ConcurrentModificationException`, but `iterator.remove()` is not supported."
+
+Ye answer kaafi interviews me direct expected hota hai.
+
+=======================================================================================================================
+
+# Topic: CopyOnWriteArraySet & Fail-Fast vs Fail-Safe (Important Interview Q&A)
+
+---
+
+# Q26. Difference between ArrayList and CopyOnWriteArrayList ⭐⭐⭐⭐⭐
+
+| ArrayList                              | CopyOnWriteArrayList                         |
+| -------------------------------------- | -------------------------------------------- |
+| Not Thread Safe                        | Thread Safe                                  |
+| Fail-Fast Iterator                     | Fail-Safe Iterator                           |
+| Throws ConcurrentModificationException | Never throws ConcurrentModificationException |
+| Iterator supports remove()             | Iterator.remove() is not supported           |
+| Introduced in Java 1.2                 | Introduced in Java 1.5                       |
+
+### Interview Answer
+
+**ArrayList**
+
+* Not thread-safe
+* Fail-Fast iterator
+* Throws ConcurrentModificationException
+* Iterator supports remove()
+
+**CopyOnWriteArrayList**
+
+* Thread-safe
+* Every write creates a cloned copy
+* Fail-Safe iterator
+* No ConcurrentModificationException
+* Iterator.remove() throws `UnsupportedOperationException`
+
+---
+
+# Q27. Difference between CopyOnWriteArrayList and synchronizedList()? ⭐⭐⭐⭐
+
+### Answer
+
+| CopyOnWriteArrayList                     | synchronizedList()                     |
+| ---------------------------------------- | -------------------------------------- |
+| Creates cloned copy on every write       | Locks the entire list                  |
+| Multiple threads can read simultaneously | Only one thread at a time              |
+| Fail-Safe iterator                       | Fail-Fast iterator                     |
+| No ConcurrentModificationException       | Throws ConcurrentModificationException |
+| Iterator.remove() not supported          | Iterator.remove() supported            |
+
+---
+
+# Q28. What is CopyOnWriteArraySet? ⭐⭐⭐⭐
+
+### Answer
+
+CopyOnWriteArraySet is a **thread-safe implementation of Set**.
+
+It is internally implemented using **CopyOnWriteArrayList**.
+
+Features:
+
+* Thread-safe
+* Insertion order preserved
+* Duplicate elements are not allowed
+* Multiple threads can read simultaneously
+* Every write operation creates a cloned copy
+
+---
+
+# Q29. When should we use CopyOnWriteArraySet?
+
+### Answer
+
+Use CopyOnWriteArraySet when:
+
+* Read operations are more.
+* Write operations are fewer.
+* Thread safety is required.
+
+Avoid it if there are frequent updates because every update creates a cloned copy.
+
+---
+
+# Q30. Difference between CopyOnWriteArraySet and synchronizedSet()? ⭐⭐⭐⭐
+
+| CopyOnWriteArraySet                | synchronizedSet()                      |
+| ---------------------------------- | -------------------------------------- |
+| Thread-safe using cloned copy      | Thread-safe using locking              |
+| Fail-Safe iterator                 | Fail-Fast iterator                     |
+| No ConcurrentModificationException | Throws ConcurrentModificationException |
+| Iterator supports only read        | Iterator supports read and remove      |
+
+---
+
+# Q31. What is a Fail-Fast Iterator? ⭐⭐⭐⭐⭐
+
+### Answer
+
+A Fail-Fast iterator throws **ConcurrentModificationException** if the collection is structurally modified while iterating.
+
+It uses an internal **modCount** (called MOD in your notes) to detect changes.
+
+Examples:
+
+* ArrayList
+* HashMap
+* HashSet
+* Vector
+
+---
+
+# Q32. What is a Fail-Safe Iterator? ⭐⭐⭐⭐⭐
+
+### Answer
+
+A Fail-Safe iterator works on a **separate cloned copy** of the collection.
+
+If another thread modifies the original collection, the iterator is not affected.
+
+Therefore it never throws `ConcurrentModificationException`.
+
+Examples:
+
+* ConcurrentHashMap
+* CopyOnWriteArrayList
+* CopyOnWriteArraySet
+
+---
+
+# Q33. Difference between Fail-Fast and Fail-Safe Iterator ⭐⭐⭐⭐⭐
+
+| Fail-Fast                                     | Fail-Safe                                                              |
+| --------------------------------------------- | ---------------------------------------------------------------------- |
+| Throws ConcurrentModificationException        | Never throws ConcurrentModificationException                           |
+| No cloned copy                                | Uses cloned copy                                                       |
+| Better memory usage                           | Extra memory required                                                  |
+| Faster                                        | Slightly slower due to copy creation                                   |
+| Examples: ArrayList, HashMap, HashSet, Vector | Examples: ConcurrentHashMap, CopyOnWriteArrayList, CopyOnWriteArraySet |
+
+---
+
+# Q34. Why does a Fail-Safe Iterator not throw ConcurrentModificationException?
+
+### Answer
+
+Because it iterates over a **cloned copy** of the collection.
+
+Any modification happens on the original collection, not on the copied one.
+
+So the iterator continues safely without any exception.
+
+---
+
+# ⭐ Most Expected Interview Questions (Revision)
+
+1. Difference between ArrayList and CopyOnWriteArrayList.
+2. What is CopyOnWriteArraySet?
+3. When should we use CopyOnWriteArraySet?
+4. Difference between CopyOnWriteArraySet and synchronizedSet().
+5. What is a Fail-Fast Iterator?
+6. What is a Fail-Safe Iterator?
+7. Difference between Fail-Fast and Fail-Safe Iterator.
+8. Why does Fail-Safe Iterator not throw `ConcurrentModificationException`?
+
+---
+
+# 🎯 Super Revision (1 Minute)
+
+* **HashMap** → Not thread-safe, Fail-Fast.
+* **ConcurrentHashMap** → Thread-safe, Bucket-level locking, Fail-Safe.
+* **ArrayList** → Not thread-safe, Fail-Fast.
+* **CopyOnWriteArrayList** → Thread-safe, Every write creates a cloned copy, Fail-Safe.
+* **CopyOnWriteArraySet** → Thread-safe Set, internally uses `CopyOnWriteArrayList`, Fail-Safe.
+* **Fail-Fast** → Throws `ConcurrentModificationException`.
+* **Fail-Safe** → Uses a cloned copy, never throws `ConcurrentModificationException`.
+
+---
+
+## 📌 Correction in your notes
+
+Ek important correction hai:
+
+Tumhare notes me likha hai:
+
+> **"CopyOnWriteArrayList – It is Not Thread Safe because Every Update Operation..."**
+
+❌ Ye line **galat** hai.
+
+Sahi statement:
+
+> ✅ **CopyOnWriteArrayList is Thread Safe because every update operation is performed on a separate cloned copy of the underlying array.**
+
+Interview me agar ye point poocha jaye to hamesha **Thread Safe** hi bolna.
+
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================

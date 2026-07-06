@@ -643,6 +643,18 @@ SELECT full_name,
 FROM employee;
 ```
 
+CASE statement SQL ka if-else hota hai.
+
+Agar Java me likho to:
+
+if(address.equals("Mumbai")){
+    zone = "West Zone";
+}else{
+    zone = "Other Zone";
+}
+
+SQL me isi ko CASE bolte hain.
+
 ---
 
 Let me know if you want this as a printable PDF or `.sql` cheatsheet!
