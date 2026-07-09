@@ -1,0 +1,429 @@
+
+# Reactive Programming Interview Questions & Answers (Part-1)
+
+## Q1. What is Reactive Programming?
+
+**Answer:**
+
+Reactive Programming is a programming paradigm used to build **asynchronous** and **non-blocking** applications.
+
+Instead of waiting for a task to complete, the application reacts whenever data becomes available.
+
+**Simple Interview Definition:**
+
+> Reactive Programming is an asynchronous, non-blocking, event-driven programming model that efficiently handles data streams and events.
+
+---
+
+## Q2. Why do we need Reactive Programming?
+
+**Answer:**
+
+Traditional applications use one thread per request.
+
+If one request takes a long time (database call, API call, file reading), the thread remains blocked.
+
+Reactive Programming solves this problem by freeing the thread immediately and processing the task asynchronously.
+
+**Advantages**
+
+* Better Performance
+* Better Scalability
+* Less Memory Usage
+* Handles More Concurrent Users
+* Better Resource Utilization
+
+---
+
+## Q3. What is the difference between Synchronous and Asynchronous Programming?
+
+| Synchronous                 | Asynchronous                           |
+| --------------------------- | -------------------------------------- |
+| Executes one task at a time | Executes multiple tasks simultaneously |
+| Thread waits                | Thread doesn't wait                    |
+| Blocking                    | Non-blocking                           |
+| Slow under heavy load       | Better for high traffic                |
+
+**Example**
+
+Synchronous:
+
+```
+Request
+ ↓
+Process
+ ↓
+Wait
+ ↓
+Response
+```
+
+Asynchronous:
+
+```
+Request
+ ↓
+Start Processing
+ ↓
+Thread Free
+ ↓
+Handle Next Request
+ ↓
+Response Later
+```
+
+---
+
+## Q4. Explain Blocking Programming.
+
+**Answer:**
+
+Blocking means a thread waits until the operation completes.
+
+Example:
+
+```
+Client Request
+      ↓
+Database Call
+      ↓
+Thread Waits
+      ↓
+Response
+```
+
+If the database takes 5 seconds, the thread is busy for 5 seconds.
+
+---
+
+## Q5. Explain Non-Blocking Programming.
+
+**Answer:**
+
+In Non-Blocking Programming, the thread delegates work and immediately becomes available for the next request.
+
+Example:
+
+```
+Client Request
+       ↓
+Background Processing
+       ↓
+Thread Free
+       ↓
+Another Request
+       ↓
+Result Comes Later
+```
+
+---
+
+## Q6. Give a real-life example of Reactive Programming.
+
+**Answer:**
+
+### WhatsApp
+
+Friend sends a message.
+
+Immediately notification appears.
+
+The application reacts only when an event occurs.
+
+Another example:
+
+Restaurant waiter.
+
+Waiter takes the order.
+
+Gives it to the kitchen.
+
+Instead of waiting there, he serves other customers.
+
+When food is ready, the kitchen informs the waiter.
+
+This is asynchronous and non-blocking.
+
+---
+
+## Q7. What are the main features of Reactive Programming?
+
+**Answer**
+
+1. Asynchronous
+2. Non-Blocking
+3. Event Driven
+4. Publisher-Subscriber Model
+5. Backpressure
+6. Functional Programming
+
+---
+
+## Q8. What is Event Driven Programming?
+
+**Answer:**
+
+In Event Driven Programming, the application performs an action only when an event occurs.
+
+Examples
+
+* Mouse Click
+* Keyboard Input
+* HTTP Request
+* Database Response
+* Kafka Message
+* RabbitMQ Event
+
+---
+
+## Q9. What is Reactive Streams Specification?
+
+**Answer:**
+
+Reactive Streams Specification is a standard that defines rules for asynchronous stream processing with non-blocking backpressure.
+
+It ensures all reactive libraries behave consistently.
+
+---
+
+## Q10. What are the four interfaces of Reactive Streams?
+
+**Answer:**
+
+1. Publisher
+2. Subscriber
+3. Subscription
+4. Processor
+
+---
+
+## Q11. What is Publisher?
+
+**Answer:**
+
+Publisher is the data producer.
+
+It publishes data to subscribers.
+
+In Project Reactor,
+
+* Mono is a Publisher.
+* Flux is also a Publisher.
+
+---
+
+## Q12. What is Subscriber?
+
+**Answer:**
+
+Subscriber consumes data published by the Publisher.
+
+It receives events like:
+
+* onSubscribe()
+* onNext()
+* onError()
+* onComplete()
+
+---
+
+## Q13. What is Subscription?
+
+**Answer:**
+
+Subscription acts as a bridge between Publisher and Subscriber.
+
+It provides two methods:
+
+* request(n)
+* cancel()
+
+It is responsible for implementing backpressure.
+
+---
+
+## Q14. What is Processor?
+
+**Answer:**
+
+Processor is both a Publisher and a Subscriber.
+
+It receives data, processes it, and publishes the processed data to another subscriber.
+
+---
+
+## Q15. Explain the complete Reactive Stream Flow.
+
+**Answer:**
+
+Flow:
+
+```
+Subscriber
+      |
+      | subscribe()
+      ↓
+Publisher
+      |
+      | onSubscribe()
+      ↓
+Subscriber
+      |
+      | request(n)
+      ↓
+Publisher
+      |
+      | onNext()
+      ↓
+Subscriber
+
+Finally
+
+onComplete()
+
+or
+
+onError()
+```
+
+---
+
+## Q16. What is Backpressure?
+
+**Answer:**
+
+Backpressure is a mechanism where the Subscriber controls how much data it wants from the Publisher.
+
+Example
+
+```
+subscription.request(5);
+```
+
+Publisher sends only 5 items.
+
+This prevents memory overflow.
+
+---
+
+## Q17. What is Project Reactor?
+
+**Answer:**
+
+Project Reactor is the reactive library used in Spring WebFlux.
+
+It implements the Reactive Streams Specification.
+
+It provides:
+
+* Mono
+* Flux
+
+---
+
+## Q18. What is Spring WebFlux?
+
+**Answer:**
+
+Spring WebFlux is Spring's reactive web framework used to build asynchronous and non-blocking REST APIs.
+
+Unlike Spring MVC, it uses a small number of threads to handle many concurrent requests efficiently.
+
+---
+
+## Q19. Difference between Spring MVC and Spring WebFlux?
+
+| Spring MVC                        | Spring WebFlux                         |
+| --------------------------------- | -------------------------------------- |
+| Blocking                          | Non-blocking                           |
+| Synchronous                       | Asynchronous                           |
+| Uses Tomcat                       | Uses Netty (commonly)                  |
+| One Thread per Request            | Few Threads handle many Requests       |
+| Best for traditional applications | Best for high concurrency applications |
+
+---
+
+## Q20. When should we use WebFlux?
+
+**Answer:**
+
+Use WebFlux when:
+
+* Building high-traffic applications
+* Developing real-time applications
+* Working with streaming APIs
+* Using reactive databases (R2DBC)
+* Calling multiple external APIs asynchronously
+
+Avoid WebFlux for simple CRUD applications where blocking architecture is sufficient.
+
+---
+
+# ⭐ 4-Year Experience Interview Questions
+
+### Q21. Why is WebFlux faster than Spring MVC?
+
+**Answer:**
+
+Because WebFlux is asynchronous and non-blocking.
+
+Threads don't wait for I/O operations, so the same thread can process multiple requests, improving throughput.
+
+---
+
+### Q22. Can we use Spring MVC and WebFlux together?
+
+**Answer:**
+
+Yes.
+
+Spring Boot supports both, but it is generally recommended to choose one programming model for a service to avoid unnecessary complexity.
+
+---
+
+### Q23. Is WebFlux always better than Spring MVC?
+
+**Answer:**
+
+No.
+
+For simple CRUD applications, Spring MVC is often simpler and sufficient.
+
+WebFlux is beneficial when there are many concurrent users, streaming data, or multiple asynchronous I/O operations.
+
+---
+
+### Q24. What server does Spring WebFlux use?
+
+**Answer:**
+
+By default, Spring WebFlux commonly uses **Netty**, which is lightweight and designed for asynchronous, non-blocking communication.
+
+---
+
+### Q25. Why are fewer threads required in WebFlux?
+
+**Answer:**
+
+Because threads do not remain blocked while waiting for I/O operations.
+
+The thread starts the work, becomes available for other requests, and later resumes processing when the result is ready.
+
+---
+
+This is **Part 1 (25 Interview Questions)**.
+
+The next part will cover **Mono** in detail (around **30 interview questions**), including:
+
+* `Mono.just()`
+* `Mono.empty()`
+* `Mono.error()`
+* `subscribe()`
+* `log()`
+* `map()`
+* `flatMap()`
+* `zip()`
+* `then()`
+* `delayElement()`
+* Practical interview scenarios
+* 4-year experience questions with expected answers.

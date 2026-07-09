@@ -1,0 +1,808 @@
+Perfect. 👍 Ye notes padhne ki jagah interview ke liye tumhe sirf Q&A yaad karna hai. Main is topic se **repeat na hone wale**, **interview-oriented**, **simple language** wale questions bana raha hoon.
+
+# Kubernetes Components Interview Questions & Answers
+
+## Q1. What are the main components of Kubernetes?
+
+**Answer:**
+Kubernetes ke components 3 categories me divide hote hain:
+
+1. **Control Plane Components** → Cluster ko manage karte hain.
+2. **Worker Node Components** → Applications (Pods) ko run karte hain.
+3. **Kubernetes Objects** → Resources jo hum create karte hain (Pod, Service, Deployment, etc.)
+
+**Easy Line:**
+
+> Control Plane manages the cluster, Worker Node runs applications, and Kubernetes Objects define resources.
+
+---
+
+## Q2. What is the role of kube-apiserver?
+
+**Answer:**
+**kube-apiserver** Kubernetes ka **entry point** hai.
+
+* Har request pehle API Server ke paas aati hai.
+* Ye baaki components ke beech communication karwata hai.
+
+**Example:**
+Jab hum `kubectl apply -f deployment.yaml` chalate hain, request sabse pehle **API Server** ke paas jaati hai.
+
+**Easy Line:**
+
+> API Server is the front door of Kubernetes.
+
+---
+
+## Q3. What is etcd and why is it used?
+
+**Answer:**
+**etcd** ek **distributed key-value database** hai.
+
+Ye cluster ki sari information store karta hai jaise:
+
+* Pods
+* Nodes
+* Deployments
+* Configuration
+
+Agar etcd data lose ho gaya to cluster ki state bhi lose ho sakti hai.
+
+**Easy Line:**
+
+> etcd stores the complete state of the Kubernetes cluster.
+
+---
+
+## Q4. What is the work of kube-scheduler?
+
+**Answer:**
+**kube-scheduler** decide karta hai ki naya Pod kis Worker Node par run hoga.
+
+Ye CPU, Memory aur available resources check karta hai.
+
+**Easy Line:**
+
+> Scheduler decides where a Pod should run.
+
+---
+
+## Q5. What is kube-controller-manager?
+
+**Answer:**
+Ye multiple controllers ko manage karta hai.
+
+Controllers ensure karte hain ki cluster **desired state** me rahe.
+
+**Example:**
+Agar Deployment me 3 replicas diye aur 1 Pod delete ho gaya, Controller automatically naya Pod create karega.
+
+**Easy Line:**
+
+> Controller Manager maintains the desired state of the cluster.
+
+---
+
+## Q6. What is cloud-controller-manager?
+
+**Answer:**
+Ye sirf Cloud environment (AWS, Azure, GCP) me use hota hai.
+
+Ye cloud resources manage karta hai jaise:
+
+* Load Balancer
+* Storage
+* Network
+
+**Easy Line:**
+
+> Cloud Controller Manager integrates Kubernetes with cloud providers.
+
+---
+
+## Q7. What is kubelet?
+
+**Answer:**
+**kubelet** Worker Node ka agent hai.
+
+Ye API Server se instructions leta hai aur ensure karta hai ki Pod properly run ho raha hai.
+
+**Easy Line:**
+
+> Kubelet makes sure Pods are running on the node.
+
+---
+
+## Q8. What is kube-proxy?
+
+**Answer:**
+**kube-proxy** networking manage karta hai.
+
+Ye traffic ko correct Pod tak route karta hai aur load balancing me help karta hai.
+
+**Easy Line:**
+
+> kube-proxy routes network traffic to the correct Pod.
+
+---
+
+## Q9. What is Container Runtime?
+
+**Answer:**
+Container Runtime actual containers ko run karta hai.
+
+Examples:
+
+* Docker
+* containerd
+* CRI-O
+
+Kubelet Container Runtime ko instruction deta hai container start karne ke liye.
+
+**Easy Line:**
+
+> Container Runtime runs the containers.
+
+---
+
+## Q10. What is the difference between Control Plane and Worker Node?
+
+| Control Plane               | Worker Node                  |
+| --------------------------- | ---------------------------- |
+| Cluster manage karta hai    | Applications run karta hai   |
+| API Server, Scheduler, etcd | kubelet, kube-proxy, Runtime |
+| Decision leta hai           | Decision execute karta hai   |
+
+**Easy Line:**
+
+> Control Plane manages the cluster, Worker Node runs the workload.
+
+---
+
+# ⭐ Interview Rapid Revision (30 Seconds)
+
+| Component                    | One-Line Answer                       |
+| ---------------------------- | ------------------------------------- |
+| **API Server**               | Entry point of Kubernetes             |
+| **etcd**                     | Stores cluster data                   |
+| **Scheduler**                | Selects the best Worker Node          |
+| **Controller Manager**       | Maintains desired state               |
+| **Cloud Controller Manager** | Manages cloud resources               |
+| **kubelet**                  | Runs and monitors Pods                |
+| **kube-proxy**               | Handles networking and load balancing |
+| **Container Runtime**        | Runs containers                       |
+
+---
+
+### ⭐ Most Important Interview Questions
+
+1. What are the main components of Kubernetes?
+2. What is kube-apiserver?
+3. What is etcd?
+4. What is kube-scheduler?
+5. What is kubelet?
+6. Difference between Control Plane and Worker Node.
+
+**Repeat Count:** 0 (Ye saare naye interview Q&A hain.)
+=======================================================================================================================
+Perfect. 👍 Is notes me se main **sirf interview ke important aur non-repeated questions** nikal raha hoon. Main pehle wale components (API Server, Scheduler, kubelet...) ko repeat **nahi** karunga.
+
+# Kubernetes Objects & Pod Interview Questions (Part-2)
+
+---
+
+# Q1. What are Kubernetes Objects?
+
+### Answer:
+
+**Kubernetes Objects** woh resources hote hain jo hum cluster me create karte hain taaki application ko deploy aur manage kar sake.
+
+Examples:
+
+* Pod
+* Service
+* Deployment
+* ReplicaSet
+* StatefulSet
+* DaemonSet
+* Job
+* CronJob
+* ConfigMap
+* Secret
+* Namespace
+
+**Easy Line:**
+
+> Kubernetes Objects are resources used to deploy and manage applications.
+
+---
+
+# Q2. What is a Pod in Kubernetes?
+
+### Answer:
+
+**Pod** Kubernetes ki **smallest deployable unit** hai.
+
+Ek Pod me **one ya multiple containers** ho sakte hain jo same **IP, Network aur Storage** share karte hain.
+
+**Easy Line:**
+
+> Pod is the smallest deployable unit in Kubernetes.
+
+---
+
+# Q3. Why can't we create containers directly in Kubernetes?
+
+### Answer:
+
+Kubernetes containers ko directly manage nahi karta.
+
+Container hamesha **Pod ke andar** run hota hai.
+
+Pod container ko networking, storage aur lifecycle provide karta hai.
+
+**Easy Line:**
+
+> Kubernetes manages Pods, not individual containers.
+
+---
+
+# Q4. How does a Pod work internally?
+
+### Answer:
+
+Jab Pod create hota hai:
+
+1. API Server request receive karta hai.
+2. Scheduler decide karta hai Pod kis Node par chalega.
+3. kubelet Pod create karta hai.
+4. Container Runtime container start karta hai.
+
+**Easy Flow:**
+
+```
+kubectl
+    ↓
+API Server
+    ↓
+Scheduler
+    ↓
+Worker Node
+    ↓
+kubelet
+    ↓
+Container Runtime
+    ↓
+Pod Running
+```
+
+**Easy Line:**
+
+> Scheduler selects the node, kubelet creates the Pod, and Container Runtime starts the container.
+
+---
+
+# Q5. Can a Pod contain multiple containers?
+
+### Answer:
+
+Yes.
+
+Ek Pod me multiple containers ho sakte hain.
+
+Ye containers:
+
+* Same IP share karte hain.
+* Same Volume share kar sakte hain.
+* localhost se communicate karte hain.
+
+**Example:**
+
+* Main Application Container
+* Logging Container (Sidecar)
+
+**Easy Line:**
+
+> Multiple containers inside a Pod share the same network and storage.
+
+---
+
+# Q6. What resources are shared inside a Pod?
+
+### Answer:
+
+Pod ke andar containers share karte hain:
+
+* Network
+* IP Address
+* Volumes
+* localhost communication
+
+Lekin har container ka apna filesystem aur process hota hai.
+
+**Easy Line:**
+
+> Containers inside a Pod share network and storage.
+
+---
+
+# Q7. What is a Kubernetes Node?
+
+### Answer:
+
+Node ek **Physical Machine** ya **Virtual Machine** hota hai jahan Pods run hote hain.
+
+Har Worker Node par kubelet, kube-proxy aur Container Runtime installed hota hai.
+
+**Easy Line:**
+
+> Node is the machine where Pods actually run.
+
+---
+
+# Q8. What are the types of Nodes?
+
+### Answer:
+
+### 1. Control Plane (Master Node)
+
+Cluster ko manage karta hai.
+
+Examples:
+
+* API Server
+* Scheduler
+* etcd
+
+---
+
+### 2. Worker Node
+
+Applications run karta hai.
+
+Examples:
+
+* kubelet
+* kube-proxy
+* Container Runtime
+
+**Easy Line:**
+
+> Master manages the cluster, Worker runs the application.
+
+---
+
+# Q9. What is the difference between Pod and Node?
+
+| Pod                                | Node                               |
+| ---------------------------------- | ---------------------------------- |
+| Smallest deployment unit           | Physical/Virtual Machine           |
+| Container run karta hai            | Pods run karta hai                 |
+| Temporary                          | Machine hai                        |
+| Scheduler Node par place karta hai | Worker resources provide karta hai |
+
+**Easy Line:**
+
+> Pod runs inside a Node.
+
+---
+
+# Q10. Can multiple Pods run on one Node?
+
+### Answer:
+
+Yes.
+
+Ek Node par multiple Pods run kar sakte hain.
+
+Ye Node ke available CPU aur Memory par depend karta hai.
+
+**Easy Line:**
+
+> One Node can run many Pods.
+
+---
+
+# Q11. What happens if a Pod crashes?
+
+### Answer:
+
+Agar Pod Deployment ya ReplicaSet ke through create hua hai, to Kubernetes automatically naya Pod create kar deta hai.
+
+Agar standalone Pod tha, to automatically recreate nahi hoga.
+
+**Easy Line:**
+
+> Deployment recreates failed Pods automatically.
+
+---
+
+# ⭐ Scenario-Based Interview Question
+
+## Q12. Suppose one Worker Node goes down. What happens?
+
+### Answer:
+
+* Us Node ke Pods unavailable ho jayenge.
+* Kubernetes detect karega ki Node down hai.
+* Agar Pods Deployment/ReplicaSet ke under hain, to Scheduler unhe kisi healthy Node par recreate kar dega.
+
+**Easy Line:**
+
+> Kubernetes automatically shifts Pods to another healthy Node.
+
+---
+
+# ⭐⭐⭐ Must Remember (1 Minute Revision)
+
+| Object          | One Line                         |
+| --------------- | -------------------------------- |
+| **Pod**         | Smallest deployable unit         |
+| **Node**        | Machine where Pods run           |
+| **Deployment**  | Manages Pods                     |
+| **ReplicaSet**  | Maintains desired number of Pods |
+| **Service**     | Stable IP + Load Balancing       |
+| **StatefulSet** | Stateful applications            |
+| **DaemonSet**   | One Pod per Node                 |
+| **Job**         | Runs once                        |
+| **CronJob**     | Runs on schedule                 |
+| **ConfigMap**   | Non-sensitive configuration      |
+| **Secret**      | Sensitive data                   |
+| **Namespace**   | Logical separation               |
+
+## ⭐ Most Important Interview Questions
+
+1. What is a Pod?
+2. How does a Pod work internally?
+3. Why can't Kubernetes run containers directly?
+4. What is a Node?
+5. Difference between Pod and Node?
+6. What happens if a Pod crashes?
+7. What happens when a Worker Node goes down?
+
+**Repeat Count:** 0 (Is response me pehle wale Component questions repeat nahi kiye gaye.)
+
+=======================================================================================================================
+Perfect. Is notes me se main **sirf naye interview questions** bana raha hoon. **Pod, Node aur basic Kubernetes Objects** wale questions pehle hi cover ho chuke hain, isliye unhe repeat nahi karunga.
+
+---
+
+# Kubernetes Service, ConfigMap & Secret Interview Questions (Part-3)
+
+## Q1. What is a Service in Kubernetes?
+
+### Answer:
+
+**Service** ek Kubernetes Object hai jo **Pods ko stable IP aur DNS Name** provide karta hai.
+
+Pods ka IP change ho sakta hai, lekin Service ka IP same rehta hai.
+
+**Easy Line:**
+
+> Service provides a stable endpoint to access Pods.
+
+---
+
+# Q2. Why do we need a Service in Kubernetes?
+
+### Answer:
+
+Pods dynamic hote hain aur recreate hone par unka IP change ho jata hai.
+
+Service:
+
+* Stable IP deti hai.
+* Stable DNS Name deti hai.
+* Load Balancing karti hai.
+* Client ko Pod IP yaad rakhne ki zarurat nahi hoti.
+
+**Easy Line:**
+
+> Service solves the Pod IP change problem.
+
+---
+
+# Q3. What problem does Kubernetes Service solve?
+
+### Answer:
+
+Agar Pod delete ho jaye aur naya Pod create ho jaye to uska IP change ho jata hai.
+
+Service ek permanent endpoint provide karti hai jisse application hamesha accessible rehti hai.
+
+**Easy Line:**
+
+> Service hides the changing Pod IP.
+
+---
+
+# Q4. How does a Service find the correct Pods?
+
+### Answer:
+
+Service **Labels** aur **Selectors** ka use karti hai.
+
+Jin Pods ke labels match hote hain, Service unhi Pods ko request forward karti hai.
+
+Example:
+
+```yaml
+selector:
+   app: my-app
+```
+
+Ye selector sirf `app=my-app` wale Pods ko traffic bhejega.
+
+**Easy Line:**
+
+> Service uses Labels and Selectors to identify Pods.
+
+---
+
+# Q5. How does load balancing work in Kubernetes Service?
+
+### Answer:
+
+Agar Deployment me multiple Pods hain, Service automatically requests ko un sab Pods me distribute karti hai.
+
+Example:
+
+```
+Request 1 → Pod A
+
+Request 2 → Pod B
+
+Request 3 → Pod C
+```
+
+**Easy Line:**
+
+> Service automatically distributes traffic among Pods.
+
+---
+
+# Q6. What are the different types of Services in Kubernetes?
+
+### Answer:
+
+| Service Type     | Use                                     |
+| ---------------- | --------------------------------------- |
+| **ClusterIP**    | Internal communication                  |
+| **NodePort**     | External access using Node IP + Port    |
+| **LoadBalancer** | Public access using Cloud Load Balancer |
+| **ExternalName** | Connect to an external service          |
+
+**Easy Line:**
+
+> ClusterIP, NodePort, LoadBalancer and ExternalName are the four Service types.
+
+---
+
+# Q7. What is ClusterIP?
+
+### Answer:
+
+ClusterIP default Service type hai.
+
+Ye application ko sirf cluster ke andar access karne deta hai.
+
+Internet se access nahi kar sakte.
+
+**Easy Line:**
+
+> ClusterIP provides internal access only.
+
+---
+
+# Q8. What is NodePort?
+
+### Answer:
+
+NodePort har Worker Node par ek fixed port open karta hai.
+
+Application ko access karte hain:
+
+```
+<NodeIP>:<NodePort>
+```
+
+Example:
+
+```
+192.168.1.10:30080
+```
+
+**Easy Line:**
+
+> NodePort exposes the application through Node IP and Port.
+
+---
+
+# Q9. What is LoadBalancer Service?
+
+### Answer:
+
+LoadBalancer cloud provider ke through ek **Public IP** create karta hai.
+
+Ye external users ko application access karne deta hai aur traffic ko multiple Pods me distribute karta hai.
+
+**Easy Line:**
+
+> LoadBalancer exposes the application to the Internet.
+
+---
+
+# Q10. What is ExternalName Service?
+
+### Answer:
+
+ExternalName external service ka DNS alias banata hai.
+
+Example:
+
+```
+mysql-db
+↓
+
+mydb.aws.com
+```
+
+Application sirf alias use karti hai.
+
+**Easy Line:**
+
+> ExternalName maps an external service using DNS.
+
+---
+
+# Q11. What is ConfigMap?
+
+### Answer:
+
+ConfigMap non-sensitive configuration store karta hai.
+
+Example:
+
+* Database URL
+* Application Mode
+* Port Number
+* Environment Variables
+
+**Easy Line:**
+
+> ConfigMap stores application configuration.
+
+---
+
+# Q12. What is Secret?
+
+### Answer:
+
+Secret sensitive information store karta hai.
+
+Example:
+
+* Password
+* API Key
+* SSL Certificate
+* Access Token
+
+Ye Base64 encoded format me store hota hai.
+
+**Easy Line:**
+
+> Secret stores sensitive data securely.
+
+---
+
+# Q13. Difference between ConfigMap and Secret?
+
+| ConfigMap          | Secret              |
+| ------------------ | ------------------- |
+| Non-sensitive data | Sensitive data      |
+| Plain text         | Base64 encoded      |
+| App configuration  | Passwords, API Keys |
+| Less secure        | More secure         |
+
+**Easy Line:**
+
+> ConfigMap stores configuration, Secret stores confidential data.
+
+---
+
+# Q14. Can ConfigMap and Secret be used inside Pods?
+
+### Answer:
+
+Yes.
+
+Dono ko Pod me inject kar sakte hain:
+
+* Environment Variables
+* Volume
+* Configuration Files
+
+**Easy Line:**
+
+> ConfigMap and Secret can be mounted as Environment Variables or Volumes.
+
+---
+
+# ⭐ Scenario-Based Interview Question
+
+## Q15. Suppose your database password changes. Will you rebuild the Docker image?
+
+### Answer:
+
+No.
+
+Password Docker image me store nahi karna chahiye.
+
+Usse **Secret** me update karenge aur Pod usi Secret ko use karega.
+
+**Easy Line:**
+
+> Store passwords in Secret, not inside the Docker image.
+
+---
+
+# ⭐ Scenario-Based Interview Question
+
+## Q16. Why should we use ConfigMap instead of hardcoding configuration?
+
+### Answer:
+
+Agar configuration hardcode karenge to chhote se change ke liye bhi image rebuild aur redeploy karna padega.
+
+ConfigMap use karne se bina image change kiye configuration update kar sakte hain.
+
+**Easy Line:**
+
+> ConfigMap separates configuration from application code.
+
+---
+
+# ⭐⭐⭐ 30-Second Revision
+
+| Object             | One-Line Answer                  |
+| ------------------ | -------------------------------- |
+| **Service**        | Stable IP + DNS for Pods         |
+| **ClusterIP**      | Internal access                  |
+| **NodePort**       | Access using NodeIP:Port         |
+| **LoadBalancer**   | Public Internet access           |
+| **ExternalName**   | Alias for external service       |
+| **ConfigMap**      | Non-sensitive configuration      |
+| **Secret**         | Sensitive data                   |
+| **Selector**       | Finds Pods using Labels          |
+| **Load Balancing** | Distributes requests across Pods |
+
+---
+
+## ⭐ Most Important Interview Questions
+
+1. What is a Kubernetes Service?
+2. Why do we need a Service?
+3. How does Service find Pods?
+4. Explain all Service types.
+5. Difference between ClusterIP, NodePort and LoadBalancer.
+6. What is ConfigMap?
+7. What is Secret?
+8. Difference between ConfigMap and Secret.
+9. How do you pass configuration to a Pod?
+10. Why should passwords be stored in Secrets instead of ConfigMaps?
+
+**Repeat Count:** 0 (Is set me pehle ke Pod, Node aur Component questions repeat nahi kiye gaye.)
+
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================

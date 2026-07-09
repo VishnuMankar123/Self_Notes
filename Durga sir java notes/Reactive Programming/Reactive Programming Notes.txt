@@ -6,6 +6,50 @@ Notes : Learn code with Durgesh Notes
 Introduction to Reactive Programming | What is Asynchronous Programming in Detail | Hindi
 ===========================================================================================
 
+Reactive ka Meaning
+
+Reactive = React karna (Response dena) kisi event ya change par.
+
+Simple language me:
+
+Jab koi event ho, to system uske response me turant action le, usko Reactive kehte hain.
+
+Real Life Example 1: Door Bell
+Koi door bell bajata hai. (Event)
+Aap darwaza kholte ho. (Reaction)
+
+Yaha aap react kar rahe ho, isliye ye reactive behavior hai.
+
+Real Life Example 2: WhatsApp
+Friend ne message bheja. (Event)
+WhatsApp turant notification dikha deta hai. (Reaction)
+
+App continuously check nahi kar raha ki message aaya ya nahi.
+Jab message aata hai tabhi react karta hai.
+
+Real Life Example 3: YouTube Live Chat
+Viewer comment karta hai.
+Chat screen turant update ho jati hai.
+
+Ye bhi reactive hai.
+
+Programming me Reactive ka Meaning
+
+Normal programming me:
+
+Program → Data maangta hai → Wait karta hai → Data milta hai → Process karta hai
+
+Reactive programming me:
+
+Data aaya (Event)
+        ↓
+Program automatically react karta hai
+        ↓
+Data process karta hai
+
+Yani program event-driven hota hai.
+============================================================================================
+
 Below are **Q&A-style notes** in **Hindi-wali English**, exactly like a **Teacher–Student conversation**, covering **all important concepts** from the video **“Introduction to Reactive Programming | Asynchronous Programming”**.
 
 I’ve kept the language very **simple**, **beginner-friendly**, and **step-by-step**.

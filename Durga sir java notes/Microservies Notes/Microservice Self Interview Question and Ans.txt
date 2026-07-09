@@ -5,7 +5,8 @@ Link for This Question : https://www.datacamp.com/blog/microservices-interview-q
 
 ### ✅ Interview Answer
 
-A **Microservice** is a software architecture where a large application is divided into **small, independent services**. Each service is responsible for **one specific business functionality**, has its own codebase, can be **developed, deployed, and scaled independently**, and communicates with other services using lightweight protocols like **REST APIs** or **Messaging (Kafka/RabbitMQ)**.
+A **Microservice** is a software architecture where a large application is divided into **small, independent services**. Each service is responsible 
+for **one specific business functionality**, has its own codebase, can be **developed, deployed, and scaled independently**, and communicates with other services using lightweight protocols like **REST APIs** or **Messaging (Kafka/RabbitMQ)**.
 
 For example, in an E-commerce application:
 
@@ -275,7 +276,8 @@ Ye 4 points bolne ke baad agar interviewer aur detail puche, tab example ke saat
 
 ## ✅ Interview Answer
 
-Microservices communicate with each other using different communication mechanisms depending on the application requirements. The three most common communication methods are:
+Microservices communicate with each other using different communication mechanisms depending on the application requirements.
+ The three most common communication methods are:
 
 ### **1. HTTP/REST APIs (Synchronous Communication)**
 
@@ -363,7 +365,9 @@ Ye answer **tumhare self notes me already available hai (API Gateway section)**,
 
 ## ✅ Interview Answer
 
-An **API Gateway** is a **single entry point** for all client requests in a Microservices Architecture. Instead of clients calling multiple microservices directly, they send all requests to the API Gateway. The API Gateway then routes the request to the appropriate microservice and returns the response to the client.
+An **API Gateway** is a **single entry point** for all client requests in a Microservices Architecture. 
+Instead of clients calling multiple microservices directly, they send all requests to the API Gateway.
+The API Gateway then routes the request to the appropriate microservice and returns the response to the client.
 
 Using an API Gateway hides the internal microservices from clients and provides centralized management of common functionalities.
 
@@ -594,7 +598,8 @@ Microservices register their address in Eureka, and other services ask Eureka fo
 
 ## 🎤 30-Second Interview Answer
 
-> **Service Discovery is a mechanism that allows microservices to register themselves with a Service Registry like Eureka Server and discover other services using their service name instead of hardcoded IP addresses and ports. This makes communication dynamic and automatically handles IP and port changes.**
+> **Service Discovery is a mechanism that allows microservices to register themselves with a Service Registry like Eureka Server and discover other services using their service name instead of hardcoded IP addresses and ports. 
+This makes communication dynamic and automatically handles IP and port changes.**
 
 
 ==============================================================================================================
@@ -816,7 +821,8 @@ Since session data is not stored inside individual service instances, there is n
 
 ## 🎤 30-Second Interview Answer
 
-> **A Stateless Microservice does not store session or client data between requests. Every request is processed independently. If session data is required, it is stored in an external system such as Redis, Memcached, or a database. Stateless services are easier to scale, provide better fault tolerance, and simplify deployment because any service instance can handle any request.**
+> **A Stateless Microservice does not store session or client data between requests. Every request is processed independently. If session data is required, it is stored in an external system such as Redis, Memcached, or a database. 
+Stateless services are easier to scale, provide better fault tolerance, and simplify deployment because any service instance can handle any request.**
 
 ---
 
@@ -1219,7 +1225,8 @@ Ye question **tumhare self notes me directly cover nahi hai**, isliye main **tum
 
 The **Circuit Breaker Pattern** is a design pattern used in **Microservices** to prevent one failing service from affecting the entire system.
 
-When a microservice repeatedly fails, the Circuit Breaker **stops sending requests** to that service for some time. This prevents unnecessary load on the failed service and allows it time to recover.
+When a microservice repeatedly fails, the Circuit Breaker **stops sending requests** to that service for some time. 
+This prevents unnecessary load on the failed service and allows it time to recover.
 
 ---
 
