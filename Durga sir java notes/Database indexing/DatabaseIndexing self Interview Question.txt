@@ -7,7 +7,8 @@
 
 **Answer:**
 
-Indexing is important because databases generally contain millions of records. Searching every record one by one is slow. Indexing helps the database locate required records quickly by reducing the number of disk blocks accessed, which improves query performance.
+Indexing is important because databases generally contain millions of records. Searching every record one by one is slow. 
+Indexing helps the database locate required records quickly by reducing the number of disk blocks accessed, which improves query performance.
 
 ---
 
@@ -1501,6 +1502,7 @@ Therefore,
 * ✅ Lecture-108 → **Q27–Q46**
 * ✅ Lecture-109 → **Q47–Q70**
 * ✅ Lecture-110 → **Q71–Q95**
+* ✅ Lecture-110 → **Q71–Q95**
 
 ### 💡 Improvement Suggestion
 
@@ -1512,7 +1514,820 @@ Lecture 110 se questions **scenario-based** bhi banne lage hain. Interview me ai
 Agle lectures me main **theory + scenario-based + tricky interview questions** mix karke dunga. Isse Java Developer (2–5 years) interviews ke liye tumhari preparation aur strong ho jayegi.
 
 ==============================================================================================================
+Bilkul. Main **Q1–Q95 repeat nahi karunga**. Is Lecture-111 se **Q96** se continue kar raha hoon. Maine sirf **new interview questions** nikale hain jo previous lectures me cover nahi hue. Source: 
+
+---
+
+# DBMS Indexing Interview Questions (Lecture-111)
+
+## (Question No. 96 Onwards)
+
+---
+
+## Q96. What is the definition of a Primary Index?
+
+**Answer:**
+
+A **Primary Index** is an index created on **Ordered (Sorted)** and **Unique (Key)** data to make searching faster.
+
+---
+
+## Q97. What are the mandatory conditions for creating a Primary Index?
+
+**Answer:**
+
+There are two conditions:
+
+* Data must be **Ordered (Sorted)**.
+* Attribute must be **Unique (Key)**.
+
+If either condition fails, Primary Index cannot be used.
+
+---
+
+## Q98. What happens if the data is ordered but not unique?
+
+**Answer:**
+
+Primary Index cannot be created.
+
+Instead, **Clustered Index** is used.
+
+Example:
+
+```text
+10
+20
+20
+30
+30
+```
+
+---
+
+## Q99. What happens if the data is unique but unordered?
+
+**Answer:**
+
+Primary Index cannot be created.
+
+Instead, **Secondary Index** is used.
+
+Example:
+
+```text
+50
+10
+90
+5
+70
+```
+
+---
+
+## Q100. Which column usually gets a Primary Index in a Student table?
+
+**Answer:**
+
+The **Roll Number** column because it is:
+
+* Unique
+* Sorted
+
+Hence, it is suitable for a Primary Index.
+
+---
+
+## Q101. Does a Primary Index store all the columns of a table?
+
+**Answer:**
+
+No.
+
+It stores only:
+
+* Key Value
+* Pointer (Block/Page Address)
+
+The remaining column values stay in the data blocks.
+
+---
+
+## Q102. Why doesn't a Primary Index store complete records?
+
+**Answer:**
+
+Because storing only **Key + Pointer** reduces storage space and makes searching faster.
+
+---
+
+## Q103. Why is a unique key preferred in a Primary Index?
+
+**Answer:**
+
+A unique key identifies exactly one record.
+
+This avoids ambiguity and allows direct access to the required record.
+
+---
+
+## Q104. Why is Train Number a better Primary Index than Train Name?
+
+**Answer:**
+
+Because:
+
+* Train Number is unique.
+* Train Name may not always be unique.
+
+A Primary Index should always be based on a unique key.
+
+---
+
+## Q105. Which fields are commonly used as Primary Index keys?
+
+**Answer:**
+
+Examples:
+
+* Employee ID
+* Roll Number
+* Registration Number
+* Passport Number
+* Aadhaar Number
+
+These values are unique.
+
+---
+
+## Q106. Is a Primary Index generally Dense or Sparse?
+
+**Answer:**
+
+Generally, a **Primary Index is Sparse**.
+
+Because it stores one index entry for each data block instead of every record.
+
+---
+
+## Q107. Why is a Sparse Primary Index preferred over a Dense Primary Index?
+
+**Answer:**
+
+Because Sparse Index:
+
+* Uses less storage.
+* Stores fewer pointers.
+* Requires fewer index entries.
+* Is easier to maintain.
+
+---
+
+## Q108. What is an Anchor Record?
+
+**Answer:**
+
+The **first record of every data block** stored in a Sparse Index is called the **Anchor Record**.
+
+Example:
+
+```text
+Block1
+
+1
+2
+3
+4
+
+Anchor = 1
+```
+
+---
+
+## Q109. Why is an Anchor Record stored in a Sparse Index?
+
+**Answer:**
+
+The Anchor Record helps identify which data block should be searched.
+
+It acts as the reference point for the entire block.
+
+---
+
+## Q110. How is the number of entries calculated in a Sparse Primary Index?
+
+**Answer:**
+
+Formula:
+
+```text
+Number of Index Entries
+=
+Number of Data Blocks
+```
+
+Each block contributes only one index entry.
+
+---
+
+## Q111. How does searching work in a Sparse Primary Index?
+
+**Answer:**
+
+Steps:
+
+1. Perform Binary Search on the Index Table.
+2. Find the nearest Anchor Record.
+3. Follow the Pointer.
+4. Search only that data block.
+
+---
+
+## Q112. How do you find the correct block if the exact key is not present in the Sparse Index?
+
+**Answer:**
+
+Find the two nearest Anchor Records.
+
+Example:
+
+```text
+Index
+
+1 → Block1
+
+5 → Block2
+
+9 → Block3
+```
+
+Search Key = **8**
+
+Since:
+
+```text
+5 < 8 < 9
+```
+
+The record must be inside **Block2**.
+
+---
+
+## Q113. Which search algorithm is used in a Primary Index?
+
+**Answer:**
+
+**Binary Search**.
+
+Because the Primary Index is maintained in sorted order.
+
+---
+
+## Q114. On what value is the Primary Index time complexity calculated?
+
+**Answer:**
+
+Time complexity is calculated using the **number of Index Blocks**, **not** the number of Data Blocks.
+
+Formula:
+
+```text
+log₂(Index Blocks) + 1
+```
+
+---
+
+## Q115. Why is Binary Search possible in a Primary Index?
+
+**Answer:**
+
+Because the Index Table is always maintained in sorted order.
+
+Binary Search requires sorted data.
+
+---
+
+## Q116. What is the time complexity of searching in a Primary Index?
+
+**Answer:**
+
+Time Complexity:
+
+```text
+O(log N)
+```
+
+Formula:
+
+```text
+log₂(N) + 1
+```
+
+---
+
+## Q117. Why is '+1' added to the Primary Index search formula?
+
+**Answer:**
+
+Because:
+
+* `log₂(N)` is used to search the Index Table.
+* `+1` is required to access the actual data block using the pointer.
+
+---
+
+## Q118. What are the main advantages of a Primary Index?
+
+**Answer:**
+
+* Faster searching.
+* Lower I/O Cost.
+* Fewer block accesses.
+* Less storage (Sparse Index).
+* Efficient Binary Search.
+
+---
+
+## Q119. Give a real-life example of a Primary Index.
+
+**Answer:**
+
+A Library.
+
+Each book has a unique **ISBN Number**.
+
+The index stores:
+
+```text
+ISBN Number
+
+↓
+
+Rack Number
+```
+
+Using the ISBN, we directly reach the correct rack without checking every book.
+
+---
+
+## Q120. Why is a Primary Index more efficient than scanning the complete table?
+
+**Answer:**
+
+Because it:
+
+* Avoids Full Table Scan.
+* Uses Binary Search.
+* Reads fewer disk blocks.
+* Reduces I/O Cost.
+* Improves query performance.
+
+---
+
+# 📌 Progress Tracker
+
+* ✅ Lecture-107 → **Q1–Q26**
+* ✅ Lecture-108 → **Q27–Q46**
+* ✅ Lecture-109 → **Q47–Q70**
+* ✅ Lecture-110 → **Q71–Q95**
+* ✅ Lecture-111 → **Q96–Q120**
+
+### 💡 Interview Tip
+
+Lecture 111 se interview me ye **tricky questions** bahut pooche jaate hain:
+
+* **Why is Primary Index generally Sparse and not Dense?**
+* **What is an Anchor Record?**
+* **Why does Primary Index store only Key + Pointer?**
+* **Why is Train Number preferred over Train Name as an index?**
+* **Why is `log₂(N)` calculated on Index Blocks instead of Data Blocks?**
+
+Ye 5 questions 2–5 years Java Backend Developer interviews me kaafi common hain aur inhe achchhe se yaad rakhna.
+
 ==============================================================================================================
+Perfect. Main **Q1–Q120 repeat nahi karunga**. Is Lecture-112 aur Lecture-113 se **Q121** se continue kar raha hoon. Maine sirf **new interview questions** nikale hain jo previous lectures me cover nahi hue. Source: 
+
+---
+
+# DBMS Indexing Interview Questions (Lecture-112 & 113)
+
+## (Question No. 121 Onwards)
+
+---
+
+## Q121. What is a Clustered Index?
+
+**Answer:**
+
+A **Clustered Index** is created on **Ordered (Sorted)** data where the indexed column is a **Non-Key** (duplicate values are allowed).
+
+---
+
+## Q122. What are the conditions required for creating a Clustered Index?
+
+**Answer:**
+
+Two conditions must be satisfied:
+
+* Data must be **Ordered (Sorted)**.
+* Indexed column must be **Non-Key** (duplicates allowed).
+
+---
+
+## Q123. Why can't a Primary Index be created on duplicate values?
+
+**Answer:**
+
+Because a Primary Index requires a **Unique Key**.
+
+If duplicate values exist, **Clustered Index** should be used instead.
+
+---
+
+## Q124. Which column is generally used as the search key in a Clustered Index?
+
+**Answer:**
+
+The **Non-Key ordered column** is used as the search key.
+
+Example:
+
+```text
+Department Number
+```
+
+---
+
+## Q125. Does the Clustered Index store duplicate entries for duplicate values?
+
+**Answer:**
+
+No.
+
+Even if a value appears many times, the index stores **only one entry** for that distinct value.
+
+Example:
+
+```text
+Department
+
+1
+1
+1
+1
+
+↓
+
+Index
+
+1 → Block1
+```
+
+---
+
+## Q126. Why is only one index entry stored for duplicate values?
+
+**Answer:**
+
+Because the purpose of the index is to locate the **starting block**.
+
+After reaching the first block, remaining duplicate records are read from the data blocks.
+
+---
+
+## Q127. Where does the pointer of a Clustered Index point?
+
+**Answer:**
+
+The pointer always points to the **first occurrence** of that value in the data blocks.
+
+---
+
+## Q128. What is a Block Hanger?
+
+**Answer:**
+
+A **Block Hanger** is an extra pointer used when duplicate records continue into the next block.
+
+It links one data block to another.
+
+---
+
+## Q129. Why is a Block Hanger required?
+
+**Answer:**
+
+When all duplicate records cannot fit into a single block.
+
+Example:
+
+```text
+Block5
+
+4
+4
+4
+
+↓
+
+Block Hanger
+
+↓
+
+Block6
+
+4
+4
+4
+```
+
+---
+
+## Q130. How does searching work when a Block Hanger exists?
+
+**Answer:**
+
+Steps:
+
+1. Search the Index Table.
+2. Reach the first data block.
+3. Follow the Block Hanger.
+4. Continue reading the next block until all matching records are found.
+
+---
+
+## Q131. What is the search complexity of a Clustered Index?
+
+**Answer:**
+
+Minimum:
+
+```text
+log₂N + 1
+```
+
+If Block Hangers exist:
+
+```text
+log₂N + Extra Block Access
+```
+
+---
+
+## Q132. Why can Clustered Index sometimes take more time than Primary Index?
+
+**Answer:**
+
+Because duplicate values may span multiple blocks.
+
+Additional block reads are required through Block Hangers.
+
+---
+
+## Q133. Is a Clustered Index generally Dense or Sparse?
+
+**Answer:**
+
+Generally **Sparse**.
+
+Because only one entry is maintained for each distinct value.
+
+---
+
+## Q134. Can a table have multiple Clustered Indexes?
+
+**Answer:**
+
+Generally **No**.
+
+Because data can be physically arranged in only one order at a time.
+
+> **Interview Note:** Modern DBMS implementations differ, but this lecture explains the exam-oriented concept. 
+
+---
+
+## Q135. What is the biggest difference between Primary Index and Clustered Index?
+
+**Answer:**
+
+| Primary Index   | Clustered Index      |
+| --------------- | -------------------- |
+| Unique Data     | Duplicate Data       |
+| Key Attribute   | Non-Key Attribute    |
+| No Block Hanger | May use Block Hanger |
+
+---
+
+## Q136. What is a Secondary Index?
+
+**Answer:**
+
+A **Secondary Index** is an additional index created on another column to speed up searching when the original data is unordered.
+
+---
+
+## Q137. When is a Secondary Index used?
+
+**Answer:**
+
+When the original table data is **Unordered**.
+
+It can be created on:
+
+* Key Attributes
+* Non-Key Attributes
+
+---
+
+## Q138. Why is a Secondary Index called an "Additional Index"?
+
+**Answer:**
+
+Because the table may already have a Primary Index, and the Secondary Index is created on another column to improve searching.
+
+---
+
+## Q139. Why do we need a Secondary Index if a Primary Index already exists?
+
+**Answer:**
+
+A Primary Index works efficiently only on its indexed column.
+
+If queries search another column (like PAN or Name), a Secondary Index improves performance.
+
+---
+
+## Q140. Does a Secondary Index change the original table order?
+
+**Answer:**
+
+No.
+
+The original table remains unordered.
+
+Only the **Index Table** is stored in sorted order.
+
+---
+
+## Q141. Is the Secondary Index Table sorted?
+
+**Answer:**
+
+Yes.
+
+The Index Table is always sorted so that **Binary Search** can be used.
+
+---
+
+## Q142. Is a Secondary Index Dense or Sparse?
+
+**Answer:**
+
+**Always Dense.**
+
+Because every record requires an index entry.
+
+---
+
+## Q143. Why is a Secondary Index always Dense?
+
+**Answer:**
+
+Since the original data is unordered, there are no Anchor Records.
+
+Therefore, every record must have its own pointer.
+
+---
+
+## Q144. How is the number of entries calculated in a Secondary Index?
+
+**Answer:**
+
+Formula:
+
+```text
+Number of Secondary Index Entries
+=
+Number of Records
+```
+
+Every record contributes one index entry.
+
+---
+
+## Q145. How does searching work in a Secondary Index (Key Attribute)?
+
+**Answer:**
+
+Steps:
+
+1. Binary Search on the Secondary Index.
+2. Get the Pointer.
+3. Read the actual data block.
+
+Time Complexity:
+
+```text
+log₂N + 1
+```
+
+---
+
+## Q146. How does a Secondary Index work for Non-Key Attributes?
+
+**Answer:**
+
+Duplicate values share a common index entry.
+
+That entry points to an **Intermediate Pointer Block**, which stores pointers to all matching records.
+
+---
+
+## Q147. What is an Intermediate Pointer Block?
+
+**Answer:**
+
+It is an extra block containing pointers to all records that have the same duplicate value.
+
+Example:
+
+```text
+Rahul
+
+↓
+
+Pointer Block
+
+↓
+
+Row1
+
+↓
+
+Row3
+
+↓
+
+Row5
+```
+
+---
+
+## Q148. Why is an Intermediate Pointer Block needed?
+
+**Answer:**
+
+Because one value may correspond to multiple records.
+
+Instead of storing multiple entries in the Index Table, one entry points to a list of record pointers.
+
+---
+
+## Q149. Which searching algorithm is used in a Secondary Index?
+
+**Answer:**
+
+**Binary Search**, because the Index Table is maintained in sorted order.
+
+---
+
+## Q150. Compare all three Indexes in one table.
+
+| Feature          | Primary       | Clustered     | Secondary                  |
+| ---------------- | ------------- | ------------- | -------------------------- |
+| Data             | Ordered       | Ordered       | Unordered                  |
+| Key              | Unique        | Non-Key       | Key / Non-Key              |
+| Index Type       | Sparse        | Sparse        | Dense                      |
+| Duplicate Values | Not Allowed   | Allowed       | Allowed                    |
+| Extra Structure  | None          | Block Hanger  | Intermediate Pointer Block |
+| Search           | Binary Search | Binary Search | Binary Search              |
+
+---
+
+# 📌 Progress Tracker
+
+* ✅ Lecture-107 → **Q1–Q26**
+* ✅ Lecture-108 → **Q27–Q46**
+* ✅ Lecture-109 → **Q47–Q70**
+* ✅ Lecture-110 → **Q71–Q95**
+* ✅ Lecture-111 → **Q96–Q120**
+* ✅ Lecture-112 & 113 → **Q121–Q150**
+
+### 🎯 Most Important Interview Questions from These Lectures
+
+Interview me in questions ke aane ke chances bahut zyada hote hain:
+
+1. **What is Block Hanger and why is it needed?**
+2. **Why is Clustered Index Sparse?**
+3. **Why is Secondary Index always Dense?**
+4. **Difference between Block Hanger and Intermediate Pointer Block?**
+5. **Why is the Secondary Index called an Additional Index?**
+6. **Can a table have multiple Clustered Indexes?**
+7. **How does searching happen in a Secondary Index for duplicate values?**
+8. **Compare Primary, Clustered, and Secondary Index with a real example.**
+
+Ye questions 3–5 years Java Backend Developer interviews me frequently pooche jaate hain aur inka clear concept hona bahut important hai.
+
 ==============================================================================================================
 ==============================================================================================================
 ==============================================================================================================

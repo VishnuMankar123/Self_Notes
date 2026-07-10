@@ -794,6 +794,295 @@ ConfigMap use karne se bina image change kiye configuration update kar sakte hai
 **Repeat Count:** 0 (Is set me pehle ke Pod, Node aur Component questions repeat nahi kiye gaye.)
 
 =======================================================================================================================
+Perfect 👍. Is topic me **LoadBalancer** aur **ExternalName** ke basic questions hum pehle hi cover kar chuke hain. Isliye main **NodePort vs LoadBalancer** aur **advanced interview questions** de raha hoon. **Koi bhi previous question repeat nahi hoga.**
+
+---
+
+# Kubernetes NodePort vs LoadBalancer Interview Questions (Part-6)
+
+## Q1. What is NodePort Service?
+
+### Answer:
+
+**NodePort** Service application ko **Node IP + Port** ke through bahar se access karne deti hai.
+
+Format:
+
+```text
+http://<NodeIP>:<NodePort>
+```
+
+Example:
+
+```text
+http://192.168.1.10:30080
+```
+
+**Easy Line:**
+
+> NodePort exposes the application using Node IP and a fixed port.
+
+---
+
+# Q2. What is the default NodePort range?
+
+### Answer:
+
+By default, Kubernetes NodePort range hoti hai:
+
+```text
+30000 - 32767
+```
+
+Agar manually port specify nahi karte, to Kubernetes isi range se automatically ek port assign karta hai.
+
+**Easy Line:**
+
+> Default NodePort range is **30000–32767**.
+
+---
+
+# Q3. How do users access an application using NodePort?
+
+### Answer:
+
+User application ko access karta hai:
+
+```text
+http://<NodeIP>:<NodePort>
+```
+
+Example:
+
+```text
+http://192.168.1.10:30080
+```
+
+Request Flow:
+
+```text
+User
+   ↓
+NodeIP:30080
+   ↓
+Service
+   ↓
+Pod
+```
+
+**Easy Line:**
+
+> Access format is NodeIP + NodePort.
+
+---
+
+# Q4. Why is NodePort not preferred in Production?
+
+### Answer:
+
+NodePort me:
+
+* Node IP yaad rakhna padta hai.
+* Port number yaad rakhna padta hai.
+* User-friendly URL nahi hota.
+* Direct Internet exposure secure nahi hota.
+
+Isliye Production me generally **LoadBalancer** ya **Ingress** use kiya jata hai.
+
+**Easy Line:**
+
+> NodePort is mainly used for development and testing.
+
+---
+
+# Q5. How does LoadBalancer work internally?
+
+### Answer:
+
+Jab hum `type: LoadBalancer` use karte hain:
+
+1. Kubernetes internally ek **NodePort** create karta hai.
+2. Cloud Provider us NodePort ke upar Public Load Balancer create karta hai.
+3. Public traffic Service ke through Pods tak pahunchti hai.
+
+Flow:
+
+```text
+Internet
+   ↓
+Cloud Load Balancer
+   ↓
+NodePort
+   ↓
+Service
+   ↓
+Pods
+```
+
+**Easy Line:**
+
+> LoadBalancer works on top of NodePort.
+
+---
+
+# Q6. Does LoadBalancer create a NodePort internally?
+
+### Answer:
+
+**Yes.**
+
+LoadBalancer Service internally ek NodePort create karti hai aur Cloud Load Balancer usi NodePort ko use karta hai.
+
+**Easy Line:**
+
+> LoadBalancer = NodePort + Cloud Load Balancer.
+
+> ⭐ Ye bahut common interview question hai.
+
+---
+
+# Q7. When should you use NodePort?
+
+### Answer:
+
+NodePort use karte hain:
+
+* Minikube
+* Docker Desktop Kubernetes
+* Local Development
+* Testing
+* Lab Practice
+
+**Easy Line:**
+
+> NodePort is best for development and testing.
+
+---
+
+# Q8. When should you use LoadBalancer?
+
+### Answer:
+
+LoadBalancer use karte hain:
+
+* Production Applications
+* Public APIs
+* Banking Applications
+* E-commerce Websites
+* Cloud Deployments
+
+**Easy Line:**
+
+> LoadBalancer is best for production environments.
+
+---
+
+# Q9. What is the main advantage of LoadBalancer over NodePort?
+
+### Answer:
+
+LoadBalancer:
+
+* Public IP provide karta hai.
+* User-friendly access deta hai.
+* Automatic load balancing karta hai.
+* Cloud provider manage karta hai.
+
+NodePort me manually Node IP aur Port use karna padta hai.
+
+**Easy Line:**
+
+> LoadBalancer provides easier and more scalable public access.
+
+---
+
+# ⭐⭐⭐ Scenario-Based Questions
+
+## Q10. You are using Minikube on your laptop. Which Service type will you choose?
+
+### Answer:
+
+**NodePort**
+
+Kyuki local development aur testing ke liye NodePort simple aur sufficient hota hai.
+
+**Easy Line:**
+
+> Minikube → NodePort.
+
+---
+
+## Q11. Your application will be used by millions of users on AWS. Which Service type will you choose?
+
+### Answer:
+
+**LoadBalancer**
+
+Kyuki AWS automatically Public Load Balancer create karega aur traffic multiple Pods me distribute karega.
+
+**Easy Line:**
+
+> Production on Cloud → LoadBalancer.
+
+---
+
+## Q12. A user says, "I can access the application using Node IP but not using the domain name." What could be the reason?
+
+### Answer:
+
+NodePort sirf **NodeIP:Port** provide karta hai.
+
+Domain name use karne ke liye generally **Ingress** ya external DNS configuration ki zarurat hoti hai.
+
+**Easy Line:**
+
+> NodePort doesn't provide a domain name by itself.
+
+---
+
+# ⭐⭐⭐ Interview Trap Question
+
+## Q13. Which Service type is cloud-dependent?
+
+### Answer:
+
+**LoadBalancer**
+
+Kyuki ye AWS, Azure ya GCP jaise cloud providers ke Load Balancer service ka use karta hai.
+
+**Easy Line:**
+
+> LoadBalancer is cloud-dependent.
+
+---
+
+# ⭐⭐⭐ Quick Comparison
+
+| Feature        | NodePort      | LoadBalancer          |
+| -------------- | ------------- | --------------------- |
+| Access         | NodeIP:Port   | Public IP             |
+| Environment    | Dev / Testing | Production            |
+| Public Access  | Manual        | Automatic             |
+| Cloud Required | ❌ No          | ✅ Yes                 |
+| URL            | NodeIP:30080  | myapp.com / Public IP |
+
+---
+
+# ⭐ Most Important Interview Questions
+
+1. What is NodePort?
+2. What is the default NodePort range?
+3. How do users access an application using NodePort?
+4. Why is NodePort not preferred in Production?
+5. How does LoadBalancer work internally?
+6. Does LoadBalancer create a NodePort internally?
+7. When should you use NodePort?
+8. When should you use LoadBalancer?
+9. Which Service type is used in Minikube?
+10. **Difference between NodePort and LoadBalancer.** ⭐⭐⭐⭐⭐
+
+**Repeat Count:** 0 (Is set me pehle cover kiye gaye LoadBalancer, ExternalName, Service basics aur Deployment questions repeat nahi kiye gaye.)
+
 =======================================================================================================================
 =======================================================================================================================
 =======================================================================================================================

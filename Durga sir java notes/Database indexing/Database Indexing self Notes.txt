@@ -6112,7 +6112,8 @@ Sure! Here's the selected text in a writing block.
 
 # Binary Search
 
-**Binary Search** ek searching algorithm hai jo **sirf sorted (ordered)** data par kaam karta hai. Isme har step me search space aadhi (half) ho jati hai, isliye ye **Linear Search** se bahut fast hota hai.
+**Binary Search** ek searching algorithm hai jo **sirf sorted (ordered)** data par kaam karta hai.
+ Isme har step me search space aadhi (half) ho jati hai, isliye ye **Linear Search** se bahut fast hota hai.
 
 ## Example
 
