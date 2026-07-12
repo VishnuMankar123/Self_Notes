@@ -1084,6 +1084,171 @@ Kyuki ye AWS, Azure ya GCP jaise cloud providers ke Load Balancer service ka use
 **Repeat Count:** 0 (Is set me pehle cover kiye gaye LoadBalancer, ExternalName, Service basics aur Deployment questions repeat nahi kiye gaye.)
 
 =======================================================================================================================
+Perfect 👍. Main apna promise follow kar raha hoon: **kube-scheduler par pehle question aa chuka hai**, isliye **"What is kube-scheduler?"** ya **"What is the use of kube-scheduler?"** ko dobara **repeat nahi karunga**.
+
+Ab is notes se **sirf naye interview questions** nikal raha hoon.
+
+---
+
+# Kubernetes Scheduler Interview Questions (New Questions Only)
+
+## Q1. What factors does kube-scheduler consider before assigning a Pod to a Node?
+
+### Answer:
+
+kube-scheduler Pod ko Node assign karne se pehle ye check karta hai:
+
+* CPU availability
+* Memory availability
+* Node Labels
+* Taints & Tolerations
+* Node Affinity / Anti-Affinity
+* Resource Requests & Limits
+
+**Easy Line:**
+
+> Scheduler selects the best node based on resources and scheduling rules.
+
+---
+
+# Q2. Does kube-scheduler create Pods?
+
+### Answer:
+
+**No.**
+
+Scheduler sirf Pod ke liye suitable Node select karta hai.
+
+Pod create aur run karne ka kaam **kubelet** aur **Container Runtime** karte hain.
+
+**Easy Line:**
+
+> Scheduler assigns the Pod; kubelet runs the Pod.
+
+---
+
+# Q3. What is an Unscheduled Pod?
+
+### Answer:
+
+Jab Pod create hota hai aur abhi kisi Node par assign nahi hua hota, use **Unscheduled Pod** kehte hain.
+
+Scheduler uske liye suitable Node choose karta hai.
+
+**Easy Line:**
+
+> An unscheduled Pod has no assigned Node.
+
+---
+
+# Q4. What happens immediately after kube-scheduler selects a Node?
+
+### Answer:
+
+Scheduler Node select karta hai.
+
+Uske baad:
+
+* API Server assignment update karta hai.
+* Selected Node ka **kubelet** Pod create karta hai.
+* Container Runtime container start karta hai.
+
+**Easy Line:**
+
+> After scheduling, kubelet starts the Pod.
+
+---
+
+# Q5. Can kube-scheduler move a running Pod to another Node automatically?
+
+### Answer:
+
+**No.**
+
+Ek baar Pod schedule ho gaya to scheduler usse automatically dusre Node par move nahi karta.
+
+Agar Pod recreate hoga ya Node fail hoga, tab naya Pod kisi aur Node par schedule ho sakta hai.
+
+**Easy Line:**
+
+> Scheduler places a Pod only during scheduling, not after it is running.
+
+---
+
+# ⭐⭐⭐ Scenario-Based Questions
+
+## Q6. Suppose a Node doesn't have enough CPU and Memory. Will kube-scheduler place the Pod there?
+
+### Answer:
+
+**No.**
+
+Scheduler available resources check karta hai.
+
+Agar resources insufficient hain, to dusra suitable Node choose karega.
+
+Agar koi suitable Node nahi mila to Pod **Pending** state me rahega.
+
+**Easy Line:**
+
+> No resources → Pod stays Pending.
+
+---
+
+## Q7. A Pod is stuck in Pending state. Which Kubernetes component should you investigate first?
+
+### Answer:
+
+Sabse pehle **kube-scheduler** aur Pod events check karenge.
+
+Command:
+
+```bash
+kubectl describe pod <pod-name>
+```
+
+Isse scheduling failure ka reason mil sakta hai.
+
+**Easy Line:**
+
+> Pending Pod → Check scheduler events.
+
+---
+
+# ⭐⭐⭐ Interview Trap Question
+
+## Q8. Which component decides "where" a Pod will run, and which component actually starts the Pod?
+
+### Answer:
+
+* **kube-scheduler** → Decide karta hai Pod kis Node par chalega.
+* **kubelet** → Selected Node par Pod start karta hai.
+
+**Easy Line:**
+
+> Scheduler decides, kubelet executes.
+
+---
+
+# ⭐ Quick Revision
+
+| Component             | Responsibility   |
+| --------------------- | ---------------- |
+| **API Server**        | Receives request |
+| **Scheduler**         | Selects Node     |
+| **kubelet**           | Starts Pod       |
+| **Container Runtime** | Runs Container   |
+
+---
+
+## ⭐ New Questions Added: **8**
+
+## 🔁 Repeat Count: **0**
+
+## 📚 Total Unique Questions So Far: **(Previous Total + 8)**
+
+> **Note:** Main aage bhi isi tarah track rakhunga. Agar kisi concept ka basic question pehle cover ho chuka hai, to uska basic version dobara nahi dunga—sirf naye, intermediate ya scenario-based interview questions hi add karunga.
+
 =======================================================================================================================
 =======================================================================================================================
 =======================================================================================================================
