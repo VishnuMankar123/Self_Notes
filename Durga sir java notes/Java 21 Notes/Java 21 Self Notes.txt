@@ -1,0 +1,5299 @@
+video Link for java 21 new features with examples | Java 21 Interview Questions and Answers | Learn code with Durgesh - YouTube
+Link: https://www.youtube.com/watch?v=p7cL1r60QVg
+
+====================================================================================================
+# **Java 21 - Part 1**
+
+## **Java 21 Introduction + LTS + Preview Features + Installation**
+
+> **Teacher → Student Style**
+> **Language:** Hindi wali English
+> **Level:** Beginner Friendly
+
+---
+
+# 1. Java 21 Kya Hai?
+
+### 👨‍🏫 Teacher:
+
+Java 21 kya hai?
+
+### 👨‍🎓 Student:
+
+Sir, Java 21 Java ka latest major version hai jo **19 September 2023** ko release hua tha.
+
+Is version me bahut saare naye features aaye hain jo Java ko aur powerful aur modern banate hain.
+
+---
+
+## Yaad Rakhne Wali Line
+
+> **Java 21 = Latest LTS Version + New Features + Better Performance + Better Developer Experience**
+
+---
+
+# 2. Java 21 itna Important Kyu Hai?
+
+### 👨‍🏫 Teacher:
+
+Har Java version important hota hai, fir Java 21 ko itna special kyu bolte hain?
+
+### 👨‍🎓 Student:
+
+Kyuki Java 21 ek **LTS (Long Term Support)** version hai.
+
+Isliye companies production applications me isko use karna prefer karti hain.
+
+---
+
+# 3. LTS Kya Hota Hai?
+
+### 👨‍🏫 Teacher:
+
+LTS ka full form kya hai?
+
+### 👨‍🎓 Student:
+
+**Long Term Support**
+
+Matlab Oracle is version ko bahut saal tak support karega.
+
+Isme
+
+* Bug Fixes
+* Security Updates
+* Performance Improvements
+
+regular milte rahenge.
+
+---
+
+## Real Life Example
+
+Socho tumne ek mobile kharida.
+
+### Phone A
+
+2 saal update milega.
+
+### Phone B
+
+6-7 saal update milega.
+
+Obviously tum Phone B loge.
+
+Java me bhi wahi concept hai.
+
+LTS version = Long Time Support
+
+---
+
+# 4. Java ke Important LTS Versions
+
+| Java Version | Release | LTS?  |
+| ------------ | ------- | ----- |
+| Java 8       | 2014    | ✅ Yes |
+| Java 11      | 2018    | ✅ Yes |
+| Java 17      | 2021    | ✅ Yes |
+| Java 21      | 2023    | ✅ Yes |
+
+---
+
+## Interview Question
+
+### 👨‍🏫 Teacher:
+
+Production me kaunsa Java version use karna chahiye?
+
+### 👨‍🎓 Student:
+
+Mostly **LTS Version** use karna chahiye.
+
+Example
+
+* Java 11
+* Java 17
+* Java 21
+
+Kyuki ye long-term support provide karte hain.
+
+---
+
+# 5. Kya Sirf LTS hi Use Kar Sakte Hai?
+
+### 👨‍🏫 Teacher:
+
+Sir kya Java 18,19,20 use nahi kar sakte?
+
+### 👨‍🎓 Student:
+
+Kar sakte hain.
+
+Lekin production projects me companies generally LTS version hi choose karti hain.
+
+Non-LTS versions mostly learning aur testing ke liye use hote hain.
+
+---
+
+# 6. Java ki Release Cycle
+
+### 👨‍🏫 Teacher:
+
+Java kitne time baad naya version release karta hai?
+
+### 👨‍🎓 Student:
+
+Har **6 months** me ek naya Java version release hota hai.
+
+Example
+
+```
+Java 17
+
+↓
+
+Java 18
+
+↓
+
+Java 19
+
+↓
+
+Java 20
+
+↓
+
+Java 21
+```
+
+Har version me kuch naye features add hote rehte hain.
+
+---
+
+# Interview Question
+
+### 👨‍🏫 Teacher:
+
+Java kitne months me release hota hai?
+
+### 👨‍🎓 Student:
+
+Java ki release cycle **6 months** ki hoti hai.
+
+---
+
+# 7. Kya Har Version Padhna Zaroori Hai?
+
+### 👨‍🏫 Teacher:
+
+Mujhe Java 8,9,10,11,12,13...21 sab padhna padega?
+
+### 👨‍🎓 Student:
+
+Nahi Sir.
+
+Ek LTS version achhe se padh lo.
+
+Fir naye version me sirf naye features padhte jao.
+
+Example
+
+Java 17 aata hai
+
+↓
+
+Java 21 aaya
+
+↓
+
+Bas Java 21 ke naye features seekho.
+
+Pura Java dobara padhne ki zarurat nahi.
+
+---
+
+## Easy Rule
+
+```
+Java Basics
+
++
+
+OOP
+
++
+
+Collections
+
++
+
+Exception
+
++
+
+Multithreading
+
++
+
+Java 21 New Features
+
+=
+
+Interview Ready
+```
+
+---
+
+# 8. Preview Feature Kya Hota Hai?
+
+### 👨‍🏫 Teacher:
+
+Video me Preview Feature bola gaya tha.
+
+Ye kya hota hai?
+
+### 👨‍🎓 Student:
+
+Preview Feature matlab
+
+Feature complete hai.
+
+Lekin Oracle abhi usko test kar raha hai.
+
+Future me
+
+✅ Permanent ho sakta hai.
+
+Ya
+
+❌ Remove bhi ho sakta hai.
+
+---
+
+## Easy Example
+
+Mobile App me
+
+**Beta Feature**
+
+Exactly wahi Java me
+
+**Preview Feature**
+
+---
+
+## Example
+
+Java 21 me
+
+**String Templates**
+
+Preview Feature hai.
+
+Matlab
+
+Aaj available hai.
+
+Future me
+
+Permanent bhi ho sakta hai.
+
+Ya remove bhi ho sakta hai.
+
+---
+
+# Interview Question
+
+### 👨‍🏫 Teacher:
+
+Preview Feature kya hota hai?
+
+### 👨‍🎓 Student:
+
+Preview Feature ek experimental feature hota hai.
+
+Ye complete hota hai lekin officially permanent nahi hota.
+
+Future Java versions me isko permanent ya remove kiya ja sakta hai.
+
+---
+
+# 9. Java 21 me Kitne Features Hai?
+
+### 👨‍🏫 Teacher:
+
+Java 21 me kitne features aaye?
+
+### 👨‍🎓 Student:
+
+Java 21 me bahut saare features introduce hue hain.
+
+Lekin interview ke liye kuch important features hi padhna enough hai.
+
+Jaise
+
+* **String Templates**
+* **Unnamed Patterns**
+* **Unnamed Classes**
+* **Sequenced Collections**
+* **Record Patterns**
+* **Virtual Threads**
+
+Ye sabse important features hain.
+
+---
+
+# 10. Java 21 Install Kaise Kare?
+
+### 👨‍🏫 Teacher:
+
+Java 21 install kaise karte hain?
+
+### 👨‍🎓 Student:
+
+Bahut simple.
+
+### Step 1
+
+Oracle ya OpenJDK ki website se JDK 21 download karo.
+
+Apne OS ke according
+
+* Windows
+* Linux
+* Mac
+
+installer download karo.
+
+---
+
+### Step 2
+
+Installer ko
+
+```
+Next
+
+↓
+
+Next
+
+↓
+
+Finish
+```
+
+kar do.
+
+---
+
+### Step 3
+
+Installation complete.
+
+---
+
+# 11. JAVA_HOME Kyu Set Karte Hai?
+
+### 👨‍🏫 Teacher:
+
+Installation ke baad JAVA_HOME ya PATH kyu set karte hain?
+
+### 👨‍🎓 Student:
+
+Taaki system ko pata chale Java kaha install hai.
+
+Fir hum terminal me
+
+```
+java
+
+javac
+```
+
+kahin se bhi run kar sakte hain.
+
+---
+
+# 12. PATH Kaise Set Karte Hai?
+
+### 👨‍🏫 Teacher:
+
+PATH me kya add karte hain?
+
+### 👨‍🎓 Student:
+
+Java installation folder ke andar
+
+```
+bin
+```
+
+folder ka path add karte hain.
+
+Example
+
+```
+C:\Program Files\Java\jdk-21\bin
+```
+
+---
+
+# 13. Java Install Verify Kaise Kare?
+
+### 👨‍🏫 Teacher:
+
+Install hua ya nahi kaise check kare?
+
+### 👨‍🎓 Student:
+
+Command Prompt open karo.
+
+Run karo
+
+```bash
+java -version
+```
+
+Output
+
+```
+java version "21"
+```
+
+Agar version aa gaya
+
+Matlab installation successful.
+
+---
+
+# 14. Java 21 Abhi Use Karna Chahiye?
+
+### 👨‍🏫 Teacher:
+
+Sir kya mujhe abhi Java 21 pe shift ho jana chahiye?
+
+### 👨‍🎓 Student:
+
+Agar learning kar rahe ho to Java 21 zarur seekho.
+
+Lekin agar company Java 17 use kar rahi hai to pehle Java 17 master karo, phir Java 21 ke naye features seekh lo.
+
+---
+
+# ⭐ Important Keywords
+
+* **Java 21**
+* **LTS**
+* **Long Term Support**
+* **Preview Feature**
+* **Release Cycle**
+* **JAVA_HOME**
+* **PATH**
+* **JDK**
+* **Oracle JDK**
+* **OpenJDK**
+
+---
+
+# 🎯 Interview Questions (Part 1)
+
+### Q1. Java 21 kab release hua?
+
+**Answer:** 19 September 2023.
+
+---
+
+### Q2. Java 21 important kyu hai?
+
+**Answer:** Kyuki ye **LTS (Long Term Support)** version hai aur production me widely use kiya jata hai.
+
+---
+
+### Q3. LTS ka full form kya hai?
+
+**Answer:** Long Term Support.
+
+---
+
+### Q4. Companies LTS version kyu use karti hain?
+
+**Answer:** Kyuki isme long-term bug fixes, security updates aur support milta hai.
+
+---
+
+### Q5. Java ki release cycle kitni hai?
+
+**Answer:** Har 6 months me ek naya Java version release hota hai.
+
+---
+
+### Q6. Preview Feature kya hota hai?
+
+**Answer:** Preview Feature ek experimental feature hota hai jo future me permanent bhi ho sakta hai aur remove bhi.
+
+---
+
+### Q7. Java install hua ya nahi kaise check karte hain?
+
+**Answer:** `java -version` command run karke.
+
+---
+
+### Q8. PATH me kya add karte hain?
+
+**Answer:** JDK ke **bin** folder ka path.
+
+---
+
+### Q9. JAVA_HOME ka purpose kya hai?
+
+**Answer:** System ko batana ki Java kis location par install hai.
+
+---
+
+### Q10. Java 21 ke kuch important features batao.
+
+**Answer:**
+
+* String Templates
+* Unnamed Patterns & Variables
+* Unnamed Classes
+* Sequenced Collections
+* Record Patterns
+* Virtual Threads
+
+---
+
+## 📌 Part 1 Summary
+
+* Java 21 **19 September 2023** ko release hua.
+* Ye **LTS (Long Term Support)** version hai.
+* Production projects me LTS versions ko preference di jaati hai.
+* Java har **6 months** me naya version release karta hai.
+* **Preview Features** experimental hote hain; future me permanent ya remove ho sakte hain.
+* JDK install karne ke baad **PATH/JAVA_HOME** configure karke `java -version` se installation verify karte hain.
+* Java 21 me kai naye features aaye hain, jinme se interview ke liye sabse important features ko hum agle parts me detail me samjhenge.
+
+====================================================================================================
+# **Java 21 - Part 2**
+
+# **String Templates (Preview Feature)**
+
+> **Teacher 👨‍🏫 → Student 👨‍🎓 Style**
+> **Language:** Hindi wali English
+> **Level:** Beginner Friendly
+> **Topic:** Java 21 - String Templates (JEP 430 - Preview Feature)
+
+---
+
+# 1. String Template Kya Hai?
+
+### 👨‍🏫 Teacher:
+
+Java 21 me sabse interesting feature kaunsa hai?
+
+### 👨‍🎓 Student:
+
+Sir, **String Templates**.
+
+Is feature ki help se hum string ke andar directly variables aur expressions likh sakte hain.
+
+Pehle hume **concatenation (+)** use karna padta tha.
+
+Ab Java khud runtime par value replace kar deta hai.
+
+---
+
+## Easy Definition
+
+> **String Template** ek naya feature hai jisme hum string ke andar direct variable ya expression likh sakte hain.
+
+---
+
+# Real Life Example
+
+Suppose aap WhatsApp message bana rahe ho.
+
+Pehle
+
+```java
+String msg = "Hello " + name;
+```
+
+Ab
+
+```java
+String msg = STR."Hello \{name}";
+```
+
+Kitna clean lag raha hai.
+
+---
+
+# 2. Java 21 se Pehle Kaise Karte The?
+
+### 👨‍🏫 Teacher:
+
+Java 20 ya Java 17 me variable string ke andar kaise likhte the?
+
+### 👨‍🎓 Student:
+
+Concatenation use karte the.
+
+Example
+
+```java
+String name = "Vishnu";
+
+System.out.println("Hello " + name);
+```
+
+Output
+
+```
+Hello Vishnu
+```
+
+---
+
+## Agar Multiple Variables Ho?
+
+```java
+String name = "Vishnu";
+int age = 29;
+
+System.out.println("Name : " + name + " Age : " + age);
+```
+
+Output
+
+```
+Name : Vishnu Age : 29
+```
+
+Dekho kitne saare **+** lag gaye.
+
+Code readable nahi lag raha.
+
+---
+
+# Problem with Concatenation
+
+* Code lamba ho jata hai.
+* Readability kam ho jati hai.
+* Multiple variables me confusion hota hai.
+* HTML ya SQL banana difficult hota hai.
+
+Isi problem ko solve karne ke liye Java 21 me **String Templates** introduce hue.
+
+---
+
+# 3. String Template Ka Idea
+
+### 👨‍🏫 Teacher:
+
+String Template ka basic idea kya hai?
+
+### 👨‍🎓 Student:
+
+Hum string ke andar hi variable likhenge.
+
+Java runtime par automatically uski value replace kar dega.
+
+---
+
+## Example
+
+```java
+String name = "Rahul";
+```
+
+Instead of
+
+```java
+"Hello " + name
+```
+
+Use
+
+```java
+STR."Hello \{name}"
+```
+
+Output
+
+```
+Hello Rahul
+```
+
+---
+
+# 4. STR Kya Hai?
+
+### 👨‍🏫 Teacher:
+
+Ye **STR** kya hota hai?
+
+### 👨‍🎓 Student:
+
+Ye **Template Processor** hai.
+
+Ye string ko process karta hai.
+
+Aur
+
+```
+\{ }
+```
+
+ke andar jo expression hota hai uski value calculate karke string me replace karta hai.
+
+---
+
+## Easy Diagram
+
+```
+Variable
+
+↓
+
+String Template
+
+↓
+
+STR Processor
+
+↓
+
+Runtime
+
+↓
+
+Final String
+```
+
+---
+
+# 5. Basic Example
+
+```java
+String name = "Vishnu";
+
+String message = STR."Hello \{name}";
+
+System.out.println(message);
+```
+
+Output
+
+```
+Hello Vishnu
+```
+
+---
+
+# 6. Integer Example
+
+```java
+int age = 29;
+
+System.out.println(
+STR."Age is \{age}"
+);
+```
+
+Output
+
+```
+Age is 29
+```
+
+---
+
+# 7. Multiple Variables
+
+```java
+String name="Vishnu";
+int age=29;
+String city="Pune";
+
+System.out.println(
+
+STR."Name : \{name}
+Age : \{age}
+City : \{city}"
+
+);
+```
+
+Output
+
+```
+Name : Vishnu
+Age : 29
+City : Pune
+```
+
+---
+
+# 8. Expression bhi Use Kar Sakte Hai
+
+### 👨‍🏫 Teacher:
+
+Sir sirf variable hi use kar sakte hain?
+
+### 👨‍🎓 Student:
+
+Nahi.
+
+Expression bhi likh sakte hain.
+
+Example
+
+```java
+int a=10;
+int b=20;
+
+System.out.println(
+
+STR."Sum = \{a+b}"
+
+);
+```
+
+Output
+
+```
+Sum = 30
+```
+
+---
+
+# Aur Bhi Example
+
+```java
+int salary = 50000;
+
+System.out.println(
+
+STR."Bonus = \{salary*2}"
+
+);
+```
+
+Output
+
+```
+Bonus = 100000
+```
+
+---
+
+# 9. Method Call bhi Kar Sakte Hai
+
+```java
+String name="vishnu";
+
+System.out.println(
+
+STR."Upper Case : \{name.toUpperCase()}"
+
+);
+```
+
+Output
+
+```
+Upper Case : VISHNU
+```
+
+---
+
+# 10. Function Call Example
+
+```java
+public static int square(int n){
+
+return n*n;
+
+}
+```
+
+Use
+
+```java
+System.out.println(
+
+STR."Square = \{square(5)}"
+
+);
+```
+
+Output
+
+```
+Square = 25
+```
+
+---
+
+# 11. Runtime pe Kya Hota Hai?
+
+### 👨‍🏫 Teacher:
+
+Java internally kya karta hai?
+
+### 👨‍🎓 Student:
+
+Java pehle
+
+```
+\{ }
+```
+
+ke andar ka expression evaluate karta hai.
+
+Uske baad final string banata hai.
+
+Example
+
+```
+a=5
+
+b=10
+```
+
+```
+STR."Sum = \{a+b}"
+```
+
+Runtime
+
+↓
+
+```
+5+10
+```
+
+↓
+
+```
+15
+```
+
+↓
+
+```
+Sum = 15
+```
+
+---
+
+# 12. HTML Banana Bahut Easy
+
+Pehle
+
+```java
+String html="<h1>"+title+"</h1>";
+```
+
+Ab
+
+```java
+String html=STR."""
+
+<h1>\{title}</h1>
+
+""";
+```
+
+Readable bhi hai.
+
+Beautiful bhi hai.
+
+---
+
+# 13. SQL Query Example
+
+Pehle
+
+```java
+String sql="select * from user where id="+id;
+```
+
+Ab
+
+```java
+String sql=
+
+STR."""
+
+select *
+
+from user
+
+where id=\{id}
+
+""";
+```
+
+---
+
+# 14. JSON Example
+
+```java
+String json=
+
+STR."""
+
+{
+
+"name":"\{name}",
+
+"age":\{age}
+
+}
+
+""";
+```
+
+Output
+
+```json
+{
+"name":"Vishnu",
+"age":29
+}
+```
+
+---
+
+# 15. Ye Preview Feature Hai
+
+### 👨‍🏫 Teacher:
+
+Sir ye permanent feature hai?
+
+### 👨‍🎓 Student:
+
+Nahi.
+
+Ye **Preview Feature** hai.
+
+Matlab
+
+* Abhi available hai.
+* Testing phase me hai.
+* Future me permanent bhi ho sakta hai.
+* Ya remove bhi ho sakta hai.
+
+---
+
+# 16. By Default Error Kyu Aata Hai?
+
+Agar simply compile karoge
+
+```bash
+javac Main.java
+```
+
+Error
+
+```
+Preview Features are disabled.
+```
+
+Kyuki Java preview feature ko default me OFF rakhta hai.
+
+---
+
+# 17. Enable Kaise Kare?
+
+Compile
+
+```bash
+javac --enable-preview --release 21 Main.java
+```
+
+Run
+
+```bash
+java --enable-preview Main
+```
+
+Ye command interview me yaad rakhna.
+
+---
+
+# 18. SQL Injection Danger
+
+### 👨‍🏫 Teacher:
+
+Video me sir ne bola String Template dangerous bhi ho sakta hai.
+
+Kaise?
+
+### 👨‍🎓 Student:
+
+Agar user ki input directly SQL query me daal di to attacker malicious input bhej sakta hai.
+
+Example
+
+```java
+String username=input;
+```
+
+```java
+String sql=
+
+STR."""
+
+SELECT *
+
+FROM USER
+
+WHERE NAME=\{username}
+
+""";
+```
+
+Agar attacker bheje
+
+```
+' OR 1=1 --
+```
+
+Final Query
+
+```sql
+SELECT *
+
+FROM USER
+
+WHERE NAME=' OR 1=1 --
+```
+
+Ye poori table return kar sakti hai.
+
+Isko **SQL Injection** bolte hain.
+
+---
+
+# Real Life Rule
+
+Kabhi bhi
+
+❌ User input directly SQL me mat daalo.
+
+Always
+
+✅ PreparedStatement use karo.
+
+---
+
+# 19. Advantages
+
+### 👨‍🏫 Teacher:
+
+String Template ke fayde kya hain?
+
+### 👨‍🎓 Student:
+
+✅ Readable Code
+
+✅ Less Concatenation
+
+✅ Easy HTML
+
+✅ Easy JSON
+
+✅ Easy SQL
+
+✅ Less Boilerplate Code
+
+✅ Modern Syntax
+
+---
+
+# 20. Limitations
+
+* Preview Feature hai.
+* Enable karna padta hai.
+* Direct SQL me use karna dangerous ho sakta hai.
+* Future me syntax change ho sakta hai.
+
+---
+
+# ⭐ Important Keywords
+
+* **String Template**
+* **STR**
+* **Template Processor**
+* **Embedded Expression**
+* **Runtime Evaluation**
+* **Preview Feature**
+* **SQL Injection**
+* **PreparedStatement**
+
+---
+
+# 🎯 Interview Questions
+
+---
+
+## Q1. String Template kya hai?
+
+**Answer:**
+
+String Template Java 21 ka preview feature hai jisme hum string ke andar directly variables ya expressions likh sakte hain. Java runtime par unki value replace kar deta hai.
+
+---
+
+## Q2. String Template kyu introduce hua?
+
+**Answer:**
+
+Concatenation (`+`) ko kam karne, code ko readable banane aur HTML/JSON/SQL jaise text ko easily create karne ke liye.
+
+---
+
+## Q3. STR kya hai?
+
+**Answer:**
+
+**STR** ek **Template Processor** hai jo string template ko process karta hai aur `\{}` ke andar ke expressions ko evaluate karke final string banata hai.
+
+---
+
+## Q4. Kya String Template me sirf variable hi use kar sakte hain?
+
+**Answer:**
+
+Nahi. Variable ke saath expressions (`a+b`), method calls (`name.toUpperCase()`) aur function calls bhi use kar sakte hain.
+
+---
+
+## Q5. String Template kab value replace karta hai?
+
+**Answer:**
+
+Runtime par.
+
+---
+
+## Q6. Ye feature permanent hai?
+
+**Answer:**
+
+Nahi. Ye Java 21 ka **Preview Feature** hai.
+
+---
+
+## Q7. Preview feature compile karne ke liye kya command use karte hain?
+
+**Answer:**
+
+```bash
+javac --enable-preview --release 21 Main.java
+```
+
+Run karne ke liye:
+
+```bash
+java --enable-preview Main
+```
+
+---
+
+## Q8. String Template ka sabse bada benefit kya hai?
+
+**Answer:**
+
+Readable code aur kam concatenation.
+
+---
+
+## Q9. String Template use karte waqt security concern kya hai?
+
+**Answer:**
+
+Agar user input ko directly SQL query me use karein, to **SQL Injection** ka risk hota hai. Isliye **PreparedStatement** use karna chahiye.
+
+---
+
+## Q10. String Template kin scenarios me useful hai?
+
+**Answer:**
+
+* HTML generate karna
+* JSON banana
+* SQL query banana (safe approach ke saath)
+* Dynamic messages banana
+
+---
+
+# 📌 Part 2 Summary
+
+* **String Templates** Java 21 ka **Preview Feature** hai.
+* Isme `STR` template processor aur `\{}` syntax se variables aur expressions ko string ke andar directly use kar sakte hain.
+* Ye concatenation (`+`) ki need ko kam karta hai aur code ko zyada readable banata hai.
+* HTML, JSON aur dynamic messages banana bahut easy ho jata hai.
+* Preview feature hone ki wajah se `--enable-preview` ke saath compile aur run karna padta hai.
+* SQL queries me direct user input use karne se **SQL Injection** ka risk hota hai, isliye **PreparedStatement** prefer karna chahiye.
+
+====================================================================================================
+# **Java 21 - Part 3**
+
+# **Unnamed Patterns & Variables (Preview Feature)**
+
+> **Teacher 👨‍🏫 → Student 👨‍🎓 Style**
+> **Language:** Hindi wali English
+> **Level:** Beginner Friendly
+> **Topic:** Java 21 - Unnamed Patterns & Variables (JEP 443 - Preview)
+
+---
+
+# 1. Unnamed Variables Kya Hai?
+
+### 👨‍🏫 Teacher:
+
+Java 21 me **Unnamed Variables** kya hote hain?
+
+### 👨‍🎓 Student:
+
+Sir, kabhi-kabhi hum koi variable sirf syntax complete karne ke liye likhte hain, lekin uska use kahin bhi nahi karte.
+
+Java 21 me aise unused variable ki jagah hum **underscore (_)** use kar sakte hain.
+
+Isse code aur clean dikhta hai.
+
+---
+
+## Easy Definition
+
+> **Unnamed Variable** = Aisa variable jiska naam important nahi hai aur jise hum future me use nahi karne wale.
+
+---
+
+# 2. Is Feature ki Zarurat Kyu Padi?
+
+### 👨‍🏫 Teacher:
+
+Ye feature introduce hi kyu kiya gaya?
+
+### 👨‍🎓 Student:
+
+Kyuki Java developers bahut baar aise variables bana dete the jo kabhi use hi nahi hote.
+
+Example
+
+```java
+catch(Exception e)
+```
+
+Aur poore catch block me **e** ka use hi nahi hota.
+
+Fir variable likhne ka kya fayda?
+
+Isi problem ko solve karne ke liye Java 21 me **Unnamed Variables** aaye.
+
+---
+
+# Real Life Example
+
+Socho school me attendance ho rahi hai.
+
+Teacher bolta hai:
+
+"Roll Number batao."
+
+Tum bolte ho:
+
+"Sir mujhe naam yaad nahi, bas student hai."
+
+Matlab naam important hi nahi hai.
+
+Exactly waise hi Java me bhi.
+
+---
+
+# 3. Java 21 se Pehle
+
+```java
+try{
+
+int result=100/0;
+
+}
+
+catch(Exception e){
+
+System.out.println("Error");
+
+}
+```
+
+Notice karo
+
+Variable
+
+```java
+e
+```
+
+Kabhi use hi nahi hua.
+
+---
+
+# 4. Java 21 me
+
+```java
+try{
+
+int result=100/0;
+
+}
+
+catch(Exception _){
+
+System.out.println("Error");
+
+}
+```
+
+Ab Java ko pata hai
+
+"Haan bhai mujhe exception object nahi chahiye."
+
+---
+
+# Easy Rule
+
+```text
+Use ho raha hai?
+
+↓
+
+YES
+
+↓
+
+Variable Name Likho
+
+↓
+
+NO
+
+↓
+
+_ Use Karo
+```
+
+---
+
+# 5. Kab Use Karna Chahiye?
+
+### 👨‍🏫 Teacher:
+
+Underscore kab use karna chahiye?
+
+### 👨‍🎓 Student:
+
+Jab variable future me use hi nahi hona.
+
+---
+
+## Example
+
+```java
+catch(Exception _)
+```
+
+Perfect.
+
+---
+
+## Wrong Example
+
+```java
+catch(Exception _){
+
+System.out.println(_.getMessage());
+
+}
+```
+
+Ye galat hai.
+
+Kyuki
+
+**_ unnamed variable hai.**
+
+Usko access nahi kar sakte.
+
+---
+
+# 6. Lambda Expression Example
+
+### 👨‍🏫 Teacher:
+
+Lambda me bhi use kar sakte hain?
+
+### 👨‍🎓 Student:
+
+Bilkul.
+
+Suppose
+
+```java
+list.forEach((name)->{
+
+System.out.println("Hello");
+
+});
+```
+
+Yaha
+
+```java
+name
+```
+
+kabhi use hi nahi hua.
+
+To
+
+Java 21 me
+
+```java
+list.forEach((_)->{
+
+System.out.println("Hello");
+
+});
+```
+
+Cleaner code.
+
+---
+
+# 7. Multiple Parameters
+
+```java
+(a,b)->{
+
+return a+b;
+
+}
+```
+
+Agar
+
+```java
+b
+```
+
+ka use nahi hai
+
+To
+
+```java
+(a,_)->{
+
+return a;
+
+}
+```
+
+---
+
+# 8. for Loop Example
+
+### 👨‍🏫 Teacher:
+
+for loop me use kar sakte hain?
+
+### 👨‍🎓 Student:
+
+Nahi.
+
+Ye normal variable ki replacement nahi hai.
+
+Sirf specific places par hi use hota hai.
+
+---
+
+# 9. Pattern Matching Example
+
+Suppose
+
+```java
+Object obj="Hello";
+```
+
+Old Way
+
+```java
+if(obj instanceof String s){
+
+System.out.println(s);
+
+}
+```
+
+Yaha
+
+```java
+s
+```
+
+use ho raha hai.
+
+To underscore use nahi kar sakte.
+
+---
+
+Lekin agar
+
+```java
+if(obj instanceof String s){
+
+System.out.println("String hai");
+
+}
+```
+
+Yaha
+
+```java
+s
+```
+
+ka use hi nahi hua.
+
+Java 21 me
+
+```java
+if(obj instanceof String _){
+
+System.out.println("String hai");
+
+}
+```
+
+Ye valid hai.
+
+---
+
+# 10. Switch Example
+
+Old
+
+```java
+switch(obj){
+
+case Integer i->
+
+System.out.println("Integer");
+
+}
+```
+
+Agar
+
+```java
+i
+```
+
+use nahi ho raha
+
+To
+
+```java
+switch(obj){
+
+case Integer _->
+
+System.out.println("Integer");
+
+}
+```
+
+Cleaner.
+
+---
+
+# 11. Record Pattern Example
+
+```java
+record Student(
+
+String name,
+
+int age
+
+){}
+```
+
+Old
+
+```java
+if(obj instanceof Student(
+
+String name,
+
+int age
+
+)){
+
+}
+```
+
+Suppose
+
+Sirf
+
+age
+
+chahiye.
+
+Name nahi.
+
+To
+
+```java
+if(obj instanceof Student(
+
+_,
+
+int age
+
+)){
+
+System.out.println(age);
+
+}
+```
+
+---
+
+# 12. Ek Aur Example
+
+Sirf name chahiye
+
+```java
+if(obj instanceof Student(
+
+String name,
+
+_
+
+)){
+
+System.out.println(name);
+
+}
+```
+
+---
+
+# 13. Nested Pattern Example
+
+```java
+record Address(
+
+String city,
+
+String state
+
+){}
+```
+
+```java
+record Employee(
+
+String name,
+
+Address address
+
+){}
+```
+
+Sirf city chahiye
+
+```java
+if(emp instanceof Employee(
+
+_,
+
+Address(
+
+String city,
+
+_
+
+)
+
+)){
+
+System.out.println(city);
+
+}
+```
+
+---
+
+# 14. Benefits
+
+### 👨‍🏫 Teacher:
+
+Unnamed Variables ke advantages kya hain?
+
+### 👨‍🎓 Student:
+
+✅ Less Boilerplate
+
+✅ Cleaner Code
+
+✅ Readability Better
+
+✅ Compiler ko clear signal milta hai
+
+✅ Intent clear ho jata hai
+
+---
+
+# 15. Difference
+
+| Normal Variable              | Unnamed Variable            |
+| ---------------------------- | --------------------------- |
+| Name hota hai                | Name nahi hota              |
+| Future me use kar sakte hain | Use nahi kar sakte          |
+| Value access kar sakte hain  | Value access nahi kar sakte |
+| Read/Write possible          | Sirf ignore karne ke liye   |
+
+---
+
+# 16. Interview Trick
+
+### 👨‍🏫 Teacher:
+
+Agar mujhe exception ka message print karna hai to kya underscore use kar sakte hain?
+
+### 👨‍🎓 Student:
+
+Bilkul nahi.
+
+Example
+
+```java
+catch(Exception _){
+
+System.out.println(_.getMessage());
+
+}
+```
+
+Wrong.
+
+Correct
+
+```java
+catch(Exception e){
+
+System.out.println(e.getMessage());
+
+}
+```
+
+---
+
+# 17. Kab Use Nahi Karna Chahiye?
+
+❌ Jab variable ki value access karni ho
+
+❌ Jab logging karni ho
+
+❌ Jab debugging karni ho
+
+❌ Jab future me variable use karna ho
+
+---
+
+# 18. Kab Use Karna Chahiye?
+
+✅ Exception ignore karna
+
+✅ Lambda unused parameter
+
+✅ Pattern Matching
+
+✅ Record Pattern
+
+✅ Switch Pattern
+
+---
+
+# ⭐ Important Keywords
+
+* **Unnamed Variable**
+* **Unnamed Pattern**
+* **Underscore (_)**
+* **Pattern Matching**
+* **Record Pattern**
+* **Switch Pattern**
+* **Preview Feature**
+* **Unused Variable**
+
+---
+
+# 🎯 Interview Questions
+
+---
+
+## Q1. Unnamed Variable kya hai?
+
+**Answer:**
+
+Unnamed Variable ek aisa variable hai jiska naam important nahi hota aur jise future me use nahi karna hota. Java 21 me iske liye **underscore (_)** use kar sakte hain.
+
+---
+
+## Q2. Is feature ko introduce kyu kiya gaya?
+
+**Answer:**
+
+Unused variables ko avoid karne aur code ko cleaner aur readable banane ke liye.
+
+---
+
+## Q3. Underscore (_) kab use karte hain?
+
+**Answer:**
+
+Jab variable ki value future me use nahi karni hoti.
+
+---
+
+## Q4. Kya underscore variable ko baad me access kar sakte hain?
+
+**Answer:**
+
+Nahi. Underscore unnamed variable hota hai, uski value access nahi kar sakte.
+
+---
+
+## Q5. Ye feature kaha-kaha use hota hai?
+
+**Answer:**
+
+* Pattern Matching
+* Record Patterns
+* Switch Patterns
+* Lambda Expressions
+* Exception Handling (jab exception object use na ho)
+
+---
+
+## Q6. Kya normal local variable ki jagah underscore use kar sakte hain?
+
+**Answer:**
+
+Nahi. Ye sirf specific contexts me use hota hai jahan variable intentionally ignore karna ho.
+
+---
+
+## Q7. Java 21 se pehle unused exception variable kaise likhte the?
+
+**Answer:**
+
+```java
+catch(Exception e){
+    System.out.println("Error");
+}
+```
+
+Agar `e` ka use nahi hota tha tab bhi likhna padta tha.
+
+---
+
+## Q8. Java 21 me wahi code kaise likhenge?
+
+**Answer:**
+
+```java
+catch(Exception _){
+    System.out.println("Error");
+}
+```
+
+---
+
+## Q9. Agar exception ka message print karna ho to kya underscore use kar sakte hain?
+
+**Answer:**
+
+Nahi. Agar exception object ki value chahiye, to normal variable (`e`) hi use karna hoga.
+
+---
+
+## Q10. Is feature ka sabse bada benefit kya hai?
+
+**Answer:**
+
+Cleaner, more readable code aur unused variables ko avoid karna.
+
+---
+
+# 📌 Part 3 Summary
+
+* **Unnamed Variables & Patterns** Java 21 ka **Preview Feature** hai.
+* Agar kisi variable ka future me use nahi hona, to uski jagah **underscore (_)** use kar sakte hain.
+* Ye feature especially **exception handling**, **lambda expressions**, **pattern matching**, **record patterns**, aur **switch patterns** me useful hai.
+* Underscore se variable ki value access nahi ki ja sakti; ye sirf "ignore" karne ka signal hai.
+* Is feature se code aur clean, readable aur intention-clear ban jata hai.
+
+====================================================================================================
+# **Java 21 - Part 4**
+
+# **Unnamed Classes & Instance Main Methods (Preview Feature)**
+
+> **Teacher 👨‍🏫 → Student 👨‍🎓 Style**
+> **Language:** Hindi wali English
+> **Level:** Beginner Friendly
+> **Topic:** Java 21 - Unnamed Classes & Instance Main Methods (JEP 445 - Preview)
+
+---
+
+# 1. Unnamed Classes Kya Hai?
+
+### 👨‍🏫 Teacher:
+
+Java 21 me **Unnamed Classes** kya hai?
+
+### 👨‍🎓 Student:
+
+Sir, Java 21 me hum bina class ka naam likhe bhi simple Java program likh sakte hain.
+
+Pehle Java me har program ke liye class banana compulsory tha.
+
+Java 21 me beginners ke liye ye restriction kam kar di gayi hai.
+
+---
+
+## Easy Definition
+
+> **Unnamed Class** ka matlab hai Java automatically background me class create kar deta hai aur hume class ka naam likhne ki zarurat nahi padti.
+
+---
+
+# 2. Ye Feature Kyu Introduce Hua?
+
+### 👨‍🏫 Teacher:
+
+Java me already class thi, fir ye feature kyu introduce hua?
+
+### 👨‍🎓 Student:
+
+Kyuki Java beginners ko shuru me bahut boilerplate code likhna padta tha.
+
+Example
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        System.out.println("Hello");
+
+    }
+
+}
+```
+
+Ek simple line print karne ke liye itna sara code.
+
+Python me sirf
+
+```python
+print("Hello")
+```
+
+Java beginners ko lagta tha Java difficult hai.
+
+Is problem ko solve karne ke liye Java 21 me ye feature introduce hua.
+
+---
+
+# Real Life Example
+
+Suppose tum calculator use karna chahte ho.
+
+Purana Java bolta tha
+
+> Pehle machine assemble karo...
+
+Fir calculation karo.
+
+Java 21 bolta hai
+
+> Direct calculation karo.
+
+Machine background me ready hai.
+
+---
+
+# 3. Java 21 se Pehle
+
+Hello World
+
+```java
+public class Main {
+
+    public static void main(String[] args){
+
+        System.out.println("Hello World");
+
+    }
+
+}
+```
+
+---
+
+# Java 21
+
+```java
+void main(){
+
+    System.out.println("Hello World");
+
+}
+```
+
+Bas.
+
+Java khud baaki ka kaam kar lega.
+
+---
+
+# 4. Kya Sach me Class Nahi Hoti?
+
+### 👨‍🏫 Teacher:
+
+Sir kya Java class banana band kar diya?
+
+### 👨‍🎓 Student:
+
+Nahi.
+
+Class to banti hai.
+
+Bas developer ko dikhai nahi deti.
+
+Java compiler background me class generate kar deta hai.
+
+---
+
+## Diagram
+
+```text
+Developer
+
+↓
+
+void main()
+
+↓
+
+Compiler
+
+↓
+
+Unnamed Class Create
+
+↓
+
+JVM Execute
+```
+
+---
+
+# 5. Instance Main Method Kya Hai?
+
+### 👨‍🏫 Teacher:
+
+Instance Main Method kya hota hai?
+
+### 👨‍🎓 Student:
+
+Pehle
+
+```java
+public static void main()
+```
+
+likhna compulsory tha.
+
+Ab
+
+```java
+void main()
+```
+
+likh sakte hain.
+
+Ye **Instance Main Method** hai.
+
+---
+
+# Old Java
+
+```java
+public class Main{
+
+public static void main(String[] args){
+
+System.out.println("Hello");
+
+}
+
+}
+```
+
+---
+
+# Java 21
+
+```java
+void main(){
+
+System.out.println("Hello");
+
+}
+```
+
+---
+
+# 6. Static Ki Zarurat Kyu Nahi?
+
+### 👨‍🏫 Teacher:
+
+Sir static hata diya?
+
+### 👨‍🎓 Student:
+
+Developer ke liye hata diya.
+
+Java internally object bana leta hai.
+
+Fir us object se
+
+```java
+void main()
+```
+
+call karta hai.
+
+---
+
+# Easy Diagram
+
+```text
+Program Start
+
+↓
+
+Java Creates Object
+
+↓
+
+Object.main()
+
+↓
+
+Execution Starts
+```
+
+---
+
+# 7. Practical Example
+
+```java
+void main(){
+
+System.out.println("Welcome");
+
+}
+```
+
+Output
+
+```text
+Welcome
+```
+
+---
+
+# 8. Variables Use Karna
+
+```java
+void main(){
+
+String name="Vishnu";
+
+System.out.println(name);
+
+}
+```
+
+Output
+
+```text
+Vishnu
+```
+
+---
+
+# 9. Method Banana
+
+```java
+void greet(){
+
+System.out.println("Hello");
+
+}
+
+void main(){
+
+greet();
+
+}
+```
+
+Output
+
+```text
+Hello
+```
+
+---
+
+# 10. Multiple Methods
+
+```java
+void add(){
+
+System.out.println(10+20);
+
+}
+
+void greet(){
+
+System.out.println("Hi");
+
+}
+
+void main(){
+
+greet();
+
+add();
+
+}
+```
+
+Output
+
+```text
+Hi
+
+30
+```
+
+---
+
+# 11. Pahle Itna Boilerplate Tha
+
+```java
+public class Demo{
+
+public static void main(String[] args){
+
+System.out.println("Java");
+
+}
+
+}
+```
+
+Ab
+
+```java
+void main(){
+
+System.out.println("Java");
+
+}
+```
+
+Kitna simple.
+
+---
+
+# 12. Iska Biggest Benefit
+
+### 👨‍🏫 Teacher:
+
+Sir iska sabse bada advantage kya hai?
+
+### 👨‍🎓 Student:
+
+Beginners ko
+
+Ye nahi samjhana padega ki
+
+* public kya hai
+* class kya hai
+* static kya hai
+* String[] args kya hai
+
+Pehle programming seekhenge.
+
+Baad me OOP.
+
+---
+
+# 13. Ye Production Ke Liye Hai?
+
+### 👨‍🏫 Teacher:
+
+Sir kya company me ye use karenge?
+
+### 👨‍🎓 Student:
+
+Mostly nahi.
+
+Ye mainly
+
+* Learning
+* Teaching
+* Beginners
+* Small Examples
+
+ke liye introduce hua hai.
+
+Large production projects me normal class structure hi use hota hai.
+
+---
+
+# 14. Ye Preview Feature Hai
+
+### 👨‍🏫 Teacher:
+
+Ye permanent feature hai?
+
+### 👨‍🎓 Student:
+
+Nahi.
+
+Ye Java 21 ka **Preview Feature** hai.
+
+Future me
+
+* Permanent ho sakta hai.
+
+Ya
+
+* Change bhi ho sakta hai.
+
+---
+
+# 15. Compile Kaise Kare?
+
+Kyuki preview feature hai.
+
+Compile
+
+```bash
+javac --enable-preview --release 21 Demo.java
+```
+
+Run
+
+```bash
+java --enable-preview Demo
+```
+
+---
+
+# 16. Purane Aur Naye Java ka Difference
+
+| Old Java                    | Java 21                             |
+| --------------------------- | ----------------------------------- |
+| Class compulsory            | Class automatically create hoti hai |
+| `public static void main()` | `void main()`                       |
+| Boilerplate zyada           | Boilerplate kam                     |
+| Beginners confuse hote the  | Beginners ke liye easy              |
+
+---
+
+# 17. Real Life Example
+
+Suppose tum driving seekh rahe ho.
+
+Old Java
+
+> Engine kaise kaam karta hai
+
+> Gearbox kya hai
+
+> Clutch kya hai
+
+Fir driving.
+
+Java 21
+
+> Pehle car chalao.
+
+Engine baad me samjhenge.
+
+Exactly beginners ke liye ye feature hai.
+
+---
+
+# 18. Important Points
+
+✅ Class background me create hoti hai.
+
+✅ Object bhi Java khud create karta hai.
+
+✅ Static likhna compulsory nahi.
+
+✅ Learning easy ho gayi.
+
+✅ Boilerplate kam ho gaya.
+
+---
+
+# 19. Limitations
+
+❌ Preview Feature hai.
+
+❌ Production me commonly use nahi hota.
+
+❌ Large projects me traditional class structure hi better hai.
+
+---
+
+# ⭐ Important Keywords
+
+* **Unnamed Classes**
+* **Instance Main Method**
+* **Boilerplate Code**
+* **Preview Feature**
+* **Object Creation**
+* **Compiler Generated Class**
+* **void main()**
+
+---
+
+# 🎯 Interview Questions
+
+---
+
+## Q1. Unnamed Class kya hai?
+
+**Answer:**
+
+Unnamed Class Java 21 ka Preview Feature hai jisme developer ko class ka naam likhne ki zarurat nahi hoti. Java compiler background me class create kar deta hai.
+
+---
+
+## Q2. Ye feature kyu introduce hua?
+
+**Answer:**
+
+Java ka boilerplate code kam karne aur beginners ke liye programming ko easy banane ke liye.
+
+---
+
+## Q3. Instance Main Method kya hai?
+
+**Answer:**
+
+Java 21 me `public static void main(String[] args)` ki jagah simple `void main()` likh sakte hain. Isse Instance Main Method kehte hain.
+
+---
+
+## Q4. Kya Java me class completely remove ho gayi?
+
+**Answer:**
+
+Nahi. Class ab bhi banti hai, lekin compiler usse automatically background me create karta hai.
+
+---
+
+## Q5. Kya `static` ki zarurat nahi hoti?
+
+**Answer:**
+
+Developer ko `static` likhne ki zarurat nahi hoti. Java internally object create karke `main()` method call karta hai.
+
+---
+
+## Q6. Is feature ka sabse bada benefit kya hai?
+
+**Answer:**
+
+Boilerplate code kam ho jata hai aur beginners ko Java seekhna easy ho jata hai.
+
+---
+
+## Q7. Kya ye production applications me commonly use hota hai?
+
+**Answer:**
+
+Nahi. Ye mainly learning, teaching aur small examples ke liye introduce hua hai. Production me traditional class structure zyada use hota hai.
+
+---
+
+## Q8. Kya ye permanent feature hai?
+
+**Answer:**
+
+Nahi. Java 21 me ye **Preview Feature** hai.
+
+---
+
+## Q9. Preview feature compile aur run kaise karte hain?
+
+**Answer:**
+
+Compile:
+
+```bash
+javac --enable-preview --release 21 Demo.java
+```
+
+Run:
+
+```bash
+java --enable-preview Demo
+```
+
+---
+
+## Q10. Old Java aur Java 21 me Hello World ka main difference kya hai?
+
+**Answer:**
+
+Old Java me class aur `public static void main()` compulsory tha. Java 21 me sirf `void main()` likhkar simple program likha ja sakta hai, baaki class aur object Java background me manage karta hai.
+
+---
+
+# 📌 Part 4 Summary
+
+* **Unnamed Classes & Instance Main Methods** Java 21 ka **Preview Feature** hai.
+* Is feature ka goal Java ke boilerplate code ko kam karna aur beginners ke liye language ko easy banana hai.
+* Ab simple programs ke liye `public class` aur `public static void main(String[] args)` likhna zaruri nahi; `void main()` se bhi program start ho sakta hai.
+* Java compiler background me unnamed class aur object create karke program execute karta hai.
+* Ye feature learning aur teaching ke liye bahut useful hai, lekin production projects me traditional class-based structure abhi bhi common hai.
+
+====================================================================================================
+# **Java 21 - Part 5**
+
+# **Sequenced Collections (JEP 431)**
+
+> **Teacher 👨‍🏫 → Student 👨‍🎓 Style**
+> **Language:** Hindi wali English
+> **Level:** Beginner Friendly
+> **Topic:** Java 21 - Sequenced Collections (Permanent Feature)
+
+---
+
+# 1. Sequenced Collection Kya Hai?
+
+### 👨‍🏫 Teacher:
+
+Java 21 me **Sequenced Collection** kya hai?
+
+### 👨‍🎓 Student:
+
+Sir, Java 21 me Collections Framework me ek naya interface introduce hua hai jiska naam hai **SequencedCollection**.
+
+Ye collections ko **order (sequence)** ke according access aur manage karna easy banata hai.
+
+---
+
+## Easy Definition
+
+> **SequencedCollection** ek naya interface hai jo ordered collections ke liye common methods provide karta hai jaise **getFirst(), getLast(), addFirst(), addLast()** etc.
+
+---
+
+# Real Life Example
+
+Suppose ek train hai.
+
+```text
+Engine → Coach1 → Coach2 → Coach3 → Last Coach
+```
+
+Agar tumhe
+
+* First coach chahiye
+* Last coach chahiye
+
+To directly mil jana chahiye.
+
+Pehle Java me last element nikalna thoda complicated tha.
+
+Java 21 ne ise easy bana diya.
+
+---
+
+# 2. Java 21 se Pehle
+
+### 👨‍🏫 Teacher:
+
+Pehle first aur last element kaise nikalte the?
+
+### 👨‍🎓 Student:
+
+Example
+
+```java
+List<String> list = new ArrayList<>();
+
+list.add("Java");
+list.add("Spring");
+list.add("Docker");
+```
+
+First element
+
+```java
+list.get(0);
+```
+
+Last element
+
+```java
+list.get(list.size()-1);
+```
+
+Output
+
+```text
+Java
+
+Docker
+```
+
+---
+
+## Problem
+
+Agar list empty ho to?
+
+Ya baar-baar `size()-1` likhna pade.
+
+Code readable nahi lagta.
+
+---
+
+# 3. Java 21 Ka Solution
+
+Ab direct methods available hain.
+
+```java
+list.getFirst();
+
+list.getLast();
+```
+
+Simple.
+
+---
+
+# 4. SequencedCollection Interface
+
+Java 21 me
+
+```text
+SequencedCollection
+```
+
+introduce hua.
+
+Iske important methods hain
+
+* getFirst()
+* getLast()
+* addFirst()
+* addLast()
+* removeFirst()
+* removeLast()
+* reversed()
+
+---
+
+# 5. getFirst()
+
+### 👨‍🏫 Teacher:
+
+getFirst() kya karta hai?
+
+### 👨‍🎓 Student:
+
+Collection ka first element return karta hai.
+
+---
+
+Example
+
+```java
+List<String> list = new ArrayList<>();
+
+list.add("Java");
+list.add("Spring");
+list.add("Docker");
+
+System.out.println(list.getFirst());
+```
+
+Output
+
+```text
+Java
+```
+
+---
+
+# 6. getLast()
+
+### 👨‍🏫 Teacher:
+
+getLast() kya karta hai?
+
+### 👨‍🎓 Student:
+
+Collection ka last element return karta hai.
+
+---
+
+Example
+
+```java
+System.out.println(list.getLast());
+```
+
+Output
+
+```text
+Docker
+```
+
+---
+
+# 7. addFirst()
+
+### 👨‍🏫 Teacher:
+
+addFirst() kya karta hai?
+
+### 👨‍🎓 Student:
+
+Collection ke beginning me element insert karta hai.
+
+---
+
+Example
+
+```java
+List<String> list = new ArrayList<>();
+
+list.add("Spring");
+
+list.add("Docker");
+
+list.addFirst("Java");
+
+System.out.println(list);
+```
+
+Output
+
+```text
+[Java, Spring, Docker]
+```
+
+---
+
+# 8. addLast()
+
+Ye last me element add karta hai.
+
+Example
+
+```java
+list.addLast("Kubernetes");
+
+System.out.println(list);
+```
+
+Output
+
+```text
+[Java, Spring, Docker, Kubernetes]
+```
+
+---
+
+# 9. removeFirst()
+
+### 👨‍🏫 Teacher:
+
+removeFirst() kya karta hai?
+
+### 👨‍🎓 Student:
+
+First element remove karta hai.
+
+---
+
+Example
+
+```java
+list.removeFirst();
+
+System.out.println(list);
+```
+
+Output
+
+```text
+[Spring, Docker, Kubernetes]
+```
+
+---
+
+# 10. removeLast()
+
+Ye last element remove karta hai.
+
+Example
+
+```java
+list.removeLast();
+
+System.out.println(list);
+```
+
+Output
+
+```text
+[Spring, Docker]
+```
+
+---
+
+# 11. reversed()
+
+### 👨‍🏫 Teacher:
+
+reversed() method kya karti hai?
+
+### 👨‍🎓 Student:
+
+Ye collection ka reverse view return karti hai.
+
+---
+
+Example
+
+```java
+List<String> list = List.of(
+
+"Java",
+
+"Spring",
+
+"Docker"
+
+);
+
+System.out.println(
+
+list.reversed()
+
+);
+```
+
+Output
+
+```text
+[Docker, Spring, Java]
+```
+
+---
+
+# 12. Complete Example
+
+```java
+import java.util.*;
+
+public class Demo {
+
+    public static void main(String[] args) {
+
+        List<String> list = new ArrayList<>();
+
+        list.add("Spring");
+
+        list.add("Docker");
+
+        list.addFirst("Java");
+
+        list.addLast("Kubernetes");
+
+        System.out.println("List : " + list);
+
+        System.out.println("First : " + list.getFirst());
+
+        System.out.println("Last : " + list.getLast());
+
+    }
+
+}
+```
+
+Output
+
+```text
+List : [Java, Spring, Docker, Kubernetes]
+
+First : Java
+
+Last : Kubernetes
+```
+
+---
+
+# 13. reversed() Example
+
+```java
+List<Integer> numbers = List.of(
+
+10,
+
+20,
+
+30,
+
+40
+
+);
+
+System.out.println(
+
+numbers.reversed()
+
+);
+```
+
+Output
+
+```text
+[40,30,20,10]
+```
+
+---
+
+# 14. Real-Life Example
+
+Suppose Queue hai.
+
+```text
+Person1
+
+Person2
+
+Person3
+
+Person4
+```
+
+Ab tumhe
+
+First person bhi chahiye
+
+Aur
+
+Last person bhi.
+
+Pehle
+
+```java
+queue.get(0)
+
+queue.get(queue.size()-1)
+```
+
+Ab
+
+```java
+queue.getFirst();
+
+queue.getLast();
+```
+
+Simple.
+
+---
+
+# 15. Kaun Kaun Implement Karta Hai?
+
+### 👨‍🏫 Teacher:
+
+Sir ye interface kaun implement karta hai?
+
+### 👨‍🎓 Student:
+
+Java ke ordered collections.
+
+Example
+
+* List
+* LinkedList
+* ArrayList
+* ArrayDeque
+
+Ye SequencedCollection ke methods support karte hain.
+
+---
+
+# 16. Advantages
+
+✅ Readable Code
+
+✅ Less Boilerplate
+
+✅ Better API
+
+✅ First aur Last access easy
+
+✅ Reverse View available
+
+---
+
+# 17. Difference
+
+| Old Java         | Java 21         |
+| ---------------- | --------------- |
+| list.get(0)      | list.getFirst() |
+| list.get(size-1) | list.getLast()  |
+| Manual Reverse   | reversed()      |
+| Complicated      | Easy            |
+
+---
+
+# 18. Important Points
+
+✔️ Ye Preview Feature nahi hai.
+
+✔️ Ye Permanent Feature hai.
+
+✔️ Collections Framework ko improve karta hai.
+
+✔️ Ordered collections ke liye useful hai.
+
+---
+
+# 19. Kab Use Karen?
+
+Jab bhi
+
+* First element chahiye
+* Last element chahiye
+* Reverse order chahiye
+
+Tab ye methods use kar sakte hain.
+
+---
+
+# ⭐ Important Keywords
+
+* **SequencedCollection**
+* **Ordered Collection**
+* **getFirst()**
+* **getLast()**
+* **addFirst()**
+* **addLast()**
+* **removeFirst()**
+* **removeLast()**
+* **reversed()**
+
+---
+
+# 🎯 Interview Questions
+
+---
+
+## Q1. Sequenced Collection kya hai?
+
+**Answer:**
+
+SequencedCollection Java 21 me introduce hua ek naya interface hai jo ordered collections ke liye common operations provide karta hai.
+
+---
+
+## Q2. Ye feature kyu introduce hua?
+
+**Answer:**
+
+Ordered collections ke first aur last elements ko access aur manage karna easy banane ke liye.
+
+---
+
+## Q3. getFirst() kya karta hai?
+
+**Answer:**
+
+Collection ka first element return karta hai.
+
+---
+
+## Q4. getLast() kya karta hai?
+
+**Answer:**
+
+Collection ka last element return karta hai.
+
+---
+
+## Q5. addFirst() aur addLast() me difference kya hai?
+
+**Answer:**
+
+* `addFirst()` beginning me element add karta hai.
+* `addLast()` end me element add karta hai.
+
+---
+
+## Q6. removeFirst() aur removeLast() kya karte hain?
+
+**Answer:**
+
+* `removeFirst()` first element remove karta hai.
+* `removeLast()` last element remove karta hai.
+
+---
+
+## Q7. reversed() method kya karti hai?
+
+**Answer:**
+
+Ye collection ka reverse-order view return karti hai.
+
+---
+
+## Q8. Kya Sequenced Collection Preview Feature hai?
+
+**Answer:**
+
+Nahi. Ye Java 21 ka **Permanent Feature** hai.
+
+---
+
+## Q9. Is feature ka biggest benefit kya hai?
+
+**Answer:**
+
+Cleaner code aur first/last element access karna bahut easy ho jata hai.
+
+---
+
+## Q10. Java 21 se pehle last element kaise nikalte the?
+
+**Answer:**
+
+```java
+list.get(list.size() - 1);
+```
+
+Java 21 me
+
+```java
+list.getLast();
+```
+
+---
+
+# 🔥 Interview Scenario
+
+### 👨‍🏫 Interviewer:
+
+**Java 21 me Sequenced Collection kyu introduce kiya gaya?**
+
+### 👨‍🎓 You:
+
+"Pehle ordered collections me first aur last element access karne ke liye `get(0)` aur `get(size()-1)` jaisi logic likhni padti thi. Java 21 ne `SequencedCollection` interface introduce kiya, jisme `getFirst()`, `getLast()`, `addFirst()`, `addLast()`, `removeFirst()`, `removeLast()` aur `reversed()` jaise methods diye gaye hain. Isse code zyada readable aur maintainable ho gaya."
+
+---
+
+# 📌 Part 5 Summary
+
+* **SequencedCollection** Java 21 ka **Permanent Feature** hai.
+* Ye ordered collections ke liye common API provide karta hai.
+* Naye methods:
+
+  * `getFirst()`
+  * `getLast()`
+  * `addFirst()`
+  * `addLast()`
+  * `removeFirst()`
+  * `removeLast()`
+  * `reversed()`
+* Isse first aur last element ko access karna simple ho gaya aur code ki readability improve hui.
+* Ye feature **List**, **LinkedList**, **ArrayList**, **ArrayDeque** jaise ordered collections ke saath use kiya ja sakta hai.
+
+====================================================================================================
+# **Java 21 - Part 6**
+
+# **Record Patterns (Final Feature)**
+
+> **Teacher 👨‍🏫 → Student 👨‍🎓 Style**
+> **Language:** Hindi wali English
+> **Level:** Beginner Friendly
+> **Topic:** Java 21 - Record Patterns (JEP 440)
+
+---
+
+# 1. Record Pattern Kya Hai?
+
+### 👨‍🏫 Teacher:
+
+Java 21 me **Record Pattern** kya hota hai?
+
+### 👨‍🎓 Student:
+
+Sir, **Record Pattern** ki help se hum **Record object ke data ko direct extract (deconstruct)** kar sakte hain.
+
+Pehle hume getter methods call karne padte the.
+
+Ab Java automatically values nikal deta hai.
+
+---
+
+## Easy Definition
+
+> **Record Pattern** ka use Record object ke andar ki values ko direct access karne ke liye hota hai, bina baar-baar getter methods call kiye.
+
+---
+
+# 2. Sabse Pehle Record Samjho
+
+### 👨‍🏫 Teacher:
+
+Sir Record kya hota hai?
+
+### 👨‍🎓 Student:
+
+Record Java ka ek special class type hai jo sirf **data store** karne ke liye use hota hai.
+
+Ye **Immutable** hota hai.
+
+Matlab object banne ke baad values change nahi hoti.
+
+---
+
+## Example
+
+```java
+record Student(
+    String name,
+    int age
+){}
+```
+
+Yaha
+
+Student ke paas
+
+* name
+* age
+
+ye do fields hain.
+
+---
+
+# 3. Object Banana
+
+```java
+Student s =
+new Student("Vishnu",29);
+```
+
+---
+
+# 4. Java 21 se Pehle
+
+### 👨‍🏫 Teacher:
+
+Pehle Record ki values kaise nikalte the?
+
+### 👨‍🎓 Student:
+
+Getter methods use karte the.
+
+```java
+Student s =
+new Student("Vishnu",29);
+
+System.out.println(s.name());
+
+System.out.println(s.age());
+```
+
+Output
+
+```
+Vishnu
+
+29
+```
+
+---
+
+## Problem
+
+Agar Record me
+
+10 fields ho
+
+To
+
+10 getters call karne padenge.
+
+---
+
+# 5. Java 21 Ka Solution
+
+Java automatically Record ko deconstruct kar deta hai.
+
+---
+
+## Example
+
+```java
+if(obj instanceof Student(
+
+String name,
+
+int age
+
+)){
+
+System.out.println(name);
+
+System.out.println(age);
+
+}
+```
+
+Dekho
+
+Alag se
+
+```java
+student.name()
+
+student.age()
+```
+
+nahi likhna pada.
+
+---
+
+# Easy Diagram
+
+```
+Student Object
+
+↓
+
+Record Pattern
+
+↓
+
+name
+
+↓
+
+age
+
+↓
+
+Direct Use
+```
+
+---
+
+# 6. Deconstruction Kya Hota Hai?
+
+### 👨‍🏫 Teacher:
+
+Video me sir ne bola tha
+
+"Record Deconstruction"
+
+Ye kya hota hai?
+
+### 👨‍🎓 Student:
+
+Object ke andar ki values ko alag-alag variables me tod dena hi **Deconstruction** kehlata hai.
+
+---
+
+## Example
+
+Object
+
+```java
+Student("Rahul",25)
+```
+
+Deconstruct
+
+↓
+
+```
+name = Rahul
+
+age = 25
+```
+
+Bas ye hi Deconstruction hai.
+
+---
+
+# 7. Practical Example
+
+```java
+record Student(
+
+String name,
+
+int age
+
+){}
+```
+
+```java
+Object obj =
+
+new Student(
+
+"Vishnu",
+
+29
+
+);
+```
+
+```java
+if(obj instanceof Student(
+
+String name,
+
+int age
+
+)){
+
+System.out.println(name);
+
+System.out.println(age);
+
+}
+```
+
+Output
+
+```
+Vishnu
+
+29
+```
+
+---
+
+# 8. Old Way vs New Way
+
+## Old Java
+
+```java
+if(obj instanceof Student s){
+
+System.out.println(s.name());
+
+System.out.println(s.age());
+
+}
+```
+
+---
+
+## Java 21
+
+```java
+if(obj instanceof Student(
+
+String name,
+
+int age
+
+)){
+
+System.out.println(name);
+
+System.out.println(age);
+
+}
+```
+
+Cleaner.
+
+---
+
+# 9. Record Pattern + Switch
+
+### 👨‍🏫 Teacher:
+
+Switch me bhi use kar sakte hain?
+
+### 👨‍🎓 Student:
+
+Bilkul.
+
+---
+
+Example
+
+```java
+switch(obj){
+
+case Student(
+
+String name,
+
+int age
+
+)->
+
+System.out.println(name);
+
+default->
+
+System.out.println("Unknown");
+
+}
+```
+
+---
+
+# 10. Nested Record Pattern
+
+Suppose
+
+```java
+record Address(
+
+String city,
+
+String state
+
+){}
+```
+
+```java
+record Employee(
+
+String name,
+
+Address address
+
+){}
+```
+
+Object
+
+```java
+Employee emp=
+
+new Employee(
+
+"Vishnu",
+
+new Address(
+
+"Pune",
+
+"Maharashtra"
+
+)
+
+);
+```
+
+---
+
+Java 21
+
+```java
+if(emp instanceof Employee(
+
+String name,
+
+Address(
+
+String city,
+
+String state
+
+)
+
+)){
+
+System.out.println(name);
+
+System.out.println(city);
+
+}
+```
+
+Output
+
+```
+Vishnu
+
+Pune
+```
+
+---
+
+# 11. Aur Easy Tarike Se
+
+Diagram
+
+```
+Employee
+
+↓
+
+Name
+
+↓
+
+Address
+
+↓
+
+City
+
+↓
+
+State
+```
+
+Java automatically
+
+sab extract kar deta hai.
+
+---
+
+# 12. Unnamed Variable ke Sath
+
+Suppose
+
+Age ki zarurat nahi.
+
+```java
+if(obj instanceof Student(
+
+String name,
+
+_
+
+)){
+
+System.out.println(name);
+
+}
+```
+
+Ya
+
+Sirf age chahiye.
+
+```java
+if(obj instanceof Student(
+
+_,
+
+int age
+
+)){
+
+System.out.println(age);
+
+}
+```
+
+Ye Java 21 ke naye feature ke saath combine ho sakta hai.
+
+---
+
+# 13. Benefits
+
+### 👨‍🏫 Teacher:
+
+Record Pattern ke fayde kya hain?
+
+### 👨‍🎓 Student:
+
+✅ Less Code
+
+✅ Readability Better
+
+✅ Getter call nahi karna padta
+
+✅ Pattern Matching easy
+
+✅ Nested Objects handle ho jate hain
+
+---
+
+# 14. Difference
+
+| Old Way           | Java 21              |
+| ----------------- | -------------------- |
+| Getter call       | Direct variable      |
+| Object access     | Deconstruction       |
+| Long code         | Short code           |
+| Manual extraction | Automatic extraction |
+
+---
+
+# 15. Real Life Example
+
+Suppose
+
+Employee ID Card
+
+```
+Employee
+
+↓
+
+Name
+
+↓
+
+Department
+
+↓
+
+City
+```
+
+Pehle
+
+ID Card kholo
+
+↓
+
+Name padho
+
+↓
+
+Department padho
+
+↓
+
+City padho
+
+Ab Java bolta hai
+
+Main khud sab nikal deta hoon.
+
+Tum direct use karo.
+
+---
+
+# 16. Important Points
+
+✔ Record immutable hota hai.
+
+✔ Record Pattern Java 21 me Final Feature hai.
+
+✔ Pattern Matching ke sath use hota hai.
+
+✔ Getter methods kam ho jate hain.
+
+✔ Nested Records support karta hai.
+
+---
+
+# 17. Record Pattern Kab Use Kare?
+
+Jab
+
+* Record object ho
+* Data extract karna ho
+* Pattern Matching use kar rahe ho
+* Switch Pattern use kar rahe ho
+
+---
+
+# ⭐ Important Keywords
+
+* **Record**
+* **Record Pattern**
+* **Pattern Matching**
+* **Deconstruction**
+* **Immutable**
+* **Nested Pattern**
+* **Switch Pattern**
+
+---
+
+# 🎯 Interview Questions
+
+---
+
+## Q1. Record kya hota hai?
+
+**Answer:**
+
+Record Java ka special class type hai jo immutable data store karne ke liye use hota hai.
+
+---
+
+## Q2. Record Pattern kya hai?
+
+**Answer:**
+
+Record Pattern Java 21 ka feature hai jo Record object ki values ko direct extract (deconstruct) karne ki facility deta hai.
+
+---
+
+## Q3. Record Pattern ka biggest benefit kya hai?
+
+**Answer:**
+
+Getter methods call karne ki zarurat kam ho jati hai aur code readable ho jata hai.
+
+---
+
+## Q4. Deconstruction kya hota hai?
+
+**Answer:**
+
+Object ke andar ki values ko alag-alag variables me extract karna Deconstruction kehlata hai.
+
+---
+
+## Q5. Kya Record Pattern switch me use ho sakta hai?
+
+**Answer:**
+
+Haan. Java 21 me switch pattern matching ke saath Record Pattern use kar sakte hain.
+
+---
+
+## Q6. Record immutable kyu kehlata hai?
+
+**Answer:**
+
+Kyuki object create hone ke baad uski values change nahi ki ja sakti.
+
+---
+
+## Q7. Java 21 se pehle Record ki value kaise access karte the?
+
+**Answer:**
+
+Getter methods jaise `student.name()` aur `student.age()` use karke.
+
+---
+
+## Q8. Java 21 me Record Pattern kaise help karta hai?
+
+**Answer:**
+
+Ye object ko direct deconstruct karke values ko variables me assign kar deta hai.
+
+---
+
+## Q9. Kya Record Pattern nested records ko support karta hai?
+
+**Answer:**
+
+Haan. Nested Records ko bhi direct deconstruct kar sakte hain.
+
+---
+
+## Q10. Record Pattern aur Unnamed Variable ek saath use kar sakte hain?
+
+**Answer:**
+
+Haan. Agar kisi field ki value use nahi karni ho to uski jagah `_` (underscore) use kar sakte hain.
+
+---
+
+# 🔥 Interview Scenario
+
+### 👨‍🏫 Interviewer:
+
+**Java 21 me Record Pattern introduce karne ki kya zarurat thi?**
+
+### 👨‍🎓 You:
+
+"Pehle Record object ki values access karne ke liye har field ka getter call karna padta tha. Java 21 me Record Pattern introduce hua jisse Record object ko direct deconstruct kar sakte hain. Isse code short, readable aur maintainable ho jata hai. Ye Pattern Matching aur Switch Pattern ke saath bhi bahut achha kaam karta hai."
+
+---
+
+# 📌 Part 6 Summary
+
+* **Record Pattern** Java 21 ka **Final (Permanent) Feature** hai.
+* Iska purpose Record objects ko **deconstruct** karke unki values directly variables me extract karna hai.
+* Getter methods (`name()`, `age()`) ko repeatedly call karne ki zarurat kam ho jati hai.
+* Ye **Pattern Matching** aur **Switch Pattern Matching** ke saath use hota hai.
+* **Nested Records** ko bhi easily deconstruct kiya ja sakta hai.
+* Agar kisi field ki value ki zarurat na ho to **Unnamed Variable (`_`)** ke saath combine karke aur bhi clean code likha ja sakta hai.
+
+====================================================================================================
+# **Java 21 - Part 7**
+
+# **Virtual Threads (Final Feature)**
+
+> **Teacher 👨‍🏫 → Student 👨‍🎓 Style**
+> **Language:** Hindi wali English
+> **Level:** Beginner Friendly
+> **Topic:** Java 21 - Virtual Threads (JEP 444)
+
+---
+
+# 1. Virtual Thread Kya Hai?
+
+### 👨‍🏫 Teacher:
+
+Java 21 me **Virtual Thread** kya hota hai?
+
+### 👨‍🎓 Student:
+
+Sir, **Virtual Thread** ek **lightweight thread** hai jo bahut kam memory use karta hai aur ek hi application me lakhon tasks ko efficiently handle kar sakta hai.
+
+Ye Java 21 ka sabse important feature hai.
+
+---
+
+## Easy Definition
+
+> **Virtual Thread** ek lightweight thread hai jo high concurrency applications ko efficiently handle karne ke liye introduce kiya gaya hai.
+
+---
+
+# 2. Sabse Pehle Thread Samjho
+
+### 👨‍🏫 Teacher:
+
+Virtual Thread samajhne se pehle Thread kya hota hai?
+
+### 👨‍🎓 Student:
+
+Thread matlab **execution ka ek path**.
+
+Ek program ke andar multiple kaam ek saath chal sakte hain.
+
+Example
+
+* File Download
+* Email Send
+* Database Call
+
+Ye sab alag-alag threads me chal sakte hain.
+
+---
+
+## Real Life Example
+
+Suppose ek restaurant hai.
+
+Customers
+
+```text
+Customer1
+
+Customer2
+
+Customer3
+
+Customer4
+```
+
+Aur sirf
+
+2 Waiters hain.
+
+To
+
+Customers ko wait karna padega.
+
+Waiter = Thread
+
+---
+
+# 3. Traditional Thread Ki Problem
+
+### 👨‍🏫 Teacher:
+
+Normal Thread me problem kya thi?
+
+### 👨‍🎓 Student:
+
+Normal Thread
+
+* Heavy hota hai
+* Zyada Memory leta hai
+* OS Thread create hota hai
+* Limited number me create kar sakte hain
+
+Example
+
+Agar 10,000 users aa gaye.
+
+To 10,000 OS Threads banana expensive hai.
+
+---
+
+## Traditional Thread
+
+```text
+Task 1 → OS Thread 1
+
+Task 2 → OS Thread 2
+
+Task 3 → OS Thread 3
+
+Task 4 → OS Thread 4
+```
+
+Har thread heavy hai.
+
+---
+
+# 4. Java 21 Ka Solution
+
+Java 21 bolta hai
+
+OS Thread mat banao.
+
+Main lightweight Virtual Threads bana deta hoon.
+
+---
+
+## Diagram
+
+```text
+100000 Tasks
+
+↓
+
+Virtual Threads
+
+↓
+
+Few OS Threads
+
+↓
+
+CPU
+```
+
+Matlab
+
+Lakhon Virtual Threads
+
+↓
+
+Kuch hi OS Threads
+
+↓
+
+Better Performance
+
+---
+
+# 5. Virtual Thread Kya Hai?
+
+### 👨‍🏫 Teacher:
+
+Virtual Thread internally kya hota hai?
+
+### 👨‍🎓 Student:
+
+Virtual Thread
+
+* JVM manage karta hai.
+* OS directly manage nahi karta.
+* Lightweight hota hai.
+* Fast create hota hai.
+
+---
+
+# Easy Comparison
+
+## Platform Thread
+
+```text
+1 Task
+
+↓
+
+1 OS Thread
+```
+
+---
+
+## Virtual Thread
+
+```text
+100000 Tasks
+
+↓
+
+100000 Virtual Threads
+
+↓
+
+Few Platform Threads
+
+↓
+
+CPU
+```
+
+---
+
+# 6. Why Virtual Thread?
+
+### 👨‍🏫 Teacher:
+
+Virtual Thread introduce hi kyu hua?
+
+### 👨‍🎓 Student:
+
+Kyuki modern applications me
+
+* Millions of Requests
+* APIs
+* Microservices
+* Banking
+* Chat Applications
+
+bahut concurrent requests handle karti hain.
+
+Traditional threads expensive the.
+
+Virtual Threads cheap hain.
+
+---
+
+# Real Life Example
+
+Old Office
+
+10 Employees
+
+↓
+
+10 Chairs
+
+↓
+
+Sirf 10 log kaam kar sakte.
+
+---
+
+New Office
+
+100 Employees
+
+↓
+
+Virtual Desk System
+
+↓
+
+Sab kaam kar sakte.
+
+---
+
+# 7. Virtual Thread Kaise Banaye?
+
+### Method 1
+
+```java
+Thread.startVirtualThread(() -> {
+
+    System.out.println("Hello");
+
+});
+```
+
+Ye sabse easy method hai.
+
+---
+
+### 👨‍🏫 Teacher:
+
+Ye kya karega?
+
+### 👨‍🎓 Student:
+
+Ek Virtual Thread create karega.
+
+Aur Runnable execute karega.
+
+---
+
+# 8. Complete Example
+
+```java
+public class Demo {
+
+    public static void main(String[] args) {
+
+        Thread.startVirtualThread(() -> {
+
+            System.out.println("Virtual Thread Running");
+
+        });
+
+    }
+
+}
+```
+
+Output
+
+```text
+Virtual Thread Running
+```
+
+---
+
+# 9. Method 2
+
+```java
+Thread thread = Thread.ofVirtual()
+
+.start(() -> {
+
+System.out.println("Hello");
+
+});
+```
+
+Yaha
+
+Pehle Thread object bana.
+
+Fir start hua.
+
+---
+
+# 10. Method 3 (Executor)
+
+```java
+try(var executor=
+
+Executors.newVirtualThreadPerTaskExecutor()){
+
+executor.submit(
+
+()->{
+
+System.out.println("Task");
+
+}
+
+);
+
+}
+```
+
+Ye enterprise applications me zyada use hota hai.
+
+---
+
+# 11. Difference Between All 3
+
+| Method                 | Use                   |
+| ---------------------- | --------------------- |
+| startVirtualThread()   | Simple Program        |
+| Thread.ofVirtual()     | Thread Object chahiye |
+| VirtualThread Executor | Multiple Tasks        |
+
+---
+
+# 12. Platform Thread vs Virtual Thread
+
+| Platform Thread | Virtual Thread    |
+| --------------- | ----------------- |
+| Heavy           | Lightweight       |
+| OS Managed      | JVM Managed       |
+| Expensive       | Cheap             |
+| Limited         | Millions Possible |
+| High Memory     | Low Memory        |
+
+---
+
+# 13. Memory Difference
+
+Traditional Thread
+
+```text
+1 Thread
+
+↓
+
+1 MB Stack
+```
+
+10000 Threads
+
+↓
+
+10000 MB
+
+↓
+
+Huge Memory
+
+---
+
+Virtual Thread
+
+Bahut kam memory.
+
+Isi liye
+
+Millions create kar sakte.
+
+---
+
+# 14. Real-Life Example
+
+Suppose
+
+Swiggy
+
+10 lakh orders
+
+Traditional Thread
+
+↓
+
+10 lakh OS Threads
+
+Impossible
+
+---
+
+Virtual Thread
+
+↓
+
+10 lakh Virtual Threads
+
+↓
+
+Few Platform Threads
+
+↓
+
+Efficient
+
+---
+
+# 15. Microservices Example
+
+Suppose
+
+API
+
+↓
+
+Database Call
+
+↓
+
+Redis Call
+
+↓
+
+Kafka Call
+
+↓
+
+External Service Call
+
+Ye sab
+
+Waiting State me rehte hain.
+
+Traditional Thread
+
+Waiting ke time bhi block rehta hai.
+
+Virtual Thread
+
+Waiting efficiently handle karta hai.
+
+Isi liye Microservices me bahut useful hai.
+
+---
+
+# 16. Banking Example
+
+10000 Customers
+
+↓
+
+Balance Check
+
+↓
+
+DB Call
+
+↓
+
+Response
+
+Traditional Thread
+
+↓
+
+OS Thread busy
+
+---
+
+Virtual Thread
+
+↓
+
+Lightweight
+
+↓
+
+Better Scalability
+
+---
+
+# 17. Kya Virtual Thread Fast Hai?
+
+### 👨‍🏫 Teacher:
+
+Sir Virtual Thread hamesha fast hota hai?
+
+### 👨‍🎓 Student:
+
+Nahi.
+
+Ye har situation me fast nahi hota.
+
+Ye specially
+
+**I/O Bound Applications**
+
+me best hai.
+
+Example
+
+* Database
+* HTTP Calls
+* REST APIs
+* File Reading
+* Network Calls
+
+---
+
+# CPU Intensive Work
+
+Example
+
+```java
+Prime Number
+
+Encryption
+
+Image Processing
+```
+
+Yaha Virtual Thread ka special benefit nahi milega.
+
+---
+
+# 18. Advantages
+
+✅ Lightweight
+
+✅ Millions of Threads
+
+✅ Better Scalability
+
+✅ Better Concurrency
+
+✅ Easy Programming
+
+✅ Less Resource Usage
+
+✅ Perfect for Microservices
+
+---
+
+# 19. Limitations
+
+❌ CPU Intensive tasks me special benefit nahi.
+
+❌ Thread Local ka use carefully.
+
+❌ Old libraries compatible na ho sakti hain.
+
+---
+
+# 20. Important Points
+
+✔ Java 21 Final Feature.
+
+✔ Preview nahi hai.
+
+✔ JVM manage karta hai.
+
+✔ OS directly manage nahi karta.
+
+✔ High Concurrency ke liye best.
+
+---
+
+# ⭐ Important Keywords
+
+* **Virtual Thread**
+* **Platform Thread**
+* **Concurrency**
+* **JVM**
+* **Lightweight Thread**
+* **Executor**
+* **Thread.ofVirtual()**
+* **startVirtualThread()**
+
+---
+
+# 🎯 Interview Questions
+
+---
+
+## Q1. Virtual Thread kya hai?
+
+**Answer:**
+
+Virtual Thread Java 21 ka lightweight thread hai jo JVM dwara manage hota hai aur high concurrency applications ke liye design kiya gaya hai.
+
+---
+
+## Q2. Virtual Thread introduce kyu hua?
+
+**Answer:**
+
+Traditional OS Threads heavy aur expensive the. High concurrency applications ko efficiently handle karne ke liye Virtual Threads introduce kiye gaye.
+
+---
+
+## Q3. Virtual Thread aur Platform Thread me difference kya hai?
+
+| Platform Thread | Virtual Thread    |
+| --------------- | ----------------- |
+| OS Managed      | JVM Managed       |
+| Heavy           | Lightweight       |
+| Limited         | Millions Possible |
+| High Memory     | Low Memory        |
+
+---
+
+## Q4. Virtual Thread create kaise karte hain?
+
+**Answer:**
+
+Teen common ways:
+
+```java
+Thread.startVirtualThread(...)
+```
+
+```java
+Thread.ofVirtual().start(...)
+```
+
+```java
+Executors.newVirtualThreadPerTaskExecutor()
+```
+
+---
+
+## Q5. Virtual Thread kis type ke applications ke liye best hai?
+
+**Answer:**
+
+I/O Bound Applications jaise:
+
+* REST APIs
+* Database Calls
+* File Operations
+* Network Calls
+* Microservices
+
+---
+
+## Q6. Kya Virtual Thread CPU Intensive task me bhi best hai?
+
+**Answer:**
+
+Nahi. CPU-bound tasks me iska special advantage nahi hota.
+
+---
+
+## Q7. Kya Virtual Thread Preview Feature hai?
+
+**Answer:**
+
+Nahi. Java 21 me ye **Final (Permanent) Feature** hai.
+
+---
+
+## Q8. JVM aur OS me Virtual Thread ko kaun manage karta hai?
+
+**Answer:**
+
+JVM Virtual Threads ko manage karta hai aur unhe available Platform Threads par schedule karta hai.
+
+---
+
+## Q9. Executor ke saath Virtual Thread kaise use karte hain?
+
+**Answer:**
+
+`Executors.newVirtualThreadPerTaskExecutor()` use karke har task ke liye ek Virtual Thread create kiya ja sakta hai.
+
+---
+
+## Q10. Interview me agar poocha jaye "Virtual Thread ka biggest advantage kya hai?" to kya bolenge?
+
+**Answer:**
+
+"Virtual Threads lightweight hote hain aur bahut kam resources use karte hain. Is wajah se Java applications lakhon concurrent I/O tasks efficiently handle kar sakti hain, especially microservices aur web applications me."
+
+---
+
+# 🔥 Interview Scenario
+
+### 👨‍🏫 Interviewer:
+
+**Java 21 me Virtual Threads ka main purpose kya hai?**
+
+### 👨‍🎓 You:
+
+"Virtual Threads ka main purpose high concurrency applications ko efficiently handle karna hai. Traditional Platform Threads heavy aur OS-managed hote hain, jabki Virtual Threads lightweight hote hain aur JVM manage karti hai. Isse kam resources me bahut saare concurrent I/O tasks execute kiye ja sakte hain."
+
+---
+
+# 📌 Part 7 Summary
+
+* **Virtual Threads** Java 21 ka **Final (Permanent) Feature** hai.
+* Ye **lightweight threads** hain jo **JVM** manage karti hai.
+* Inka purpose **high concurrency** ko efficiently handle karna hai.
+* Common creation methods:
+
+  * `Thread.startVirtualThread()`
+  * `Thread.ofVirtual().start()`
+  * `Executors.newVirtualThreadPerTaskExecutor()`
+* Ye **I/O-bound applications** (REST APIs, database calls, microservices, network operations) ke liye best suited hain.
+* Traditional Platform Threads ke comparison me ye kam memory use karte hain aur bahut zyada concurrent tasks handle kar sakte hain.
+
+====================================================================================================
+# **Java 21 - Part 8**
+
+# **Remaining Important Features + Revision + Interview Tips**
+
+> **Teacher 👨‍🏫 → Student 👨‍🎓 Style**
+> **Language:** Hindi wali English
+> **Level:** Beginner Friendly
+
+---
+
+# 1. Teacher:
+
+Sir, kya Java 21 me sirf yehi features aaye hain?
+
+## Student:
+
+Nahi Sir.
+
+Java 21 me aur bhi bahut saare features aaye hain.
+
+Jaise
+
+* Foreign Function & Memory API
+* Generational ZGC
+* Scoped Values
+* Structured Concurrency
+* Key Encapsulation Mechanism API
+* Vector API
+
+Lekin interview me mostly
+
+* Virtual Threads
+* Record Patterns
+* Sequenced Collections
+* String Templates
+* Unnamed Classes
+
+ye hi pooche jaate hain.
+
+---
+
+# 2. Foreign Function & Memory API
+
+## 👨‍🏫 Teacher:
+
+Ye kya hota hai?
+
+## 👨‍🎓 Student:
+
+Pehle Java ko C/C++ libraries use karne ke liye
+
+**JNI (Java Native Interface)** use karna padta tha.
+
+JNI difficult tha.
+
+Java 21 ne Foreign Function & Memory API introduce ki.
+
+Isse Java directly native libraries ko access kar sakta hai.
+
+---
+
+### Example
+
+Java Program
+
+↓
+
+Call C Library
+
+↓
+
+Result
+
+---
+
+## Advantage
+
+* JNI se easy
+* Better Performance
+* Native Memory Access
+
+---
+
+# 3. Generational ZGC
+
+## 👨‍🏫 Teacher:
+
+Generational ZGC kya hai?
+
+## 👨‍🎓 Student:
+
+Ye Java ka Garbage Collector improve karta hai.
+
+Garbage Collection ko fast banata hai.
+
+Pause Time kam karta hai.
+
+Performance improve hoti hai.
+
+---
+
+### Real Life Example
+
+Suppose
+
+Room me garbage hai.
+
+Old GC
+
+↓
+
+Poora room clean karega.
+
+Generational ZGC
+
+↓
+
+Sirf jaha garbage hai wahi clean karega.
+
+Time bhi bachega.
+
+---
+
+# 4. Scoped Values
+
+## 👨‍🏫 Teacher:
+
+Scoped Values kya hai?
+
+## 👨‍🎓 Student:
+
+Scoped Values ka use data ko safely multiple threads ke beech share karne ke liye hota hai.
+
+Ye ThreadLocal ka modern alternative mana jata hai.
+
+---
+
+# 5. Structured Concurrency
+
+## 👨‍🏫 Teacher:
+
+Ye kya hota hai?
+
+## 👨‍🎓 Student:
+
+Agar multiple threads ek hi task ke liye chal rahe hain,
+
+to unko ek group ki tarah manage karna hi Structured Concurrency hai.
+
+Example
+
+Food Delivery
+
+↓
+
+Payment
+
+↓
+
+Restaurant
+
+↓
+
+Delivery Boy
+
+↓
+
+Tracking
+
+Ye sab ek hi request ka part hain.
+
+Agar payment fail ho jaye,
+
+to baaki tasks bhi cancel ho sakte hain.
+
+---
+
+# 6. Java 21 Revision
+
+## 👨‍🏫 Teacher:
+
+Ek baar saare features revise karao.
+
+## 👨‍🎓 Student:
+
+| Feature                   | Purpose                                   |
+| ------------------------- | ----------------------------------------- |
+| **String Templates**      | String ko readable banana                 |
+| **Unnamed Variables**     | Unused variable ko ignore karna           |
+| **Unnamed Classes**       | Beginners ke liye Java easy banana        |
+| **Sequenced Collections** | Ordered collection operations easy banana |
+| **Record Patterns**       | Record object ko deconstruct karna        |
+| **Virtual Threads**       | High Concurrency improve karna            |
+
+---
+
+# 7. Preview vs Permanent
+
+| Preview Feature   | Permanent Feature     |
+| ----------------- | --------------------- |
+| String Templates  | Sequenced Collections |
+| Unnamed Variables | Record Patterns       |
+| Unnamed Classes   | Virtual Threads       |
+
+---
+
+# 8. Java 17 vs Java 21
+
+| Java 17              | Java 21                    |
+| -------------------- | -------------------------- |
+| LTS                  | LTS                        |
+| Records              | Record Patterns            |
+| Pattern Matching     | Improved Pattern Matching  |
+| Traditional Threads  | Virtual Threads            |
+| Old Collections      | Sequenced Collections      |
+| String Concatenation | String Templates (Preview) |
+
+---
+
+# 9. Interview Tips
+
+### 👨‍🏫 Teacher:
+
+Interview me kya bolna chahiye?
+
+### 👨‍🎓 Student:
+
+Feature ka naam mat bolo sirf.
+
+Ye bhi batao
+
+* Problem kya thi?
+* Solution kya aaya?
+* Benefit kya hai?
+* Real-life example kya hai?
+
+---
+
+Example
+
+Interviewer
+
+Virtual Thread?
+
+Wrong Answer
+
+> Lightweight Thread.
+
+Correct Answer
+
+> Virtual Thread Java 21 ka lightweight thread hai jo JVM manage karti hai. Ye high concurrency aur I/O-bound applications ke liye introduce hua tha kyuki Platform Threads heavy hote hain aur OS manage karta hai.
+
+---
+
+# 10. Java 21 Feature Mnemonic
+
+Yaad karne ka easy trick
+
+## "**SUV-SRV**"
+
+```text
+S → String Templates
+
+U → Unnamed Variables
+
+U → Unnamed Classes
+
+S → Sequenced Collections
+
+R → Record Patterns
+
+V → Virtual Threads
+```
+
+---
+
+# 11. Interview Flow
+
+Agar interviewer bole
+
+Java 21 me kya naya hai?
+
+Answer
+
+Java 21 ek LTS version hai.
+
+Isme important features hain
+
+* String Templates
+* Unnamed Variables
+* Unnamed Classes
+* Sequenced Collections
+* Record Patterns
+* Virtual Threads
+
+Aur sabse important feature
+
+**Virtual Threads** hai.
+
+---
+
+# 12. Common Interview Mistakes
+
+❌ Preview aur Permanent Feature mix kar dena
+
+❌ Virtual Thread ko OS Thread bol dena
+
+❌ Record ko normal class bol dena
+
+❌ Sequenced Collection ko List bol dena
+
+❌ String Template ko StringBuilder bol dena
+
+---
+
+# 13. Java 21 One-Line Revision
+
+| Feature                   | One Line                                |
+| ------------------------- | --------------------------------------- |
+| **LTS**                   | Long-Term Support Version               |
+| **String Templates**      | String me direct variable use           |
+| **Unnamed Variables**     | Unused variable = `_`                   |
+| **Unnamed Classes**       | Class likhna optional (simple programs) |
+| **Sequenced Collections** | First/Last methods                      |
+| **Record Patterns**       | Direct data extraction                  |
+| **Virtual Threads**       | Lightweight JVM-managed threads         |
+
+---
+
+# 14. Java 21 Feature Mapping
+
+```text
+Java 21
+
+│
+
+├── LTS
+
+│
+
+├── Preview
+
+│      │
+
+│      ├── String Templates
+
+│      ├── Unnamed Variables
+
+│      └── Unnamed Classes
+
+│
+
+└── Permanent
+
+       │
+
+       ├── Sequenced Collections
+
+       ├── Record Patterns
+
+       └── Virtual Threads
+```
+
+---
+
+# ⭐ Final Interview Questions
+
+### Q1. Java 21 LTS hai?
+
+**Answer:**
+Haan.
+
+---
+
+### Q2. Sabse important feature?
+
+**Answer:**
+Virtual Threads.
+
+---
+
+### Q3. String Template kis problem ko solve karta hai?
+
+**Answer:**
+String concatenation aur readability.
+
+---
+
+### Q4. Record Pattern kis problem ko solve karta hai?
+
+**Answer:**
+Getter calls ko reduce karta hai.
+
+---
+
+### Q5. Sequenced Collection kis problem ko solve karta hai?
+
+**Answer:**
+Ordered collections ke first/last operations ko simple banata hai.
+
+---
+
+### Q6. Virtual Thread kis problem ko solve karta hai?
+
+**Answer:**
+High concurrency aur heavy OS threads ki limitation ko solve karta hai.
+
+---
+
+### Q7. Preview Feature ka matlab?
+
+**Answer:**
+Experimental feature jo future me permanent ya remove ho sakta hai.
+
+---
+
+### Q8. Java 21 me kitne important features interview ke liye padhne chahiye?
+
+**Answer:**
+
+1. String Templates
+2. Unnamed Variables
+3. Unnamed Classes
+4. Sequenced Collections
+5. Record Patterns
+6. Virtual Threads
+
+---
+
+# 🎯 Final Interview Summary (2-Minute Revision)
+
+### 👨‍🏫 Interviewer:
+
+**Java 21 me kya naya aaya?**
+
+### 👨‍🎓 You:
+
+> "Java 21 ek **Long-Term Support (LTS)** release hai jo September 2023 me launch hua. Isme kai naye features introduce hue. **Preview Features** me String Templates, Unnamed Variables aur Unnamed Classes hain. **Permanent Features** me Sequenced Collections, Record Patterns aur Virtual Threads hain. Inme se Virtual Threads sabse important feature hai kyuki ye lightweight, JVM-managed threads provide karta hai jo high-concurrency, especially I/O-bound applications, ko efficiently handle karte hain."
+
+---
+
+# 📌 Java 21 Complete Summary
+
+* ✅ **Java 21** is an **LTS (Long-Term Support)** release.
+* ✅ **Preview Features**:
+
+  * String Templates
+  * Unnamed Variables & Patterns
+  * Unnamed Classes & Instance Main Methods
+* ✅ **Permanent Features**:
+
+  * Sequenced Collections
+  * Record Patterns
+  * Virtual Threads
+* ✅ Other improvements include **Foreign Function & Memory API**, **Generational ZGC**, **Scoped Values**, and **Structured Concurrency**.
+* ✅ **Virtual Threads** are the most important Java 21 feature for backend and microservices interviews because they improve scalability and concurrency while reducing resource usage.
+
+🎉 **Congratulations!** You have now completed the full **Java 21 interview notes series (Parts 1–8)** in a teacher–student style with beginner-friendly explanations. These notes cover the most commonly asked Java 21 interview topics.
+
+====================================================================================================
+====================================================================================================

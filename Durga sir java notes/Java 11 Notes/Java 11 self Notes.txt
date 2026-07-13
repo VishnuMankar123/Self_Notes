@@ -1,0 +1,2506 @@
+Java 11 Notes Takes a reference by Durga Sir notes
+
+==========================================================================================
+Ye feature **Java 11** me introduce hua tha aur interview me kaafi pucha jata hai. Chaliye ise simple Hindi-English me samajhte hain.
+
+---
+
+# Java 11 - Run Java File Without Compilation
+
+## Java 10 aur uske pehle
+
+Pehle Java program run karne ke liye **2 commands** chalani padti thi.
+
+### Step 1 - Compile
+
+```bash
+javac Test.java
+```
+
+Ye command `.java` file ko `.class` file me convert karti hai.
+
+```
+Test.java
+      |
+   javac
+      |
+Test.class
+```
+
+### Step 2 - Execute
+
+```bash
+java Test
+```
+
+Output
+
+```
+Welcome To Java
+```
+
+---
+
+## Java 11
+
+Java 11 me agar sirf ek Java source file run karni hai to compile manually karne ki zarurat nahi hai.
+
+Sirf ye command likho
+
+```bash
+java Test.java
+```
+
+Output
+
+```
+Welcome To Java 11 Version
+```
+
+---
+
+## Internally kya hota hai?
+
+Jab aap
+
+```bash
+java Test.java
+```
+
+chalate ho to JVM khud ye steps perform karti hai.
+
+```
+Test.java
+      |
+      | (JVM internally compile karta hai)
+      |
+Temporary .class
+      |
+Run
+      |
+Output
+```
+
+Matlab
+
+Tumhe
+
+```bash
+javac Test.java
+```
+
+likhne ki zarurat nahi hai.
+
+Java khud compile karke turant execute kar deta hai.
+
+---
+
+# Example
+
+```java
+class Test {
+
+    public static void main(String[] args) {
+
+        System.out.println("Welcome To Java 11");
+
+    }
+
+}
+```
+
+Run
+
+```bash
+java Test.java
+```
+
+Output
+
+```
+Welcome To Java 11
+```
+
+---
+
+# Kya permanent .class file banegi?
+
+Normally **No**.
+
+Java internally compile karta hai aur temporary use karke program run kar deta hai.
+
+Isliye folder me `Test.class` generally nahi dikhegi.
+
+---
+
+# Ye feature kab useful hai?
+
+Ye mostly use hota hai
+
+* Practice programs
+* Demo
+* Small utilities
+* Interview coding
+* Learning
+
+Production projects me hum abhi bhi
+
+```
+javac
+```
+
+ya
+
+```
+Maven
+```
+
+ya
+
+```
+Gradle
+```
+
+use karte hain.
+
+---
+
+# Multiple main() Methods Example
+
+Suppose
+
+```java
+class A {
+    public static void main(String[] args) {
+        System.out.println("A");
+    }
+}
+
+class B {
+    public static void main(String[] args) {
+        System.out.println("B");
+    }
+}
+
+class C {
+    public static void main(String[] args) {
+        System.out.println("C");
+    }
+}
+```
+
+Run
+
+```bash
+java abc.java
+```
+
+Output
+
+```
+A
+```
+
+### Question
+
+Why A?
+
+Because JVM source file ko **top se bottom** padhti hai.
+
+Sabse pehle jis class me
+
+```java
+public static void main()
+```
+
+milta hai, usi ko execute kar deti hai.
+
+Flow
+
+```
+abc.java
+
+↓
+
+Class A
+Main mila ✅
+
+↓
+
+Execute A
+
+↓
+
+Stop searching
+```
+
+---
+
+## Agar order change kar do
+
+```java
+class B
+{
+   main()
+}
+
+class C
+{
+   main()
+}
+
+class A
+{
+   main()
+}
+```
+
+Run
+
+```bash
+java abc.java
+```
+
+Output
+
+```
+B
+```
+
+Kyun?
+
+```
+Top
+
+↓
+
+B
+Main mila ✅
+
+↓
+
+Execute B
+```
+
+---
+
+## Agar C sabse upar ho
+
+```java
+class C
+{
+   main()
+}
+
+class A
+{
+   main()
+}
+
+class B
+{
+   main()
+}
+```
+
+Output
+
+```
+C
+```
+
+Again
+
+```
+Top
+
+↓
+
+C
+Main mila
+
+↓
+
+Execute C
+```
+
+---
+
+# Important Point
+
+Ye sirf **source-file mode** (`java File.java`) me hota hai.
+
+Agar tum normal tarike se run karte ho
+
+```bash
+javac abc.java
+```
+
+to multiple classes compile ho jayengi
+
+```
+A.class
+B.class
+C.class
+```
+
+Ab tum jis class ko run karoge wahi execute hogi.
+
+Example
+
+```
+java A
+```
+
+Output
+
+```
+A
+```
+
+```
+java B
+```
+
+Output
+
+```
+B
+```
+
+```
+java C
+```
+
+Output
+
+```
+C
+```
+
+Yahan file ka order matter nahi karta.
+
+---
+
+# Java 11 Backward Compatibility
+
+Java 11 ne purana tarika remove nahi kiya.
+
+Aaj bhi tum ye kar sakte ho
+
+```bash
+javac Test.java
+java Test
+```
+
+Aur ye bhi
+
+```bash
+java Test.java
+```
+
+Dono valid hain.
+
+---
+
+# Interview Questions
+
+### Q1. Java 11 me bina compile kiye Java program kaise run karte hain?
+
+**Answer:** `java FileName.java` command se. JVM internally source file compile karke execute karti hai.
+
+### Q2. Kya Java 11 me `javac` ki zarurat khatam ho gayi?
+
+**Answer:** Nahi. Ye feature sirf single source file ko directly run karne ke liye hai. Real projects me `javac`, Maven ya Gradle hi use hote hain.
+
+### Q3. Agar ek source file me multiple `main()` methods hain aur `java File.java` chalaya, to kaunsi class execute hogi?
+
+**Answer:** JVM source file ko upar se niche padhti hai. Jis class ka `main()` method sabse pehle milta hai, wahi execute hoti hai.
+
+### Q4. Java 11 backward compatible hai?
+
+**Answer:** Haan. Purana tarika (`javac Test.java` + `java Test`) bhi Java 11 me fully supported hai.
+
+### Easy Memory Trick
+
+* **Java 10 and below:** `javac` ➜ `java`
+* **Java 11+:** `java File.java` (compile + run automatically)
+* **Multiple `main()` in source-file mode:** **First `main()` from top wins.**
+
+==========================================================================================
+
+# Java 11 New String Methods
+
+Java 11 me String class me 6 naye methods add hue.
+
+```java
+repeat()
+
+isBlank()
+
+strip()
+
+stripLeading()
+
+stripTrailing()
+
+lines()
+```
+
+---
+
+# 1. repeat(int count)
+
+## Purpose
+
+Ek string ko jitni baar chaho repeat kar sakte ho.
+
+### Syntax
+
+```java
+String result = str.repeat(count);
+```
+
+---
+
+## Example 1
+
+```java
+String str = "Hello";
+
+System.out.println(str.repeat(3));
+```
+
+Output
+
+```text
+HelloHelloHello
+```
+
+---
+
+## Example 2
+
+```java
+String str = "Java";
+
+System.out.println(str.repeat(1));
+```
+
+Output
+
+```text
+Java
+```
+
+---
+
+## Example 3
+
+```java
+String str = "Java";
+
+System.out.println(str.repeat(0));
+```
+
+Output
+
+```text
+```
+
+(No output because empty string is returned.)
+
+---
+
+## Example 4
+
+```java
+String str = "Java";
+
+System.out.println(str.repeat(-1));
+```
+
+Output
+
+```text
+java.lang.IllegalArgumentException
+```
+
+Negative count allowed nahi hai.
+
+---
+
+### Interview Question
+
+**Q. repeat() method negative value par kya karta hai?**
+
+**Answer:** `IllegalArgumentException` throw karta hai.
+
+---
+
+# 2. isBlank()
+
+## Purpose
+
+Check karta hai ki string blank hai ya nahi.
+
+Blank means
+
+* Empty string
+* Sirf spaces
+* Tabs
+* New line
+
+---
+
+### Example 1
+
+```java
+String str = "";
+
+System.out.println(str.isBlank());
+```
+
+Output
+
+```text
+true
+```
+
+---
+
+### Example 2
+
+```java
+String str = "      ";
+
+System.out.println(str.isBlank());
+```
+
+Output
+
+```text
+true
+```
+
+Sirf spaces hain.
+
+---
+
+### Example 3
+
+```java
+String str = "Java";
+
+System.out.println(str.isBlank());
+```
+
+Output
+
+```text
+false
+```
+
+---
+
+### Difference between isEmpty() and isBlank()
+
+| isEmpty()                   | isBlank()                  |
+| --------------------------- | -------------------------- |
+| Sirf length check karta hai | Spaces bhi check karta hai |
+| `"   "` → false             | `"   "` → true             |
+| `""` → true                 | `""` → true                |
+
+### Example
+
+```java
+String str = "   ";
+
+System.out.println(str.isEmpty());
+System.out.println(str.isBlank());
+```
+
+Output
+
+```text
+false
+true
+```
+
+**Easy Memory Trick**
+
+* **Empty = Length 0**
+* **Blank = Empty + Spaces**
+
+---
+
+# 3. strip()
+
+## Purpose
+
+Starting aur ending ke spaces remove karta hai.
+
+Ye `trim()` jaisa lagta hai, lekin `strip()` Unicode whitespace ko bhi properly handle karta hai, jabki `trim()` mainly ASCII whitespace remove karta hai.
+
+---
+
+Example
+
+```java
+String str = "   Java Programming   ";
+
+System.out.println(str.strip());
+```
+
+Output
+
+```text
+Java Programming
+```
+
+---
+
+## Visual
+
+```text
+Before
+
+"    Java    "
+
+↓
+
+strip()
+
+↓
+
+"Java"
+```
+
+---
+
+# 4. stripLeading()
+
+## Purpose
+
+Sirf starting (left side) ke spaces remove karta hai.
+
+End ke spaces waise hi rehte hain.
+
+---
+
+Example
+
+```java
+String str = "    Java    ";
+
+System.out.println(str.stripLeading());
+```
+
+Output
+
+```text
+Java
+```
+
+(End me spaces abhi bhi hain, console me dikhte nahi.)
+
+Visual
+
+```text
+Before
+
+"    Java    "
+
+↓
+
+stripLeading()
+
+↓
+
+"Java    "
+```
+
+---
+
+# 5. stripTrailing()
+
+## Purpose
+
+Sirf ending (right side) ke spaces remove karta hai.
+
+Starting ke spaces waise hi rehte hain.
+
+---
+
+Example
+
+```java
+String str = "    Java    ";
+
+System.out.println(str.stripTrailing());
+```
+
+Visual
+
+```text
+Before
+
+"    Java    "
+
+↓
+
+stripTrailing()
+
+↓
+
+"    Java"
+```
+
+Leading spaces abhi bhi present hain.
+
+---
+
+# strip(), stripLeading(), stripTrailing() Difference
+
+| Method          | Leading Space | Trailing Space |
+| --------------- | ------------- | -------------- |
+| strip()         | Remove        | Remove         |
+| stripLeading()  | Remove        | Keep           |
+| stripTrailing() | Keep          | Remove         |
+
+---
+
+# 6. lines()
+
+## Purpose
+
+Ek multi-line string ko line by line split karta hai.
+
+Delimiter hota hai
+
+```text
+\n
+```
+
+Aur result me `Stream<String>` return karta hai.
+
+---
+
+Example
+
+```java
+String str =
+"Java
+Spring
+Docker";
+```
+
+Actually string aise hogi:
+
+```java
+String str = "Java\nSpring\nDocker";
+```
+
+---
+
+Ab
+
+```java
+Stream<String> stream = str.lines();
+```
+
+Ye internally bana dega
+
+```text
+Java
+
+Spring
+
+Docker
+```
+
+as a Stream.
+
+---
+
+Complete Example
+
+```java
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Test {
+
+    public static void main(String[] args) {
+
+        String str = "Java\nSpring\nDocker";
+
+        List<String> list = str.lines()
+                               .collect(Collectors.toList());
+
+        System.out.println(list);
+
+    }
+
+}
+```
+
+Output
+
+```text
+[Java, Spring, Docker]
+```
+
+---
+
+## Internally kya hota hai?
+
+```text
+String
+
+Java
+Spring
+Docker
+```
+
+Actually memory me
+
+```text
+Java\nSpring\nDocker
+```
+
+↓
+
+`lines()`
+
+↓
+
+```text
+Java
+
+Spring
+
+Docker
+```
+
+↓
+
+Stream
+
+↓
+
+List
+
+↓
+
+```text
+[Java, Spring, Docker]
+```
+
+---
+
+# Real-Life Use
+
+Suppose file ka content string me aa gaya.
+
+```text
+Amit
+Rahul
+Priya
+Ankit
+```
+
+Ab
+
+```java
+content.lines()
+```
+
+se har line alag mil jayegi.
+
+---
+
+# Interview Questions
+
+### Q1. `repeat()` method kya karta hai?
+
+**Answer:** String ko specified number of times repeat karta hai.
+
+### Q2. `repeat(0)` ka output kya hoga?
+
+**Answer:** Empty string return hogi.
+
+### Q3. `repeat(-1)` ka output?
+
+**Answer:** `IllegalArgumentException` throw hota hai.
+
+### Q4. `isBlank()` aur `isEmpty()` me difference?
+
+**Answer:** `isEmpty()` sirf length 0 check karta hai, jabki `isBlank()` length 0 ke saath-saath sirf whitespace wali strings ko bhi blank maanta hai.
+
+### Q5. `strip()` aur `trim()` me difference?
+
+**Answer:** Dono leading aur trailing whitespace remove karte hain, lekin `strip()` Unicode whitespace ko bhi handle karta hai, jabki `trim()` mainly ASCII whitespace remove karta hai.
+
+### Q6. `lines()` method kya return karta hai?
+
+**Answer:** `Stream<String>` return karta hai, jisme string `\n` ke basis par line by line split hoti hai.
+
+## Easy Memory Trick
+
+* **repeat()** → Copy string many times.
+* **isBlank()** → Empty ya sirf spaces?
+* **strip()** → Left + Right spaces remove.
+* **stripLeading()** → Sirf left spaces remove.
+* **stripTrailing()** → Sirf right spaces remove.
+* **lines()** → `\n` ke basis par string ko line-by-line stream me convert karta hai.
+
+==========================================================================================
+Ye **Java 11 ka Lambda Expression feature** hai. Interview me iska main focus hota hai ki **Java 11 ne lambda parameters me `var` use karna allow kiya**, jo Java 10 me allowed nahi tha.
+
+Chaliye simple language me samajhte hain.
+
+---
+
+# Pehle samjho `var` kya hai?
+
+Java 10 me `var` introduce hua tha.
+
+Iska matlab hai compiler khud data type identify karega.
+
+Example
+
+```java
+var name = "Vishnu";
+var age = 25;
+var salary = 45000.50;
+```
+
+Compiler internally isko aise samajhta hai
+
+```java
+String name = "Vishnu";
+int age = 25;
+double salary = 45000.50;
+```
+
+Tumne type nahi likha, compiler ne khud infer kar liya.
+
+---
+
+# Java 10 Limitation
+
+Java 10 me `var` **sirf local variables** ke liye tha.
+
+Lambda parameter me use nahi kar sakte the.
+
+Example
+
+```java
+interface Calculator{
+    int add(int a,int b);
+}
+
+Calculator c = (var a,var b) -> a+b;
+```
+
+Java 10
+
+```
+Compilation Error
+
+'var' is not allowed here
+```
+
+Kyuki Java 10 me lambda parameter ke liye `var` support nahi tha.
+
+---
+
+# Java 11
+
+Java 11 ne ye limitation remove kar di.
+
+Ab tum lambda parameter me bhi `var` use kar sakte ho.
+
+Example
+
+```java
+interface Calculator{
+
+    int add(int a,int b);
+
+}
+
+public class Test{
+
+    public static void main(String[] args){
+
+        Calculator cal = (var a,var b) -> a+b;
+
+        System.out.println(cal.add(10,20));
+
+    }
+
+}
+```
+
+Output
+
+```
+30
+```
+
+---
+
+## Compiler internally kya samajhta hai?
+
+Ye
+
+```java
+(var a,var b)->a+b
+```
+
+actually ban jata hai
+
+```java
+(int a,int b)->a+b
+```
+
+Kyuki interface already define kar raha hai
+
+```java
+int add(int a,int b);
+```
+
+Isliye compiler ko pata hai
+
+```
+a → int
+
+b → int
+```
+
+---
+
+# Ek aur Example
+
+```java
+interface Calculator{
+
+    int multiply(int a,int b);
+
+}
+
+Calculator c = (var a,var b)->a*b;
+
+System.out.println(c.multiply(5,6));
+```
+
+Output
+
+```
+30
+```
+
+---
+
+# Limitation 1
+
+### Ya to sab parameters me `var` likho
+
+Ya kisi me bhi mat likho.
+
+---
+
+### Correct
+
+```java
+(var a,var b)->a+b
+```
+
+---
+
+### Correct
+
+```java
+(a,b)->a+b
+```
+
+---
+
+### Correct
+
+```java
+(int a,int b)->a+b
+```
+
+---
+
+### Wrong
+
+```java
+(var a,b)->a+b
+```
+
+Compiler Error
+
+---
+
+### Wrong
+
+```java
+(var a,int b)->a+b
+```
+
+Compiler Error
+
+---
+
+Easy Rule
+
+```
+All var
+
+OR
+
+No var
+```
+
+Mix allowed nahi hai.
+
+---
+
+# Limitation 2
+
+Single parameter ho to parentheses mandatory hain.
+
+---
+
+### Wrong
+
+```java
+var a -> a*a
+```
+
+Compiler Error
+
+---
+
+### Correct
+
+```java
+(var a)->a*a
+```
+
+Output
+
+```java
+100
+```
+
+---
+
+Example
+
+```java
+interface Square{
+
+    int square(int x);
+
+}
+
+public class Test{
+
+    public static void main(String[] args){
+
+        Square s = (var x)->x*x;
+
+        System.out.println(s.square(10));
+
+    }
+
+}
+```
+
+Output
+
+```
+100
+```
+
+---
+
+# Without var
+
+Single parameter me ye bhi valid hai
+
+```java
+x -> x*x
+```
+
+Parentheses optional hain.
+
+---
+
+# With var
+
+Lekin
+
+```java
+(var x)->x*x
+```
+
+Parentheses compulsory hain.
+
+---
+
+# Why Java 11 added this feature?
+
+Main reason **Annotations** tha.
+
+Suppose lambda parameter par annotation lagana hai.
+
+Example
+
+```java
+(@Nonnull var a,@Nonnull var b)->a+b
+```
+
+Ab `var` ki wajah se annotation easily use kar sakte ho aur code consistent dikhta hai.
+
+Ye advanced use case hai, isliye feature add hua.
+
+---
+
+# Summary Table
+
+| Java Version | Lambda me `var` |
+| ------------ | --------------- |
+| Java 8       | ❌ No            |
+| Java 9       | ❌ No            |
+| Java 10      | ❌ No            |
+| Java 11      | ✅ Yes           |
+
+---
+
+# Interview Questions
+
+### Q1. Java 11 me Lambda Expression ka naya feature kya hai?
+
+**Answer:**
+Java 11 me lambda parameters ke liye `var` keyword use kar sakte hain.
+
+---
+
+### Q2. Java 10 me `(var a, var b) -> a+b` valid tha?
+
+**Answer:**
+Nahi. Java 10 me `var` sirf local variables ke liye tha, lambda parameters ke liye nahi.
+
+---
+
+### Q3. Kya hum `(var a, b) -> a+b` likh sakte hain?
+
+**Answer:**
+Nahi. Agar ek parameter me `var` use karte hain to sab parameters me `var` use karna mandatory hai.
+
+---
+
+### Q4. Single parameter lambda me `var` use karte waqt parentheses zaruri hain?
+
+**Answer:**
+Haan. `(var x) -> x*x` valid hai, lekin `var x -> x*x` invalid hai.
+
+---
+
+## Easy Memory Trick 🧠
+
+* **Java 10:** `var` = **Only Local Variables** ❌ Lambda nahi.
+* **Java 11:** `var` = **Local Variables + Lambda Parameters** ✅
+* **Rule 1:** **All parameters `var` ya kisi me bhi `var` nahi.**
+* **Rule 2:** **Single parameter + `var` = Parentheses `( )` compulsory.**
+
+==========================================================================================
+Ye **Java 11 ka sabse confusing feature** hai, lekin interview me sirf concept pucha jata hai. Chaliye ise simple language me samajhte hain.
+
+---
+
+# Nested Based Access Control (Java 11)
+
+## Sabse pehle Nested Class kya hoti hai?
+
+Jab ek class ke andar dusri class hoti hai.
+
+Example
+
+```java
+class Outer {
+
+    class Inner {
+
+    }
+
+}
+```
+
+Yahan
+
+* `Outer` = Outer Class
+* `Inner` = Nested (Inner) Class
+
+---
+
+# Problem Before Java 11
+
+Suppose
+
+```java
+class Outer {
+
+    class Inner {
+
+        private int count = 10;
+
+    }
+
+}
+```
+
+`count` **private** hai.
+
+Normally Java me
+
+```text
+Private member
+
+↓
+
+Sirf usi class ke andar access hona chahiye.
+```
+
+---
+
+## Reflection API kya hai?
+
+Reflection ka matlab
+
+**Program run hone ke baad bhi class ke private members ko access karna.**
+
+Example
+
+```java
+Field field = Inner.class.getDeclaredField("count");
+```
+
+Is line se private variable mil gaya.
+
+---
+
+Fir
+
+```java
+field.setInt(obj, 100);
+```
+
+Private variable ki value change karne ki koshish kar rahe hain.
+
+---
+
+# Java 10 me kya hota tha?
+
+```java
+class Outer {
+
+    class Inner {
+
+        private int count = 10;
+
+    }
+
+}
+```
+
+Main method
+
+```java
+Inner obj = new Outer().new Inner();
+
+Field f = Inner.class.getDeclaredField("count");
+
+f.setInt(obj,2000);
+```
+
+Output
+
+```text
+IllegalAccessException
+```
+
+Reason
+
+Java bolta tha
+
+> "Ye private variable hai. Reflection se directly access nahi kar sakte."
+
+---
+
+# Java 11 me kya change hua?
+
+Java team ne socha
+
+> **Outer aur Inner class ek hi family ke members hain.**
+
+To inke beech private access allow hona chahiye.
+
+Isliye Java 11 me
+
+**Nest-Based Access Control** introduce hua.
+
+---
+
+## Result
+
+Same code
+
+```java
+Field f = Inner.class.getDeclaredField("count");
+
+f.setInt(obj,2000);
+```
+
+Output
+
+```text
+10
+2000
+```
+
+Koi exception nahi.
+
+---
+
+# Ye internally kaise hota hai?
+
+Java 11 ne JVM ko samjhaya
+
+```text
+Outer
+
+↓
+
+Inner
+
+↓
+
+Same Nest (Family)
+
+↓
+
+Private access allowed
+```
+
+---
+
+# Easy Diagram
+
+### Java 10
+
+```text
+Outer
+
+|
+
++-- Inner
+
+      |
+
+ private variable
+
+      |
+
+Reflection
+
+      |
+
+❌ IllegalAccessException
+```
+
+---
+
+### Java 11
+
+```text
+Outer
+
+|
+
++-- Inner
+
+      |
+
+ private variable
+
+      |
+
+Reflection
+
+      |
+
+✅ Access Allowed
+```
+
+---
+
+# Java 11 me naye methods aaye
+
+Ye methods **`java.lang.Class`** class me add hue.
+
+Normally interview me sirf naam aur purpose puchte hain.
+
+---
+
+## 1. `getNestHost()`
+
+Ye batata hai
+
+**Main (Host) class kaunsi hai?**
+
+Example
+
+```java
+Outer.Inner.class.getNestHost()
+```
+
+Return
+
+```text
+Outer.class
+```
+
+Matlab
+
+```text
+Inner belongs to Outer
+```
+
+---
+
+## 2. `getNestMembers()`
+
+Ye batata hai
+
+Ek nest me kaun-kaun classes hain.
+
+Example
+
+```java
+Outer.class.getNestMembers()
+```
+
+Output
+
+```text
+Outer
+
+Outer$Inner
+
+Outer$Inner2
+```
+
+---
+
+## 3. `isNestmateOf()`
+
+Check karta hai
+
+Kya dono classes same nest ki hain?
+
+Example
+
+```java
+Outer.class.isNestmateOf(Inner.class)
+```
+
+Output
+
+```text
+true
+```
+
+---
+
+# Example Explained
+
+Program
+
+```java
+public class Test {
+
+    class NestTest {
+
+        private int count = 10;
+
+    }
+
+}
+```
+
+Object banaya
+
+```java
+Test.NestTest tt = new Test().new NestTest();
+```
+
+Output
+
+```java
+System.out.println(tt.count);
+```
+
+Output
+
+```text
+10
+```
+
+---
+
+Reflection
+
+```java
+Field f = NestTest.class.getDeclaredField("count");
+```
+
+Private variable mil gaya.
+
+---
+
+Value change ki
+
+```java
+f.setInt(tt,2000);
+```
+
+---
+
+Java 10
+
+```text
+IllegalAccessException
+```
+
+---
+
+Java 11
+
+Value successfully change ho gayi.
+
+```java
+System.out.println(tt.count);
+```
+
+Output
+
+```text
+2000
+```
+
+---
+
+# Why Java 11 introduced this?
+
+Performance improve karne ke liye.
+
+Java 10 me JVM ko private access verify karne ke liye extra synthetic methods generate karne padte the.
+
+Java 11 me
+
+```text
+Outer
+
+↓
+
+Inner
+
+↓
+
+Same Nest
+
+↓
+
+Direct Access
+```
+
+Isliye synthetic bridge methods ki zarurat kam ho gayi aur performance aur maintainability improve hui.
+
+---
+
+# Summary
+
+| Java 10                                                                       | Java 11                                                       |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Reflection se private member access par `IllegalAccessException` aa sakta tha | Nested classes ke beech private access support improve hua    |
+| Outer aur Inner ko alag treat karta tha                                       | Same nest (family) treat karta hai                            |
+| No Nest API                                                                   | `getNestHost()`, `getNestMembers()`, `isNestmateOf()` add hue |
+
+---
+
+# Interview Questions
+
+### Q1. Java 11 me Nest-Based Access Control kya hai?
+
+**Answer:** Java 11 me outer aur inner (nested) classes ko ek hi **nest** maana jata hai, isliye unke beech private members ka access JVM better tarike se allow karta hai.
+
+---
+
+### Q2. Java 10 me nested class ke private member ko reflection se access karne par kya hota tha?
+
+**Answer:** `IllegalAccessException` aa sakta tha.
+
+---
+
+### Q3. Java 11 me kaun se naye methods add hue?
+
+**Answer:**
+
+* `getNestHost()`
+* `getNestMembers()`
+* `isNestmateOf()`
+
+---
+
+### Q4. `getNestHost()` kya karta hai?
+
+**Answer:** Nested class ka host (outer) class return karta hai.
+
+---
+
+### Q5. `getNestMembers()` kya return karta hai?
+
+**Answer:** Same nest ki sabhi classes ka `Class[]` return karta hai.
+
+---
+
+### Q6. `isNestmateOf()` kya check karta hai?
+
+**Answer:** Ye check karta hai ki do classes same nest (same outer class family) ki members hain ya nahi.
+
+---
+
+## Easy Memory Trick 🧠
+
+Socho:
+
+```text
+Outer Class = 👨 Father
+
+Inner Class = 👦 Son
+```
+
+Java 10 bolta tha:
+
+> Father aur Son alag hain, private cheez share mat karo. ❌
+
+Java 11 bolta hai:
+
+> Father aur Son ek hi family (Nest) ke members hain, private access internally allow hai. ✅
+
+**Nest = Same Family = Better Private Access.**
+
+==========================================================================================
+Ye topic **Java 11 HttpClient API** aur **Files.readString()/writeString()** ke baare me hai. Agar tum Spring Boot developer ho, to ye feature samajhna bahut easy hai kyunki tum REST APIs roz use karte ho.
+
+---
+
+# 1. Java 11 HttpClient API
+
+## HttpClient kya hai?
+
+Simple language me:
+
+> **HttpClient ek Java API hai jo kisi server ko HTTP Request bhejta hai aur uska Response receive karta hai.**
+
+Jaise browser request bhejta hai:
+
+```text
+Browser
+    |
+HTTP Request
+    |
+Google Server
+    |
+HTTP Response
+    |
+Browser
+```
+
+Waise hi Java application bhi request bhej sakti hai.
+
+```text
+Java Application
+      |
+HttpClient
+      |
+HTTP Request
+      |
+Server
+      |
+HTTP Response
+      |
+Java Application
+```
+
+---
+
+## Java 8 aur usse pehle
+
+Request bhejne ke liye log use karte the
+
+* HttpURLConnection
+* Apache HttpClient
+* OkHttp
+
+Ye thoda complex tha.
+
+---
+
+## Java 11
+
+Java ne apna official HTTP Client de diya.
+
+Package
+
+```java
+java.net.http
+```
+
+Isme mainly 3 classes hain.
+
+```
+HttpClient
+
+HttpRequest
+
+HttpResponse
+```
+
+---
+
+# 1. HttpClient
+
+Ye actual client hai.
+
+Ye request bhejta hai.
+
+```java
+HttpClient client = HttpClient.newHttpClient();
+```
+
+Socho
+
+```
+Tum
+
+↓
+
+Courier Boy
+
+↓
+
+Server
+```
+
+Yahan
+
+```
+Courier Boy = HttpClient
+```
+
+---
+
+# 2. HttpRequest
+
+Ye batata hai
+
+* kis URL par jana hai
+* GET hai ya POST
+* headers kya hain
+* timeout kitna hai
+
+Example
+
+```java
+HttpRequest request =
+        HttpRequest.newBuilder()
+        .GET()
+        .uri(URI.create("https://google.com"))
+        .build();
+```
+
+Yahan
+
+```
+URL
+
+↓
+
+https://google.com
+
+↓
+
+Method
+
+↓
+
+GET
+```
+
+---
+
+# 3. HttpResponse
+
+Server se jo answer aata hai.
+
+Usko represent karta hai.
+
+Example
+
+```java
+HttpResponse<String> response =
+        client.send(request,
+        BodyHandlers.ofString());
+```
+
+Ab response ke andar sab information hoti hai.
+
+---
+
+## Status Code
+
+```java
+response.statusCode()
+```
+
+Example
+
+```
+200
+
+404
+
+500
+```
+
+---
+
+## Headers
+
+```java
+response.headers()
+```
+
+Example
+
+```
+Content-Type
+
+Content-Length
+
+Server
+```
+
+---
+
+## Body
+
+```java
+response.body()
+```
+
+Example
+
+```
+<html>
+
+Hello World
+
+</html>
+```
+
+ya JSON
+
+```json
+{
+   "id":1,
+   "name":"Vishnu"
+}
+```
+
+---
+
+# Complete Flow
+
+Program
+
+```java
+HttpClient client = HttpClient.newHttpClient();
+```
+
+↓
+
+Request banayi
+
+```java
+HttpRequest request =
+HttpRequest.newBuilder()
+.GET()
+.uri(URI.create("https://google.com"))
+.build();
+```
+
+↓
+
+Request bheji
+
+```java
+HttpResponse<String> response =
+client.send(request,
+BodyHandlers.ofString());
+```
+
+↓
+
+Print
+
+```java
+System.out.println(response.statusCode());
+
+System.out.println(response.body());
+```
+
+---
+
+## Diagram
+
+```
+Java Program
+
+      |
+
+HttpClient
+
+      |
+
+GET Request
+
+      |
+
+https://google.com
+
+      |
+
+Google Server
+
+      |
+
+200 OK
+
+HTML Response
+
+      |
+
+Java Program
+```
+
+---
+
+# GET Request
+
+GET ka matlab
+
+Sirf data lena.
+
+Example
+
+```
+GET
+
+/products
+
+/users
+
+/employees
+```
+
+Spring Boot me
+
+```java
+@GetMapping("/users")
+```
+
+Ye GET request handle karta hai.
+
+---
+
+# POST Request
+
+POST ka matlab
+
+Server ko data bhejna.
+
+Example
+
+```
+Login
+
+Registration
+
+Save Employee
+```
+
+Spring Boot
+
+```java
+@PostMapping("/login")
+```
+
+---
+
+## Java 11 POST Example
+
+```java
+HttpRequest.newBuilder()
+
+.POST(HttpRequest.BodyPublishers.ofString(""))
+```
+
+Ye POST request banata hai.
+
+Fir URL
+
+```
+http://localhost/login
+```
+
+---
+
+Example
+
+```
+Username
+
+↓
+
+Vishnu
+
+Password
+
+↓
+
+123
+```
+
+Request
+
+```
+POST
+
+/login
+
+uname=Vishnu
+
+upwd=123
+```
+
+Server
+
+↓
+
+Check
+
+↓
+
+Response
+
+```
+Login Success
+```
+
+---
+
+# Server Side
+
+Servlet
+
+```java
+@WebServlet("/login")
+```
+
+Client request bhejta hai
+
+```
+/login
+```
+
+Servlet receive karta hai
+
+```java
+String uname =
+request.getParameter("uname");
+```
+
+Password
+
+```java
+request.getParameter("upwd");
+```
+
+Fir
+
+```java
+if(username.equals("durga")
+&& password.equals("durga"))
+```
+
+To
+
+```
+User Login Success
+```
+
+warna
+
+```
+User Login Failure
+```
+
+---
+
+# Real Life
+
+Ye bilkul waise hi hai jaise Spring Boot me
+
+```java
+@RestController
+
+@GetMapping()
+
+@PostMapping()
+```
+
+Bas Java 11 me HttpClient se request bhej rahe ho.
+
+---
+
+# Files.readString() aur writeString()
+
+Java 11 se pehle file read/write karna bahut lengthy tha.
+
+Use karna padta tha
+
+```
+BufferedReader
+
+FileReader
+
+BufferedWriter
+
+FileWriter
+```
+
+---
+
+## Java 11
+
+Sirf ek line.
+
+---
+
+### File Write
+
+```java
+Files.writeString(path,
+"Hello");
+```
+
+Ye file bana dega aur text likh dega.
+
+---
+
+### File Read
+
+```java
+String data =
+Files.readString(path);
+```
+
+Bas.
+
+Saara content string me aa jayega.
+
+---
+
+Example
+
+```java
+Path path =
+Paths.get("welcome.txt");
+
+Files.writeString(path,
+"Hello Java");
+
+String text =
+Files.readString(path);
+
+System.out.println(text);
+```
+
+Output
+
+```
+Hello Java
+```
+
+---
+
+## Append
+
+Normally
+
+```java
+Files.writeString()
+```
+
+purani file overwrite kar deta hai.
+
+Agar append karna hai
+
+```java
+Files.writeString(
+path,
+"Hello",
+StandardOpenOption.APPEND);
+```
+
+Suppose file me pehle
+
+```
+Java
+```
+
+Append
+
+```
+Spring
+```
+
+Final
+
+```
+Java
+
+Spring
+```
+
+---
+
+# Flight Recorder
+
+Interview me rarely puchte hain.
+
+Simple definition yaad rakho.
+
+> **Java Flight Recorder (JFR) ek profiling aur monitoring tool hai jo running Java application ki performance, memory, CPU, GC aur diagnostics collect karta hai.**
+
+Aaj ke modern JDKs me JFR widely available hai; purane Oracle JDK versions me ye commercial feature tha.
+
+---
+
+# Interview Questions
+
+### Q1. Java 11 me HttpClient kis package me introduce hua?
+
+**Answer:**
+
+```
+java.net.http
+```
+
+---
+
+### Q2. HttpClient ka kaam kya hai?
+
+**Answer:**
+
+HTTP request send karna aur response receive karna.
+
+---
+
+### Q3. HttpRequest kya karta hai?
+
+**Answer:**
+
+Request ka URL, HTTP method (GET/POST), headers aur timeout configure karta hai.
+
+---
+
+### Q4. HttpResponse kya provide karta hai?
+
+**Answer:**
+
+* `statusCode()`
+* `headers()`
+* `body()`
+
+---
+
+### Q5. GET aur POST me difference?
+
+**Answer:**
+
+* **GET:** Server se data fetch karna.
+* **POST:** Server ko data bhejna.
+
+---
+
+### Q6. Java 11 me file read/write ke naye methods kaun se hain?
+
+**Answer:**
+
+* `Files.writeString()`
+* `Files.readString()`
+
+---
+
+### Q7. `StandardOpenOption.APPEND` ka use kya hai?
+
+**Answer:**
+
+Existing file ke end me naya data add karne ke liye, bina purana content overwrite kiye.
+
+---
+
+## Easy Memory Trick 🧠
+
+```
+HttpClient
+    ↓
+Request bhejta hai
+
+HttpRequest
+    ↓
+Kya bhejna hai (URL + GET/POST + Headers)
+
+HttpResponse
+    ↓
+Server ne kya bheja (Status + Headers + Body)
+```
+
+Aur file operations ke liye yaad rakho:
+
+* **`writeString()` = File me likho ✍️**
+* **`readString()` = File se padho 📖**
+* **`APPEND` = Existing content ke end me add karo ➕**
+
+==========================================================================================
+==========================================================================================
