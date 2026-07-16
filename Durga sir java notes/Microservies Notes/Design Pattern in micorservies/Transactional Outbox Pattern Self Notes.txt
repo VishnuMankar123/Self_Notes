@@ -1,0 +1,4132 @@
+Link Video :
+https://www.youtube.com/watch?v=fzGZPf0FMao&list=PLVz2XdJiJQxw1H3JVhclHc__WYDaiS1uL&index=4
+channel Name : Java Techie
+
+=======================================================================================================================
+# Part 1 – Transactional Outbox Pattern (Hindi Wali English)
+
+### Topic: Dual Write Problem aur Data Inconsistency ko samjho
+
+Based on your uploaded transcript.
+
+---
+
+# Teacher 👨‍🏫
+
+Aaj hum **Transactional Outbox Pattern** shuru karenge.
+
+Lekin Outbox Pattern samajhne se pehle ek question.
+
+## Q1. Transactional Outbox Pattern ki zarurat hi kyu padi?
+
+### Student 👨‍🎓
+
+Sir, Microservice Architecture me **Data Consistency maintain karne ke liye**.
+
+Jab ek hi request ke time par hume **Database** aur **Kafka** dono me write karna padta hai, tab problem aati hai.
+
+Isi problem ko solve karne ke liye Transactional Outbox Pattern use hota hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Bahut badhiya.
+
+Lekin pehle ye batao...
+
+## Q2. Data Consistency kya hoti hai?
+
+### Student 👨‍🎓
+
+Data Consistency ka matlab hai
+
+> Har Microservice ke paas same aur correct data hona.
+
+Example
+
+Suppose
+
+Customer ne Order Place kiya.
+
+Sab services ko same information milni chahiye.
+
+```
+Order Service
+↓
+
+Order Created
+
+↓
+
+Inventory Service
+↓
+
+Stock Reduce
+
+↓
+
+Payment Service
+↓
+
+Payment Process
+
+↓
+
+Notification Service
+↓
+
+Mail Sent
+```
+
+Agar sabko same information mili
+
+To Data Consistent hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Aur agar kisi service ko data nahi mila?
+
+### Student 👨‍🎓
+
+Fir Data Inconsistent ho jayega.
+
+Example
+
+```
+Order Service
+
+Order Created
+        ✔
+
+Inventory
+
+Stock Reduced
+        ✔
+
+Payment
+
+No Event
+        ❌
+
+Notification
+
+No Mail
+        ❌
+```
+
+Ab customer bolega
+
+Mera order hua ya nahi?
+
+Payment Service bolegi
+
+Order hi nahi mila.
+
+Inventory bolegi
+
+Stock already reduce kar diya.
+
+Ye hi Data Inconsistency hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Very Good.
+
+Ab batao...
+
+## Q3. Dual Write Problem kya hota hai?
+
+### Student 👨‍🎓
+
+Jab ek hi transaction me
+
+Hum do alag systems me write karte hain.
+
+Example
+
+```
+Database
+
++
+
+Kafka
+
+```
+
+Ya
+
+```
+Database
+
++
+
+RabbitMQ
+
+```
+
+Ya
+
+```
+Database
+
++
+
+External API
+```
+
+Isko bolte hain
+
+**Dual Write Problem**
+
+---
+
+# Teacher 👨‍🏫
+
+Ek real life example batao.
+
+---
+
+# Student 👨‍🎓
+
+Video me John aur Peter ka example diya gaya hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Achha batao.
+
+---
+
+# Story Example (Very Important)
+
+Exam Hall me
+
+Do students baithe hain.
+
+```
+John
+
+Peter
+```
+
+John intelligent hai.
+
+Peter weak student hai.
+
+Peter baar baar John se answers pooch raha hai.
+
+```
+Peter
+
+Question No.2 ka answer batao.
+
+John
+
+Wait.
+```
+
+Thodi der baad
+
+```
+Peter
+
+Question 10 batao.
+
+John
+
+Please disturb mat karo.
+```
+
+Phir John bolta hai
+
+```
+Answer = 15
+```
+
+Lekin Peter sunta hai
+
+```
+50
+```
+
+Aur wrong answer likh deta hai.
+
+Result aaya.
+
+Peter fail.
+
+---
+
+# Teacher 👨‍🏫
+
+Ab batao galti kiski thi?
+
+---
+
+### Student 👨‍🎓
+
+Sir
+
+Actually problem communication me thi.
+
+John
+
+Ek time par
+
+Do kaam kar raha tha.
+
+```
+Apna paper solve karna
+
++
+
+Peter ko answer dena
+```
+
+Isi wajah se confusion hua.
+
+---
+
+# Teacher 👨‍🏫
+
+Exactly.
+
+Isi ko software language me bolte hain
+
+**Dual Write Problem**
+
+John
+
+Ek hi time pe
+
+Do jagah data bhej raha tha.
+
+Result
+
+Wrong Information.
+
+---
+
+# Teacher 👨‍🏫
+
+Software me iska relation kaise hai?
+
+---
+
+# Student 👨‍🎓
+
+John = Order Service
+
+Peter = Other Microservices
+
+Answer = Event
+
+Exam = Transaction
+
+---
+
+Matlab
+
+```
+Order Service
+
+↓
+
+Save Order
+
+↓
+
+Publish Event
+```
+
+Agar publish me problem hui
+
+Ya kisi ne wrong data receive kiya
+
+To Data Inconsistency ho jayegi.
+
+---
+
+# Teacher 👨‍🏫
+
+Excellent.
+
+---
+
+# Q4. Real Time Example batao.
+
+### Student 👨‍🎓
+
+Suppose
+
+Amazon jaisi application hai.
+
+Customer order place karta hai.
+
+```
+Customer
+
+↓
+
+Order Service
+```
+
+Order Service ko do kaam karne hain.
+
+### Work 1
+
+Database me Order Save karna
+
+```
+INSERT INTO orders
+```
+
+### Work 2
+
+Kafka me Event Publish karna
+
+```
+OrderCreated Event
+```
+
+Diagram
+
+```
+           Order Service
+                |
+        -------------------
+        |                 |
+        |                 |
+ Save Database       Publish Kafka
+```
+
+Ye hi Dual Write hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Ab batao problem kab hogi?
+
+---
+
+## Case 1
+
+Database Save Success
+
+Kafka Fail
+
+```
+Database
+✔ Saved
+
+Kafka
+❌ Failed
+```
+
+Result
+
+Inventory ko event nahi mila.
+
+Payment ko event nahi mila.
+
+Notification nahi gaya.
+
+Customer ka order database me hai.
+
+Lekin kisi aur service ko pata hi nahi.
+
+---
+
+# Teacher 👨‍🏫
+
+Ye kis type ki problem hai?
+
+### Student 👨‍🎓
+
+Data Inconsistency.
+
+---
+
+## Case 2
+
+Kafka Success
+
+Database Fail
+
+```
+Kafka
+✔ Event Sent
+
+Database
+❌ Failed
+```
+
+Ab kya hoga?
+
+Inventory bolegi
+
+Order aa gaya.
+
+Payment bolegi
+
+Payment start karo.
+
+Lekin Database me order hai hi nahi.
+
+Ye aur bhi dangerous hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Exactly.
+
+---
+
+# Teacher 👨‍🏫
+
+Transaction rollback kar denge na?
+
+---
+
+# Student 👨‍🎓
+
+Nahi Sir.
+
+Problem ye hai
+
+Database aur Kafka
+
+Dono alag systems hain.
+
+```
+Database Transaction
+
+≠
+
+Kafka Transaction
+```
+
+Database rollback ho sakta hai.
+
+Kafka rollback nahi hota.
+
+Isliye issue aa jata hai.
+
+---
+
+# Teacher 👨‍🏫
+
+To simple language me batao.
+
+---
+
+## Dual Write Problem
+
+```
+Ek hi request me
+
+Database
+
++
+
+Kafka
+
+dono me write karna.
+```
+
+---
+
+## Data Inconsistency
+
+```
+Ek system me data hai
+
+Dusre system me nahi.
+```
+
+---
+
+## Real Time Flow
+
+```
+Client
+
+↓
+
+Order Service
+
+↓
+
+Save Order Database
+        ✔
+
+↓
+
+Publish Kafka
+        ❌
+
+↓
+
+Inventory
+No Data
+
+↓
+
+Payment
+No Data
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Ab last question.
+
+## Q5. Is problem ko solve karne ke liye kaunsa Design Pattern use hota hai?
+
+### Student 👨‍🎓
+
+**Transactional Outbox Pattern**
+
+Ye ensure karta hai
+
+* Reliable Message Delivery
+* Data Consistency
+* No Dual Write Issue
+* No Lost Event
+
+---
+
+# ⭐ Easy Interview Definition
+
+**Transactional Outbox Pattern** ek design pattern hai jo pehle **Database aur Outbox Table** ko ek hi local transaction me update karta hai. Uske baad ek alag service Outbox Table se messages read karke Kafka me publish karti hai. Isse **Dual Write Problem** aur **Data Inconsistency** avoid hoti hai.
+
+---
+
+# 📝 Interview Questions (Part 1)
+
+### Q1. Why do we need Transactional Outbox Pattern?
+
+**Answer:**
+Microservice Architecture me Data Consistency maintain karne aur Dual Write Problem avoid karne ke liye.
+
+---
+
+### Q2. What is Dual Write Problem?
+
+**Answer:**
+Jab ek hi transaction me Database aur Kafka (ya kisi aur system) dono me write karna padta hai.
+
+---
+
+### Q3. What is Data Inconsistency?
+
+**Answer:**
+Jab ek service ke paas data ho aur dusri service ke paas same data na ho.
+
+---
+
+### Q4. Why can't we rollback Kafka like Database?
+
+**Answer:**
+Kyuki Database aur Kafka alag systems hain. Database transaction rollback ho sakta hai, lekin Kafka message ko usi tarah rollback nahi kar sakte.
+
+---
+
+### Q5. Give one real-time example of Dual Write.
+
+**Answer:**
+Order Service pehle Order Database me save karti hai aur uske baad Kafka me `OrderCreated` event publish karti hai. Agar in dono me se koi ek fail ho jaye, to Data Inconsistency create ho jati hai.
+
+---
+
+## 📌 Part 1 Summary (Yaad Rakhne ka Shortcut)
+
+```
+Microservices
+      ↓
+Need Data Consistency
+      ↓
+Problem = Dual Write
+      ↓
+Database + Kafka
+      ↓
+One Fails
+      ↓
+Data Inconsistency
+      ↓
+Solution
+      ↓
+Transactional Outbox Pattern
+```
+
+**Next Part 2:** Hum detail me samjhenge **Transactional Outbox Pattern kya hai, Outbox Table kaise kaam karti hai, aur complete architecture step-by-step kaise flow karta hai.**
+========================================================================================================================
+# Part 2 – Transactional Outbox Pattern (Hindi Wali English)
+
+## Topic: Transactional Outbox Pattern ka Complete Flow & Architecture
+
+Based on your uploaded transcript.
+
+---
+
+# Teacher 👨‍🏫
+
+Part 1 me humne samjha tha ki **Dual Write Problem** ki wajah se Data Inconsistency hoti hai.
+
+Ab question hai...
+
+## Q1. Is problem ka solution kya hai?
+
+### Student 👨‍🎓
+
+Sir,
+
+**Transactional Outbox Pattern**
+
+---
+
+# Teacher 👨‍🏫
+
+Achha...
+
+Ye Transactional Outbox Pattern actually karta kya hai?
+
+---
+
+# Student 👨‍🎓
+
+Sir,
+
+Ye directly Kafka me message publish nahi karta.
+
+Sabse pehle
+
+Database me data save karta hai
+
+Aur uske sath hi ek **Outbox Table** me bhi same data save karta hai.
+
+Uske baad ek alag service Outbox Table se data read karke Kafka me publish karti hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Excellent.
+
+Ek diagram se samjho.
+
+## Without Outbox Pattern
+
+```text
+          Order Service
+
+               │
+      ---------------------
+      │                   │
+      ▼                   ▼
+ Order Database      Kafka Event
+```
+
+Ye hai **Dual Write**.
+
+Ek hi time par
+
+* Database
+* Kafka
+
+Dono me write ho raha hai.
+
+Agar koi bhi fail hua
+
+➡ Data Inconsistency.
+
+---
+
+# Teacher 👨‍🏫
+
+Ab Outbox Pattern me kya hota hai?
+
+---
+
+## With Transactional Outbox Pattern
+
+```text
+                 Order Service
+                       │
+          -------------------------
+          │                       │
+          ▼                       ▼
+     Order Table            Outbox Table
+             (Same Local Transaction)
+                       │
+                       ▼
+              Order Puller Service
+                       │
+                       ▼
+                    Kafka
+                       │
+       -------------------------------
+       │              │              │
+ Inventory       Payment      Notification
+```
+
+Ab dekho
+
+Order Service sirf
+
+✔ Order Table
+
+aur
+
+✔ Outbox Table
+
+me write karti hai.
+
+Kafka me nahi.
+
+---
+
+# Teacher 👨‍🏫
+
+Very Good.
+
+Ab batao
+
+Outbox Table kya hoti hai?
+
+---
+
+# Student 👨‍🎓
+
+Sir,
+
+Outbox Table ek normal database table hoti hai.
+
+Isme future me publish hone wale messages temporarily store hote hain.
+
+Simple language me
+
+Ye ek waiting room hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Bahut badhiya.
+
+Real Life Example se samjho.
+
+---
+
+## John & Peter Story Again
+
+Pehle kya hota tha?
+
+John directly Peter ko answer bolta tha.
+
+```text
+John
+
+↓
+
+Peter
+```
+
+Peter galat sun leta tha.
+
+Problem.
+
+---
+
+Ab Outbox Pattern me
+
+John kya karega?
+
+```text
+John
+
+↓
+
+Cheat Sheet
+
+↓
+
+Peter
+```
+
+John pehle
+
+Cheat Sheet me answer likhega.
+
+Uske baad Peter
+
+Cheat Sheet se padhega.
+
+Ab misunderstanding impossible.
+
+---
+
+### Software me
+
+```text
+John
+
+=
+
+Order Service
+
+Cheat Sheet
+
+=
+
+Outbox Table
+
+Peter
+
+=
+
+Other Microservices
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Isliye Outbox Table ko Cheat Sheet bhi bol sakte ho.
+
+---
+
+# Teacher 👨‍🏫
+
+Ab batao
+
+Order Service ka kaam kya hai?
+
+---
+
+# Student 👨‍🎓
+
+Sir,
+
+Sirf 2 kaam.
+
+### Step 1
+
+Order Table me save karo.
+
+### Step 2
+
+Outbox Table me copy save karo.
+
+Bas.
+
+Kafka ko touch nahi karna.
+
+---
+
+Diagram
+
+```text
+Order Service
+
+↓
+
+Order Table
+
+↓
+
+Outbox Table
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Very Good.
+
+Ab question.
+
+Kafka me publish kaun karega?
+
+---
+
+# Student 👨‍🎓
+
+Order Puller Service
+
+Ya
+
+Message Relay Service
+
+---
+
+# Teacher 👨‍🏫
+
+Correct.
+
+Ye service continuously Outbox Table check karti rehti hai.
+
+---
+
+Diagram
+
+```text
+Outbox Table
+
+↓
+
+Order Puller
+
+↓
+
+Kafka
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Ab batao
+
+Outbox Table me kya-kya columns hote hain?
+
+---
+
+# Student 👨‍🎓
+
+Normally
+
+```text
+ID
+
+Aggregate ID
+
+Payload
+
+Created Time
+
+Processed Flag
+```
+
+Example
+
+| ID | AggregateId | Payload    | Processed |
+| -- | ----------- | ---------- | --------- |
+| 1  | 101         | Order JSON | False     |
+| 2  | 102         | Order JSON | False     |
+
+---
+
+# Teacher 👨‍🏫
+
+Aggregate ID kya hota hai?
+
+---
+
+# Student 👨‍🎓
+
+Mostly
+
+Order ID
+
+ya
+
+Customer ID
+
+Jo bhi unique identifier ho.
+
+---
+
+# Teacher 👨‍🏫
+
+Payload kya hota hai?
+
+---
+
+# Student 👨‍🎓
+
+Pure Order Object ka JSON.
+
+Example
+
+```json
+{
+  "orderId":1,
+  "customer":"Rahul",
+  "product":"Laptop",
+  "price":60000
+}
+```
+
+Ye pura JSON String ke form me store hota hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Processed Flag kya hota hai?
+
+---
+
+# Student 👨‍🎓
+
+Ye sabse important column hai.
+
+Sirf do values.
+
+```text
+FALSE
+
+TRUE
+```
+
+---
+
+FALSE matlab
+
+```text
+Abhi Kafka me publish nahi hua.
+```
+
+---
+
+TRUE matlab
+
+```text
+Already publish ho chuka hai.
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Ye flag kyu use karte hain?
+
+---
+
+# Student 👨‍🎓
+
+Duplicate messages avoid karne ke liye.
+
+Example
+
+Suppose
+
+Outbox me
+
+```text
+Order 1
+
+Processed = FALSE
+```
+
+Order Puller aaya
+
+Kafka me publish kiya.
+
+Uske baad
+
+```text
+Processed = TRUE
+```
+
+Ab next time
+
+Order Puller
+
+FALSE records hi uthayega.
+
+TRUE ko ignore karega.
+
+---
+
+Diagram
+
+```text
+FALSE
+
+↓
+
+Publish Kafka
+
+↓
+
+TRUE
+
+↓
+
+Ignore
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Bahut Important.
+
+Interview me ye question pakka aata hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Ab complete flow batao.
+
+---
+
+# Student 👨‍🎓
+
+Step 1
+
+Customer Order Place karta hai.
+
+↓
+
+Step 2
+
+Order Service request receive karti hai.
+
+↓
+
+Step 3
+
+Order Table me save.
+
+↓
+
+Step 4
+
+Same transaction me
+
+Outbox Table me save.
+
+↓
+
+Step 5
+
+Transaction Commit.
+
+↓
+
+Step 6
+
+Order Puller FALSE records fetch karta hai.
+
+↓
+
+Step 7
+
+Kafka me publish karta hai.
+
+↓
+
+Step 8
+
+Processed Flag TRUE.
+
+↓
+
+Step 9
+
+Inventory
+
+Payment
+
+Notification
+
+Event consume karte hain.
+
+---
+
+Diagram
+
+```text
+Client
+
+↓
+
+Order Service
+
+↓
+
+Order Table
+      +
+
+Outbox Table
+
+↓
+
+Commit
+
+↓
+
+Order Puller
+
+↓
+
+Kafka
+
+↓
+
+Inventory
+
+↓
+
+Payment
+
+↓
+
+Notification
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Ab batao
+
+Ye Distributed Transaction hai ya Local Transaction?
+
+---
+
+# Student 👨‍🎓
+
+Local Transaction.
+
+---
+
+# Teacher 👨‍🏫
+
+Why?
+
+---
+
+# Student 👨‍🎓
+
+Kyuki
+
+Order Table
+
+Aur
+
+Outbox Table
+
+Dono same database me hain.
+
+Sirf ek database transaction chal raha hai.
+
+Kafka us transaction ka part nahi hai.
+
+---
+
+Diagram
+
+```text
+MySQL
+
+Order Table
+
++
+
+Outbox Table
+
+=
+
+One Local Transaction
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Ye bahut important interview point hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Ab batao
+
+Agar Order Table save ho gaya
+
+Aur Outbox save nahi hua
+
+To?
+
+---
+
+# Student 👨‍🎓
+
+Rollback.
+
+Dono rollback.
+
+Kyuki
+
+Same Local Transaction hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Aur agar Outbox save ho gaya
+
+Lekin Order save nahi hua?
+
+---
+
+# Student 👨‍🎓
+
+Fir bhi rollback.
+
+Dono rollback.
+
+---
+
+Diagram
+
+```text
+Order Table
+      ✔
+
+Outbox
+      ❌
+
+↓
+
+Rollback
+
+↓
+
+Nothing Saved
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Isliye ise bolte hain
+
+**Transactional Outbox Pattern**
+
+---
+
+# Teacher 👨‍🏫
+
+Ab ek practical example.
+
+Customer order karta hai.
+
+```text
+Customer
+
+↓
+
+Buy Mobile
+```
+
+Order Service
+
+```text
+Order Table
+
+ID = 1
+
+Mobile
+
+Saved
+```
+
+Outbox
+
+```text
+ID=1
+
+Payload
+
+{
+ Mobile
+}
+Processed=False
+```
+
+Order Puller
+
+1 minute baad
+
+Read karega
+
+↓
+
+Kafka Publish
+
+↓
+
+Processed=True
+
+↓
+
+Inventory receive
+
+↓
+
+Payment receive
+
+↓
+
+Notification receive
+
+---
+
+# ⭐ Easy Interview Definition
+
+**Transactional Outbox Pattern** me hum pehle **Order Table aur Outbox Table** ko ek hi local transaction me update karte hain. Uske baad ek **Order Puller (Message Relay)** Outbox Table se unprocessed records read karke Kafka me publish karta hai aur record ko processed mark kar deta hai. Isse data consistency maintain rehti hai aur Dual Write Problem solve ho jata hai.
+
+---
+
+# 📌 Advantages
+
+### 1. No Dual Write Problem
+
+Database aur Kafka ko ek sath write nahi karna padta.
+
+---
+
+### 2. Reliable Message Delivery
+
+Message lose hone ke chances bahut kam hote hain.
+
+---
+
+### 3. Data Consistency
+
+Sab Microservices ko same data milta hai.
+
+---
+
+### 4. Retry Possible
+
+Agar Kafka down ho
+
+To message Outbox me hi pada rahega.
+
+Later publish ho jayega.
+
+---
+
+### 5. Duplicate Avoid
+
+Processed Flag duplicate publish hone se bachata hai.
+
+---
+
+# 🎯 Interview Questions (Part 2)
+
+### Q1. What is an Outbox Table?
+
+**Answer:**
+Outbox Table ek database table hoti hai jisme publish hone wale events temporarily store hote hain.
+
+---
+
+### Q2. Why do we use an Outbox Table?
+
+**Answer:**
+Reliable message delivery aur Data Consistency maintain karne ke liye.
+
+---
+
+### Q3. Who reads records from the Outbox Table?
+
+**Answer:**
+Order Puller Service ya Message Relay Service.
+
+---
+
+### Q4. What is the purpose of the Processed Flag?
+
+**Answer:**
+Ye batata hai ki message Kafka me publish hua hai ya nahi. Isse duplicate processing avoid hoti hai.
+
+---
+
+### Q5. Why is Transactional Outbox called a Local Transaction?
+
+**Answer:**
+Kyuki Order Table aur Outbox Table dono same database me hote hain aur ek hi database transaction ke andar update hote hain.
+
+---
+
+### Q6. What happens if Kafka is down?
+
+**Answer:**
+Message Outbox Table me safely stored rehta hai. Jab Kafka wapas up ho jata hai, Order Puller us message ko publish kar deta hai.
+
+---
+
+## 📌 Part 2 Revision Shortcut
+
+```text
+Client
+   │
+   ▼
+Order Service
+   │
+   ├──► Order Table
+   │
+   └──► Outbox Table
+          │
+          ▼
+   Order Puller Service
+          │
+          ▼
+        Kafka
+          │
+  ┌───────┼────────┐
+  ▼       ▼        ▼
+Inventory Payment Notification
+```
+
+**Next (Part 3):** Hum actual implementation start karenge—Spring Boot project creation, dependencies, `application.properties`, `Order Entity`, `DTO`, `Mapper`, `Repository`, `Service`, aur `Controller` ko step-by-step samjhenge.
+
+========================================================================================================================
+Bilkul 👍. Mujhe pata hai tumhara target **interview + practical implementation** hai. Isliye main basic Spring Boot dependencies ya common cheeze repeat nahi karunga.
+
+Ab se sirf **implementation** aur **real project flow** samjhenge.
+
+---
+
+# Part 3 - Order Service Implementation (Actual Coding)
+
+### Transactional Outbox Pattern
+
+Based on your uploaded transcript.
+
+---
+
+# Teacher 👨‍🏫
+
+Ab hum actual implementation start karte hain.
+
+Sabse pehla question.
+
+## Q1. Order Service me sabse pehle kya banana hai?
+
+### Student 👨‍🎓
+
+Sir,
+
+Sabse pehle **Order Entity** banani hai.
+
+Kyuki Order ka data database me save karna hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Order Entity me kaunse fields rahenge?
+
+### Student 👨‍🎓
+
+```java
+id
+
+name
+
+customerId
+
+productType
+
+quantity
+
+price
+
+orderDate
+```
+
+---
+
+## Order Entity
+
+```java
+@Entity
+@Table(name="order_tbl")
+public class Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+    private String customerId;
+    private String productType;
+    private Integer quantity;
+    private Double price;
+    private LocalDateTime orderDate;
+}
+```
+
+---
+
+# Teacher 👨‍🏫
+
+ID ko Auto Generate kyu kiya?
+
+### Student 👨‍🎓
+
+Kyuki Database automatically Primary Key generate karega.
+
+Application ko ID dene ki zarurat nahi.
+
+---
+
+# Teacher 👨‍🏫
+
+Order Date client se lenge?
+
+### Student 👨‍🎓
+
+Nahi Sir.
+
+Server automatically set karega.
+
+```java
+order.setOrderDate(LocalDateTime.now());
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Good.
+
+---
+
+# Q2. Kya Client directly Entity bhejega?
+
+### Student 👨‍🎓
+
+Nahi Sir.
+
+Best Practice hai
+
+**DTO use karna.**
+
+---
+
+# Teacher 👨‍🏫
+
+Entity use kyu nahi karte?
+
+### Student 👨‍🎓
+
+Kyuki Entity Database Object hota hai.
+
+Client Object nahi.
+
+Entity expose karna security aur maintenance dono ke liye accha nahi.
+
+---
+
+## DTO
+
+```java
+public class OrderRequestDTO {
+
+    private String name;
+    private String customerId;
+    private String productType;
+    private Integer quantity;
+    private Double price;
+}
+```
+
+Notice
+
+DTO me
+
+```java
+id
+```
+
+nahi hai.
+
+Aur
+
+```java
+orderDate
+```
+
+bhi nahi hai.
+
+Ye server generate karega.
+
+---
+
+# Interview Question
+
+### Why DTO instead of Entity?
+
+**Answer**
+
+Entity Database ke liye hoti hai.
+
+DTO Client Request/Response ke liye hota hai.
+
+Entity expose nahi karni chahiye.
+
+---
+
+# Teacher 👨‍🏫
+
+Ab DTO ko Entity me kaise convert karenge?
+
+---
+
+### Student 👨‍🎓
+
+Mapper use karenge.
+
+---
+
+# Teacher 👨‍🏫
+
+Service ke andar manually kar sakte hain?
+
+---
+
+### Student 👨‍🎓
+
+Kar sakte hain.
+
+Example
+
+```java
+Order order = new Order();
+
+order.setName(dto.getName());
+
+order.setPrice(dto.getPrice());
+
+order.setQuantity(dto.getQuantity());
+```
+
+Lekin
+
+Ye Best Practice nahi hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Why?
+
+---
+
+### Student 👨‍🎓
+
+Kyuki
+
+Agar 20 fields hongi
+
+To Service class bahut badi ho jayegi.
+
+---
+
+# Best Practice
+
+```
+DTO
+
+↓
+
+Mapper
+
+↓
+
+Entity
+```
+
+---
+
+## Mapper
+
+```java
+@Component
+public class OrderDTOEntityMapper {
+
+    public Order map(OrderRequestDTO dto){
+
+        return Order.builder()
+
+                .name(dto.getName())
+
+                .customerId(dto.getCustomerId())
+
+                .productType(dto.getProductType())
+
+                .quantity(dto.getQuantity())
+
+                .price(dto.getPrice())
+
+                .orderDate(LocalDateTime.now())
+
+                .build();
+    }
+}
+```
+
+---
+
+# Interview Question
+
+### Mapper kyu use karte hain?
+
+Answer
+
+Service class clean rakhne ke liye.
+
+Aur mapping logic ek hi place par maintain karne ke liye.
+
+---
+
+# Teacher 👨‍🏫
+
+Ab Repository banegi.
+
+Usme kya likhenge?
+
+---
+
+### Student 👨‍🎓
+
+Sir
+
+Kuch bhi nahi.
+
+Sirf
+
+```java
+public interface OrderRepository
+extends JpaRepository<Order,Long>{
+
+}
+```
+
+Bas.
+
+---
+
+# Teacher 👨‍🏫
+
+Service me pehla step kya hai?
+
+---
+
+### Student 👨‍🎓
+
+Request aayegi.
+
+DTO milega.
+
+Usko Entity me convert karenge.
+
+---
+
+Flow
+
+```
+Client
+
+↓
+
+OrderRequestDTO
+
+↓
+
+Mapper
+
+↓
+
+Order Entity
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Uske baad?
+
+---
+
+### Student 👨‍🎓
+
+Repository se Save.
+
+```java
+Order order = mapper.map(dto);
+
+orderRepository.save(order);
+```
+
+Bas.
+
+---
+
+# Complete Flow
+
+```
+POST Request
+
+↓
+
+DTO
+
+↓
+
+Mapper
+
+↓
+
+Entity
+
+↓
+
+Repository.save()
+
+↓
+
+Database
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Controller me kya hoga?
+
+---
+
+### Student 👨‍🎓
+
+Controller sirf Request receive karega.
+
+Business Logic Service me hogi.
+
+---
+
+## Controller
+
+```java
+@PostMapping
+
+public Order createOrder(
+
+@RequestBody OrderRequestDTO dto){
+
+    return service.createOrder(dto);
+
+}
+```
+
+Bas.
+
+Controller ka kaam sirf
+
+```
+Receive Request
+
+↓
+
+Call Service
+
+↓
+
+Return Response
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Ab Service ka code dekhte hain.
+
+---
+
+## Service
+
+```java
+public Order createOrder(OrderRequestDTO dto){
+
+    Order order = mapper.map(dto);
+
+    order = repository.save(order);
+
+    return order;
+}
+```
+
+Abhi tak
+
+Transactional Outbox start nahi hua.
+
+Ye sirf
+
+```
+Client
+
+↓
+
+Order Table
+```
+
+tak ka flow hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Video me mapper alag class me kyu banaya?
+
+---
+
+### Student 👨‍🎓
+
+Separation of Concern.
+
+Har class ka ek hi responsibility hona chahiye.
+
+```
+Controller
+
+↓
+
+Request Handle
+
+---------------
+
+Service
+
+↓
+
+Business Logic
+
+---------------
+
+Mapper
+
+↓
+
+DTO → Entity
+
+---------------
+
+Repository
+
+↓
+
+Database
+```
+
+Ye **Single Responsibility Principle (SRP)** bhi follow karta hai.
+
+---
+
+# Real Project Flow
+
+```
+POST /orders
+
+↓
+
+Controller
+
+↓
+
+OrderService
+
+↓
+
+OrderDTOEntityMapper
+
+↓
+
+OrderRepository
+
+↓
+
+Order Table
+```
+
+---
+
+# Important Interview Questions
+
+## Q1. DTO aur Entity me difference?
+
+**Answer**
+
+DTO client ke liye.
+
+Entity database ke liye.
+
+---
+
+## Q2. Mapper kyu use karte hain?
+
+**Answer**
+
+DTO ko Entity me convert karne ke liye aur Service class ko clean rakhne ke liye.
+
+---
+
+## Q3. Repository ka role kya hai?
+
+**Answer**
+
+Database CRUD operation perform karna.
+
+---
+
+## Q4. Controller ka role kya hai?
+
+**Answer**
+
+HTTP Request receive karna aur Service ko call karna.
+
+---
+
+## Q5. Service ka role kya hai?
+
+**Answer**
+
+Business Logic execute karna aur Repository ko call karna.
+
+---
+
+## Q6. Kya is stage par Kafka use hua?
+
+**Answer**
+
+❌ Nahi.
+
+Abhi sirf Order Database me save hua hai.
+
+Outbox implementation abhi baki hai.
+
+---
+
+# ⭐ Part 3 Summary
+
+```
+POST /orders
+        │
+        ▼
+Controller
+        │
+        ▼
+Service
+        │
+        ▼
+Mapper
+        │
+        ▼
+Order Entity
+        │
+        ▼
+Repository
+        │
+        ▼
+Order Table
+```
+
+**Next Part 4 sabse important hai**, kyunki wahi se actual **Transactional Outbox Pattern** start hota hai:
+
+* Outbox Entity
+* Outbox Repository
+* Order → Outbox Mapping
+* `@Transactional` ka use
+* Local Transaction
+* Rollback Demo (video me jo ArithmeticException dikhaya tha uska complete explanation)
+
+========================================================================================================================
+# Part 4 – Transactional Outbox Pattern (Actual Implementation)
+
+## Topic: Outbox Entity + Outbox Repository + @Transactional + Rollback Demo
+
+Based on your uploaded transcript.
+
+---
+
+# Teacher 👨‍🏫
+
+Ab tak humne sirf **Order Table** me data save kiya.
+
+Lekin Transactional Outbox Pattern ka main concept ab start hota hai.
+
+Question.
+
+## Q1. Order save hone ke baad next kya karna hai?
+
+### Student 👨‍🎓
+
+Sir,
+
+Same Order ki ek copy **Outbox Table** me bhi save karni hai.
+
+---
+
+# Teacher 👨‍🏫
+
+Kyu?
+
+Direct Kafka me publish kar dete hain na?
+
+---
+
+### Student 👨‍🎓
+
+Nahi Sir.
+
+Agar Kafka down hua to message lose ho jayega.
+
+Isliye pehle Outbox Table me safely store karte hain.
+
+Baad me Kafka me publish karenge.
+
+---
+
+# Flow
+
+```text
+Client
+
+↓
+
+Order Service
+
+↓
+
+Order Table
+      +
+
+Outbox Table
+
+(Same Transaction)
+```
+
+**Abhi Kafka use nahi hoga.**
+
+---
+
+# Teacher 👨‍🏫
+
+Outbox Entity me kya-kya fields hongi?
+
+---
+
+## Student 👨‍🎓
+
+```java
+id
+
+aggregateId
+
+payload
+
+createdAt
+
+processed
+```
+
+---
+
+## Outbox Entity
+
+```java
+@Entity
+public class Outbox {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String aggregateId;
+
+    private String payload;
+
+    private LocalDateTime createdAt;
+
+    private Boolean processed;
+}
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Ye fields ka meaning batao.
+
+---
+
+## 1. id
+
+Primary Key.
+
+Har Outbox Record ki unique ID.
+
+---
+
+## 2. aggregateId
+
+Ye kis Order ka message hai.
+
+Mostly
+
+```text
+Order ID
+
+ya
+
+Customer ID
+```
+
+Video me Customer ID use kiya gaya hai.
+
+Example
+
+```text
+aggregateId = CUST101
+```
+
+---
+
+## 3. payload ⭐ (Most Important)
+
+Teacher
+
+Payload kya hota hai?
+
+---
+
+Student
+
+Payload matlab
+
+Pure Order Object ka JSON.
+
+Example
+
+```json
+{
+  "id":1,
+  "customerId":"CUST101",
+  "product":"Mobile",
+  "price":50000
+}
+```
+
+Ye String ke form me save hota hai.
+
+---
+
+# Teacher
+
+Object ko String me convert kaise karte hain?
+
+---
+
+### Student
+
+Jackson **ObjectMapper**
+
+```java
+ObjectMapper.writeValueAsString(order);
+```
+
+Output
+
+```text
+"{\"id\":1,\"product\":\"Mobile\"}"
+```
+
+Ye String database me save hogi.
+
+---
+
+# Teacher
+
+Payload JSON me save kyu karte hain?
+
+---
+
+### Student
+
+Kyuki Kafka ko wahi JSON publish karna hota hai.
+
+Dobara object banane ki zarurat nahi padti.
+
+---
+
+# Teacher
+
+Processed field kya karti hai?
+
+---
+
+### Student
+
+Ye batati hai
+
+Message publish hua ya nahi.
+
+```text
+FALSE
+
+↓
+
+Publish Pending
+```
+
+```text
+TRUE
+
+↓
+
+Already Published
+```
+
+---
+
+# By Default
+
+```java
+processed=false;
+```
+
+---
+
+# Teacher
+
+Outbox Repository me kya likhenge?
+
+---
+
+### Student
+
+Simple.
+
+```java
+public interface OutboxRepository
+extends JpaRepository<Outbox,Long>{
+
+}
+```
+
+Bas.
+
+---
+
+# Teacher
+
+Ab Order ko Outbox me convert kaise karenge?
+
+---
+
+### Student
+
+Mapper banayenge.
+
+---
+
+## Order → Outbox Mapper
+
+```java
+@Component
+public class OrderEntityToOutboxMapper {
+
+    public Outbox map(Order order){
+
+        return Outbox.builder()
+
+                .aggregateId(order.getCustomerId())
+
+                .payload(convertToJson(order))
+
+                .createdAt(LocalDateTime.now())
+
+                .processed(false)
+
+                .build();
+    }
+
+}
+```
+
+---
+
+# Teacher
+
+Mapper me processed false kyu kiya?
+
+---
+
+### Student
+
+Kyuki
+
+Abhi Kafka me publish nahi hua.
+
+Isliye
+
+```java
+processed=false;
+```
+
+---
+
+# Teacher
+
+Ab Service ka flow batao.
+
+---
+
+## Student
+
+Step 1
+
+DTO → Entity
+
+↓
+
+Step 2
+
+Order Table Save
+
+↓
+
+Step 3
+
+Order → Outbox
+
+↓
+
+Step 4
+
+Outbox Save
+
+↓
+
+Return Response
+
+---
+
+Diagram
+
+```text
+DTO
+
+↓
+
+Order Entity
+
+↓
+
+Save Order
+
+↓
+
+Create Outbox
+
+↓
+
+Save Outbox
+```
+
+---
+
+# Teacher
+
+Code dikhao.
+
+---
+
+## Service
+
+```java
+Order order = mapper.map(dto);
+
+order = orderRepository.save(order);
+
+Outbox outbox =
+outboxMapper.map(order);
+
+outboxRepository.save(outbox);
+
+return order;
+```
+
+Bas.
+
+Ab Order Table bhi save ho gayi.
+
+Aur
+
+Outbox Table bhi.
+
+---
+
+# Teacher
+
+Ab ek bahut important question.
+
+Ye dono save alag-alag ho rahe hain.
+
+Agar Order save ho gaya
+
+Aur Outbox save fail ho gaya
+
+To?
+
+---
+
+### Student
+
+Isi problem ko solve karne ke liye
+
+```java
+@Transactional
+```
+
+use karte hain.
+
+---
+
+# Teacher
+
+@Transactional kahan lagayenge?
+
+---
+
+### Student
+
+Service Method ke upar.
+
+```java
+@Transactional
+public Order createOrder(){
+
+}
+```
+
+---
+
+# Teacher
+
+@Transactional karta kya hai?
+
+---
+
+### Student
+
+Service ke andar jitne bhi Database Operations honge
+
+Unko
+
+Ek hi Transaction bana deta hai.
+
+---
+
+Diagram
+
+```text
+@Transactional
+
+↓
+
+Order Save
+
++
+
+Outbox Save
+
+↓
+
+Commit Together
+```
+
+---
+
+# Teacher
+
+Agar Outbox Save fail hua?
+
+---
+
+### Student
+
+To
+
+Order bhi rollback.
+
+Outbox bhi rollback.
+
+---
+
+Diagram
+
+```text
+Order Save
+      ✔
+
+↓
+
+Outbox Save
+      ❌
+
+↓
+
+Rollback
+
+↓
+
+Nothing Saved
+```
+
+---
+
+# Teacher
+
+Aur agar Order Save hi fail ho gaya?
+
+---
+
+### Student
+
+Outbox bhi save nahi hoga.
+
+---
+
+Diagram
+
+```text
+Order
+❌
+
+↓
+
+Outbox
+Not Executed
+```
+
+---
+
+# Teacher
+
+Video me sir ne Rollback kaise prove kiya?
+
+---
+
+### Student
+
+Sir ne intentionally error throw kiya.
+
+```java
+int x = 10 / 0;
+```
+
+ArithmeticException.
+
+---
+
+Flow
+
+```text
+Save Order
+
+↓
+
+Exception
+
+↓
+
+Rollback
+```
+
+---
+
+# Teacher
+
+Database me insert statement to execute hua tha.
+
+Fir record save kyu nahi hua?
+
+---
+
+### Student
+
+Kyuki
+
+Transaction Commit nahi hua.
+
+Jab tak Commit nahi hota
+
+Database permanently save nahi karta.
+
+---
+
+Diagram
+
+```text
+INSERT SQL
+
+↓
+
+Exception
+
+↓
+
+Rollback
+
+↓
+
+No Record
+```
+
+---
+
+# Teacher
+
+Ye interview me bahut puchte hain.
+
+SQL execute hua.
+
+Fir bhi data save nahi hua.
+
+Why?
+
+---
+
+### Student
+
+Because
+
+Transaction Commit nahi hua.
+
+Rollback ho gaya.
+
+---
+
+# Real Project Flow
+
+```text
+POST /orders
+
+↓
+
+Controller
+
+↓
+
+Service
+
+↓
+
+OrderRepository.save()
+
+↓
+
+OutboxMapper
+
+↓
+
+OutboxRepository.save()
+
+↓
+
+Commit
+```
+
+---
+
+# Agar Exception Aaye
+
+```text
+POST
+
+↓
+
+Order Save
+
+↓
+
+Exception
+
+↓
+
+Rollback
+
+↓
+
+No Order
+
+No Outbox
+```
+
+---
+
+# Teacher
+
+Agar @Transactional hata diya to?
+
+---
+
+### Student
+
+Bahut dangerous.
+
+Example
+
+```text
+Order Save
+✔
+
+↓
+
+Outbox Save
+❌
+
+↓
+
+No Rollback
+```
+
+Result
+
+Order Database me hai.
+
+Outbox me nahi.
+
+Kafka kabhi Event nahi bhejega.
+
+Ye Data Inconsistency hai.
+
+---
+
+# Teacher
+
+Ye Local Transaction hai ya Distributed?
+
+---
+
+### Student
+
+Local Transaction.
+
+Kyuki
+
+Order Table
+
+Aur
+
+Outbox Table
+
+Dono same Database me hain.
+
+---
+
+Diagram
+
+```text
+MySQL
+
+↓
+
+Order Table
+
++
+
+Outbox Table
+
+↓
+
+One Local Transaction
+```
+
+---
+
+# Interview Questions
+
+## Q1. Outbox Table ka purpose kya hai?
+
+**Answer**
+
+Kafka me publish hone wale messages ko temporarily store karna.
+
+---
+
+## Q2. Payload kya hota hai?
+
+**Answer**
+
+Order Object ka JSON String.
+
+---
+
+## Q3. Processed field ka use kya hai?
+
+**Answer**
+
+Ye batata hai message publish hua ya nahi.
+
+---
+
+## Q4. `@Transactional` kyu use kiya?
+
+**Answer**
+
+Order Table aur Outbox Table ko ek hi transaction me save karne ke liye.
+
+---
+
+## Q5. Agar Outbox save fail ho jaye to?
+
+**Answer**
+
+Pura transaction rollback ho jayega.
+
+Order bhi save nahi hoga.
+
+---
+
+## Q6. Video me ArithmeticException kyu throw kiya?
+
+**Answer**
+
+Ye prove karne ke liye ki `@Transactional` rollback correctly kaam kar raha hai.
+
+---
+
+## Q7. Agar `@Transactional` na ho to kya problem hogi?
+
+**Answer**
+
+Order save ho sakta hai, lekin Outbox save fail ho sakta hai. Isse Kafka ko event nahi milega aur Data Inconsistency create ho jayegi.
+
+---
+
+# ⭐ Part 4 Revision
+
+```text
+Client
+   │
+   ▼
+Controller
+   │
+   ▼
+Service (@Transactional)
+   │
+   ├──► OrderRepository.save()
+   │
+   ├──► OutboxMapper
+   │
+   ├──► OutboxRepository.save()
+   │
+   ▼
+ Commit
+```
+
+Agar beech me exception aaye:
+
+```text
+Order Save ✔
+
+↓
+
+Exception ❌
+
+↓
+
+Rollback
+
+↓
+
+Order ❌
+
+Outbox ❌
+```
+
+**Next Part 5** me hum **Order Puller Service** implement karenge—Scheduler, `findByProcessedFalse()`, Kafka Producer, Topic Creation, Processed Flag ko `false → true` update karna, aur complete polling flow step-by-step samjhenge.
+
+========================================================================================================================
+# Part 5 – Order Puller Service + Kafka Publishing (Actual Implementation)
+
+## Topic: Scheduler + Polling + Kafka Producer + Processed Flag
+
+Based on your uploaded transcript.
+
+---
+
+# Teacher 👨‍🏫
+
+Ab Order Service ka kaam complete ho gaya.
+
+Question.
+
+## Q1. Ab Outbox Table me jo records pade hain unko Kafka me kaun bhejega?
+
+### Student 👨‍🎓
+
+Sir,
+
+**Order Puller Service**.
+
+Isko **Message Relay Service** bhi bolte hain.
+
+---
+
+# Teacher 👨‍🏫
+
+Order Puller Service ka sirf ek hi kaam hai.
+
+```text
+Read Outbox Table
+
+↓
+
+Publish Kafka
+
+↓
+
+Update Processed Flag
+```
+
+Bas.
+
+---
+
+# Complete Architecture
+
+```text
+              Order Service
+
+                     │
+
+         ----------------------
+
+         │                    │
+
+         ▼                    ▼
+
+   Order Table         Outbox Table
+
+                              │
+
+                              ▼
+
+                  Order Puller Service
+
+                              │
+
+                              ▼
+
+                          Kafka Topic
+
+                              │
+
+             -----------------------------
+
+             │              │
+
+             ▼              ▼
+
+        Inventory       Payment
+```
+
+---
+
+# Teacher 👨‍🏫
+
+Question.
+
+Order Puller ko kaise pata chalega ki naye records aaye hain?
+
+---
+
+## Student 👨‍🎓
+
+Sir,
+
+Scheduler continuously Outbox Table check karega.
+
+---
+
+# Teacher
+
+Scheduler matlab?
+
+---
+
+## Student
+
+Har fixed interval ke baad
+
+Automatically method execute hoga.
+
+Example
+
+```text
+Every 60 Seconds
+
+↓
+
+Check Outbox Table
+```
+
+---
+
+# Teacher
+
+Code?
+
+---
+
+```java
+@EnableScheduling
+```
+
+Application class me.
+
+---
+
+Aur
+
+```java
+@Scheduled(fixedRate = 60000)
+```
+
+Service method ke upar.
+
+---
+
+Meaning
+
+```text
+Har 60 second
+
+↓
+
+Ye method automatically chalega.
+```
+
+---
+
+# Teacher
+
+Method ka naam kya rakha?
+
+---
+
+## Student
+
+```java
+pollOutboxAndPublish()
+```
+
+Ye best naam hai.
+
+Kyuki method exactly yehi kaam kar raha hai.
+
+---
+
+# Teacher
+
+Method ke andar pehla step?
+
+---
+
+## Student
+
+Outbox Table se
+
+Sirf unprocessed records fetch karo.
+
+---
+
+# Repository
+
+```java
+List<Outbox> findByProcessedFalse();
+```
+
+---
+
+# Teacher
+
+Ye method kaise kaam karta hai?
+
+---
+
+## Student
+
+Spring Data JPA khud query bana deta hai.
+
+Actual SQL
+
+```sql
+SELECT *
+
+FROM outbox
+
+WHERE processed = false;
+```
+
+Hume query likhne ki zarurat nahi.
+
+---
+
+# Teacher
+
+Suppose
+
+Table me ye data hai.
+
+| ID | Processed |
+| -- | --------- |
+| 1  | false     |
+| 2  | true      |
+| 3  | false     |
+| 4  | true      |
+
+Method kya return karega?
+
+---
+
+### Student
+
+Sir
+
+Sirf
+
+```text
+1
+
+3
+```
+
+---
+
+# Teacher
+
+Correct.
+
+---
+
+# Flow
+
+```text
+Scheduler
+
+↓
+
+findByProcessedFalse()
+
+↓
+
+List<Outbox>
+```
+
+---
+
+# Teacher
+
+Uske baad?
+
+---
+
+## Student
+
+Loop lagayenge.
+
+```java
+for(Outbox message : messages){
+
+}
+```
+
+Har message ko Kafka me publish karenge.
+
+---
+
+# Teacher
+
+Service me Kafka ka code likhna sahi hai?
+
+---
+
+## Student
+
+Nahi.
+
+Best Practice
+
+Alag Publisher Class.
+
+---
+
+# Architecture
+
+```text
+Order Puller Service
+
+↓
+
+KafkaPublisher
+
+↓
+
+Kafka
+```
+
+---
+
+# Teacher
+
+Publisher ka method?
+
+---
+
+```java
+publish(String payload)
+```
+
+---
+
+# Teacher
+
+Input kya jayega?
+
+---
+
+## Student
+
+Payload
+
+Kyuki
+
+Payload already JSON hai.
+
+---
+
+Example
+
+```json
+{
+
+"id":1,
+
+"product":"Laptop",
+
+"price":50000
+
+}
+```
+
+Ye hi Kafka me jayega.
+
+---
+
+# Teacher
+
+Kafka Publish ka code?
+
+---
+
+```java
+kafkaTemplate.send(topic,payload);
+```
+
+Bas.
+
+---
+
+# Teacher
+
+Topic hardcode karna chahiye?
+
+---
+
+## Student
+
+Nahi.
+
+Properties file me.
+
+Example
+
+```properties
+order.pull.topic.name=outbox-event
+```
+
+Fir
+
+```java
+@Value("${order.pull.topic.name}")
+```
+
+use karenge.
+
+---
+
+# Teacher
+
+Topic automatically create kaise hua?
+
+---
+
+## Student
+
+Configuration Class.
+
+```java
+@Bean
+
+NewTopic()
+```
+
+---
+
+Example
+
+```java
+@Bean
+
+public NewTopic orderTopic(){
+
+return new NewTopic(
+
+topicName,
+
+3,
+
+(short)1
+
+);
+
+}
+```
+
+---
+
+# Teacher
+
+Ye
+
+```text
+3
+```
+
+kya hai?
+
+---
+
+## Student
+
+Partitions.
+
+---
+
+Aur
+
+```text
+1
+```
+
+Replica Count.
+
+---
+
+# Teacher
+
+Good.
+
+---
+
+# Teacher
+
+Ab Kafka publish ho gaya.
+
+Uske baad?
+
+---
+
+## Student
+
+Processed Flag update.
+
+---
+
+```java
+message.setProcessed(true);
+
+repository.save(message);
+```
+
+---
+
+# Teacher
+
+Processed=true kyu kiya?
+
+---
+
+## Student
+
+Next Scheduler Run me
+
+Ye record dubara publish na ho.
+
+---
+
+# Example
+
+Initially
+
+| ID | Processed |
+| -- | --------- |
+| 1  | false     |
+
+Scheduler
+
+↓
+
+Kafka Publish
+
+↓
+
+Update
+
+| ID | Processed |
+| -- | --------- |
+| 1  | true      |
+
+Next Time
+
+Scheduler
+
+↓
+
+Ignore
+
+---
+
+# Teacher
+
+Agar Processed update na kare?
+
+---
+
+## Student
+
+Bahut dangerous.
+
+Har minute
+
+Same Message publish hota rahega.
+
+---
+
+Example
+
+```text
+1 Minute
+
+↓
+
+Publish
+
+↓
+
+2 Minute
+
+↓
+
+Publish
+
+↓
+
+3 Minute
+
+↓
+
+Publish
+```
+
+Infinite Duplicate.
+
+---
+
+# Teacher
+
+Video me Try Catch kyu use kiya?
+
+---
+
+## Student
+
+Suppose
+
+10 Messages hain.
+
+5th Message fail ho gaya.
+
+Agar Try Catch nahi hoga
+
+To
+
+6th
+
+7th
+
+8th
+
+Message publish hi nahi honge.
+
+---
+
+Isliye
+
+```java
+for(){
+
+try{
+
+publish();
+
+}
+
+catch(){
+
+log.error();
+
+}
+
+}
+```
+
+---
+
+Result
+
+Ek fail hua
+
+Baaki continue.
+
+---
+
+# Teacher
+
+Ye bahut important Real Time Point hai.
+
+---
+
+# Complete Flow
+
+```text
+Scheduler
+
+↓
+
+findByProcessedFalse()
+
+↓
+
+Loop
+
+↓
+
+Kafka Publish
+
+↓
+
+Processed=True
+
+↓
+
+Save
+
+↓
+
+Next Record
+```
+
+---
+
+# Teacher
+
+Console Log kyu add kiya?
+
+---
+
+## Student
+
+Debugging.
+
+---
+
+Example
+
+```text
+Unprocessed Record Count = 8
+```
+
+Matlab
+
+8 Messages publish hone wale hain.
+
+---
+
+# Teacher
+
+Agar Count = 0
+
+Matlab?
+
+---
+
+## Student
+
+Koi naya Order nahi aaya.
+
+Scheduler quietly exit.
+
+---
+
+# Teacher
+
+Video me
+
+Har 60 second baad
+
+Ye log aa raha tha.
+
+```text
+Unprocessed Record Count : 0
+```
+
+Meaning?
+
+---
+
+## Student
+
+Sab messages already publish ho chuke hain.
+
+---
+
+# Real Project Flow
+
+```text
+Order Puller Start
+
+↓
+
+Scheduler Trigger
+
+↓
+
+Fetch False Records
+
+↓
+
+Loop
+
+↓
+
+Kafka Publish
+
+↓
+
+Update True
+
+↓
+
+Save
+
+↓
+
+Wait 60 Seconds
+
+↓
+
+Repeat
+```
+
+---
+
+# Complete Sequence Diagram
+
+```text
+Scheduler
+
+      │
+
+      ▼
+
+Outbox Repository
+
+      │
+
+      ▼
+
+findByProcessedFalse()
+
+      │
+
+      ▼
+
+List<Outbox>
+
+      │
+
+      ▼
+
+Kafka Publisher
+
+      │
+
+      ▼
+
+Kafka
+
+      │
+
+      ▼
+
+Update processed=true
+
+      │
+
+      ▼
+
+Repository.save()
+```
+
+---
+
+# Interview Questions
+
+## Q1. Order Puller Service ka kaam kya hai?
+
+**Answer**
+
+Outbox Table se unprocessed records read karke Kafka me publish karna.
+
+---
+
+## Q2. Scheduler kyu use kiya?
+
+**Answer**
+
+Har fixed interval ke baad automatically Outbox Table check karne ke liye.
+
+---
+
+## Q3. `findByProcessedFalse()` kya karta hai?
+
+**Answer**
+
+Sirf un records ko fetch karta hai jinka `processed=false` hai.
+
+---
+
+## Q4. Kafka Publish ke baad Processed=true kyu karte hain?
+
+**Answer**
+
+Taaki same message dobara publish na ho.
+
+---
+
+## Q5. Try Catch kyu use kiya?
+
+**Answer**
+
+Ek message fail hone par baaki messages ki processing continue rahe.
+
+---
+
+## Q6. Kafka Topic Configuration properties file me kyu rakhte hain?
+
+**Answer**
+
+Topic ka naam easily change kiya ja sake aur hardcoding avoid ho.
+
+---
+
+## Q7. Agar Scheduler na ho to?
+
+**Answer**
+
+Outbox Table me messages save to ho jayenge, lekin Kafka me automatically publish nahi honge.
+
+---
+
+# ⭐ Part 5 Revision
+
+```text
+Order Service
+      │
+      ▼
+Outbox Table
+(processed=false)
+      │
+      ▼
+Scheduler
+      │
+      ▼
+findByProcessedFalse()
+      │
+      ▼
+Kafka Publisher
+      │
+      ▼
+Kafka Topic
+      │
+      ▼
+processed=true
+      │
+      ▼
+Save Outbox
+```
+
+## 💡 Interview Tip (Most Asked)
+
+Interviewer aksar puchta hai:
+
+**"Agar Kafka down ho jaye to kya hoga?"**
+
+**Answer:**
+
+* Order aur Outbox record already database me save ho chuke hote hain.
+* `processed=false` rehta hai.
+* Scheduler agle run me fir se wahi record uthata hai.
+* Jaise hi Kafka available hota hai, message publish ho jata hai.
+* Isliye **message loss nahi hota** aur **Data Consistency maintain rehti hai**.
+
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================

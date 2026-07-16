@@ -1,0 +1,561 @@
+Perfect. Agar tum **sirf is Transactional Outbox Pattern video** ke interview questions prepare kar lo, to 90% interview questions cover ho jayenge. Neeche maine **easy Hindi-English** me questions aur answers diye hain jo yaad rakhna easy hai.
+
+Based on your uploaded transcript.
+
+---
+
+# Transactional Outbox Pattern Interview Questions & Answers
+
+---
+
+# 1. What is Transactional Outbox Pattern?
+
+### Answer
+
+Transactional Outbox Pattern ek design pattern hai jo **Data Consistency** maintain karta hai.
+
+Isme hum pehle **Business Table (Order Table)** aur **Outbox Table** ko ek hi local transaction me save karte hain.
+
+Uske baad ek alag service Outbox Table se records read karke Kafka me publish karti hai.
+
+---
+
+# 2. Why do we need Transactional Outbox Pattern?
+
+### Answer
+
+Dual Write Problem avoid karne ke liye.
+
+Aur Database aur Kafka ke beech Data Consistency maintain karne ke liye.
+
+---
+
+# 3. What is Dual Write Problem?
+
+### Answer
+
+Jab ek hi request me
+
+* Database
+* Kafka
+
+dono me write karna padta hai.
+
+Agar ek success aur dusra fail ho jaye to Data Inconsistency ho jati hai.
+
+---
+
+# 4. What is Data Inconsistency?
+
+### Answer
+
+Jab ek system ke paas data ho aur dusre system ke paas same data na ho.
+
+Example
+
+Order Database me save ho gaya.
+
+Lekin Kafka Event publish nahi hua.
+
+---
+
+# 5. Explain Dual Write with an example.
+
+### Answer
+
+Customer order place karta hai.
+
+Order Service
+
+* Database me save karti hai.
+* Kafka me event publish karti hai.
+
+Agar Kafka fail ho gaya,
+
+to Inventory aur Payment ko order ka pata hi nahi chalega.
+
+---
+
+# 6. What is an Outbox Table?
+
+### Answer
+
+Outbox Table ek database table hoti hai.
+
+Isme Kafka me publish hone wale events temporarily store hote hain.
+
+---
+
+# 7. Why do we need an Outbox Table?
+
+### Answer
+
+Message lose na ho.
+
+Kafka down ho tab bhi event database me safe rahe.
+
+Later Scheduler publish kar dega.
+
+---
+
+# 8. What is stored in the Outbox Table?
+
+### Answer
+
+* ID
+* Aggregate ID
+* Payload
+* Created Time
+* Processed Flag
+
+---
+
+# 9. What is Payload?
+
+### Answer
+
+Payload pura Order Object ka JSON String hota hai.
+
+Ye hi Kafka me publish hota hai.
+
+---
+
+# 10. Why store Payload as JSON?
+
+### Answer
+
+Taaki wahi JSON directly Kafka me publish kar sake.
+
+Dobara object create karne ki zarurat nahi.
+
+---
+
+# 11. What is Aggregate ID?
+
+### Answer
+
+Aggregate ID mostly Order ID ya Customer ID hota hai.
+
+Ye batata hai message kis order ka hai.
+
+---
+
+# 12. What is Processed Flag?
+
+### Answer
+
+Ye batata hai
+
+Message Kafka me publish hua hai ya nahi.
+
+false = Pending
+
+true = Published
+
+---
+
+# 13. Why is processed=false by default?
+
+### Answer
+
+Kyuki Order abhi Kafka me publish nahi hua.
+
+---
+
+# 14. Why do we change processed=false to true?
+
+### Answer
+
+Duplicate publishing avoid karne ke liye.
+
+---
+
+# 15. What happens if processed flag is never updated?
+
+### Answer
+
+Scheduler har baar same message publish karta rahega.
+
+Duplicate events create honge.
+
+---
+
+# 16. What is Order Puller Service?
+
+### Answer
+
+Order Puller Service Outbox Table se records read karti hai.
+
+Aur Kafka me publish karti hai.
+
+---
+
+# 17. What is Message Relay Service?
+
+### Answer
+
+Order Puller ko hi Message Relay bhi bolte hain.
+
+Ye Outbox se Kafka tak message bhejne ka kaam karta hai.
+
+---
+
+# 18. Why do we use Scheduler?
+
+### Answer
+
+Automatically Outbox Table ko check karne ke liye.
+
+---
+
+# 19. What does @Scheduled do?
+
+### Answer
+
+Fixed interval ke baad method automatically execute karta hai.
+
+---
+
+# 20. Why use findByProcessedFalse()?
+
+### Answer
+
+Sirf unprocessed records fetch karne ke liye.
+
+Published records ko ignore karta hai.
+
+---
+
+# 21. Why use @Transactional?
+
+### Answer
+
+Order Table aur Outbox Table ko ek hi transaction me save karne ke liye.
+
+---
+
+# 22. What happens if Outbox save fails?
+
+### Answer
+
+Pura transaction rollback ho jayega.
+
+Order bhi save nahi hoga.
+
+---
+
+# 23. What happens if Order save fails?
+
+### Answer
+
+Outbox bhi save nahi hoga.
+
+---
+
+# 24. Why is this called a Local Transaction?
+
+### Answer
+
+Kyuki Order Table aur Outbox Table same database me hain.
+
+---
+
+# 25. Is Kafka part of this transaction?
+
+### Answer
+
+No.
+
+Kafka local transaction ka part nahi hota.
+
+---
+
+# 26. Why don't we directly publish to Kafka?
+
+### Answer
+
+Agar Kafka unavailable ho to message lose ho sakta hai.
+
+Isliye pehle Outbox me save karte hain.
+
+---
+
+# 27. What happens if Kafka is down?
+
+### Answer
+
+Message Outbox Table me safe rahega.
+
+Scheduler baad me publish kar dega.
+
+---
+
+# 28. Is message lost if Kafka is unavailable?
+
+### Answer
+
+No.
+
+Message database me Outbox Table me already saved hota hai.
+
+---
+
+# 29. Why do we use a Mapper?
+
+### Answer
+
+DTO ko Entity aur Entity ko Outbox me convert karne ke liye.
+
+---
+
+# 30. Why not convert DTO inside Service?
+
+### Answer
+
+Service clean rakhne ke liye.
+
+Mapping logic alag class me rakhte hain.
+
+---
+
+# 31. Why use DTO?
+
+### Answer
+
+Client request ko receive karne ke liye.
+
+Entity ko directly expose nahi karna chahiye.
+
+---
+
+# 32. Why use Try-Catch while publishing Kafka messages?
+
+### Answer
+
+Ek message fail ho to baaki messages publish hote rahein.
+
+---
+
+# 33. What happens without Try-Catch?
+
+### Answer
+
+Ek message fail hote hi pura loop stop ho jayega.
+
+---
+
+# 34. Why use KafkaTemplate?
+
+### Answer
+
+Kafka topic me message publish karne ke liye.
+
+---
+
+# 35. Why keep Kafka topic in application.properties?
+
+### Answer
+
+Hardcoding avoid karne ke liye.
+
+Configuration easily change ho sake.
+
+---
+
+# 36. What are the advantages of Transactional Outbox Pattern?
+
+### Answer
+
+* Data Consistency
+* Reliable Message Delivery
+* No Dual Write Problem
+* Retry Support
+* No Message Loss
+
+---
+
+# 37. What are the disadvantages?
+
+### Answer
+
+* Extra Outbox Table maintain karni padti hai.
+* Extra Scheduler/Relay Service chahiye.
+* Thoda delay ho sakta hai (event eventually publish hota hai).
+
+---
+
+# 38. Difference between Normal Flow and Outbox Pattern?
+
+### Answer
+
+### Normal
+
+```text
+Order Service
+
+↓
+
+Database
+
++
+
+Kafka
+```
+
+Dual Write Problem.
+
+---
+
+### Outbox
+
+```text
+Order Service
+
+↓
+
+Order Table
+
++
+
+Outbox Table
+
+↓
+
+Order Puller
+
+↓
+
+Kafka
+```
+
+Safe and Reliable.
+
+---
+
+# 39. Difference between Saga Pattern and Transactional Outbox Pattern?
+
+### Answer
+
+**Transactional Outbox**
+
+* Ek service ke Database aur Event Publishing ko reliable banata hai.
+* Dual Write Problem solve karta hai.
+
+**Saga Pattern**
+
+* Multiple microservices ke transactions coordinate karta hai.
+* Distributed transaction manage karta hai using events or orchestrator.
+
+---
+
+# 40. Explain the complete flow of Transactional Outbox Pattern.
+
+### Answer
+
+```text
+Client
+
+↓
+
+Order Service
+
+↓
+
+Order Table Save
+
+↓
+
+Outbox Table Save
+
+↓
+
+Transaction Commit
+
+↓
+
+Scheduler
+
+↓
+
+findByProcessedFalse()
+
+↓
+
+Kafka Publish
+
+↓
+
+processed=true
+
+↓
+
+Inventory Service
+
+↓
+
+Payment Service
+
+↓
+
+Notification Service
+```
+
+---
+
+# ⭐ Most Important Interview Question (100% Asked)
+
+## Explain Transactional Outbox Pattern in your own words.
+
+### Best Answer (Remember This)
+
+> "Transactional Outbox Pattern ka use hum Dual Write Problem ko solve karne ke liye karte hain. Jab Order Service ko Database aur Kafka dono me write karna hota hai, to hum directly Kafka me publish nahi karte. Pehle Order Table aur Outbox Table ko ek hi local transaction me save karte hain. Fir ek Order Puller ya Message Relay Service Outbox Table se unprocessed records read karke Kafka me publish karti hai aur processed flag ko true kar deti hai. Isse Data Consistency maintain rehti hai aur agar Kafka temporarily down bhi ho, to message lose nahi hota."
+
+---
+
+# ⭐ 30-Second Revision (Interview Crack Answer)
+
+```text
+Problem
+↓
+Dual Write
+
+↓
+
+Database + Kafka
+
+↓
+
+Data Inconsistency
+
+↓
+
+Solution
+
+↓
+
+Transactional Outbox Pattern
+
+↓
+
+Order Table + Outbox Table
+
+(Same @Transactional)
+
+↓
+
+Scheduler
+
+↓
+
+Kafka Publish
+
+↓
+
+processed = true
+
+↓
+
+Reliable Message Delivery
+```
+
+Ye **40 questions** agar tum achhe se prepare kar loge, to **Transactional Outbox Pattern** se related lagbhag har Java Spring Boot/Microservices interview ka answer confidently de paoge.
