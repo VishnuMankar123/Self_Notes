@@ -1,0 +1,6533 @@
+Link Video : https://www.youtube.com/watch?v=70jyEPYKlLM
+chnnel Name : Learn code with Durgesh
+
+=======================================================================================================================
+# 📘 Saga Pattern Notes – Part 1
+
+# **What is Saga Pattern? Why Do We Need It? Monolith vs Microservices**
+
+> **Goal:** Before learning Saga Pattern, first understand **why it was introduced** and **what problem it solves.**
+
+---
+
+# 👨‍🏫 Teacher:
+
+Before learning **Saga Pattern**, tell me one thing...
+
+### **Why was Saga Pattern introduced?**
+
+---
+
+# 👨‍🎓 Student:
+
+Saga Pattern was introduced to solve the problem of **transaction management in Microservices Architecture**.
+
+In a **Monolithic Application**, transaction management is very easy because everything is inside one application and usually uses one database.
+
+But in **Microservices**, one business operation may involve multiple services and multiple databases.
+
+Because of this, maintaining **data consistency** becomes difficult.
+
+👉 Saga Pattern solves this problem.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Before understanding Saga Pattern, explain **Monolithic Architecture.**
+
+---
+
+# 👨‍🎓 Student:
+
+A **Monolithic Application** is an application where **all modules are inside one project**.
+
+Everything is deployed together.
+
+Everything usually shares the same database.
+
+### Example
+
+Imagine an E-Commerce application.
+
+Instead of multiple services, everything is inside one application.
+
+```
+E-Commerce Application
+
+├── Order Module
+├── Payment Module
+├── Product Module
+├── Inventory Module
+├── Shipping Module
+└── Notification Module
+
+         │
+
+      One Database
+```
+
+Everything runs together.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What are the advantages of Monolithic Architecture?
+
+---
+
+# 👨‍🎓 Student:
+
+### ✅ Advantages
+
+### 1. Simple Development
+
+Only one project to manage.
+
+No communication between multiple services.
+
+---
+
+### 2. Easy Deployment
+
+Deploy only one application.
+
+No need to deploy many services separately.
+
+---
+
+### 3. Easy Transaction Management
+
+Since everything is inside one application,
+
+Spring's **@Transactional**
+
+or
+
+Database Transaction
+
+can easily handle rollback.
+
+---
+
+### 4. Easy Debugging
+
+All logs are available in one place.
+
+No distributed tracing required.
+
+---
+
+### 5. Better Performance
+
+No network calls between modules.
+
+Method calls happen inside the same JVM.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Then why did companies move to Microservices?
+
+---
+
+# 👨‍🎓 Student:
+
+Because Monolithic Architecture creates problems when the application becomes very large.
+
+Large companies like
+
+* Amazon
+* Netflix
+* Uber
+* Flipkart
+
+have millions of users.
+
+One application becomes difficult to maintain.
+
+---
+
+# Problems in Monolithic Architecture
+
+## Problem 1
+
+Huge codebase
+
+```
+10 Developers
+
+↓
+
+100 Developers
+
+↓
+
+500 Developers
+```
+
+Everyone works in the same project.
+
+Merge conflicts increase.
+
+Development becomes slow.
+
+---
+
+## Problem 2
+
+Scaling Problem
+
+Suppose only the Payment module has high traffic.
+
+Even then, we have to scale the **entire application**.
+
+This wastes server resources.
+
+---
+
+## Problem 3
+
+Deployment Risk
+
+Changing a small feature requires deploying the entire application.
+
+A small bug can affect the whole system.
+
+---
+
+## Problem 4
+
+Technology Limitation
+
+Entire application uses one technology stack.
+
+Example
+
+Everything must use Java.
+
+You cannot easily build one module in Go or Node.js.
+
+---
+
+## Problem 5
+
+Single Point of Failure
+
+If the application crashes,
+
+Everything becomes unavailable.
+
+```
+Application Down
+
+↓
+
+Order Down
+
+↓
+
+Payment Down
+
+↓
+
+Inventory Down
+
+↓
+
+Shipping Down
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+So what is Microservices Architecture?
+
+---
+
+# 👨‍🎓 Student:
+
+Microservices Architecture means
+
+Instead of creating one huge application,
+
+we divide it into many **small independent services**.
+
+Each service handles one specific business functionality.
+
+---
+
+### Example
+
+Instead of one application
+
+```
+E-Commerce
+```
+
+We split it into
+
+```
+Order Service
+
+Payment Service
+
+Inventory Service
+
+Shipping Service
+
+Notification Service
+
+Product Service
+```
+
+Each service
+
+✔ has its own code
+
+✔ can have its own database
+
+✔ can be deployed independently
+
+✔ can scale independently
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain this using Amazon?
+
+---
+
+# 👨‍🎓 Student:
+
+Suppose you place an order on Amazon.
+
+Different services work together.
+
+```
+Customer
+
+     │
+
+Order Service
+     │
+
+Payment Service
+     │
+
+Inventory Service
+     │
+
+Shipping Service
+     │
+
+Notification Service
+```
+
+Every service performs only its own responsibility.
+
+---
+
+### Order Service
+
+Creates the order.
+
+---
+
+### Payment Service
+
+Deducts money.
+
+---
+
+### Inventory Service
+
+Reserves product stock.
+
+---
+
+### Shipping Service
+
+Creates shipment.
+
+---
+
+### Notification Service
+
+Sends Email/SMS.
+
+---
+
+Instead of one big application,
+
+many small services collaborate.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What are the advantages of Microservices?
+
+---
+
+# 👨‍🎓 Student:
+
+### ✅ Independent Deployment
+
+Deploy one service without affecting others.
+
+---
+
+### ✅ Independent Scaling
+
+If Payment Service receives heavy traffic,
+
+only Payment Service needs scaling.
+
+---
+
+### ✅ Better Fault Isolation
+
+If Notification Service fails,
+
+Order and Payment can still continue.
+
+---
+
+### ✅ Faster Development
+
+Different teams can work on different services simultaneously.
+
+---
+
+### ✅ Technology Flexibility
+
+Different services can use different technologies.
+
+Example
+
+```
+Order Service
+
+↓
+
+Java
+
+------------------
+
+Notification Service
+
+↓
+
+Node.js
+
+------------------
+
+Recommendation Service
+
+↓
+
+Python
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+If Microservices have so many advantages,
+
+then where is the problem?
+
+---
+
+# 👨‍🎓 Student:
+
+The biggest challenge is **Distributed Transaction Management**.
+
+In Monolithic Architecture,
+
+everything is inside one application,
+
+so rollback is easy.
+
+But in Microservices,
+
+each service has its own database.
+
+One business transaction spans multiple services.
+
+If one service fails after others have already completed,
+
+the system can become inconsistent.
+
+This is exactly the problem that **Saga Pattern** is designed to solve.
+
+---
+
+# 📌 Key Points to Remember
+
+* **Saga Pattern** is used only in **Microservices Architecture**.
+* Monolithic applications usually use **database transactions** (`BEGIN`, `COMMIT`, `ROLLBACK`).
+* Microservices split a large application into multiple independent services.
+* Each microservice usually has its own database.
+* A single business operation (like placing an order) may involve multiple services.
+* **The biggest challenge in Microservices is maintaining data consistency across services.**
+* **Saga Pattern solves the Distributed Transaction problem.**
+
+---
+
+# 🎯 Interview Questions
+
+### Q1. Why do we need Saga Pattern?
+
+**Answer:**
+Saga Pattern is used to manage distributed transactions in Microservices. It keeps data consistent when a business operation spans multiple services and one of the steps fails.
+
+---
+
+### Q2. Is Saga Pattern used in Monolithic Architecture?
+
+**Answer:**
+No. Monolithic applications usually use database transactions with `BEGIN`, `COMMIT`, and `ROLLBACK`. Saga Pattern is mainly used in Microservices.
+
+---
+
+### Q3. Why did companies move from Monolithic to Microservices?
+
+**Answer:**
+To achieve independent deployment, independent scaling, better fault isolation, faster development, and technology flexibility.
+
+---
+
+### Q4. What is the biggest challenge in Microservices?
+
+**Answer:**
+Managing **distributed transactions** and maintaining **data consistency** across multiple services.
+
+---
+
+### 🧠 Memory Trick
+
+**Monolith = One Big House 🏠**
+
+* One application
+* One database
+* Easy transactions
+
+**Microservices = Apartment Building 🏢**
+
+* Many independent services
+* Separate databases
+* Need coordination
+* **Saga Pattern acts as the building manager** to keep everything consistent.
+
+=======================================================================================================================
+# 📘 Saga Pattern Notes – Part 2
+
+# **Transaction Management in Monolithic Application**
+
+> **Goal:** Before understanding Saga Pattern, you must understand **how transactions work in a Monolithic Application**, because Saga Pattern is an alternative to traditional transactions in Microservices.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What is a **Transaction**?
+
+---
+
+# 👨‍🎓 Student:
+
+A **Transaction** is a group of database operations that are treated as **one single unit of work**.
+
+It follows the rule:
+
+> **Either all operations should succeed OR none of them should be saved.**
+
+This is called the **All-or-Nothing Principle**.
+
+---
+
+### Example
+
+Suppose we have 4 database operations.
+
+```text
+Step 1 → Create Order
+Step 2 → Deduct Money
+Step 3 → Reserve Product
+Step 4 → Create Shipment
+```
+
+If **all four steps succeed**, the transaction is successful.
+
+```text
+✔ Order Created
+✔ Payment Done
+✔ Product Reserved
+✔ Shipment Created
+
+Transaction = SUCCESS
+```
+
+---
+
+But suppose **Step 3 fails**.
+
+```text
+✔ Order Created
+
+✔ Payment Done
+
+❌ Product Reservation Failed
+
+Shipment Not Started
+```
+
+Now what should happen?
+
+The answer is:
+
+Everything should be **undone**.
+
+```text
+Order Deleted
+
+Payment Refunded
+
+Transaction Failed
+```
+
+This is called a **Rollback**.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Why do we rollback?
+
+---
+
+# 👨‍🎓 Student:
+
+Because we don't want the database to contain **half-completed data**.
+
+Imagine this situation:
+
+```text
+Order Created
+
+Payment Deducted
+
+Inventory Failed
+```
+
+If we don't rollback,
+
+then
+
+Customer has paid money,
+
+but the product was never reserved.
+
+This creates **Data Inconsistency**.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain it with a real-life example?
+
+---
+
+# 👨‍🎓 Student:
+
+Imagine four friends planned a Goa trip.
+
+```text
+Friend 1 ✔
+
+Friend 2 ✔
+
+Friend 3 ✔
+
+Friend 4 ❌ Sick
+```
+
+If the fourth friend cannot come,
+
+everyone decides to cancel the trip.
+
+Nobody goes.
+
+Why?
+
+Because the plan works only if everyone participates.
+
+A database transaction follows exactly the same rule.
+
+Either everyone succeeds,
+
+or everyone cancels.
+
+---
+
+# 👨‍🏫 Teacher:
+
+How does a database transaction work internally?
+
+---
+
+# 👨‍🎓 Student:
+
+A transaction has **three main stages**.
+
+```text
+BEGIN
+
+↓
+
+Execute SQL Statements
+
+↓
+
+COMMIT or ROLLBACK
+```
+
+---
+
+### Step 1
+
+Start Transaction
+
+```sql
+BEGIN;
+```
+
+---
+
+### Step 2
+
+Execute SQL Statements
+
+```sql
+INSERT INTO orders VALUES(...);
+
+UPDATE payment SET status='SUCCESS';
+
+UPDATE inventory SET quantity=quantity-1;
+```
+
+---
+
+### Step 3
+
+If everything succeeds
+
+```sql
+COMMIT;
+```
+
+Changes become permanent.
+
+---
+
+If anything fails
+
+```sql
+ROLLBACK;
+```
+
+Everything becomes exactly as before.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Explain COMMIT.
+
+---
+
+# 👨‍🎓 Student:
+
+**COMMIT** means
+
+> Save all the changes permanently into the database.
+
+Example
+
+```text
+Insert Order
+
+↓
+
+Update Payment
+
+↓
+
+Update Inventory
+
+↓
+
+COMMIT
+```
+
+Result
+
+```text
+✔ Everything saved permanently.
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+Explain ROLLBACK.
+
+---
+
+# 👨‍🎓 Student:
+
+**ROLLBACK** means
+
+Undo everything that happened during the current transaction.
+
+Example
+
+```text
+BEGIN
+
+↓
+
+Insert Order ✔
+
+↓
+
+Payment Success ✔
+
+↓
+
+Inventory Failed ❌
+
+↓
+
+ROLLBACK
+```
+
+Result
+
+```text
+Order Removed
+
+Payment Removed
+
+Database returns to previous state
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+How does Spring Boot manage transactions?
+
+---
+
+# 👨‍🎓 Student:
+
+Spring Boot provides the **`@Transactional`** annotation.
+
+Example
+
+```java
+@Transactional
+public void placeOrder() {
+
+    createOrder();
+
+    makePayment();
+
+    reserveInventory();
+
+}
+```
+
+If
+
+```java
+createOrder();
+```
+
+works,
+
+and
+
+```java
+makePayment();
+```
+
+works,
+
+but
+
+```java
+reserveInventory();
+```
+
+throws an exception,
+
+Spring automatically performs
+
+```text
+ROLLBACK
+```
+
+Everything is undone.
+
+No extra code is required.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What happens internally?
+
+---
+
+# 👨‍🎓 Student:
+
+Suppose this method runs.
+
+```java
+@Transactional
+public void order() {
+
+    saveOrder();
+
+    payment();
+
+    inventory();
+
+}
+```
+
+Spring internally does something like
+
+```text
+BEGIN
+
+↓
+
+saveOrder()
+
+↓
+
+payment()
+
+↓
+
+inventory()
+
+↓
+
+Success?
+
+YES
+
+↓
+
+COMMIT
+```
+
+---
+
+If
+
+```text
+inventory()
+```
+
+fails,
+
+Spring internally executes
+
+```text
+ROLLBACK
+```
+
+Everything is reverted automatically.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain this using Amazon?
+
+---
+
+# 👨‍🎓 Student:
+
+Suppose Amazon is still a **Monolithic Application**.
+
+Customer places an order.
+
+The application performs
+
+```text
+Create Order
+
+↓
+
+Deduct Payment
+
+↓
+
+Reserve Product
+
+↓
+
+Create Shipment
+```
+
+If shipment creation fails,
+
+the database performs
+
+```text
+ROLLBACK
+```
+
+Final Result
+
+```text
+Order Cancelled
+
+Money Returned
+
+Stock Restored
+```
+
+Everything is handled by **one transaction**.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Why is transaction management easy in Monolithic Architecture?
+
+---
+
+# 👨‍🎓 Student:
+
+Because
+
+Everything is
+
+✔ inside one application
+
+✔ inside one JVM
+
+✔ connected to one database
+
+So a single database transaction can manage everything.
+
+```text
+Application
+
+↓
+
+One Database
+
+↓
+
+One Transaction
+
+↓
+
+Easy Rollback
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you draw the complete flow?
+
+---
+
+# 👨‍🎓 Student:
+
+```text
+Customer Places Order
+
+        │
+
+        ▼
+
+BEGIN TRANSACTION
+
+        │
+
+        ▼
+
+Create Order
+
+        │
+
+        ▼
+
+Deduct Payment
+
+        │
+
+        ▼
+
+Reserve Inventory
+
+        │
+
+        ▼
+
+Create Shipment
+
+        │
+
+        ▼
+
+All Successful?
+
+      /     \
+
+    Yes      No
+
+    │         │
+
+COMMIT    ROLLBACK
+
+    │         │
+
+Data Saved   Undo Everything
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+If Monolithic Transactions are so powerful,
+
+why do we need Saga Pattern?
+
+---
+
+# 👨‍🎓 Student:
+
+Because this transaction works only when
+
+* Everything is inside **one application**
+* Everything uses **one database**
+
+In **Microservices**,
+
+each service has
+
+* its own application
+* its own database
+
+One database transaction **cannot** control multiple independent services.
+
+That's where **Saga Pattern** becomes necessary.
+
+---
+
+# 📌 Key Points to Remember
+
+* A **Transaction** is a group of operations treated as one unit.
+* It follows the **All-or-Nothing Principle**.
+* `BEGIN` starts a transaction.
+* `COMMIT` permanently saves all changes.
+* `ROLLBACK` undoes all changes if any step fails.
+* Spring Boot uses **`@Transactional`** to manage transactions automatically.
+* Transactions work well in **Monolithic Architecture** because there is typically a single application and a single database.
+* This approach **does not work across multiple microservices**, which leads to the need for Saga Pattern.
+
+---
+
+# 🎯 Interview Questions
+
+### Q1. What is a Transaction?
+
+**Answer:**
+A transaction is a group of database operations executed as one unit. Either all operations succeed, or all are rolled back.
+
+---
+
+### Q2. What is COMMIT?
+
+**Answer:**
+`COMMIT` permanently saves all successful changes made during a transaction.
+
+---
+
+### Q3. What is ROLLBACK?
+
+**Answer:**
+`ROLLBACK` reverses all changes made during the current transaction if any operation fails.
+
+---
+
+### Q4. What does `@Transactional` do in Spring Boot?
+
+**Answer:**
+It automatically starts a transaction, commits it if everything succeeds, and rolls it back if an exception occurs.
+
+---
+
+### Q5. Why is transaction management easy in Monolithic Architecture?
+
+**Answer:**
+Because all modules share the same application and usually the same database, allowing a single transaction to manage all operations.
+
+---
+
+### 🧠 Memory Trick
+
+Remember the sequence as:
+
+```text
+BEGIN
+   ↓
+Execute All Operations
+   ↓
+Everything Successful?
+   ↓
+YES → COMMIT ✅
+NO  → ROLLBACK ❌
+```
+
+**One Database = One Transaction = Easy Rollback** ✔
+
+➡️ **Next Part (Part 3):** **Problem in Microservices (Distributed Transaction Problem)** — this is where you'll see why traditional `@Transactional` no longer works and why Saga Pattern is needed.
+
+=======================================================================================================================
+# 📘 Saga Pattern Notes – Part 3
+
+# **Problem in Microservices (Distributed Transaction Problem)**
+
+> **Goal:** Understand why the traditional **`@Transactional`** approach fails in Microservices and why we need **Saga Pattern**. Based on the provided transcript.
+
+---
+
+# 👨‍🏫 Teacher:
+
+In the previous part, we learned that **transactions work perfectly in Monolithic Applications**.
+
+Now tell me...
+
+**Why can't we use the same transaction mechanism in Microservices?**
+
+---
+
+# 👨‍🎓 Student:
+
+Because in **Microservices**, each service is **independent**.
+
+Each service has
+
+* Its own application
+* Its own database
+* Its own transaction
+
+There is **no single database transaction** that can control all services together.
+
+---
+
+## Monolithic Architecture
+
+```text
+Application
+
+        │
+
+        ▼
+
+One Database
+
+        │
+
+        ▼
+
+One Transaction
+```
+
+Easy to manage.
+
+---
+
+## Microservices Architecture
+
+```text
+Order Service
+      │
+   Order DB
+
+Payment Service
+      │
+ Payment DB
+
+Inventory Service
+      │
+Inventory DB
+
+Shipping Service
+      │
+Shipping DB
+```
+
+Every service manages its own database independently.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Let's understand this with an Amazon example.
+
+Suppose a customer places an order.
+
+Which services are involved?
+
+---
+
+# 👨‍🎓 Student:
+
+Usually these services work together.
+
+```text
+Customer
+
+   │
+
+   ▼
+
+Order Service
+
+   │
+
+   ▼
+
+Payment Service
+
+   │
+
+   ▼
+
+Inventory Service
+
+   │
+
+   ▼
+
+Shipping Service
+
+   │
+
+   ▼
+
+Notification Service
+```
+
+Each service performs only its own responsibility.
+
+---
+
+## Responsibilities
+
+### **Order Service**
+
+Creates the order.
+
+---
+
+### **Payment Service**
+
+Deducts customer's money.
+
+---
+
+### **Inventory Service**
+
+Reserves the product.
+
+---
+
+### **Shipping Service**
+
+Creates shipment.
+
+---
+
+### **Notification Service**
+
+Sends Email/SMS.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Suppose everything starts working.
+
+What happens step by step?
+
+---
+
+# 👨‍🎓 Student:
+
+Let's assume a customer orders an iPhone.
+
+---
+
+### Step 1
+
+Order Service
+
+```text
+Create Order
+
+Status = CREATED
+```
+
+Success ✅
+
+---
+
+### Step 2
+
+Payment Service
+
+```text
+Deduct ₹80,000
+```
+
+Success ✅
+
+Customer's money is deducted.
+
+---
+
+### Step 3
+
+Inventory Service
+
+```text
+Reserve iPhone
+```
+
+Suppose...
+
+Inventory database crashes.
+
+OR
+
+Stock is already sold.
+
+OR
+
+Network issue occurs.
+
+Result
+
+```text
+Inventory Reservation Failed
+```
+
+❌ Failed
+
+---
+
+# 👨‍🏫 Teacher:
+
+Now tell me...
+
+What is the problem?
+
+---
+
+# 👨‍🎓 Student:
+
+Now the system becomes **inconsistent**.
+
+Because
+
+```text
+Order Created ✔
+
+Payment Done ✔
+
+Inventory Failed ❌
+
+Shipping Not Started
+```
+
+Customer has already paid.
+
+But the product is not reserved.
+
+This is a **Distributed Transaction Problem**.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What is an inconsistent state?
+
+---
+
+# 👨‍🎓 Student:
+
+An **Inconsistent State** means
+
+Different services contain different information.
+
+Example
+
+```text
+Order Database
+
+Order = Created
+
+-------------------
+
+Payment Database
+
+Payment = Success
+
+-------------------
+
+Inventory Database
+
+Reservation = Failed
+```
+
+Now
+
+One service says
+
+Order exists.
+
+Another service says
+
+Money deducted.
+
+Another service says
+
+Product unavailable.
+
+This is an inconsistent system.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Why can't we simply rollback everything?
+
+---
+
+# 👨‍🎓 Student:
+
+Because every service has **its own transaction**.
+
+Example
+
+```text
+Order Service
+
+Transaction Completed
+
+COMMIT
+```
+
+Later
+
+```text
+Payment Service
+
+Transaction Completed
+
+COMMIT
+```
+
+Later
+
+```text
+Inventory Service
+
+FAILED
+```
+
+Now
+
+Order Service has already committed.
+
+Payment Service has already committed.
+
+Inventory failed afterwards.
+
+Their transactions are already finished.
+
+So they **cannot be rolled back** using one database transaction.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can Spring Boot's **`@Transactional`** solve this problem?
+
+---
+
+# 👨‍🎓 Student:
+
+No.
+
+Because **`@Transactional`** works only inside a **single application** and **single database transaction**.
+
+Example
+
+```java
+@Transactional
+public void placeOrder(){
+
+    createOrder();
+
+    makePayment();
+
+    reserveInventory();
+
+}
+```
+
+This works only if all methods belong to the same application.
+
+In Microservices
+
+```text
+createOrder()
+
+↓
+
+Order Service
+
+------------------
+
+makePayment()
+
+↓
+
+Payment Service
+
+------------------
+
+reserveInventory()
+
+↓
+
+Inventory Service
+```
+
+These are different applications.
+
+Different JVMs.
+
+Different databases.
+
+Different transactions.
+
+Therefore
+
+`@Transactional`
+
+cannot control them together.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain it with a real-life example?
+
+---
+
+# 👨‍🎓 Student:
+
+Imagine four departments in a company.
+
+```text
+Sales Department
+
+↓
+
+Finance Department
+
+↓
+
+Warehouse
+
+↓
+
+Delivery Department
+```
+
+Sales confirms the order.
+
+Finance collects payment.
+
+Warehouse prepares the product.
+
+Delivery ships it.
+
+Suppose
+
+Warehouse says
+
+"We don't have stock."
+
+But
+
+Finance has already collected the money.
+
+Sales has already confirmed the order.
+
+Now someone has to coordinate and undo the previous work.
+
+Exactly the same problem happens in Microservices.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you draw the complete failure flow?
+
+---
+
+# 👨‍🎓 Student:
+
+```text
+Customer Places Order
+
+          │
+
+          ▼
+
+Order Service
+
+✔ Order Created
+
+          │
+
+          ▼
+
+Payment Service
+
+✔ Payment Success
+
+          │
+
+          ▼
+
+Inventory Service
+
+❌ Failed
+
+          │
+
+          ▼
+
+Shipping Service
+
+Not Executed
+```
+
+Current System State
+
+```text
+Order = Created ✔
+
+Payment = Deducted ✔
+
+Inventory = Failed ❌
+
+Shipment = Not Created
+```
+
+System becomes inconsistent.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What problems can happen because of this inconsistency?
+
+---
+
+# 👨‍🎓 Student:
+
+Many serious business problems.
+
+---
+
+## Problem 1
+
+Customer loses money.
+
+```text
+Money Deducted
+
+↓
+
+Product Not Available
+```
+
+---
+
+## Problem 2
+
+Fake Orders remain in database.
+
+```text
+Order Exists
+
+↓
+
+Product Doesn't Exist
+```
+
+---
+
+## Problem 3
+
+Reports become incorrect.
+
+Sales report
+
+```text
+100 Orders
+```
+
+Inventory report
+
+```text
+95 Products Reserved
+```
+
+Mismatch occurs.
+
+---
+
+## Problem 4
+
+Customer Trust decreases.
+
+Customer sees
+
+```text
+Payment Successful
+
+But
+
+Order Failed
+```
+
+Very bad user experience.
+
+---
+
+# 👨‍🏫 Teacher:
+
+So how do we solve this?
+
+---
+
+# 👨‍🎓 Student:
+
+Instead of one global database transaction,
+
+each service performs its **own local transaction**.
+
+If any service fails,
+
+we execute **Compensating Transactions** to undo the completed work.
+
+This complete approach is called the **Saga Pattern**.
+
+Example
+
+```text
+Order Created
+
+↓
+
+Payment Success
+
+↓
+
+Inventory Failed
+
+↓
+
+Refund Payment
+
+↓
+
+Cancel Order
+```
+
+Instead of using database **ROLLBACK**,
+
+Saga Pattern performs **business-level compensation**.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you summarize everything?
+
+---
+
+# 👨‍🎓 Student:
+
+```text
+Monolithic
+
+↓
+
+One Database
+
+↓
+
+One Transaction
+
+↓
+
+ROLLBACK Possible
+
+----------------------------
+
+Microservices
+
+↓
+
+Multiple Services
+
+↓
+
+Multiple Databases
+
+↓
+
+Multiple Transactions
+
+↓
+
+Global Rollback Impossible
+
+↓
+
+Need Saga Pattern
+```
+
+---
+
+# 📌 Key Points to Remember
+
+* Every Microservice owns its **own database**.
+* Every Microservice has **its own local transaction**.
+* One business request usually involves **multiple services**.
+* If one service fails after others succeed, the system becomes **inconsistent**.
+* **`@Transactional` cannot manage distributed transactions** across multiple services.
+* Traditional database **ROLLBACK** cannot undo already committed transactions in other services.
+* This problem is called the **Distributed Transaction Problem**.
+* **Saga Pattern** solves this problem using **Local Transactions** and **Compensating Transactions**.
+
+---
+
+# 🎯 Interview Questions
+
+### Q1. What is a Distributed Transaction?
+
+**Answer:**
+A distributed transaction is a business transaction that spans multiple microservices or databases instead of a single database transaction.
+
+---
+
+### Q2. Why can't `@Transactional` work in Microservices?
+
+**Answer:**
+Because `@Transactional` manages transactions only within a single application and a single database connection. In Microservices, each service has its own database and independent transaction.
+
+---
+
+### Q3. What is an Inconsistent State?
+
+**Answer:**
+An inconsistent state occurs when some services successfully complete their operations while another service fails, leaving the system with partial data.
+
+**Example:**
+
+* Order Created ✔
+* Payment Deducted ✔
+* Inventory Failed ❌
+
+---
+
+### Q4. Why can't we simply rollback committed transactions in Microservices?
+
+**Answer:**
+Because each microservice commits its own transaction independently. Once committed, another service cannot roll it back using a normal database rollback.
+
+---
+
+### Q5. What problem does Saga Pattern solve?
+
+**Answer:**
+Saga Pattern solves the **Distributed Transaction Problem** by coordinating local transactions and executing compensating transactions when failures occur.
+
+---
+
+# 🧠 Memory Trick
+
+### **Monolithic**
+
+```text
+One Application
+      ↓
+One Database
+      ↓
+One Transaction
+      ↓
+ROLLBACK
+```
+
+### **Microservices**
+
+```text
+Many Applications
+      ↓
+Many Databases
+      ↓
+Many Local Transactions
+      ↓
+No Global Rollback
+      ↓
+Use Saga Pattern
+```
+
+> **Golden Interview Line:**
+> **"In Monolithic Architecture, consistency is maintained using database transactions. In Microservices, consistency is maintained using the Saga Pattern because there is no single transaction spanning multiple services."**
+
+➡️ **Next Part (Part 4):** **What is Saga Pattern? Local Transactions & Compensating Transactions (with detailed flow and real-world examples).**
+
+=======================================================================================================================
+# 📘 Saga Pattern Notes – Part 4
+
+# **What is Saga Pattern? Local Transactions & Compensating Transactions**
+
+> **Goal:** In this part, we'll understand the core idea of **Saga Pattern**—how it works, what **Local Transactions** are, and what **Compensating Transactions** are. This is one of the most frequently asked interview topics. Based on the provided transcript.
+
+---
+
+# 👨‍🏫 Teacher:
+
+We already know that traditional database transactions don't work in Microservices.
+
+Now tell me...
+
+## **What is Saga Pattern?**
+
+---
+
+# 👨‍🎓 Student:
+
+**Saga Pattern** is a design pattern used in **Microservices Architecture** to manage **Distributed Transactions**.
+
+Instead of using **one global transaction**, Saga Pattern breaks a business transaction into **multiple Local Transactions**.
+
+If any step fails, Saga Pattern executes **Compensating Transactions** to undo the completed work.
+
+---
+
+## Simple Definition
+
+> **Saga Pattern is a sequence of Local Transactions. If one transaction fails, previously completed transactions are undone using Compensating Transactions to maintain data consistency.**
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain this definition in simple language?
+
+---
+
+# 👨‍🎓 Student:
+
+Imagine placing an order on Amazon.
+
+Instead of one big transaction,
+
+every service performs **its own transaction**.
+
+Example
+
+```text
+Customer Orders Laptop
+
+↓
+
+Order Service
+
+↓
+
+Payment Service
+
+↓
+
+Inventory Service
+
+↓
+
+Shipping Service
+```
+
+Every service completes its work independently.
+
+If every service succeeds,
+
+the order is successful.
+
+If one service fails,
+
+Saga Pattern doesn't use **Database Rollback**.
+
+Instead,
+
+it calls **Compensating Transactions** to reverse the completed operations.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Why doesn't Saga Pattern use ROLLBACK?
+
+---
+
+# 👨‍🎓 Student:
+
+Because each service has already committed its own transaction.
+
+Example
+
+```text
+Order Service
+
+COMMIT ✔
+
+----------------
+
+Payment Service
+
+COMMIT ✔
+
+----------------
+
+Inventory Service
+
+FAILED ❌
+```
+
+The Order and Payment transactions are already committed.
+
+A normal database **ROLLBACK** cannot undo them.
+
+Therefore,
+
+Saga Pattern performs **Business Rollback**, not Database Rollback.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What is a **Local Transaction**?
+
+---
+
+# 👨‍🎓 Student:
+
+A **Local Transaction** is a transaction executed inside **one Microservice**.
+
+Each service is responsible only for its own database.
+
+Example
+
+```text
+Order Service
+
+↓
+
+Insert Order
+
+↓
+
+COMMIT
+```
+
+This transaction affects only the Order database.
+
+---
+
+Payment Service
+
+```text
+Payment Service
+
+↓
+
+Deduct Money
+
+↓
+
+COMMIT
+```
+
+---
+
+Inventory Service
+
+```text
+Inventory Service
+
+↓
+
+Reserve Product
+
+↓
+
+COMMIT
+```
+
+Each service completes its own transaction independently.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain Local Transactions using Amazon?
+
+---
+
+# 👨‍🎓 Student:
+
+Suppose a customer buys an iPhone.
+
+### Step 1
+
+Order Service
+
+```text
+Create Order
+
+↓
+
+COMMIT
+```
+
+Order is saved.
+
+---
+
+### Step 2
+
+Payment Service
+
+```text
+Deduct ₹80,000
+
+↓
+
+COMMIT
+```
+
+Money is deducted.
+
+---
+
+### Step 3
+
+Inventory Service
+
+```text
+Reserve iPhone
+
+↓
+
+COMMIT
+```
+
+Product is reserved.
+
+---
+
+### Step 4
+
+Shipping Service
+
+```text
+Create Shipment
+
+↓
+
+COMMIT
+```
+
+Shipment is created.
+
+Every service completes its own transaction.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Everything looks fine.
+
+But what happens if Inventory fails?
+
+---
+
+# 👨‍🎓 Student:
+
+Suppose
+
+```text
+Order Created ✔
+
+↓
+
+Payment Success ✔
+
+↓
+
+Inventory Failed ❌
+```
+
+Now
+
+Customer has already paid.
+
+Order already exists.
+
+Inventory failed.
+
+Without Saga Pattern,
+
+the system becomes inconsistent.
+
+---
+
+# 👨‍🏫 Teacher:
+
+So how does Saga Pattern solve this?
+
+---
+
+# 👨‍🎓 Student:
+
+Saga Pattern starts executing **Compensating Transactions**.
+
+Instead of rolling back the database,
+
+it performs the **opposite business operation**.
+
+Example
+
+```text
+Order Created ✔
+
+↓
+
+Payment Success ✔
+
+↓
+
+Inventory Failed ❌
+
+↓
+
+Refund Payment
+
+↓
+
+Cancel Order
+```
+
+Now everything becomes consistent again.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What is a **Compensating Transaction**?
+
+---
+
+# 👨‍🎓 Student:
+
+A **Compensating Transaction** is an operation that **reverses** a previously completed business operation.
+
+It acts as the **opposite action**.
+
+---
+
+### Example 1
+
+Payment
+
+```text
+Original Transaction
+
+↓
+
+Deduct Money
+```
+
+Compensating Transaction
+
+```text
+Refund Money
+```
+
+---
+
+### Example 2
+
+Order
+
+```text
+Original
+
+Create Order
+```
+
+Compensation
+
+```text
+Cancel Order
+```
+
+---
+
+### Example 3
+
+Inventory
+
+```text
+Original
+
+Reserve Product
+```
+
+Compensation
+
+```text
+Release Product
+```
+
+---
+
+### Example 4
+
+Shipping
+
+```text
+Original
+
+Create Shipment
+```
+
+Compensation
+
+```text
+Cancel Shipment
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you show all compensating transactions together?
+
+---
+
+# 👨‍🎓 Student:
+
+| Original Transaction | Compensating Transaction |
+| -------------------- | ------------------------ |
+| Create Order         | Cancel Order             |
+| Deduct Payment       | Refund Payment           |
+| Reserve Inventory    | Release Inventory        |
+| Create Shipment      | Cancel Shipment          |
+| Send Loyalty Points  | Remove Loyalty Points    |
+| Update Wallet        | Reverse Wallet Update    |
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain the complete flow?
+
+---
+
+# 👨‍🎓 Student:
+
+### Successful Flow
+
+```text
+Customer
+
+↓
+
+Order Service
+
+✔ Create Order
+
+↓
+
+Payment Service
+
+✔ Deduct Money
+
+↓
+
+Inventory Service
+
+✔ Reserve Product
+
+↓
+
+Shipping Service
+
+✔ Create Shipment
+
+↓
+
+Order Completed
+```
+
+Everything succeeds.
+
+No compensation required.
+
+---
+
+### Failure Flow
+
+```text
+Customer
+
+↓
+
+Order Service
+
+✔ Create Order
+
+↓
+
+Payment Service
+
+✔ Deduct Money
+
+↓
+
+Inventory Service
+
+❌ Failed
+
+↓
+
+Refund Payment
+
+↓
+
+Cancel Order
+
+↓
+
+Transaction Completed
+```
+
+Notice
+
+Inventory never succeeded.
+
+So only successful services are compensated.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain this using a real-life example?
+
+---
+
+# 👨‍🎓 Student:
+
+Imagine you're booking a vacation package.
+
+Steps
+
+```text
+Book Flight
+
+↓
+
+Book Hotel
+
+↓
+
+Book Taxi
+```
+
+Suppose
+
+```text
+Flight ✔
+
+Hotel ✔
+
+Taxi ❌
+```
+
+Without compensation,
+
+you would still pay for the flight and hotel.
+
+Instead,
+
+the travel company
+
+```text
+Cancel Hotel
+
+↓
+
+Refund Flight
+
+↓
+
+Booking Cancelled
+```
+
+This is exactly how Saga Pattern works.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you compare Database Rollback and Compensating Transaction?
+
+---
+
+# 👨‍🎓 Student:
+
+| Database Rollback  | Compensating Transaction    |
+| ------------------ | --------------------------- |
+| Used in Monolithic | Used in Microservices       |
+| Database operation | Business operation          |
+| Undo before commit | Undo after commit           |
+| One transaction    | Multiple local transactions |
+| Automatic          | Explicitly implemented      |
+| Uses ROLLBACK      | Uses reverse business logic |
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you draw the complete Saga flow?
+
+---
+
+# 👨‍🎓 Student:
+
+```text
+Customer Places Order
+
+          │
+
+          ▼
+
+Order Service
+
+Create Order
+
+(COMMIT)
+
+          │
+
+          ▼
+
+Payment Service
+
+Deduct Money
+
+(COMMIT)
+
+          │
+
+          ▼
+
+Inventory Service
+
+Reserve Product
+
+FAILED ❌
+
+          │
+
+          ▼
+
+Compensating Transaction Starts
+
+          │
+
+          ▼
+
+Refund Payment
+
+          │
+
+          ▼
+
+Cancel Order
+
+          │
+
+          ▼
+
+System becomes Consistent Again
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain this using Java methods?
+
+---
+
+# 👨‍🎓 Student:
+
+Original Business Flow
+
+```java
+createOrder();
+
+makePayment();
+
+reserveInventory();
+
+createShipment();
+```
+
+Suppose
+
+```java
+reserveInventory();
+```
+
+throws an exception.
+
+Saga executes
+
+```java
+refundPayment();
+
+cancelOrder();
+```
+
+Notice
+
+It **does not** execute
+
+```java
+ROLLBACK;
+```
+
+Instead,
+
+it executes
+
+**Reverse Business Operations**.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What is the biggest difference between Monolithic and Saga?
+
+---
+
+# 👨‍🎓 Student:
+
+### Monolithic
+
+```text
+BEGIN
+
+↓
+
+Insert
+
+↓
+
+Update
+
+↓
+
+COMMIT
+
+↓
+
+ROLLBACK (if failed)
+```
+
+---
+
+### Saga Pattern
+
+```text
+Local Transaction
+
+↓
+
+Local Transaction
+
+↓
+
+Local Transaction
+
+↓
+
+Failure
+
+↓
+
+Compensating Transaction
+
+↓
+
+Compensating Transaction
+```
+
+---
+
+# 📌 Key Points to Remember
+
+* **Saga Pattern** manages **Distributed Transactions** in Microservices.
+* A Saga is a **sequence of Local Transactions**.
+* Each Microservice performs its own **Local Transaction** and commits independently.
+* There is **no global database rollback** across services.
+* If a step fails, Saga executes **Compensating Transactions**.
+* A Compensating Transaction is the **reverse business operation** (e.g., refund payment, cancel order).
+* Saga ensures the system eventually returns to a **consistent state**.
+
+---
+
+# 🎯 Interview Questions
+
+### Q1. What is Saga Pattern?
+
+**Answer:**
+Saga Pattern is a design pattern used in Microservices to manage distributed transactions by executing a sequence of local transactions and compensating transactions when failures occur.
+
+---
+
+### Q2. What is a Local Transaction?
+
+**Answer:**
+A Local Transaction is a transaction executed within a single microservice and its own database.
+
+---
+
+### Q3. What is a Compensating Transaction?
+
+**Answer:**
+A Compensating Transaction is a reverse business operation that undoes the effect of a previously completed local transaction.
+
+**Example:**
+
+* Deduct Money → Refund Money
+* Create Order → Cancel Order
+* Reserve Inventory → Release Inventory
+
+---
+
+### Q4. Does Saga Pattern use Database Rollback?
+
+**Answer:**
+No. Saga Pattern does not use database rollback across microservices. It uses compensating transactions because each service has already committed its local transaction.
+
+---
+
+### Q5. Why are Compensating Transactions required?
+
+**Answer:**
+Because once a local transaction is committed, it cannot be rolled back by another service. Compensation restores consistency by performing reverse business actions.
+
+---
+
+# 🧠 Memory Trick
+
+Think of Saga as:
+
+```text
+Local Transaction 1 ✅
+        ↓
+Local Transaction 2 ✅
+        ↓
+Local Transaction 3 ❌
+        ↓
+Reverse Transaction 2
+        ↓
+Reverse Transaction 1
+```
+
+### Golden Interview Line
+
+> **"Saga Pattern does not roll back database transactions. Instead, it restores consistency by executing compensating business transactions in the reverse order of the completed local transactions."**
+
+➡️ **Next Part (Part 5):** **Components of Saga Pattern (Local Transaction, Events, Compensating Transaction)** — we'll learn how services communicate using **events**, and how the three core components work together in a real microservices workflow.
+
+=======================================================================================================================
+# 📘 Saga Pattern Notes – Part 5
+
+# **Components of Saga Pattern (Local Transaction, Events & Compensating Transactions)**
+
+> **Goal:** In this part, we'll understand the **three core components** of the Saga Pattern. These three components are the heart of every Saga implementation and are frequently asked in interviews. Based on the provided transcript.
+
+---
+
+# 👨‍🏫 Teacher:
+
+We learned that Saga Pattern manages distributed transactions.
+
+Now tell me...
+
+## **What are the main components of Saga Pattern?**
+
+---
+
+# 👨‍🎓 Student:
+
+Saga Pattern has **three main components**.
+
+1. **Local Transaction**
+2. **Events**
+3. **Compensating Transaction**
+
+These three components work together to maintain data consistency in Microservices.
+
+```text
+Saga Pattern
+
+      │
+
+      ├── Local Transaction
+
+      ├── Events
+
+      └── Compensating Transaction
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+Let's understand them one by one.
+
+What is a **Local Transaction**?
+
+---
+
+# 👨‍🎓 Student:
+
+A **Local Transaction** is a transaction executed by **one microservice** on **its own database**.
+
+Every service performs only its own work.
+
+It does **not** modify another service's database.
+
+---
+
+### Example
+
+Order Service
+
+```text
+Customer Places Order
+
+↓
+
+Order Service
+
+↓
+
+INSERT INTO orders
+
+↓
+
+COMMIT
+```
+
+Only the Order database is updated.
+
+---
+
+Payment Service
+
+```text
+Payment Service
+
+↓
+
+Deduct Money
+
+↓
+
+COMMIT
+```
+
+Only the Payment database is updated.
+
+---
+
+Inventory Service
+
+```text
+Inventory Service
+
+↓
+
+Reserve Product
+
+↓
+
+COMMIT
+```
+
+Only the Inventory database is updated.
+
+---
+
+### Important Point
+
+Every service
+
+✔ Starts its own transaction
+
+✔ Commits its own transaction
+
+✔ Owns its own database
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can one service directly update another service's database?
+
+---
+
+# 👨‍🎓 Student:
+
+**No.**
+
+One Microservice should **never** access another Microservice's database directly.
+
+Wrong Approach ❌
+
+```text
+Order Service
+
+↓
+
+Update Payment Database
+```
+
+Correct Approach ✅
+
+```text
+Order Service
+
+↓
+
+Publish Event
+
+↓
+
+Payment Service receives Event
+
+↓
+
+Payment Service updates its own Database
+```
+
+This keeps services **loosely coupled**.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Good.
+
+Now tell me...
+
+What are **Events**?
+
+---
+
+# 👨‍🎓 Student:
+
+**Events** are messages that notify other services that something has happened.
+
+Instead of directly calling another service,
+
+we publish an event.
+
+The next service listens to that event and performs its work.
+
+---
+
+### Simple Definition
+
+> **An Event is a message that tells another service that a business action has completed.**
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain this with Amazon?
+
+---
+
+# 👨‍🎓 Student:
+
+Suppose a customer places an order.
+
+### Step 1
+
+Order Service creates an order.
+
+```text
+Create Order
+
+↓
+
+COMMIT
+
+↓
+
+Publish Event
+
+OrderCreated
+```
+
+---
+
+Payment Service is listening.
+
+It receives
+
+```text
+OrderCreated
+```
+
+Then
+
+```text
+Process Payment
+
+↓
+
+Publish Event
+
+PaymentCompleted
+```
+
+---
+
+Inventory Service listens
+
+```text
+PaymentCompleted
+```
+
+Then
+
+```text
+Reserve Product
+
+↓
+
+Publish Event
+
+InventoryReserved
+```
+
+---
+
+Shipping Service listens
+
+```text
+InventoryReserved
+```
+
+Then
+
+```text
+Create Shipment
+```
+
+---
+
+Complete Flow
+
+```text
+Order Service
+
+↓
+
+OrderCreated Event
+
+↓
+
+Payment Service
+
+↓
+
+PaymentCompleted Event
+
+↓
+
+Inventory Service
+
+↓
+
+InventoryReserved Event
+
+↓
+
+Shipping Service
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+Why do we use Events?
+
+---
+
+# 👨‍🎓 Student:
+
+Events provide **Loose Coupling**.
+
+Without Events
+
+```text
+Order Service
+
+↓
+
+Calls Payment Service
+
+↓
+
+Calls Inventory Service
+
+↓
+
+Calls Shipping Service
+```
+
+Order Service depends on everyone.
+
+---
+
+With Events
+
+```text
+Order Service
+
+↓
+
+Publish Event
+
+↓
+
+Whoever needs it
+
+↓
+
+Consumes Event
+```
+
+Much more flexible.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Where are these events published?
+
+---
+
+# 👨‍🎓 Student:
+
+Usually,
+
+Events are published to a **Message Broker**.
+
+Examples
+
+* **Apache Kafka**
+* **RabbitMQ**
+* **ActiveMQ**
+* **Amazon SQS**
+* **Google Pub/Sub**
+
+The Message Broker stores the event.
+
+Interested services consume it.
+
+---
+
+Example
+
+```text
+Order Service
+
+↓
+
+Kafka
+
+↓
+
+Payment Service
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you show the event flow?
+
+---
+
+# 👨‍🎓 Student:
+
+```text
+Order Service
+
+↓
+
+OrderCreated Event
+
+↓
+
+Kafka
+
+↓
+
+Payment Service
+
+↓
+
+PaymentCompleted Event
+
+↓
+
+Kafka
+
+↓
+
+Inventory Service
+
+↓
+
+InventoryReserved Event
+
+↓
+
+Kafka
+
+↓
+
+Shipping Service
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+Very good.
+
+Now explain **Compensating Transaction**.
+
+---
+
+# 👨‍🎓 Student:
+
+A **Compensating Transaction** is a **reverse business operation**.
+
+If any service fails,
+
+previous successful operations are undone.
+
+---
+
+Example
+
+Original Flow
+
+```text
+Create Order
+
+↓
+
+Payment Success
+
+↓
+
+Inventory Failed
+```
+
+Now compensation starts.
+
+```text
+Refund Payment
+
+↓
+
+Cancel Order
+```
+
+System becomes consistent again.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Give some examples.
+
+---
+
+# 👨‍🎓 Student:
+
+| Original Transaction | Compensating Transaction |
+| -------------------- | ------------------------ |
+| Create Order         | Cancel Order             |
+| Deduct Money         | Refund Money             |
+| Reserve Product      | Release Product          |
+| Create Shipment      | Cancel Shipment          |
+| Add Reward Points    | Remove Reward Points     |
+| Credit Wallet        | Debit Wallet             |
+
+---
+
+# 👨‍🏫 Teacher:
+
+Let's understand all three components together.
+
+---
+
+# 👨‍🎓 Student:
+
+Suppose a customer buys a laptop.
+
+---
+
+## Step 1
+
+Order Service
+
+```text
+Create Order
+
+↓
+
+COMMIT
+
+↓
+
+Publish OrderCreated Event
+```
+
+---
+
+## Step 2
+
+Payment Service
+
+Receives
+
+```text
+OrderCreated
+```
+
+Then
+
+```text
+Deduct Money
+
+↓
+
+COMMIT
+
+↓
+
+Publish PaymentCompleted Event
+```
+
+---
+
+## Step 3
+
+Inventory Service
+
+Receives
+
+```text
+PaymentCompleted
+```
+
+Then
+
+```text
+Reserve Product
+```
+
+Suppose
+
+```text
+Stock Not Available
+```
+
+Inventory fails.
+
+---
+
+## Step 4
+
+Compensation Starts
+
+Inventory publishes
+
+```text
+InventoryFailed Event
+```
+
+Payment Service receives it.
+
+```text
+Refund Money
+```
+
+Then
+
+Order Service receives it.
+
+```text
+Cancel Order
+```
+
+---
+
+Final Flow
+
+```text
+Customer
+
+↓
+
+Order Service
+
+↓
+
+OrderCreated Event
+
+↓
+
+Payment Service
+
+↓
+
+PaymentCompleted Event
+
+↓
+
+Inventory Service
+
+↓
+
+FAILED
+
+↓
+
+InventoryFailed Event
+
+↓
+
+Payment Service
+
+↓
+
+Refund Payment
+
+↓
+
+Order Service
+
+↓
+
+Cancel Order
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain this using Java methods?
+
+---
+
+# 👨‍🎓 Student:
+
+Business Flow
+
+```java
+createOrder();
+
+publishOrderCreated();
+
+makePayment();
+
+publishPaymentCompleted();
+
+reserveInventory();
+```
+
+Suppose
+
+```java
+reserveInventory();
+```
+
+fails.
+
+Now compensation starts.
+
+```java
+refundPayment();
+
+cancelOrder();
+```
+
+Notice
+
+Compensation executes **reverse business logic**,
+
+not database rollback.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you compare all three components?
+
+---
+
+# 👨‍🎓 Student:
+
+| Component                    | Responsibility                                      |
+| ---------------------------- | --------------------------------------------------- |
+| **Local Transaction**        | Performs work inside one service                    |
+| **Event**                    | Notifies the next service                           |
+| **Compensating Transaction** | Reverses previous successful work if failure occurs |
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you draw the complete architecture?
+
+---
+
+# 👨‍🎓 Student:
+
+```text
+               Customer
+                   │
+                   ▼
+          Order Service
+         (Local Transaction)
+                   │
+      Publish OrderCreated Event
+                   │
+                   ▼
+               Kafka
+                   │
+                   ▼
+         Payment Service
+         (Local Transaction)
+                   │
+    Publish PaymentCompleted Event
+                   │
+                   ▼
+               Kafka
+                   │
+                   ▼
+       Inventory Service
+      (Local Transaction)
+                   │
+              FAILED ❌
+                   │
+ Publish InventoryFailed Event
+                   │
+                   ▼
+               Kafka
+                   │
+         Refund Payment
+                   │
+                   ▼
+           Cancel Order
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you summarize everything?
+
+---
+
+# 👨‍🎓 Student:
+
+Saga Pattern works using three components.
+
+### **1. Local Transaction**
+
+Each service performs its own transaction.
+
+---
+
+### **2. Event**
+
+Each successful transaction publishes an event.
+
+The next service listens to that event.
+
+---
+
+### **3. Compensating Transaction**
+
+If any step fails,
+
+reverse business operations are executed.
+
+This keeps the system consistent.
+
+---
+
+# 📌 Key Points to Remember
+
+* Saga Pattern consists of **three core components**:
+
+  1. **Local Transaction**
+  2. **Events**
+  3. **Compensating Transaction**
+* **Local Transaction** updates only the service's own database.
+* Services communicate using **Events**, not by directly updating each other's databases.
+* Events are commonly published through a **Message Broker** such as **Kafka** or **RabbitMQ**.
+* If any service fails, a **Compensating Transaction** performs the reverse business operation to restore consistency.
+* **Compensating Transactions are business-level actions, not database rollbacks.**
+
+---
+
+# 🎯 Interview Questions
+
+### Q1. What are the three components of Saga Pattern?
+
+**Answer:**
+
+* Local Transaction
+* Events
+* Compensating Transaction
+
+---
+
+### Q2. What is a Local Transaction?
+
+**Answer:**
+A transaction executed by a single microservice on its own database. It is committed independently.
+
+---
+
+### Q3. Why are Events used in Saga Pattern?
+
+**Answer:**
+Events allow microservices to communicate in a loosely coupled manner. A service publishes an event after completing its work, and the next service reacts to that event.
+
+---
+
+### Q4. What is a Compensating Transaction?
+
+**Answer:**
+A reverse business operation that undoes the effect of a previously completed local transaction when a later step fails.
+
+---
+
+### Q5. Which message brokers are commonly used with Saga Pattern?
+
+**Answer:**
+
+* Apache Kafka
+* RabbitMQ
+* ActiveMQ
+* Amazon SQS
+* Google Pub/Sub
+
+---
+
+# 🧠 Memory Trick
+
+Remember the sequence:
+
+```text
+Local Transaction
+        ↓
+Publish Event
+        ↓
+Next Local Transaction
+        ↓
+Failure?
+   ┌─────────────┐
+   │     No      │ → Continue
+   │             │
+   │    Yes      │
+   └──────┬──────┘
+          ↓
+Compensating Transaction
+```
+
+### 🎯 Golden Interview Line
+
+> **"Every microservice performs its own local transaction, communicates using events, and if a failure occurs, compensating transactions execute reverse business operations to maintain eventual consistency."**
+
+➡️ **Next Part (Part 6):** **Choreography-Based Saga Pattern** — we'll learn how microservices coordinate using only **events**, without any central controller, along with its architecture, advantages, disadvantages, and interview questions.
+
+=======================================================================================================================
+# 📘 Saga Pattern Notes – Part 6
+
+# **Choreography-Based Saga Pattern (Event-Driven Saga)**
+
+> **Goal:** Understand how **Choreography Saga** works, where microservices communicate only through **events**, without any central controller. This is one of the most commonly asked Saga Pattern interview topics. Based on the provided transcript.
+
+---
+
+# 👨‍🏫 Teacher:
+
+We learned that Saga Pattern has two implementation approaches.
+
+Can you name them?
+
+---
+
+# 👨‍🎓 Student:
+
+Saga Pattern can be implemented in **two ways**.
+
+1. **Choreography-Based Saga**
+2. **Orchestration-Based Saga**
+
+In this part, we'll learn **Choreography-Based Saga**.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What is **Choreography-Based Saga**?
+
+---
+
+# 👨‍🎓 Student:
+
+In **Choreography-Based Saga**, there is **no central controller**.
+
+Every microservice communicates directly with other services using **events**.
+
+Each service:
+
+* Performs its Local Transaction
+* Publishes an Event
+* The next service listens to that event
+* Executes its own Local Transaction
+* Publishes another event
+
+This continues until the business process is completed.
+
+---
+
+## Simple Definition
+
+> **Choreography-Based Saga is an event-driven approach where microservices coordinate with each other by publishing and consuming events without any central coordinator.**
+
+---
+
+# 👨‍🏫 Teacher:
+
+Why is it called **Choreography**?
+
+---
+
+# 👨‍🎓 Student:
+
+Think about a **dance performance**.
+
+In a dance,
+
+there is **no one giving instructions after every step**.
+
+Each dancer already knows
+
+* When to start
+* What to do
+* Whom to follow
+
+Everyone coordinates naturally.
+
+Similarly,
+
+in Choreography Saga,
+
+each microservice knows
+
+* Which event to listen for
+* What work to perform
+* Which event to publish next
+
+No central controller is required.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain it with an Amazon example?
+
+---
+
+# 👨‍🎓 Student:
+
+Suppose a customer places an order.
+
+The services involved are
+
+```text
+Order Service
+
+↓
+
+Payment Service
+
+↓
+
+Inventory Service
+
+↓
+
+Shipping Service
+```
+
+Each service communicates using events.
+
+---
+
+## Step 1
+
+Order Service
+
+Creates the order.
+
+```text
+Create Order
+
+↓
+
+COMMIT
+
+↓
+
+Publish Event
+
+OrderCreated
+```
+
+---
+
+## Step 2
+
+Payment Service
+
+Listens to
+
+```text
+OrderCreated
+```
+
+Then
+
+```text
+Deduct Payment
+
+↓
+
+COMMIT
+
+↓
+
+Publish Event
+
+PaymentCompleted
+```
+
+---
+
+## Step 3
+
+Inventory Service
+
+Listens to
+
+```text
+PaymentCompleted
+```
+
+Then
+
+```text
+Reserve Product
+
+↓
+
+COMMIT
+
+↓
+
+Publish Event
+
+InventoryReserved
+```
+
+---
+
+## Step 4
+
+Shipping Service
+
+Listens to
+
+```text
+InventoryReserved
+```
+
+Then
+
+```text
+Create Shipment
+
+↓
+
+COMMIT
+
+↓
+
+Publish Event
+
+ShipmentCreated
+```
+
+Order is completed successfully.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you draw the complete flow?
+
+---
+
+# 👨‍🎓 Student:
+
+```text
+Customer
+
+     │
+
+     ▼
+
+Order Service
+
+     │
+
+OrderCreated Event
+
+     │
+
+     ▼
+
+Payment Service
+
+     │
+
+PaymentCompleted Event
+
+     │
+
+     ▼
+
+Inventory Service
+
+     │
+
+InventoryReserved Event
+
+     │
+
+     ▼
+
+Shipping Service
+
+     │
+
+ShipmentCreated Event
+
+     │
+
+     ▼
+
+Order Completed
+```
+
+Notice
+
+There is **no controller**.
+
+Each service communicates directly through events.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Where are these events stored?
+
+---
+
+# 👨‍🎓 Student:
+
+Usually inside a **Message Broker**.
+
+Popular Message Brokers
+
+* **Apache Kafka**
+* **RabbitMQ**
+* **ActiveMQ**
+* **Amazon SQS**
+
+Example
+
+```text
+Order Service
+
+↓
+
+Kafka
+
+↓
+
+Payment Service
+```
+
+Kafka delivers the event to interested services.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What happens if Inventory Service fails?
+
+---
+
+# 👨‍🎓 Student:
+
+Let's see.
+
+---
+
+## Step 1
+
+Order Created
+
+✔
+
+---
+
+## Step 2
+
+Payment Success
+
+✔
+
+---
+
+## Step 3
+
+Inventory Reservation
+
+❌ Failed
+
+Now Inventory publishes
+
+```text
+InventoryFailed Event
+```
+
+---
+
+Payment Service is listening.
+
+It receives
+
+```text
+InventoryFailed
+```
+
+Then
+
+```text
+Refund Money
+
+↓
+
+Publish PaymentRefunded Event
+```
+
+---
+
+Order Service listens
+
+```text
+PaymentRefunded
+```
+
+Then
+
+```text
+Cancel Order
+```
+
+Everything becomes consistent again.
+
+---
+
+## Failure Flow
+
+```text
+Order Created
+
+↓
+
+Payment Success
+
+↓
+
+Inventory Failed
+
+↓
+
+InventoryFailed Event
+
+↓
+
+Payment Service
+
+↓
+
+Refund Payment
+
+↓
+
+PaymentRefunded Event
+
+↓
+
+Order Service
+
+↓
+
+Cancel Order
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain this using Java methods?
+
+---
+
+# 👨‍🎓 Student:
+
+Order Service
+
+```java
+createOrder();
+
+publish(OrderCreated);
+```
+
+---
+
+Payment Service
+
+```java
+@EventListener
+public void process(OrderCreated event){
+
+    makePayment();
+
+    publish(PaymentCompleted);
+
+}
+```
+
+---
+
+Inventory Service
+
+```java
+@EventListener
+public void reserve(PaymentCompleted event){
+
+    reserveInventory();
+
+    publish(InventoryReserved);
+
+}
+```
+
+---
+
+Shipping Service
+
+```java
+@EventListener
+public void ship(InventoryReserved event){
+
+    createShipment();
+
+}
+```
+
+Each service listens for events independently.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What are the advantages of Choreography Saga?
+
+---
+
+# 👨‍🎓 Student:
+
+## ✅ 1. Loose Coupling
+
+Services don't directly call each other.
+
+They only publish events.
+
+---
+
+## ✅ 2. Highly Scalable
+
+Adding new services is easy.
+
+Simply subscribe to the required event.
+
+Example
+
+```text
+PaymentCompleted
+
+↓
+
+Loyalty Service
+
+↓
+
+Reward Service
+
+↓
+
+Analytics Service
+```
+
+No existing code changes.
+
+---
+
+## ✅ 3. Better Fault Isolation
+
+Each service works independently.
+
+One service crashing doesn't stop the entire architecture.
+
+---
+
+## ✅ 4. Asynchronous Processing
+
+Services don't wait for immediate responses.
+
+Events are processed asynchronously.
+
+This improves performance.
+
+---
+
+## ✅ 5. Easy to Extend
+
+Need a new service?
+
+Simply listen to an existing event.
+
+Example
+
+```text
+ShipmentCreated
+
+↓
+
+Email Service
+```
+
+No changes in Shipping Service.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Are there any disadvantages?
+
+---
+
+# 👨‍🎓 Student:
+
+Yes.
+
+---
+
+## ❌ 1. Difficult to Understand
+
+Many services communicate simultaneously.
+
+Tracking the flow becomes difficult.
+
+---
+
+## ❌ 2. Debugging is Complex
+
+Suppose Payment failed.
+
+Finding which event caused the failure is difficult.
+
+Need tools like
+
+* Zipkin
+* Jaeger
+* OpenTelemetry
+
+---
+
+## ❌ 3. Circular Dependency
+
+Example
+
+```text
+Service A
+
+↓
+
+Service B
+
+↓
+
+Service C
+
+↓
+
+Again Service A
+```
+
+Circular event chains may occur.
+
+---
+
+## ❌ 4. Event Storming
+
+Too many events.
+
+Example
+
+```text
+OrderCreated
+
+↓
+
+PaymentCompleted
+
+↓
+
+InventoryReserved
+
+↓
+
+ShipmentCreated
+
+↓
+
+EmailSent
+
+↓
+
+RewardAdded
+
+↓
+
+InvoiceGenerated
+```
+
+Hundreds of events become difficult to manage.
+
+---
+
+## ❌ 5. Difficult Business Flow Tracking
+
+Since there is no central controller,
+
+understanding the complete business flow is difficult.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you summarize the architecture?
+
+---
+
+# 👨‍🎓 Student:
+
+```text
+                  Customer
+                      │
+                      ▼
+               Order Service
+                      │
+          OrderCreated Event
+                      │
+                   Kafka
+                      │
+                      ▼
+             Payment Service
+                      │
+       PaymentCompleted Event
+                      │
+                   Kafka
+                      │
+                      ▼
+            Inventory Service
+                      │
+      InventoryReserved Event
+                      │
+                   Kafka
+                      │
+                      ▼
+             Shipping Service
+```
+
+Notice
+
+No Orchestrator.
+
+Only Events.
+
+---
+
+# 👨‍🏫 Teacher:
+
+When should we use Choreography Saga?
+
+---
+
+# 👨‍🎓 Student:
+
+Use Choreography when
+
+* Services are loosely coupled.
+* Event-driven architecture is already used.
+* The business workflow is relatively simple.
+* High scalability is required.
+* New services are added frequently.
+
+---
+
+# 👨‍🏫 Teacher:
+
+When should we avoid Choreography?
+
+---
+
+# 👨‍🎓 Student:
+
+Avoid it when
+
+* Business workflow is very complex.
+* Many services participate.
+* Strong monitoring is required.
+* Easy debugging is important.
+* Central control is preferred.
+
+In such cases,
+
+**Orchestration Saga** is a better choice.
+
+---
+
+# 📌 Key Points to Remember
+
+* **Choreography Saga** has **no central controller**.
+* Services communicate using **events**.
+* Each service performs:
+
+  * Local Transaction
+  * Publish Event
+  * Listen to Event
+* Events are exchanged through **Kafka**, **RabbitMQ**, etc.
+* Compensation is also triggered using **events**.
+* This approach provides **Loose Coupling** and **High Scalability**.
+* Debugging and tracking business flow become difficult as the number of services grows.
+
+---
+
+# 🎯 Interview Questions
+
+### Q1. What is Choreography-Based Saga?
+
+**Answer:**
+It is an event-driven Saga implementation where microservices coordinate by publishing and consuming events without any central coordinator.
+
+---
+
+### Q2. Is there any central controller in Choreography Saga?
+
+**Answer:**
+No. Each microservice independently listens to events and publishes new events after completing its local transaction.
+
+---
+
+### Q3. Which messaging systems are commonly used?
+
+**Answer:**
+
+* Apache Kafka
+* RabbitMQ
+* ActiveMQ
+* Amazon SQS
+
+---
+
+### Q4. What are the advantages of Choreography Saga?
+
+**Answer:**
+
+* Loose Coupling
+* High Scalability
+* Asynchronous Communication
+* Easy to add new services
+* Better fault isolation
+
+---
+
+### Q5. What are the disadvantages of Choreography Saga?
+
+**Answer:**
+
+* Difficult debugging
+* Hard to understand business flow
+* Circular dependency risk
+* Event storming
+* Complex monitoring
+
+---
+
+### Q6. Give a real-world example of Choreography Saga.
+
+**Answer:**
+In an e-commerce application:
+
+* Order Service publishes `OrderCreated`
+* Payment Service listens and publishes `PaymentCompleted`
+* Inventory Service listens and publishes `InventoryReserved`
+* Shipping Service listens and creates the shipment.
+  No central service coordinates the process.
+
+---
+
+# 🧠 Memory Trick
+
+Think of **Choreography** as a **dance performance** 💃
+
+```text
+Dancer 1
+    ↓
+Dancer 2
+    ↓
+Dancer 3
+    ↓
+Dancer 4
+```
+
+No one gives commands after every move.
+
+Everyone knows:
+
+* What to do
+* When to do it
+* Which signal (event) to follow
+
+### 🎯 Golden Interview Line
+
+> **"In Choreography Saga, there is no central coordinator. Every microservice reacts to events, performs its local transaction, and publishes the next event, creating a completely event-driven workflow."**
+
+➡️ **Next Part (Part 7): Orchestration-Based Saga Pattern** — we'll learn how a **Saga Orchestrator** centrally controls the entire workflow, decides the next step, and triggers compensating transactions when failures occur. This is the approach commonly used in many enterprise applications.
+
+=======================================================================================================================
+# 📘 Saga Pattern Notes – Part 7
+
+# **Orchestration-Based Saga Pattern (Central Coordinator)**
+
+> **Goal:** Understand how **Orchestration-Based Saga** works, where a **Saga Orchestrator** controls the complete business workflow. This approach is commonly used in enterprise applications because it is easier to monitor, debug, and manage. Based on the provided transcript.
+
+---
+
+# 👨‍🏫 Teacher:
+
+In the previous part, we learned about **Choreography Saga**.
+
+Now tell me...
+
+## **What is Orchestration-Based Saga?**
+
+---
+
+# 👨‍🎓 Student:
+
+**Orchestration-Based Saga** is a Saga implementation where a **central service**, called the **Saga Orchestrator**, controls the complete business process.
+
+Instead of services communicating directly with each other,
+
+every service communicates **only with the Saga Orchestrator**.
+
+The Orchestrator decides:
+
+* Which service should execute next.
+* What to do if a service fails.
+* Which compensating transaction should be executed.
+
+---
+
+## Simple Definition
+
+> **Orchestration-Based Saga is a centralized approach where a Saga Orchestrator coordinates all local transactions and compensation logic.**
+
+---
+
+# 👨‍🏫 Teacher:
+
+Why is it called **Orchestration**?
+
+---
+
+# 👨‍🎓 Student:
+
+Think about an **orchestra**.
+
+Many musicians are playing.
+
+But there is **one conductor**.
+
+The conductor tells everyone
+
+* When to start
+* When to stop
+* Who should play next
+
+Similarly,
+
+In Saga,
+
+the **Saga Orchestrator** acts like the conductor.
+
+Every service waits for commands from the Orchestrator.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain it with an Amazon example?
+
+---
+
+# 👨‍🎓 Student:
+
+Suppose a customer places an order.
+
+Services involved are
+
+* Order Service
+* Payment Service
+* Inventory Service
+* Shipping Service
+
+Instead of talking to each other,
+
+they all communicate with the **Saga Orchestrator**.
+
+---
+
+# Complete Architecture
+
+```text
+                  Customer
+                      │
+                      ▼
+             Saga Orchestrator
+                      │
+      ┌───────────────┼───────────────┐
+      ▼               ▼               ▼
+ Order Service   Payment Service  Inventory Service
+                                      │
+                                      ▼
+                              Shipping Service
+```
+
+Notice
+
+Every service communicates only with the **Orchestrator**.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Explain the successful flow step by step.
+
+---
+
+# 👨‍🎓 Student:
+
+### Step 1
+
+Customer places an order.
+
+```text
+Customer
+
+↓
+
+Saga Orchestrator
+```
+
+---
+
+### Step 2
+
+Saga Orchestrator calls
+
+```text
+Order Service
+```
+
+Order Service
+
+```text
+Create Order
+
+↓
+
+COMMIT
+
+↓
+
+Success
+```
+
+Returns success to the Orchestrator.
+
+---
+
+### Step 3
+
+Now Orchestrator calls
+
+```text
+Payment Service
+```
+
+Payment Service
+
+```text
+Deduct Money
+
+↓
+
+COMMIT
+
+↓
+
+Success
+```
+
+Returns success.
+
+---
+
+### Step 4
+
+Orchestrator now calls
+
+```text
+Inventory Service
+```
+
+Inventory Service
+
+```text
+Reserve Product
+
+↓
+
+COMMIT
+
+↓
+
+Success
+```
+
+---
+
+### Step 5
+
+Orchestrator calls
+
+```text
+Shipping Service
+```
+
+Shipping Service
+
+```text
+Create Shipment
+
+↓
+
+COMMIT
+```
+
+Order completed successfully.
+
+---
+
+# Successful Flow
+
+```text
+Customer
+
+↓
+
+Saga Orchestrator
+
+↓
+
+Order Service ✔
+
+↓
+
+Payment Service ✔
+
+↓
+
+Inventory Service ✔
+
+↓
+
+Shipping Service ✔
+
+↓
+
+Success
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+What happens if Inventory Service fails?
+
+---
+
+# 👨‍🎓 Student:
+
+Let's see.
+
+---
+
+### Step 1
+
+Order Created
+
+✔
+
+---
+
+### Step 2
+
+Payment Success
+
+✔
+
+---
+
+### Step 3
+
+Inventory
+
+❌ Failed
+
+Inventory informs
+
+```text
+Saga Orchestrator
+```
+
+---
+
+Now Orchestrator decides
+
+```text
+Refund Payment
+
+↓
+
+Cancel Order
+```
+
+---
+
+# Failure Flow
+
+```text
+Customer
+
+↓
+
+Saga Orchestrator
+
+↓
+
+Order Service ✔
+
+↓
+
+Payment Service ✔
+
+↓
+
+Inventory Service ❌
+
+↓
+
+Saga Orchestrator
+
+↓
+
+Refund Payment
+
+↓
+
+Cancel Order
+```
+
+Notice
+
+Services never decide compensation.
+
+Only the Orchestrator decides.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain this using Java methods?
+
+---
+
+# 👨‍🎓 Student:
+
+Saga Orchestrator
+
+```java
+placeOrder(){
+
+    orderService.createOrder();
+
+    paymentService.makePayment();
+
+    inventoryService.reserveProduct();
+
+    shippingService.createShipment();
+
+}
+```
+
+Suppose
+
+```java
+inventoryService.reserveProduct();
+```
+
+throws an exception.
+
+Now Orchestrator executes
+
+```java
+paymentService.refundPayment();
+
+orderService.cancelOrder();
+```
+
+This is called a **Compensating Transaction**.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you show the sequence diagram?
+
+---
+
+# 👨‍🎓 Student:
+
+```text
+Customer
+
+     │
+
+     ▼
+
+Saga Orchestrator
+
+     │
+
+     ▼
+
+Order Service
+
+     │
+
+Success
+
+     │
+
+     ▼
+
+Payment Service
+
+     │
+
+Success
+
+     │
+
+     ▼
+
+Inventory Service
+
+     │
+
+FAILED
+
+     │
+
+     ▼
+
+Saga Orchestrator
+
+     │
+
+Refund Payment
+
+     │
+
+Cancel Order
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+What are the advantages of Orchestration Saga?
+
+---
+
+# 👨‍🎓 Student:
+
+## ✅ 1. Easy to Understand
+
+Complete workflow is inside one place.
+
+---
+
+## ✅ 2. Easy Debugging
+
+Only Orchestrator logs need to be checked.
+
+Finding failures becomes easier.
+
+---
+
+## ✅ 3. Better Monitoring
+
+Entire business flow is visible.
+
+You know exactly
+
+* Current step
+* Completed step
+* Failed step
+
+---
+
+## ✅ 4. No Circular Dependency
+
+Services never communicate directly.
+
+Only Orchestrator communicates.
+
+---
+
+## ✅ 5. Easy Compensation
+
+Orchestrator knows
+
+* Which services succeeded
+* Which services failed
+
+So compensation becomes simple.
+
+---
+
+## ✅ 6. Better for Complex Business Logic
+
+Large enterprise applications usually prefer this approach.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What are the disadvantages?
+
+---
+
+# 👨‍🎓 Student:
+
+## ❌ 1. Single Point of Failure
+
+If Orchestrator crashes,
+
+the complete workflow may stop.
+
+---
+
+## ❌ 2. Tight Coupling with Orchestrator
+
+Every service depends on the Orchestrator.
+
+---
+
+## ❌ 3. More Responsibility
+
+The Orchestrator becomes complex.
+
+It contains
+
+* Workflow logic
+* Retry logic
+* Compensation logic
+* Error handling
+
+---
+
+## ❌ 4. Scalability Challenge
+
+As workflows grow,
+
+the Orchestrator becomes larger.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you compare Choreography and Orchestration?
+
+---
+
+# 👨‍🎓 Student:
+
+| Feature          | Choreography            | Orchestration            |
+| ---------------- | ----------------------- | ------------------------ |
+| Controller       | ❌ No                    | ✅ Yes                    |
+| Communication    | Event-to-Event          | Through Orchestrator     |
+| Workflow Control | Distributed             | Centralized              |
+| Debugging        | Difficult               | Easy                     |
+| Monitoring       | Difficult               | Easy                     |
+| Loose Coupling   | High                    | Medium                   |
+| Complexity       | Distributed             | Centralized              |
+| Best For         | Small to Medium Systems | Large Enterprise Systems |
+
+---
+
+# 👨‍🏫 Teacher:
+
+Which one is used more in real projects?
+
+---
+
+# 👨‍🎓 Student:
+
+It depends.
+
+### Small Applications
+
+Mostly
+
+**Choreography**
+
+because
+
+* Simple
+* Lightweight
+* Event-driven
+
+---
+
+### Enterprise Applications
+
+Mostly
+
+**Orchestration**
+
+because
+
+* Easy monitoring
+* Easy debugging
+* Easy auditing
+* Better business control
+
+Frameworks like:
+
+* **Temporal**
+* **Camunda**
+* **Netflix Conductor**
+* **AWS Step Functions**
+* **Azure Durable Functions**
+
+are commonly used to implement Orchestration-based workflows.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you draw the complete architecture?
+
+---
+
+# 👨‍🎓 Student:
+
+```text
+                    Customer
+                        │
+                        ▼
+               Saga Orchestrator
+                        │
+      ┌─────────────────┼─────────────────┐
+      ▼                 ▼                 ▼
+ Order Service     Payment Service   Inventory Service
+      ▲                 ▲                 ▲
+      └─────────────────┼─────────────────┘
+                        │
+                        ▼
+                Shipping Service
+```
+
+The Orchestrator controls everything.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you summarize everything?
+
+---
+
+# 👨‍🎓 Student:
+
+In Orchestration Saga
+
+* Every service performs a **Local Transaction**.
+* Services do **not communicate with each other**.
+* All communication goes through the **Saga Orchestrator**.
+* The Orchestrator controls the workflow.
+* If any service fails,
+  the Orchestrator executes the required **Compensating Transactions**.
+
+---
+
+# 📌 Key Points to Remember
+
+* **Orchestration Saga** uses a **central Saga Orchestrator**.
+* The Orchestrator decides which service executes next.
+* Services communicate **only with the Orchestrator**, not directly with each other.
+* Compensation is also managed by the Orchestrator.
+* Easier to debug, monitor, and audit compared to Choreography.
+* Commonly used in large enterprise systems with complex workflows.
+
+---
+
+# 🎯 Interview Questions
+
+### Q1. What is Orchestration-Based Saga?
+
+**Answer:**
+It is a Saga implementation where a central **Saga Orchestrator** coordinates all local transactions and compensating transactions.
+
+---
+
+### Q2. What is the role of the Saga Orchestrator?
+
+**Answer:**
+The Saga Orchestrator:
+
+* Starts the workflow
+* Invokes each service in sequence
+* Handles failures
+* Triggers compensating transactions
+* Tracks the workflow state
+
+---
+
+### Q3. What happens if a service fails?
+
+**Answer:**
+The failed service reports the error to the Saga Orchestrator. The Orchestrator then triggers compensating transactions, such as refunding the payment or cancelling the order.
+
+---
+
+### Q4. What are the advantages of Orchestration Saga?
+
+**Answer:**
+
+* Centralized workflow
+* Easy debugging
+* Better monitoring
+* Easy compensation
+* Suitable for complex business processes
+
+---
+
+### Q5. What are the disadvantages of Orchestration Saga?
+
+**Answer:**
+
+* Single Point of Failure (if the Orchestrator is not made highly available)
+* More responsibility on the Orchestrator
+* Potential scalability challenges
+* Services depend on the Orchestrator
+
+---
+
+### Q6. When should we use Choreography and when should we use Orchestration?
+
+**Answer:**
+
+* **Choreography:** Best for simple, event-driven systems with fewer services.
+* **Orchestration:** Best for complex enterprise workflows where centralized control, monitoring, and debugging are important.
+
+---
+
+# 🧠 Memory Trick
+
+### **Choreography = Dance 💃**
+
+```text
+Service → Event → Service → Event → Service
+```
+
+Everyone knows what to do.
+
+No boss.
+
+---
+
+### **Orchestration = Orchestra 🎼**
+
+```text
+           Orchestrator
+               │
+     ┌─────────┼─────────┐
+     ▼         ▼         ▼
+  Order    Payment   Inventory
+```
+
+One conductor controls everyone.
+
+---
+
+# 🎯 Golden Interview Line
+
+> **"In Orchestration-Based Saga, a central Saga Orchestrator controls the entire business workflow. It invokes each microservice, tracks progress, and executes compensating transactions whenever a failure occurs, making the workflow easier to monitor and debug."**
+
+➡️ **Next Part (Part 8): Complete Interview Questions & Answers + Choreography vs Orchestration Comparison + Real Project Scenario (Amazon Order Flow + Spring Boot Implementation Tips).**
+
+=======================================================================================================================
+# 📘 Saga Pattern Notes – Part 8
+
+# **Complete Interview Questions & Answers + Choreography vs Orchestration + Real Project Scenario**
+
+> **Goal:** This part covers the most frequently asked **Saga Pattern interview questions**, real-world implementation scenarios, and a complete comparison between **Choreography** and **Orchestration**. Based on the provided transcript.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Let's revise everything.
+
+## **What problem does Saga Pattern solve?**
+
+---
+
+# 👨‍🎓 Student:
+
+Saga Pattern solves the **Distributed Transaction Problem** in **Microservices**.
+
+When one business process involves multiple services, each service performs its own **Local Transaction**.
+
+If one service fails, Saga executes **Compensating Transactions** to keep the system consistent.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Why can't we use **@Transactional** in Microservices?
+
+---
+
+# 👨‍🎓 Student:
+
+Because **@Transactional** works only within
+
+* One Application
+* One JVM
+* One Database
+
+In Microservices,
+
+each service has
+
+* Separate Application
+* Separate Database
+* Separate Transaction
+
+Therefore,
+
+one transaction cannot control all services.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Explain Saga Pattern in one sentence.
+
+---
+
+# 👨‍🎓 Student:
+
+> **Saga Pattern is a sequence of Local Transactions where each successful transaction triggers the next one, and if any transaction fails, Compensating Transactions are executed to undo previously completed work.**
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain Saga Pattern using Amazon?
+
+---
+
+# 👨‍🎓 Student:
+
+Suppose a customer orders a Laptop.
+
+---
+
+## Step 1
+
+Order Service
+
+```text
+Create Order
+```
+
+↓
+
+Publishes
+
+```text
+OrderCreated
+```
+
+---
+
+## Step 2
+
+Payment Service
+
+Receives
+
+```text
+OrderCreated
+```
+
+↓
+
+Deducts Money
+
+↓
+
+Publishes
+
+```text
+PaymentCompleted
+```
+
+---
+
+## Step 3
+
+Inventory Service
+
+Receives
+
+```text
+PaymentCompleted
+```
+
+↓
+
+Reserves Product
+
+Suppose
+
+```text
+Stock Not Available
+```
+
+Inventory fails.
+
+---
+
+## Step 4
+
+Saga Compensation
+
+```text
+Refund Payment
+
+↓
+
+Cancel Order
+```
+
+System becomes consistent again.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain the complete architecture?
+
+---
+
+# 👨‍🎓 Student:
+
+```text
+Customer
+
+    │
+
+    ▼
+
+Order Service
+
+    │
+
+OrderCreated Event
+
+    │
+
+    ▼
+
+Payment Service
+
+    │
+
+PaymentCompleted Event
+
+    │
+
+    ▼
+
+Inventory Service
+
+    │
+
+FAILED
+
+    │
+
+Refund Payment
+
+    │
+
+Cancel Order
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+What are the two implementations of Saga Pattern?
+
+---
+
+# 👨‍🎓 Student:
+
+There are two implementations.
+
+### 1. Choreography
+
+Services communicate directly using events.
+
+No central controller.
+
+---
+
+### 2. Orchestration
+
+One central **Saga Orchestrator** controls the complete workflow.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Compare both approaches.
+
+---
+
+# 👨‍🎓 Student:
+
+| Feature            | Choreography  | Orchestration            |
+| ------------------ | ------------- | ------------------------ |
+| Central Controller | ❌ No          | ✅ Yes                    |
+| Communication      | Event Driven  | Orchestrator Driven      |
+| Coupling           | Loose         | Medium                   |
+| Debugging          | Difficult     | Easy                     |
+| Monitoring         | Difficult     | Easy                     |
+| Business Flow      | Distributed   | Centralized              |
+| Complexity         | High          | Low (for developers)     |
+| Scalability        | High          | Moderate                 |
+| Best For           | Small Systems | Large Enterprise Systems |
+
+---
+
+# 👨‍🏫 Teacher:
+
+Which approach is mostly used in enterprise projects?
+
+---
+
+# 👨‍🎓 Student:
+
+Mostly **Orchestration**.
+
+Because
+
+* Easier Monitoring
+* Easier Debugging
+* Better Auditing
+* Better Business Control
+
+Large companies usually prefer Orchestration for complex workflows.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Which approach is more scalable?
+
+---
+
+# 👨‍🎓 Student:
+
+**Choreography**.
+
+Because services communicate directly using events.
+
+No central controller.
+
+Adding new services becomes very easy.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain both with one example?
+
+---
+
+# 👨‍🎓 Student:
+
+### Choreography
+
+```text
+Order Service
+
+↓
+
+OrderCreated Event
+
+↓
+
+Payment Service
+
+↓
+
+PaymentCompleted Event
+
+↓
+
+Inventory Service
+
+↓
+
+InventoryReserved Event
+
+↓
+
+Shipping Service
+```
+
+Services communicate directly.
+
+---
+
+### Orchestration
+
+```text
+Saga Orchestrator
+
+↓
+
+Order Service
+
+↓
+
+Payment Service
+
+↓
+
+Inventory Service
+
+↓
+
+Shipping Service
+```
+
+Everything is controlled by one service.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Suppose Inventory Service fails.
+
+What happens?
+
+---
+
+# 👨‍🎓 Student:
+
+### Choreography
+
+Inventory publishes
+
+```text
+InventoryFailed
+```
+
+↓
+
+Payment Service
+
+Refund Payment
+
+↓
+
+Order Service
+
+Cancel Order
+
+---
+
+### Orchestration
+
+Inventory reports failure to
+
+```text
+Saga Orchestrator
+```
+
+↓
+
+Saga Orchestrator executes
+
+```text
+Refund Payment
+
+↓
+
+Cancel Order
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain Saga Pattern using Java?
+
+---
+
+# 👨‍🎓 Student:
+
+Business Flow
+
+```java
+createOrder();
+
+makePayment();
+
+reserveInventory();
+
+createShipment();
+```
+
+Suppose
+
+```java
+reserveInventory();
+```
+
+fails.
+
+Saga executes
+
+```java
+refundPayment();
+
+cancelOrder();
+```
+
+Instead of
+
+```java
+ROLLBACK;
+```
+
+Saga performs **Business Compensation**.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Which frameworks are used for Saga Pattern?
+
+---
+
+# 👨‍🎓 Student:
+
+Popular frameworks are
+
+### Java
+
+* Eventuate Tram
+* Axon Framework
+* Spring Boot + Kafka
+* Spring Boot + RabbitMQ
+
+---
+
+### Workflow Engines
+
+* Temporal
+* Camunda
+* Netflix Conductor
+* AWS Step Functions
+* Azure Durable Functions
+
+---
+
+# 👨‍🏫 Teacher:
+
+What message brokers are commonly used?
+
+---
+
+# 👨‍🎓 Student:
+
+* Apache Kafka
+* RabbitMQ
+* ActiveMQ
+* Amazon SQS
+* Google Pub/Sub
+
+---
+
+# 👨‍🏫 Teacher:
+
+What are Compensating Transactions?
+
+---
+
+# 👨‍🎓 Student:
+
+Compensating Transactions perform **reverse business operations**.
+
+Examples
+
+| Original Transaction | Compensation         |
+| -------------------- | -------------------- |
+| Create Order         | Cancel Order         |
+| Deduct Payment       | Refund Payment       |
+| Reserve Inventory    | Release Inventory    |
+| Create Shipment      | Cancel Shipment      |
+| Add Reward Points    | Remove Reward Points |
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can Saga Pattern guarantee immediate consistency?
+
+---
+
+# 👨‍🎓 Student:
+
+No.
+
+Saga Pattern provides
+
+**Eventual Consistency**.
+
+Meaning
+
+Immediately after a failure,
+
+services may have different states.
+
+After compensation finishes,
+
+the system becomes consistent.
+
+---
+
+# 👨‍🏫 Teacher:
+
+What is Eventual Consistency?
+
+---
+
+# 👨‍🎓 Student:
+
+It means
+
+The system may be temporarily inconsistent,
+
+but after all Local Transactions or Compensating Transactions complete,
+
+all services reach a consistent state.
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can Saga Pattern replace Database Transactions?
+
+---
+
+# 👨‍🎓 Student:
+
+No.
+
+Inside each Microservice,
+
+we still use
+
+```java
+@Transactional
+```
+
+Saga Pattern works **between** Microservices.
+
+So
+
+Inside Service
+
+```text
+@Transactional
+```
+
+Between Services
+
+```text
+Saga Pattern
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+Can you explain a real project scenario?
+
+---
+
+# 👨‍🎓 Student:
+
+### Loan Processing System (Bank)
+
+Microservices
+
+```text
+Loan Service
+
+↓
+
+Customer Service
+
+↓
+
+Credit Check Service
+
+↓
+
+Document Service
+
+↓
+
+Payment Service
+```
+
+Suppose
+
+Credit Check fails.
+
+Saga executes
+
+```text
+Delete Loan Application
+
+↓
+
+Refund Processing Fee
+
+↓
+
+Send Failure Notification
+```
+
+System becomes consistent.
+
+---
+
+### Food Delivery App
+
+```text
+Order Service
+
+↓
+
+Payment Service
+
+↓
+
+Restaurant Service
+
+↓
+
+Delivery Partner Service
+```
+
+If Restaurant rejects the order,
+
+Saga performs
+
+```text
+Refund Payment
+
+↓
+
+Cancel Order
+
+↓
+
+Notify Customer
+```
+
+---
+
+### Flight Booking
+
+```text
+Flight Booking
+
+↓
+
+Hotel Booking
+
+↓
+
+Taxi Booking
+```
+
+Taxi fails
+
+↓
+
+Saga performs
+
+```text
+Cancel Hotel
+
+↓
+
+Cancel Flight
+
+↓
+
+Refund Money
+```
+
+---
+
+# 👨‍🏫 Teacher:
+
+How is Saga Pattern implemented in Spring Boot?
+
+---
+
+# 👨‍🎓 Student:
+
+Typical architecture
+
+```text
+Spring Boot
+
+↓
+
+Kafka
+
+↓
+
+Microservices
+
+↓
+
+Local Database
+
+↓
+
+Compensating APIs
+```
+
+Example
+
+```text
+Order Service
+
+↓
+
+Kafka Topic
+
+↓
+
+Payment Service
+
+↓
+
+Kafka Topic
+
+↓
+
+Inventory Service
+```
+
+Each service
+
+* Listens to Kafka Events
+* Executes Local Transaction
+* Publishes Next Event
+
+---
+
+# 📌 Frequently Asked Interview Questions (Quick Revision)
+
+### Q1. What is Saga Pattern?
+
+**Answer:**
+A design pattern used in Microservices to manage distributed transactions using Local Transactions and Compensating Transactions.
+
+---
+
+### Q2. Why is Saga Pattern required?
+
+**Answer:**
+Because normal database transactions cannot span multiple independent microservices.
+
+---
+
+### Q3. What are the components of Saga Pattern?
+
+**Answer:**
+
+* Local Transaction
+* Events
+* Compensating Transaction
+
+---
+
+### Q4. What are the two Saga implementation approaches?
+
+**Answer:**
+
+* Choreography
+* Orchestration
+
+---
+
+### Q5. Difference between Rollback and Compensation?
+
+| Rollback           | Compensation       |
+| ------------------ | ------------------ |
+| Database Operation | Business Operation |
+| Before Commit      | After Commit       |
+| Monolithic         | Microservices      |
+
+---
+
+### Q6. What is Eventual Consistency?
+
+**Answer:**
+The system may temporarily become inconsistent, but after all Local Transactions or Compensating Transactions complete, all services reach a consistent state.
+
+---
+
+### Q7. Which message brokers are used?
+
+**Answer:**
+
+* Kafka
+* RabbitMQ
+* ActiveMQ
+* Amazon SQS
+
+---
+
+### Q8. Which approach is preferred?
+
+**Answer:**
+
+* Small Projects → Choreography
+* Enterprise Projects → Orchestration
+
+---
+
+### Q9. Does Saga replace `@Transactional`?
+
+**Answer:**
+No.
+
+`@Transactional` is used **inside** a microservice.
+
+Saga Pattern coordinates transactions **between** microservices.
+
+---
+
+### Q10. What is the role of the Saga Orchestrator?
+
+**Answer:**
+The Saga Orchestrator coordinates the workflow, invokes services, tracks progress, and triggers compensating transactions when failures occur.
+
+---
+
+# 🧠 Final Memory Trick
+
+## Monolithic
+
+```text
+One Application
+      │
+One Database
+      │
+One Transaction
+      │
+ROLLBACK
+```
+
+---
+
+## Microservices
+
+```text
+Many Applications
+      │
+Many Databases
+      │
+Many Local Transactions
+      │
+Saga Pattern
+      │
+Compensating Transactions
+```
+
+---
+
+## Choreography
+
+```text
+Service
+
+↓
+
+Event
+
+↓
+
+Service
+
+↓
+
+Event
+
+↓
+
+Service
+```
+
+**No Boss** 👥
+
+---
+
+## Orchestration
+
+```text
+Saga Orchestrator
+
+↓
+
+Order
+
+↓
+
+Payment
+
+↓
+
+Inventory
+
+↓
+
+Shipping
+```
+
+**One Boss** 👨‍💼
+
+---
+
+# 🎯 Golden Interview Answers (Must Remember)
+
+### ⭐ What is Saga Pattern?
+
+> **Saga Pattern is a design pattern used in Microservices to manage distributed transactions. It breaks a business transaction into multiple local transactions, and if any step fails, compensating transactions are executed to undo previously completed operations, ensuring eventual consistency.**
+
+---
+
+### ⭐ Difference between Rollback and Compensation?
+
+> **Rollback undoes uncommitted database changes inside a single transaction, whereas Compensation performs reverse business operations after local transactions have already been committed across different microservices.**
+
+---
+
+### ⭐ Choreography vs Orchestration?
+
+> **Choreography is decentralized and event-driven, where services communicate directly through events. Orchestration is centralized, where a Saga Orchestrator controls the entire workflow and handles compensation.**
+
+---
+
+# 🎉 Congratulations!
+
+You have now completed the entire **Saga Pattern** series:
+
+1. ✅ What is Saga Pattern? Why do we need it?
+2. ✅ Transaction Management in Monolithic Applications
+3. ✅ Distributed Transaction Problem in Microservices
+4. ✅ Local Transactions & Compensating Transactions
+5. ✅ Components of Saga Pattern
+6. ✅ Choreography-Based Saga
+7. ✅ Orchestration-Based Saga
+8. ✅ Interview Questions, Comparisons & Real Project Scenarios
+
+These notes cover the concepts from beginner level to interview level and should prepare you well for Java Spring Boot Microservices interviews.
+============================================================================================================================================
+You have out praticale video after reding this Notes Imp Notes :
+
+https://www.youtube.com/watch?v=6O5iJ7PKUhs&list=PLVz2XdJiJQxw1H3JVhclHc__WYDaiS1uL&index=1

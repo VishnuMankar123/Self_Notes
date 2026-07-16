@@ -1,0 +1,633 @@
+Perfect 👍. Ab implementation ho gaya hai. Interview me normally code nahi puchte, wo concept + implementation flow + real-world use case puchte hain.
+
+Neeche **CQRS ke most important interview questions** diye hain jo **4+ YOE Java Spring Boot Developer** ke interview me aa sakte hain.
+
+---
+
+# CQRS Interview Questions & Answers (Hindi Wali English)
+
+---
+
+# 1. What is CQRS?
+
+### Answer
+
+CQRS ka full form hai **Command Query Responsibility Segregation**.
+
+Isme hum **Read aur Write operation ko separate kar dete hain**.
+
+* **Command Service** → POST, PUT, DELETE
+* **Query Service** → GET
+
+Isse application ko independently optimize aur scale kar sakte hain.
+
+---
+
+# 2. CQRS ka full form kya hai?
+
+### Answer
+
+**Command Query Responsibility Segregation**
+
+* Command → Data Change
+* Query → Data Read
+* Segregation → Separate karna
+
+---
+
+# 3. CQRS ki need kyu padi?
+
+### Answer
+
+Real project me **Read request bahut zyada hoti hai aur Write request kam hoti hai.**
+
+Example
+
+Flipkart
+
+100 users aaye
+
+* 70 sirf product dekhte hain
+* 30 purchase karte hain
+
+Agar sab ek hi service me hoga to Read traffic ki wajah se poori service slow ho jayegi.
+
+Isliye CQRS use karte hain.
+
+---
+
+# 4. Command kya hota hai?
+
+### Answer
+
+Jo database ko modify kare.
+
+Example
+
+```text
+POST
+
+PUT
+
+DELETE
+
+PATCH
+```
+
+Ye sab Command operation hain.
+
+---
+
+# 5. Query kya hota hai?
+
+### Answer
+
+Jo sirf database se data read kare.
+
+Example
+
+```text
+GET Product
+
+GET User
+
+GET Orders
+```
+
+---
+
+# 6. Command Service me kya hota hai?
+
+### Answer
+
+Sirf Write APIs.
+
+Example
+
+```text
+POST
+
+PUT
+
+DELETE
+```
+
+Aur ye Command Database use karti hai.
+
+---
+
+# 7. Query Service me kya hota hai?
+
+### Answer
+
+Sirf Read APIs.
+
+Example
+
+```text
+GET Product
+
+GET User
+```
+
+Ye Query Database use karti hai.
+
+---
+
+# 8. CQRS ka biggest advantage kya hai?
+
+### Answer
+
+Read aur Write independently scale ho sakte hain.
+
+Example
+
+Agar Read traffic zyada hai
+
+To sirf Query Service ko scale karenge.
+
+Command Service ko nahi.
+
+---
+
+# 9. Without CQRS kya problem hoti hai?
+
+### Answer
+
+* Read aur Write same service me hote hain.
+* Independent scaling possible nahi hoti.
+* Complex queries slow ho jati hain.
+* Performance kam ho jati hai.
+
+---
+
+# 10. CQRS me do database kyu use karte hain?
+
+### Answer
+
+Command aur Query ka workload alag hota hai.
+
+Command Database
+
+Write ke liye optimized hota hai.
+
+Query Database
+
+Read ke liye optimized hota hai.
+
+---
+
+# 11. Kya dono database same ho sakte hain?
+
+### Answer
+
+Haan.
+
+Ho sakte hain.
+
+Lekin mostly production me alag use karte hain.
+
+---
+
+# 12. Kya Command aur Query Entity same honi chahiye?
+
+### Answer
+
+Nahi.
+
+Command Entity me 100 fields ho sakti hain.
+
+Query Entity me sirf 10 fields.
+
+Jo display karni hain wahi rakhte hain.
+
+---
+
+# 13. Kafka kyu use karte hain?
+
+### Answer
+
+Command Database aur Query Database ko sync karne ke liye.
+
+Command Service event publish karti hai.
+
+Query Service us event ko consume karti hai.
+
+---
+
+# 14. Kafka ke bina CQRS possible hai?
+
+### Answer
+
+Haan.
+
+RabbitMQ
+
+Redis Pub/Sub
+
+AWS SQS
+
+Ya direct API call bhi use kar sakte hain.
+
+Lekin Kafka sabse common hai.
+
+---
+
+# 15. ProductEvent DTO kyu banaya?
+
+### Answer
+
+Sirf Product bhejne se Consumer ko pata nahi chalega
+
+Create karna hai
+
+Ya Update.
+
+Isliye
+
+```java
+eventType
+
+product
+```
+
+Dono bhejte hain.
+
+---
+
+# 16. ProductEvent me kya hota hai?
+
+### Answer
+
+```java
+private String eventType;
+
+private Product product;
+```
+
+Bas.
+
+---
+
+# 17. eventType ka use kya hai?
+
+### Answer
+
+Consumer decide karta hai
+
+```text
+CREATE_PRODUCT
+
+UPDATE_PRODUCT
+
+DELETE_PRODUCT
+```
+
+Kaunsa action perform karna hai.
+
+---
+
+# 18. KafkaTemplate kya hai?
+
+### Answer
+
+Producer side class.
+
+Isse hum Kafka topic me message bhejte hain.
+
+Example
+
+```java
+kafkaTemplate.send(topic,event);
+```
+
+---
+
+# 19. @KafkaListener kya karta hai?
+
+### Answer
+
+Consumer side annotation.
+
+Topic ko continuously listen karta hai.
+
+Jaise hi message aata hai
+
+Method automatically execute ho jata hai.
+
+---
+
+# 20. groupId kya hota hai?
+
+### Answer
+
+Consumer Group ka naam.
+
+Same group ke consumers message ko share karke process karte hain.
+
+---
+
+# 21. Topic kya hota hai?
+
+### Answer
+
+Kafka me Topic ek channel hota hai.
+
+Producer usme message bhejta hai.
+
+Consumer wahi se message padhta hai.
+
+---
+
+# 22. Flow batao CQRS ka.
+
+### Answer
+
+```text
+POST
+
+↓
+
+Command Service
+
+↓
+
+Command Database
+
+↓
+
+Kafka
+
+↓
+
+Query Service
+
+↓
+
+Query Database
+
+↓
+
+GET
+```
+
+Ye sabse important answer hai.
+
+---
+
+# 23. Query Database empty kyu tha?
+
+### Answer
+
+Kyuki Command Database me data save hua tha.
+
+Query Database me kuch save hi nahi hua.
+
+Kafka sync nahi hua tha.
+
+Isliye
+
+```text
+GET
+
+↓
+
+[]
+```
+
+---
+
+# 24. Query Service directly Command Database se read kyu nahi karti?
+
+### Answer
+
+Agar aisa karenge to CQRS ka purpose hi khatam ho jayega.
+
+Read aur Write fir separate nahi rahenge.
+
+---
+
+# 25. CQRS me eventually consistent ka matlab kya hai?
+
+### Answer
+
+Command DB pehle update hota hai.
+
+Uske baad Kafka event jata hai.
+
+Fir Query DB update hota hai.
+
+Matlab dono databases **same time** update nahi hote.
+
+Thoda delay ho sakta hai.
+
+Isko **Eventual Consistency** bolte hain.
+
+---
+
+# 26. CQRS ke advantages batao.
+
+### Answer
+
+* Read aur Write separate
+* Better Performance
+* Independent Scaling
+* Better Security
+* Better Database Design
+* Better Read Optimization
+
+---
+
+# 27. CQRS ke disadvantages batao.
+
+### Answer
+
+* Architecture complex ho jata hai.
+* Do services maintain karni padti hain.
+* Do databases maintain karne padte hain.
+* Kafka ya messaging system chahiye.
+* Eventual consistency handle karni padti hai.
+
+---
+
+# 28. CQRS kab use karna chahiye?
+
+### Answer
+
+Jab
+
+* Read traffic bahut zyada ho.
+* Large scale application ho.
+* Microservices use ho.
+* Performance important ho.
+
+---
+
+# 29. CQRS kab use nahi karna chahiye?
+
+### Answer
+
+Small CRUD application.
+
+Admin Panel.
+
+College Project.
+
+Simple Employee Management.
+
+Wahan normal CRUD hi best hai.
+
+---
+
+# 30. Real-world examples of CQRS?
+
+### Answer
+
+* Amazon
+* Flipkart
+* Netflix
+* Facebook
+* Instagram
+* Banking Applications
+
+Jahan Read traffic bahut zyada hoti hai.
+
+---
+
+# 31. Agar Kafka down ho gaya to kya hoga?
+
+### Answer
+
+Command Service data ko Command DB me save kar degi.
+
+Lekin Query DB immediately update nahi hoga.
+
+Jab Kafka wapas up hoga aur pending messages consume honge, tab Query DB sync ho jayega.
+
+---
+
+# 32. Kya Query Service me MongoDB aur Command Service me MySQL use kar sakte hain?
+
+### Answer
+
+Haan.
+
+Ye CQRS ka ek major advantage hai.
+
+Example
+
+```text
+Command
+
+↓
+
+MySQL
+```
+
+```text
+Query
+
+↓
+
+MongoDB
+```
+
+Ya
+
+```text
+Query
+
+↓
+
+ElasticSearch
+```
+
+---
+
+# 33. Interviewer: "Aapne CQRS implement kiya hai?"
+
+### Best Practical Answer
+
+> "Yes. Maine Product Command Service aur Product Query Service alag banayi thi. Command Service POST aur PUT requests handle karti thi aur MySQL Command DB me data save karti thi. Save hone ke baad Kafka ke through ProductEvent publish hota tha. Query Service `@KafkaListener` se event consume karti thi aur apni Query DB update karti thi. Is wajah se GET requests sirf Query Service se aati thi aur Read aur Write independently scale ho sakte the."
+
+---
+
+# ⭐ 5 Questions Jo 90% Interview Me Aate Hain
+
+### ✅ Q1. What is CQRS?
+
+Separate Read & Write.
+
+---
+
+### ✅ Q2. Why do we use CQRS?
+
+Independent Scaling & Better Performance.
+
+---
+
+### ✅ Q3. Why Kafka in CQRS?
+
+Command DB aur Query DB ko synchronize karne ke liye.
+
+---
+
+### ✅ Q4. Difference between Command Service and Query Service?
+
+**Command Service**
+
+* POST
+* PUT
+* DELETE
+* Write Database
+
+**Query Service**
+
+* GET
+* Read Database
+
+---
+
+### ✅ Q5. Complete Flow?
+
+```text
+POST
+
+↓
+
+Command Service
+
+↓
+
+Command DB
+
+↓
+
+Kafka
+
+↓
+
+Query Service
+
+↓
+
+Query DB
+
+↓
+
+GET
+```
+
+---
+
+# 🎯 Interview Tip
+
+Agar interviewer bole:
+
+> **"Explain CQRS in 1 minute."**
+
+To ye answer yaad rakhna:
+
+> **"CQRS means Command Query Responsibility Segregation. Instead of keeping Read and Write operations in one service, we separate them. Command Service handles POST, PUT, and DELETE, while Query Service handles GET requests. After the Command Service updates the database, it publishes an event to Kafka. The Query Service consumes that event and updates its own database. This allows independent scaling, better performance, and optimized read and write models. The trade-off is increased complexity and eventual consistency."**
+
+Ye answer 4+ years ke Java Spring Boot interview ke liye kaafi strong mana jata hai.

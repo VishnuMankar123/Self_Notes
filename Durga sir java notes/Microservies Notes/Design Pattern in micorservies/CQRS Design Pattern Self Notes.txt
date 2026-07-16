@@ -1,0 +1,5407 @@
+
+Link Video :
+https://www.youtube.com/watch?v=fzGZPf0FMao&list=PLVz2XdJiJQxw1H3JVhclHc__WYDaiS1uL&index=3
+https://www.youtube.com/watch?v=fzGZPf0FMao&list=PLVz2XdJiJQxw1H3JVhclHc__WYDaiS1uL&index=4
+chnnel Name : Java Techie
+============================================================================================
+# 📘 CQRS Design Pattern - Part 1 (Introduction + What is CQRS + Why CQRS?)
+
+> **Goal of this Part**
+>
+> Is part ke baad tumhe ye clear ho jayega:
+>
+> * CQRS kya hota hai?
+> * Iski need kyu padi?
+> * Real project me problem kya thi?
+> * Interview me iska answer kaise dena hai?
+
+---
+
+# 👨‍🏫 Teacher - CQRS kya hota hai?
+
+### 🙋 Student
+
+Sir, sabse pehle ye bataiye **CQRS** ka full form kya hai?
+
+---
+
+## 👨‍🏫 Teacher
+
+CQRS ka full form hai
+
+> **Command Query Responsibility Segregation**
+
+Isme do words important hain.
+
+* **Command**
+* **Query**
+
+Aur **Segregation** ka matlab hota hai
+
+> **Separate karna**
+
+Simple language me
+
+> **Read aur Write operation ko alag-alag handle karna hi CQRS hai.**
+
+---
+
+# 👨‍🏫 Teacher
+
+Command kya hota hai?
+
+---
+
+## 🙋 Student
+
+Sir jo database me data change kare?
+
+---
+
+## 👨‍🏫 Teacher
+
+Bilkul.
+
+Jo bhi operation database ko modify kare wo **Command** hai.
+
+Example
+
+```
+POST
+PUT
+DELETE
+PATCH
+```
+
+Ye sab database ko change karte hain.
+
+Isliye ye **Command** hai.
+
+---
+
+# 👨‍🏫 Teacher
+
+Query kya hota hai?
+
+---
+
+## 🙋 Student
+
+Sir jo sirf data read kare?
+
+---
+
+## 👨‍🏫 Teacher
+
+Correct.
+
+Query sirf data read karta hai.
+
+Example
+
+```
+GET /products
+
+GET /users
+
+GET /orders
+```
+
+Ye sirf data fetch karte hain.
+
+Database me kuch change nahi hota.
+
+---
+
+# 💡 Easy Formula
+
+```
+Command = Write Operation
+
+Query = Read Operation
+```
+
+Yaad rakhna.
+
+---
+
+# 👨‍🏫 Teacher
+
+Without CQRS application kaisi hoti hai?
+
+---
+
+## 🙋 Student
+
+Sir ek hi microservice me sab kuch hota hai?
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+Example
+
+```
+Product Service
+
+GET Product
+
+POST Product
+
+PUT Product
+
+DELETE Product
+```
+
+Sab kuch ek hi service ke andar.
+
+```
+          Product Service
+
+       GET Product
+
+       POST Product
+
+       PUT Product
+
+       DELETE Product
+```
+
+Isko normal CRUD microservice bolte hain.
+
+---
+
+# 👨‍🏫 Teacher
+
+CQRS me kya hota hai?
+
+---
+
+## 🙋 Student
+
+Sir Read aur Write alag ho jata hai.
+
+---
+
+## 👨‍🏫 Teacher
+
+Bilkul.
+
+```
+Product Command Service
+
+POST
+
+PUT
+
+DELETE
+```
+
+Aur
+
+```
+Product Query Service
+
+GET
+```
+
+Ab dono alag services hain.
+
+```
+               Client
+
+                 |
+
+      -------------------------
+
+      |                       |
+
+Command Service        Query Service
+
+POST                  GET
+
+PUT
+
+DELETE
+```
+
+Yehi CQRS hai.
+
+---
+
+# 🎯 Interview Definition
+
+**Question**
+
+What is CQRS?
+
+### Answer
+
+CQRS stands for **Command Query Responsibility Segregation**.
+
+It separates **Read** operations and **Write** operations into different services or different models so that they can be developed, optimized and scaled independently.
+
+---
+
+# 👨‍🏫 Teacher
+
+Sir ye idea kisliye aaya?
+
+CRUD to already chal raha tha.
+
+---
+
+## 🙋 Student
+
+Haan sir.
+
+Fir CQRS kyu banaya?
+
+---
+
+## 👨‍🏫 Teacher
+
+Excellent Question.
+
+Real problem samajhte hain.
+
+---
+
+# 🛒 Example - Flipkart
+
+Suppose Flipkart par
+
+```
+100 users aaye.
+```
+
+Unme se
+
+```
+30 log purchase karenge.
+```
+
+Aur
+
+```
+70 log sirf product dekhenge.
+```
+
+Matlab
+
+```
+Read Request = 70%
+
+Write Request = 30%
+```
+
+Diagram
+
+```
+100 Users
+
+↓
+
+70 View Product
+
+↓
+
+30 Buy Product
+```
+
+---
+
+# 👨‍🏫 Teacher
+
+Sabse jyada load kis operation pe hai?
+
+---
+
+## 🙋 Student
+
+GET request.
+
+---
+
+## 👨‍🏫 Teacher
+
+Correct.
+
+Read request bahut jyada hai.
+
+Write request kam hai.
+
+---
+
+# Problem
+
+Lekin hamari service hai
+
+```
+Product Service
+
+GET
+
+POST
+
+PUT
+
+DELETE
+```
+
+Sab ek hi server pe.
+
+Ab agar Read traffic bahut increase ho gaya.
+
+To kya hoga?
+
+---
+
+## 🙋 Student
+
+Sir pura service slow ho jayega.
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+Kyunki
+
+Read aur Write dono same application use kar rahe hain.
+
+---
+
+# Real Life Example
+
+Big Billion Days
+
+```
+1 Million Users
+```
+
+Usme
+
+```
+900000 log
+
+sirf
+
+Search Product
+```
+
+Aur
+
+```
+100000
+
+Purchase
+```
+
+Ab socho.
+
+Server kis request se bhar jayega?
+
+```
+GET
+```
+
+---
+
+# 👨‍🏫 Teacher
+
+Agar mujhe sirf Read Service ko 20 servers pe chalana ho.
+
+Possible hai?
+
+---
+
+## 🙋 Student
+
+Nahi.
+
+Kyuki sab ek hi service me hai.
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+Yehi sabse badi problem hai.
+
+---
+
+# Another Example
+
+Instagram
+
+Tum roz kya karte ho?
+
+```
+Open App
+
+↓
+
+Watch Feed
+
+↓
+
+Watch Reels
+
+↓
+
+Search People
+```
+
+Kitni baar post karte ho?
+
+Shayad
+
+```
+1 ya 2 baar
+```
+
+Lekin
+
+Read?
+
+```
+Hundreds of Times
+```
+
+Isliye
+
+```
+Read >>> Write
+```
+
+---
+
+# Facebook
+
+```
+Like
+
+Comment
+
+Search
+
+Profile View
+
+News Feed
+```
+
+Mostly
+
+```
+Read
+```
+
+---
+
+# Twitter (X)
+
+```
+Read Tweets
+
+↓
+
+Read Replies
+
+↓
+
+Search Hashtag
+```
+
+Again
+
+```
+Read
+```
+
+---
+
+# Conclusion
+
+Most applications me
+
+```
+Read Request
+
+>
+
+Write Request
+```
+
+Ye bahut common scenario hai.
+
+---
+
+# 👨‍🏫 Teacher
+
+To solution kya hai?
+
+---
+
+## 🙋 Student
+
+Sir Read aur Write ko alag kar do.
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+```
+Command Service
+
+↓
+
+Write Only
+```
+
+Aur
+
+```
+Query Service
+
+↓
+
+Read Only
+```
+
+Ab agar Read traffic increase hua.
+
+Sirf
+
+```
+Query Service
+```
+
+ko scale karenge.
+
+Command ko touch bhi nahi karenge.
+
+---
+
+# Easy Diagram
+
+Without CQRS
+
+```
+               Product Service
+
+GET
+
+POST
+
+PUT
+
+DELETE
+```
+
+Sab ek hi jagah.
+
+---
+
+With CQRS
+
+```
+          Product Command Service
+
+POST
+
+PUT
+
+DELETE
+
+
+
+          Product Query Service
+
+GET
+```
+
+Alag-alag.
+
+---
+
+# 🧠 Memory Trick
+
+```
+C
+
+=
+
+Change
+
+Database
+
+(Command)
+```
+
+```
+Q
+
+=
+
+Question
+
+Database
+
+(Query)
+```
+
+Ya
+
+```
+Command
+
+=
+
+Change Data
+```
+
+```
+Query
+
+=
+
+Read Data
+```
+
+---
+
+# 📌 Important Points
+
+✅ CQRS = **Command Query Responsibility Segregation**
+
+✅ **Command = Write Operation**
+
+✅ **Query = Read Operation**
+
+✅ Read aur Write ko alag service me rakhte hain.
+
+✅ Read service ko independently scale kar sakte hain.
+
+✅ Write service alag optimize hoti hai.
+
+---
+
+# 🎤 Interview Questions (Part 1)
+
+## Q1. What is CQRS?
+
+**Answer**
+
+CQRS stands for **Command Query Responsibility Segregation**. It separates Read and Write operations into different services or models.
+
+---
+
+## Q2. What is Command?
+
+**Answer**
+
+Command means any operation that modifies the database.
+
+Example:
+
+* POST
+* PUT
+* DELETE
+* PATCH
+
+---
+
+## Q3. What is Query?
+
+**Answer**
+
+Query means only reading data from the database.
+
+Example:
+
+* GET Product
+* GET User
+* GET Orders
+
+---
+
+## Q4. Why do we use CQRS?
+
+**Answer**
+
+Because in most applications Read requests are much higher than Write requests. CQRS allows us to scale and optimize Read and Write independently.
+
+---
+
+## Q5. Give one real-world example of CQRS.
+
+**Answer**
+
+Flipkart, Amazon, Instagram, Facebook.
+
+Most users only search or view data. Very few users actually create or update data. So Read traffic is much higher than Write traffic.
+
+---
+
+## Q6. Can CQRS improve scalability?
+
+**Answer**
+
+Yes. Since Read and Write are separated, we can scale the Query service independently without affecting the Command service.
+
+---
+
+# ✅ Part 1 Summary
+
+```
+CQRS
+
+↓
+
+Separate Read & Write
+
+↓
+
+Command Service
+
+POST
+
+PUT
+
+DELETE
+
+↓
+
+Query Service
+
+GET
+
+↓
+
+Independent Scaling
+
+↓
+
+Better Performance
+
+↓
+
+Better Design
+```
+
+### 👉 Part 2 me hum dekhenge **"Problems Without CQRS"** (Complex Queries, Database Performance, Security Issues, aur video me bataye gaye saare real-world challenges) with detailed teacher-student Q&A.
+========================================================================================================================
+# 📘 CQRS Design Pattern - Part 2 (Problems Without CQRS)
+
+> **Goal of this Part**
+>
+> Is part ke baad tumhe samajh aa jayega ki **CQRS ki zarurat hi kyu padi**. Interview me bhi ye questions bahut aate hain.
+
+---
+
+# 👨‍🏫 Teacher
+
+Pichle part me humne padha ki CQRS Read aur Write ko separate karta hai.
+
+Lekin ek question hai...
+
+**Agar normal CRUD Microservice chal rahi hai, to CQRS ki zarurat hi kya hai?**
+
+---
+
+## 🙋 Student
+
+Haan sir, agar ek Product Service se sab kaam ho raha hai to alag services kyu banaye?
+
+---
+
+## 👨‍🏫 Teacher
+
+Bahut achha question.
+
+CQRS kisi fashion ke liye nahi bana.
+
+Ye **real production problems solve karta hai.**
+
+Chalo ek-ek problem dekhte hain.
+
+---
+
+# 🛒 Problem 1 – Read Traffic Bahut Zyada Hota Hai
+
+Suppose Flipkart me ek Product Service hai.
+
+```
+Product Service
+
+GET Product
+
+POST Product
+
+PUT Product
+
+DELETE Product
+```
+
+Sab kuch isi service me hai.
+
+---
+
+## 👨‍🏫 Teacher
+
+Big Billion Days start ho gaye.
+
+100 users aaye.
+
+Kitne purchase karenge?
+
+---
+
+## 🙋 Student
+
+Sir shayad 30.
+
+---
+
+## 👨‍🏫 Teacher
+
+Aur kitne sirf products dekhenge?
+
+---
+
+## 🙋 Student
+
+70.
+
+---
+
+## 👨‍🏫 Teacher
+
+Bilkul.
+
+```
+100 Users
+
+↓
+
+70 View Product
+
+↓
+
+30 Purchase Product
+```
+
+Matlab
+
+```
+GET Requests = 70%
+
+POST/PUT = 30%
+```
+
+---
+
+# Problem
+
+Sab request ek hi Product Service me aa rahi hai.
+
+```
+             Product Service
+
+GET
+
+POST
+
+PUT
+
+DELETE
+```
+
+Ab GET request bahut increase ho gayi.
+
+To kya hoga?
+
+---
+
+## 🙋 Student
+
+Sir pura Product Service busy ho jayega.
+
+---
+
+## 👨‍🏫 Teacher
+
+Correct.
+
+Chahe Write request kam ho,
+
+Read request poori service ko overload kar degi.
+
+---
+
+# Real Life Example
+
+Amazon
+
+Diwali Sale
+
+Crores of users
+
+Sab log
+
+```
+Search
+
+↓
+
+View Product
+
+↓
+
+Compare Product
+```
+
+Kar rahe hain.
+
+Purchase bahut kam log karte hain.
+
+Isliye
+
+```
+Read >> Write
+```
+
+---
+
+# Interview Point ⭐
+
+**Most real-world applications have much more Read traffic than Write traffic.**
+
+---
+
+# 👨‍🏫 Teacher
+
+Agar mujhe sirf GET request handle karne ke liye extra servers lagane ho to?
+
+---
+
+## 🙋 Student
+
+Sir possible nahi.
+
+Kyuki GET aur POST same service me hain.
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+Ye CQRS se pehle ki sabse badi problem hai.
+
+---
+
+# Problem 2 – Independent Scaling Nahi Kar Sakte
+
+Suppose
+
+```
+Product Service
+
+↓
+
+10,000 Requests/sec
+```
+
+Lekin
+
+```
+9500 GET
+
+500 POST
+```
+
+Agar GET slow ho raha hai.
+
+To tum kya karoge?
+
+---
+
+## 🙋 Student
+
+Sir poori service ko scale karna padega.
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+Lekin socho.
+
+POST ko scale karne ki zarurat hi nahi thi.
+
+Fir bhi
+
+```
+GET
+
+POST
+
+PUT
+
+DELETE
+```
+
+Sabhi multiple servers par deploy honge.
+
+Isse
+
+* CPU waste
+* Memory waste
+* Cost increase
+
+---
+
+# Example
+
+Without CQRS
+
+```
+Product Service
+
+↓
+
+10 Pods
+```
+
+Isme
+
+```
+GET
+
+POST
+
+PUT
+
+DELETE
+```
+
+Sab 10 pods me.
+
+---
+
+Lekin actual requirement thi
+
+```
+GET = 10 Pods
+
+POST = 2 Pods
+```
+
+Ye possible nahi.
+
+---
+
+# Interview Point ⭐
+
+**Without CQRS we cannot independently scale Read and Write operations.**
+
+---
+
+# Problem 3 – Complex Queries
+
+Suppose teen microservices hain.
+
+```
+User Service
+
+Order Service
+
+Product Service
+```
+
+Har service ka apna database hai.
+
+---
+
+## 👨‍🏫 Teacher
+
+Agar mujhe kisi user ke saare orders aur products ek saath chahiye.
+
+To kya karna padega?
+
+---
+
+## 🙋 Student
+
+Sir multiple APIs call karni padengi.
+
+Ya joins likhne padenge.
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+Example
+
+```
+User
+
+↓
+
+Orders
+
+↓
+
+Products
+
+↓
+
+Payment
+
+↓
+
+Address
+```
+
+Ab report banana hai.
+
+Tumhe
+
+* Multiple REST Calls
+* Multiple Joins
+* Aggregation
+
+karna padega.
+
+---
+
+# Problem
+
+Complex query execute hogi.
+
+Performance slow hogi.
+
+---
+
+## Example
+
+Customer Dashboard
+
+```
+Customer Name
+
+↓
+
+Orders
+
+↓
+
+Products
+
+↓
+
+Payments
+
+↓
+
+Address
+```
+
+Ye sab ek screen pe dikhana hai.
+
+Simple query se possible nahi.
+
+---
+
+# Interview Point ⭐
+
+**Complex joins and multiple service calls reduce read performance.**
+
+---
+
+# Problem 4 – Read Performance Slow Ho Jata Hai
+
+Suppose
+
+Database me
+
+```
+10 Lakh Records
+```
+
+Aur tum
+
+```
+5 tables join
+```
+
+kar rahe ho.
+
+To query fast chalegi?
+
+---
+
+## 🙋 Student
+
+Nahi sir.
+
+---
+
+## 👨‍🏫 Teacher
+
+Correct.
+
+Aur ye query
+
+Usi database pe chal rahi hai
+
+Jahan Write operation bhi ho raha hai.
+
+```
+INSERT
+
+UPDATE
+
+DELETE
+
+SELECT
+```
+
+Sab same DB pe.
+
+Result?
+
+Database slow.
+
+---
+
+# Real Life Example
+
+Suppose
+
+Hospital Software
+
+Doctor
+
+↓
+
+Patient
+
+↓
+
+Medicine
+
+↓
+
+Bill
+
+↓
+
+Insurance
+
+Sab ek report me.
+
+Ye bahut heavy query hogi.
+
+---
+
+# Problem 5 – Same Database Handle Kar Raha Hai Sab Kuch
+
+```
+Read
+
+↓
+
+Same Database
+
+↓
+
+Write
+```
+
+Matlab
+
+Ek hi database
+
+* Insert
+* Update
+* Delete
+* Select
+
+Sab handle karega.
+
+Heavy load me bottleneck ban jata hai.
+
+---
+
+# Problem 6 – Security Alag Nahi Laga Sakte
+
+Suppose
+
+Write operation me
+
+Tumhe
+
+```
+Encryption
+
+↓
+
+Validation
+
+↓
+
+Authorization
+
+↓
+
+Transaction
+```
+
+Lagani hai.
+
+---
+
+## 👨‍🏫 Teacher
+
+Question
+
+Read operation me bhi same processing hogi?
+
+---
+
+## 🙋 Student
+
+Haan sir.
+
+Kyuki dono same service me hain.
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+Result
+
+Har GET request ke saath unnecessary processing hogi.
+
+Performance aur slow.
+
+---
+
+# Example
+
+POST
+
+```
+Encrypt Data
+
+↓
+
+Validate
+
+↓
+
+Save
+```
+
+Ye sahi hai.
+
+Lekin
+
+GET
+
+```
+Read
+
+↓
+
+Decrypt
+
+↓
+
+Validation
+
+↓
+
+Return
+```
+
+Har baar ye karna zaruri nahi.
+
+Fir bhi same architecture ki wajah se overhead aa sakta hai.
+
+---
+
+# Problem 7 – Optimization Difficult
+
+Suppose
+
+Read ke liye
+
+Tum use karna chahte ho
+
+```
+Redis
+
+ElasticSearch
+
+MongoDB
+```
+
+Aur
+
+Write ke liye
+
+```
+MySQL
+```
+
+Lekin normal CRUD service me
+
+Sab kuch ek hi design me hota hai.
+
+Optimization mushkil ho jata hai.
+
+---
+
+# Video ka Main Conclusion
+
+Normal Architecture
+
+```
+Client
+
+↓
+
+Product Service
+
+↓
+
+Database
+```
+
+Problems
+
+❌ Read zyada
+
+❌ Write kam
+
+❌ Scale nahi kar sakte
+
+❌ Heavy Queries
+
+❌ Slow Database
+
+❌ Same DB pe Read + Write
+
+❌ Security alag nahi
+
+❌ Performance Issue
+
+---
+
+# 👨‍🏫 Teacher
+
+To sir solution kya hai?
+
+---
+
+## 🙋 Student
+
+Read aur Write ko alag kar dena.
+
+---
+
+## 👨‍🏫 Teacher
+
+Bilkul.
+
+Isi solution ka naam hai
+
+# **CQRS**
+
+```
+          Client
+
+             |
+
+    ------------------
+
+    |                |
+
+Command          Query
+
+Service          Service
+
+POST             GET
+
+PUT
+
+DELETE
+```
+
+---
+
+# 📌 Memory Trick
+
+```
+Without CQRS
+
+↓
+
+Everything Mixed
+
+↓
+
+Slow
+
+↓
+
+Complex
+
+↓
+
+Cannot Scale
+```
+
+```
+With CQRS
+
+↓
+
+Separate
+
+↓
+
+Fast
+
+↓
+
+Easy
+
+↓
+
+Scalable
+```
+
+---
+
+# 🎯 Interview Questions
+
+### Q1. Why do we need CQRS?
+
+**Answer:**
+
+CQRS is used because Read requests are usually much higher than Write requests. It separates Read and Write so they can be optimized and scaled independently.
+
+---
+
+### Q2. What is the biggest problem without CQRS?
+
+**Answer:**
+
+Read and Write operations are mixed in one service, so we cannot scale or optimize them independently.
+
+---
+
+### Q3. Why is independent scaling not possible in a normal CRUD service?
+
+**Answer:**
+
+Because GET, POST, PUT, and DELETE are all inside the same service. If GET traffic increases, we must scale the entire service instead of only the Read part.
+
+---
+
+### Q4. How do complex queries affect performance?
+
+**Answer:**
+
+Complex joins and multiple API calls increase response time and reduce database performance.
+
+---
+
+### Q5. Why can Read performance become slow?
+
+**Answer:**
+
+Because the same database handles both Read and Write operations. Heavy SELECT queries compete with INSERT, UPDATE, and DELETE operations.
+
+---
+
+### Q6. Why is optimization difficult without CQRS?
+
+**Answer:**
+
+Since Read and Write use the same service and database, we cannot optimize them separately with different databases, caching strategies, or security rules.
+
+---
+
+# 📝 Part 2 Summary
+
+```
+Without CQRS
+
+↓
+
+Read Traffic High
+
+↓
+
+Write Traffic Low
+
+↓
+
+Single Service
+
+↓
+
+Single Database
+
+↓
+
+Heavy Queries
+
+↓
+
+Performance Issues
+
+↓
+
+Cannot Scale Independently
+
+↓
+
+Need CQRS
+```
+
+➡️ **Part 3** me hum **CQRS Architecture** detail me dekhenge—**Command Service**, **Query Service**, **2 Databases**, **Kafka synchronization**, aur complete request flow step-by-step, exactly jaise video me explain kiya gaya hai.
+========================================================================================================================
+# 📘 CQRS Design Pattern - Part 3 (CQRS Architecture & Complete Flow)
+
+> **Goal of this Part**
+>
+> Is part ke baad tumhe ye clear ho jayega:
+>
+> * CQRS Architecture kaise dikhti hai?
+> * Command Service aur Query Service ka role kya hai?
+> * Do databases kyu hote hain?
+> * Kafka kyu use hota hai?
+> * Request complete flow kaise chalta hai?
+
+---
+
+# 👨‍🏫 Teacher
+
+Part 2 me humne dekha ki normal CRUD architecture me bahut problems hain.
+
+Ab batao...
+
+**CQRS in problems ko solve kaise karta hai?**
+
+---
+
+## 🙋 Student
+
+Sir Read aur Write ko alag kar deta hai.
+
+---
+
+## 👨‍🏫 Teacher
+
+Bilkul.
+
+Ab architecture dekhte hain.
+
+---
+
+# 🏗️ CQRS Architecture
+
+```text
+                Client
+                   |
+         ----------------------
+         |                    |
+         |                    |
+ Command Service        Query Service
+ (Write APIs)           (Read APIs)
+         |                    |
+         |                    |
+     Command DB          Query DB
+         |
+         |
+      Kafka Event
+         |
+         |
+         V
+   Query Service updates
+     its own Database
+```
+
+Ye hi basic CQRS Architecture hai.
+
+---
+
+# 👨‍🏫 Teacher
+
+Architecture me kitni Microservices hain?
+
+---
+
+## 🙋 Student
+
+Sir 2.
+
+* Product Command Service
+* Product Query Service
+
+---
+
+## 👨‍🏫 Teacher
+
+Correct.
+
+---
+
+# First Service
+
+## Product Command Service
+
+Ye sirf
+
+```text
+POST
+
+PUT
+
+DELETE
+```
+
+handle karegi.
+
+Matlab
+
+Database change karne wale saare APIs.
+
+Example
+
+```java
+POST /products
+
+PUT /products/{id}
+
+DELETE /products/{id}
+```
+
+---
+
+# Second Service
+
+## Product Query Service
+
+Ye sirf
+
+```text
+GET
+```
+
+handle karegi.
+
+Example
+
+```java
+GET /products
+
+GET /products/{id}
+```
+
+---
+
+# Memory Trick
+
+```text
+Command
+
+=
+
+Change Database
+```
+
+```text
+Query
+
+=
+
+Read Database
+```
+
+---
+
+# 👨‍🏫 Teacher
+
+Command Service ka kaam kya hai?
+
+---
+
+## 🙋 Student
+
+Sir database me insert, update aur delete karna.
+
+---
+
+## 👨‍🏫 Teacher
+
+Correct.
+
+Example
+
+Customer ne
+
+New Product create kiya.
+
+```text
+POST /products
+```
+
+Request jayegi
+
+```text
+Client
+
+↓
+
+Command Service
+
+↓
+
+Command Database
+```
+
+---
+
+# 👨‍🏫 Teacher
+
+Query Service ka kaam kya hai?
+
+---
+
+## 🙋 Student
+
+Sir sirf data fetch karna.
+
+---
+
+## 👨‍🏫 Teacher
+
+Bilkul.
+
+Example
+
+```text
+GET /products
+```
+
+Flow
+
+```text
+Client
+
+↓
+
+Query Service
+
+↓
+
+Query Database
+```
+
+Simple.
+
+---
+
+# Important Question
+
+## 👨‍🏫 Teacher
+
+Sir do databases kyu?
+
+Ek hi database rakhte.
+
+---
+
+## 🙋 Student
+
+Haan sir.
+
+Database bhi alag kyu?
+
+---
+
+## 👨‍🏫 Teacher
+
+Ye CQRS ka sabse important point hai.
+
+Command Service
+
+apna database use karegi.
+
+```text
+Command DB
+```
+
+Query Service
+
+apna database use karegi.
+
+```text
+Query DB
+```
+
+---
+
+# Diagram
+
+```text
+Command Service
+
+↓
+
+Command DB
+```
+
+```text
+Query Service
+
+↓
+
+Query DB
+```
+
+Dono independent hain.
+
+---
+
+# 👨‍🏫 Teacher
+
+Lekin problem hai.
+
+Agar Product create hua
+
+Command DB me.
+
+To Query DB ko kaise pata chalega?
+
+---
+
+## 🙋 Student
+
+Sir nahi pata chalega.
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+Ye hi sabse important problem hai.
+
+---
+
+# Example
+
+Suppose
+
+Command Service
+
+me Product create hua.
+
+```text
+Laptop
+```
+
+Command DB
+
+```text
+ID=1
+
+Laptop
+```
+
+Ab Query Service
+
+GET karegi.
+
+Uske DB me
+
+```text
+No Data
+```
+
+Result
+
+```text
+[]
+```
+
+Empty response.
+
+---
+
+# Problem
+
+Command DB
+
+aur
+
+Query DB
+
+sync nahi hain.
+
+---
+
+# 👨‍🏫 Teacher
+
+To sync kaise karenge?
+
+---
+
+## 🙋 Student
+
+Sir Kafka.
+
+---
+
+## 👨‍🏫 Teacher
+
+Correct.
+
+Video me bhi yehi bataya hai.
+
+---
+
+# Kafka ka Role
+
+Whenever
+
+Command Service
+
+Database update karegi.
+
+Immediately
+
+Kafka ko Event bhejegi.
+
+```text
+Create Product
+
+Update Product
+
+Delete Product
+```
+
+---
+
+Diagram
+
+```text
+Command Service
+
+↓
+
+Save Database
+
+↓
+
+Publish Event
+
+↓
+
+Kafka
+```
+
+---
+
+# Fir kya hoga?
+
+Kafka
+
+ye Event
+
+Query Service ko dega.
+
+```text
+Kafka
+
+↓
+
+Query Service
+
+↓
+
+Update Query Database
+```
+
+Ab
+
+Query Database
+
+latest ho jayega.
+
+---
+
+# Complete Flow
+
+Step 1
+
+Client Product create karta hai.
+
+```text
+POST /products
+```
+
+↓
+
+Step 2
+
+Command Service
+
+Database me save karti hai.
+
+↓
+
+Step 3
+
+Kafka ko Event publish karti hai.
+
+```text
+Create Product Event
+```
+
+↓
+
+Step 4
+
+Kafka
+
+Event Query Service ko bhejta hai.
+
+↓
+
+Step 5
+
+Query Service
+
+same Product
+
+apne DB me save karti hai.
+
+↓
+
+Step 6
+
+Ab
+
+GET request aayegi.
+
+↓
+
+Query Service
+
+latest data return karegi.
+
+---
+
+# Visual Flow
+
+```text
+Client
+
+↓
+
+POST Product
+
+↓
+
+Command Service
+
+↓
+
+Command Database
+
+↓
+
+Publish Event
+
+↓
+
+Kafka
+
+↓
+
+Consume Event
+
+↓
+
+Query Service
+
+↓
+
+Query Database
+
+↓
+
+GET Product
+
+↓
+
+Client
+```
+
+Ye poora CQRS flow hai.
+
+---
+
+# Example
+
+Suppose
+
+Tumne create kiya
+
+```text
+Book
+
+Price = 500
+```
+
+Step 1
+
+Command DB
+
+```text
+Book
+
+500
+```
+
+Step 2
+
+Kafka
+
+```text
+Create Product Event
+```
+
+Step 3
+
+Query DB
+
+```text
+Book
+
+500
+```
+
+Ab
+
+```text
+GET /products
+```
+
+Result
+
+```text
+Book
+
+500
+```
+
+---
+
+# Update Example
+
+Suppose
+
+Price change hui.
+
+```text
+500
+
+↓
+
+700
+```
+
+Flow
+
+```text
+PUT Product
+
+↓
+
+Command DB Updated
+
+↓
+
+Kafka Event
+
+↓
+
+Query Service Consume
+
+↓
+
+Query DB Updated
+```
+
+Ab
+
+GET kare.
+
+Result
+
+```text
+700
+```
+
+---
+
+# Delete Example
+
+```text
+DELETE Product
+
+↓
+
+Command DB
+
+↓
+
+Kafka
+
+↓
+
+Query DB
+
+↓
+
+Deleted
+```
+
+---
+
+# 👨‍🏫 Teacher
+
+Kafka kyu use kiya?
+
+Direct API call bhi kar sakte the.
+
+---
+
+## 🙋 Student
+
+Sir...
+
+---
+
+## 👨‍🏫 Teacher
+
+Kafka asynchronous communication deta hai.
+
+Benefits
+
+✅ Loose Coupling
+
+✅ Fast
+
+✅ Reliable
+
+✅ Retry
+
+✅ Event Driven
+
+Isliye CQRS ke saath Kafka bahut common hai.
+
+---
+
+# Can We Use RabbitMQ?
+
+Haan.
+
+Video me bhi bataya gaya hai.
+
+Kafka compulsory nahi hai.
+
+Use kar sakte ho
+
+* Kafka
+* RabbitMQ
+* Redis Pub/Sub
+
+Ye sab messaging systems hain.
+
+---
+
+# Architecture Summary
+
+```text
+          Client
+
+             |
+
+      ----------------
+
+      |              |
+
+ Command          Query
+
+ Service          Service
+
+      |              |
+
+ Command DB      Query DB
+
+      |
+
+ Publish Event
+
+      |
+
+ Kafka
+
+      |
+
+ Consume Event
+
+      |
+
+ Query DB Updated
+```
+
+---
+
+# Real Life Example
+
+### Flipkart
+
+Customer
+
+Search karta hai.
+
+```text
+GET
+```
+
+↓
+
+Query Service
+
+Customer
+
+Purchase karta hai.
+
+```text
+POST
+```
+
+↓
+
+Command Service
+
+Product update hota hai.
+
+↓
+
+Kafka
+
+↓
+
+Query Service
+
+↓
+
+Latest Product dikh jata hai.
+
+---
+
+# Memory Trick
+
+```text
+POST
+
+↓
+
+Command Service
+
+↓
+
+Command DB
+
+↓
+
+Kafka
+
+↓
+
+Query Service
+
+↓
+
+Query DB
+
+↓
+
+GET
+```
+
+Is flow ko yaad kar lo.
+
+Interview me directly kaam aayega.
+
+---
+
+# 🎤 Interview Questions
+
+## Q1. How many microservices are there in CQRS?
+
+**Answer**
+
+Generally two:
+
+* Command Service
+* Query Service
+
+---
+
+## Q2. Which APIs are kept inside Command Service?
+
+**Answer**
+
+All APIs that modify the database.
+
+Example:
+
+* POST
+* PUT
+* DELETE
+* PATCH
+
+---
+
+## Q3. Which APIs are kept inside Query Service?
+
+**Answer**
+
+All Read APIs.
+
+Example:
+
+* GET Product
+* GET User
+* GET Order
+
+---
+
+## Q4. Why do we use two databases in CQRS?
+
+**Answer**
+
+Because Read and Write are handled independently. This allows separate optimization, better performance, and independent scaling.
+
+---
+
+## Q5. Why do we need Kafka in CQRS?
+
+**Answer**
+
+Kafka synchronizes the Command Database and Query Database by sending events like Create Product, Update Product, and Delete Product.
+
+---
+
+## Q6. What happens after a POST request in CQRS?
+
+**Answer**
+
+1. Command Service saves data.
+2. Command DB is updated.
+3. Event is published to Kafka.
+4. Query Service consumes the event.
+5. Query DB is updated.
+
+---
+
+## Q7. Can we use RabbitMQ instead of Kafka?
+
+**Answer**
+
+Yes. Any messaging system like Kafka, RabbitMQ, or Redis Pub/Sub can be used to synchronize Command and Query services.
+
+---
+
+# 📝 Part 3 Summary
+
+```text
+CQRS Architecture
+
+↓
+
+2 Microservices
+
+↓
+
+Command Service (POST, PUT, DELETE)
+
+↓
+
+Command Database
+
+↓
+
+Publish Event
+
+↓
+
+Kafka / RabbitMQ / Redis
+
+↓
+
+Query Service
+
+↓
+
+Query Database Updated
+
+↓
+
+GET Requests
+
+↓
+
+Client
+```
+
+➡️ **Part 4** me hum **actual Spring Boot implementation** start karenge—**2 projects create karna, dependencies add karna, entities, repositories, configuration aur Command Service ka code** step-by-step, exactly video ke implementation ke hisaab se.
+
+========================================================================================================================
+Perfect 👍. Ab se hum implementation pe focus karenge.
+
+Aur haan, **common Spring Boot annotations ka explanation skip karunga**, kyunki tum already Spring Boot developer ho. Sirf CQRS specific cheeze explain karunga. Agar kahin kuch naya hoga (Kafka, CQRS Flow), usko detail me explain karunga.
+
+---
+
+# 📘 CQRS Design Pattern - Part 4 (Command Microservice Implementation)
+
+## 🎯 Goal
+
+Is part ke baad tumhare paas ye ready hoga.
+
+```
+product-command-service
+
+├── controller
+├── service
+├── repository
+├── entity
+├── dto
+└── application.yml
+```
+
+Abhi Kafka nahi lagayenge.
+
+Pehle sirf Command Service banayenge.
+
+---
+
+# Step 1 Create Spring Boot Project
+
+Project Name
+
+```
+product-command-service
+```
+
+Dependencies
+
+```
+Spring Web
+
+Spring Data JPA
+
+MySQL Driver
+
+Lombok
+```
+
+Bas itna hi.
+
+---
+
+# Step 2 Folder Structure
+
+```
+src
+
+ main
+
+   java
+
+      com.demo.command
+
+            controller
+
+            service
+
+            repository
+
+            entity
+
+            dto
+```
+
+---
+
+# Step 3 Create Entity
+
+```
+Product.java
+```
+
+```java
+package com.demo.command.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "product_command")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    private String description;
+
+    private double price;
+
+}
+```
+
+Bas itni entity hai.
+
+Video me bhi yehi hai.
+
+---
+
+# Step 4 Repository
+
+```java
+package com.demo.command.repository;
+
+import com.demo.command.entity.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductRepository
+        extends JpaRepository<Product,Long> {
+
+}
+```
+
+Kuch explain karne jaisa nahi hai.
+
+Ye normal Spring Data JPA hai.
+
+---
+
+# Step 5 application.yml
+
+```yaml
+spring:
+
+  datasource:
+
+    url: jdbc:mysql://localhost:3306/cqrs_command
+
+    username: root
+
+    password: root
+
+  jpa:
+
+    hibernate:
+
+      ddl-auto: update
+
+    show-sql: true
+
+server:
+
+  port: 9191
+```
+
+Command Service
+
+```
+9191
+```
+
+pe chalegi.
+
+---
+
+# Step 6 Service
+
+```
+ProductCommandService
+```
+
+```java
+@Service
+@RequiredArgsConstructor
+public class ProductCommandService {
+
+    private final ProductRepository repository;
+
+}
+```
+
+Ab methods likhenge.
+
+---
+
+# First Method
+
+## createProduct()
+
+```java
+public Product createProduct(Product product){
+
+    return repository.save(product);
+
+}
+```
+
+Flow
+
+```
+Controller
+
+↓
+
+Service
+
+↓
+
+Repository
+
+↓
+
+Database
+```
+
+Simple.
+
+---
+
+# Question
+
+Ye method kya karega?
+
+```
+repository.save(product)
+```
+
+Answer
+
+```
+INSERT
+```
+
+Database me.
+
+---
+
+# Step 7 Update Method
+
+Video me same logic hai.
+
+```java
+public Product updateProduct(Long id, Product product){
+
+    Product existingProduct
+            = repository.findById(id)
+            .orElseThrow();
+
+    existingProduct.setName(product.getName());
+
+    existingProduct.setDescription(product.getDescription());
+
+    existingProduct.setPrice(product.getPrice());
+
+    return repository.save(existingProduct);
+
+}
+```
+
+Flow
+
+```
+Find Existing Product
+
+↓
+
+Change Values
+
+↓
+
+Save Again
+```
+
+Bas.
+
+---
+
+# Interview Question
+
+Sir save() update kaise kar raha hai?
+
+Answer
+
+Kyuki object ke andar
+
+```
+id
+```
+
+already present hai.
+
+Hibernate samajh jata hai
+
+```
+Insert nahi
+
+Update karna hai.
+```
+
+---
+
+# Step 8 Controller
+
+```java
+@RestController
+@RequestMapping("/products")
+@RequiredArgsConstructor
+public class ProductCommandController {
+
+    private final ProductCommandService service;
+
+}
+```
+
+---
+
+# POST API
+
+```java
+@PostMapping
+public Product createProduct(
+        @RequestBody Product product){
+
+    return service.createProduct(product);
+
+}
+```
+
+---
+
+# PUT API
+
+```java
+@PutMapping("/{id}")
+public Product updateProduct(
+
+        @PathVariable Long id,
+
+        @RequestBody Product product){
+
+    return service.updateProduct(id,product);
+
+}
+```
+
+Bas.
+
+---
+
+# Abhi tak Flow
+
+```
+POST
+
+↓
+
+Controller
+
+↓
+
+Service
+
+↓
+
+Repository
+
+↓
+
+MySQL
+```
+
+---
+
+# Postman Test
+
+### POST
+
+```
+POST
+
+localhost:9191/products
+```
+
+Body
+
+```json
+{
+    "name":"Laptop",
+    "description":"Gaming Laptop",
+    "price":90000
+}
+```
+
+Response
+
+```json
+{
+    "id":1,
+    "name":"Laptop",
+    "description":"Gaming Laptop",
+    "price":90000
+}
+```
+
+---
+
+# Database
+
+```
+product_command
+```
+
+| id | name   | price |
+| -- | ------ | ----- |
+| 1  | Laptop | 90000 |
+
+---
+
+# PUT
+
+```
+PUT
+
+localhost:9191/products/1
+```
+
+Body
+
+```json
+{
+    "name":"Laptop",
+    "description":"Gaming Laptop",
+    "price":100000
+}
+```
+
+Database
+
+```
+100000
+```
+
+ho jayega.
+
+---
+
+# Ab Question
+
+Sir
+
+CQRS kaha hua?
+
+Ye to normal CRUD hai.
+
+😂😂
+
+---
+
+## Answer
+
+Abhi sirf
+
+```
+Command Service
+```
+
+banayi hai.
+
+Abhi
+
+```
+Query Service
+```
+
+nahi bani.
+
+Aur
+
+```
+Kafka
+```
+
+bhi nahi laga.
+
+---
+
+# Video me Next Kya Hoga?
+
+Ab hum
+
+```
+product-query-service
+```
+
+banayenge.
+
+Usme
+
+```
+GET APIs
+```
+
+hongi.
+
+Uska apna
+
+```
+Database
+```
+
+hoga.
+
+Fir tum dekhoge problem.
+
+---
+
+# Actual Problem
+
+Abhi
+
+```
+Command Database
+```
+
+me
+
+```
+Laptop
+```
+
+save hua.
+
+Lekin
+
+```
+Query Database
+```
+
+me kuch bhi nahi hai.
+
+Matlab
+
+```
+GET
+```
+
+karoge.
+
+To
+
+```
+[]
+```
+
+Empty response.
+
+Yahi video me bhi hua tha.
+
+Uske baad
+
+```
+Kafka
+```
+
+introduce hua.
+
+---
+
+# Real Architecture
+
+```
+             POST
+
+Client ---------------------->
+
+        Product Command Service
+
+                  |
+
+                  |
+
+          Command Database
+
+                  |
+
+         (Abhi yahi tak hua)
+
+
+
+
+
+Product Query Service
+
+↓
+
+Query Database
+
+↓
+
+No Data Yet
+```
+
+---
+
+# Important Interview Questions
+
+### Q1 Why create separate Command Service?
+
+**Answer**
+
+Command Service sirf database modify karti hai.
+
+POST
+
+PUT
+
+DELETE
+
+Ye sab isi service me hote hain.
+
+---
+
+### Q2 Why not keep GET inside Command Service?
+
+**Answer**
+
+CQRS ka purpose hi Read aur Write ko separate karna hai.
+
+---
+
+### Q3 Why updateProduct first finds entity?
+
+**Answer**
+
+Pehle existing record fetch karte hain, uski values update karte hain, phir save() karte hain.
+
+---
+
+### Q4 save() insert bhi karta hai aur update bhi?
+
+**Answer**
+
+Yes.
+
+ID null → INSERT
+
+ID present → UPDATE
+
+---
+
+# 📌 Part 4 Summary
+
+```
+Product Command Service
+
+↓
+
+Entity
+
+↓
+
+Repository
+
+↓
+
+Service
+
+↓
+
+Controller
+
+↓
+
+POST API
+
+↓
+
+PUT API
+
+↓
+
+Command Database
+
+↓
+
+(No Kafka Yet)
+
+↓
+
+(No Query Service Yet)
+```
+
+---
+
+## ⭐ Part 5 bahut important hoga.
+
+Usme hum **Product Query Service** banayenge aur tum khud dekhoge ki **GET request empty list (`[]`) kyu return karti hai**, exactly jaise video me hua tha. Uske baad **Part 6 me complete Kafka Producer + Consumer code** likhenge aur line-by-line samjhenge ki CQRS ka real magic kaise kaam karta hai.
+
+========================================================================================================================
+# 📘 CQRS Design Pattern - Part 5 (Product Query Microservice Implementation)
+
+> 🎯 **Goal**
+>
+> Is part ke baad tumhare paas **Query Service** ready hogi aur tum practically samajh jaoge ki **Kafka ki zarurat kyu padti hai.**
+
+---
+
+# Architecture Till Now
+
+Part 4 me humne banaya tha
+
+```text
+Product Command Service
+
+↓
+
+POST
+
+PUT
+
+↓
+
+Command Database
+```
+
+Ab hum banayenge
+
+```text
+Product Query Service
+
+↓
+
+GET
+
+↓
+
+Query Database
+```
+
+Dhyan rahe
+
+👉 Dono **alag Spring Boot projects** hain.
+
+---
+
+# Step 1 Create Project
+
+Project Name
+
+```text
+product-query-service
+```
+
+Dependencies
+
+```text
+Spring Web
+
+Spring Data JPA
+
+MySQL Driver
+
+Lombok
+```
+
+Bilkul Command Service jaise.
+
+---
+
+# Folder Structure
+
+```text
+src
+
+ main
+
+   java
+
+      com.demo.query
+
+            controller
+
+            service
+
+            repository
+
+            entity
+```
+
+---
+
+# Step 2 Entity
+
+Video me entity almost same rakhi hai.
+
+```java
+package com.demo.query.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name="product_query")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    private String description;
+
+    private double price;
+
+}
+```
+
+---
+
+## ❓ Teacher
+
+Sir entity same kyu hai?
+
+---
+
+### 🙋 Student
+
+Command me bhi same thi.
+
+---
+
+### 👨‍🏫 Teacher
+
+Video me demo simple rakhne ke liye same hai.
+
+Lekin Real Project me same hona zaruri nahi hai.
+
+Example
+
+Command Entity
+
+```text
+id
+
+name
+
+description
+
+price
+
+createdBy
+
+updatedBy
+
+createdDate
+
+updatedDate
+
+status
+
+category
+
+supplier
+
+discount
+
+.....
+```
+
+100 fields ho sakti hain.
+
+---
+
+Query Entity
+
+```text
+id
+
+name
+
+price
+```
+
+Bas.
+
+Kyun?
+
+Kyuki customer ko sirf yehi dikhana hai.
+
+Isi ko bolte hain
+
+> **Read Model**
+
+---
+
+# Interview Question ⭐
+
+Can Command Entity and Query Entity be different?
+
+### Answer
+
+**Yes.**
+
+Query model can contain only the fields required for reading.
+
+---
+
+# Step 3 Repository
+
+```java
+package com.demo.query.repository;
+
+import com.demo.query.entity.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductRepository
+        extends JpaRepository<Product,Long>{
+
+}
+```
+
+---
+
+# Step 4 application.yml
+
+```yaml
+spring:
+
+  datasource:
+
+    url: jdbc:mysql://localhost:3306/cqrs_query
+
+    username: root
+
+    password: root
+
+  jpa:
+
+    hibernate:
+
+      ddl-auto: update
+
+    show-sql: true
+
+server:
+
+  port: 9292
+```
+
+Notice
+
+```text
+Command
+
+9191
+```
+
+Query
+
+```text
+9292
+```
+
+Aur database bhi alag hai.
+
+```text
+cqrs_query
+```
+
+---
+
+# Step 5 Service
+
+Ab Query Service me
+
+Sirf
+
+GET APIs hongi.
+
+---
+
+## Method
+
+```java
+@Service
+@RequiredArgsConstructor
+public class ProductQueryService {
+
+    private final ProductRepository repository;
+
+    public List<Product> getProducts(){
+
+        return repository.findAll();
+
+    }
+
+}
+```
+
+Bas.
+
+Video me bhi sirf
+
+```java
+findAll()
+```
+
+kiya hai.
+
+---
+
+# Flow
+
+```text
+GET
+
+↓
+
+Controller
+
+↓
+
+Service
+
+↓
+
+Repository
+
+↓
+
+Query Database
+```
+
+Simple.
+
+---
+
+# Step 6 Controller
+
+```java
+@RestController
+@RequestMapping("/products")
+@RequiredArgsConstructor
+public class ProductQueryController {
+
+    private final ProductQueryService service;
+
+}
+```
+
+---
+
+## GET API
+
+```java
+@GetMapping
+public List<Product> getProducts(){
+
+    return service.getProducts();
+
+}
+```
+
+Bas.
+
+Ab Query Service complete hai.
+
+---
+
+# Current Architecture
+
+```text
+                 Client
+
+          POST            GET
+
+            |              |
+
+            |              |
+
+Command Service      Query Service
+
+      |                    |
+
+Command DB         Query DB
+```
+
+Ab Question.
+
+---
+
+# 🤔 Teacher
+
+Abhi agar main
+
+POST
+
+karu.
+
+```http
+POST
+
+localhost:9191/products
+```
+
+Body
+
+```json
+{
+    "name":"Laptop",
+    "price":80000
+}
+```
+
+Ye kahan save hoga?
+
+---
+
+## 🙋 Student
+
+Command Database.
+
+---
+
+## 👨‍🏫 Teacher
+
+Bilkul.
+
+Database
+
+```text
+product_command
+```
+
+me.
+
+---
+
+# Ab GET karte hain
+
+```http
+GET
+
+localhost:9292/products
+```
+
+Kya response aana chahiye?
+
+---
+
+## 🙋 Student
+
+Laptop.
+
+---
+
+## 👨‍🏫 Teacher
+
+❌ Nahi.
+
+Response
+
+```json
+[]
+```
+
+---
+
+# Question
+
+Sir Empty List kyu?
+
+---
+
+## Answer
+
+Kyuki
+
+Command Database
+
+aur
+
+Query Database
+
+alag hain.
+
+---
+
+Diagram
+
+```text
+Command DB
+
+Laptop
+```
+
+Lekin
+
+```text
+Query DB
+
+Empty
+```
+
+To
+
+```java
+repository.findAll()
+```
+
+kya return karega?
+
+```json
+[]
+```
+
+Simple.
+
+---
+
+# Yehi Video me Hua Tha
+
+Video me
+
+POST kiya
+
+```json
+Book
+```
+
+Fir
+
+```json
+Mobile
+```
+
+Dono
+
+Command DB
+
+me save ho gaye.
+
+---
+
+Fir
+
+GET maara.
+
+Response
+
+```json
+[]
+```
+
+---
+
+Sir code to sahi tha.
+
+Fir problem kya thi?
+
+---
+
+Problem
+
+```text
+Command DB
+
+!=
+
+Query DB
+```
+
+Dono sync hi nahi the.
+
+---
+
+# Database View
+
+Command Database
+
+| id | name   | price |
+| -- | ------ | ----- |
+| 1  | Book   | 500   |
+| 2  | Mobile | 20000 |
+
+---
+
+Query Database
+
+| id | name | price |
+| -- | ---- | ----- |
+
+Nothing.
+
+---
+
+# Flow
+
+POST
+
+↓
+
+Command Service
+
+↓
+
+Command Database
+
+✔ Success
+
+---
+
+GET
+
+↓
+
+Query Service
+
+↓
+
+Query Database
+
+↓
+
+Empty
+
+---
+
+# Important Question
+
+Sir
+
+Agar dono database alag hain
+
+To Query Database update kaun karega?
+
+---
+
+Answer
+
+👉 **Kafka**
+
+Yehi CQRS ka main point hai.
+
+---
+
+# Next Architecture
+
+```text
+POST
+
+↓
+
+Command Service
+
+↓
+
+Command Database
+
+↓
+
+Publish Event
+
+↓
+
+Kafka
+
+↓
+
+Consume Event
+
+↓
+
+Query Service
+
+↓
+
+Query Database Updated
+```
+
+Ab
+
+GET
+
+```http
+localhost:9292/products
+```
+
+kare.
+
+To
+
+Laptop aa jayega.
+
+---
+
+# Real Project Example
+
+Suppose
+
+Amazon
+
+Product Create
+
+↓
+
+Command Service
+
+↓
+
+MySQL
+
+↓
+
+Kafka
+
+↓
+
+ElasticSearch
+
+↓
+
+Customer Search
+
+---
+
+Yahan
+
+Customer
+
+ElasticSearch se data padhta hai.
+
+Command DB se nahi.
+
+Isi wajah se Search bahut fast hota hai.
+
+---
+
+# Another Example
+
+Netflix
+
+Movie Upload
+
+↓
+
+Command DB
+
+↓
+
+Kafka
+
+↓
+
+Redis
+
+↓
+
+Search Service
+
+↓
+
+Customer
+
+---
+
+# Interview Question
+
+Why don't we directly read from Command Database?
+
+### Answer
+
+Because CQRS separates Read and Write.
+
+Read service uses its own optimized database.
+
+---
+
+# Interview Question
+
+Can Query Service use NoSQL?
+
+### Answer
+
+Yes.
+
+Actually real projects me bahut common hai.
+
+Example
+
+```text
+Command
+
+↓
+
+MySQL
+```
+
+```text
+Query
+
+↓
+
+MongoDB
+
+Redis
+
+ElasticSearch
+```
+
+Video me bhi author ne ye point bataya tha.
+
+---
+
+# Interview Question
+
+Why is Query Entity usually smaller?
+
+### Answer
+
+Because Query Service stores only the fields required for displaying data.
+
+---
+
+# Current Project Structure
+
+## Command Service
+
+```text
+controller
+
+service
+
+repository
+
+entity
+```
+
+POST
+
+PUT
+
+---
+
+## Query Service
+
+```text
+controller
+
+service
+
+repository
+
+entity
+```
+
+GET
+
+---
+
+# End Result Till Now
+
+```text
+                Client
+
+          POST             GET
+
+            |               |
+
+            |               |
+
+Command Service      Query Service
+
+      |                    |
+
+Command DB         Query DB
+
+Laptop               Empty
+```
+
+Problem
+
+```text
+GET
+
+↓
+
+[]
+```
+
+---
+
+# 🎯 Interview Questions
+
+## Q1 Why is GET returning an empty list?
+
+**Answer**
+
+Because the Query Database is separate from the Command Database, and no data synchronization has happened yet.
+
+---
+
+## Q2 Why do we keep a separate Query Database?
+
+**Answer**
+
+To optimize Read operations independently and allow separate scaling.
+
+---
+
+## Q3 Can Query Database use MongoDB while Command Database uses MySQL?
+
+**Answer**
+
+Yes. CQRS allows different databases for Read and Write models.
+
+---
+
+## Q4 Is it mandatory that both entities have the same fields?
+
+**Answer**
+
+No. Query Entity can contain only the fields required for Read operations.
+
+---
+
+## Q5 What is the next step after creating both services?
+
+**Answer**
+
+Synchronize Command and Query databases using an event broker like Kafka.
+
+---
+
+# 📝 Part 5 Summary
+
+```text
+Command Service
+
+↓
+
+POST / PUT
+
+↓
+
+Command DB
+
+↓
+
+(No Sync Yet)
+
+↓
+
+Query Service
+
+↓
+
+GET
+
+↓
+
+Query DB
+
+↓
+
+[]
+
+Problem Found
+
+↓
+
+Need Kafka
+```
+
+---
+
+## 🔥 Part 6 sabse important part hoga.
+
+Usme hum **Kafka Producer + Consumer** ka **complete code** likhenge:
+
+* ✅ `ProductEvent` DTO
+* ✅ Kafka Dependencies
+* ✅ `application.yml` Producer Config
+* ✅ `application.yml` Consumer Config
+* ✅ `KafkaTemplate`
+* ✅ `@KafkaListener`
+* ✅ Create Event
+* ✅ Update Event
+* ✅ Query DB Sync
+
+Aur main har line explain karunga **sirf CQRS aur Kafka logic ke perspective se**, common Spring Boot cheeze skip karte hue.
+
+========================================================================================================================
+# 📘 CQRS Design Pattern - Part 6 (Kafka Integration - Producer & Consumer)
+
+> 🎯 **Goal**
+>
+> Is part ke baad tum samajh jaoge:
+>
+> * Kafka kyu use kiya?
+> * `ProductEvent` DTO kya hai?
+> * Producer ka code
+> * Consumer ka code
+> * `@KafkaListener`
+> * Complete Event Flow
+>
+> **Yehi CQRS ka sabse important implementation hai.**
+
+---
+
+# 🏗️ Current Architecture
+
+Abhi tak hamare paas ye hai.
+
+```text
+                    Client
+
+          POST                   GET
+
+            |                     |
+
+            |                     |
+
+Command Service           Query Service
+
+      |                         |
+
+Command DB              Query DB
+
+ Laptop                 Empty
+```
+
+Problem
+
+```text
+Command DB
+
+!=
+
+Query DB
+```
+
+---
+
+# 🤔 Teacher
+
+Sir Query Database update kaun karega?
+
+---
+
+## 🙋 Student
+
+Kafka
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+Ab Command Service event bhejegi.
+
+Query Service us event ko consume karegi.
+
+---
+
+# Final Architecture
+
+```text
+                   Client
+
+         POST                    GET
+
+          |                       |
+
+          |                       |
+
+Command Service           Query Service
+
+       |                         |
+
+ Command DB               Query DB
+
+       |
+
+ Publish Event
+
+       |
+
+      Kafka
+
+       |
+
+ Consume Event
+
+       |
+
+ Query Database Updated
+```
+
+---
+
+# Step 1 Add Dependency
+
+Dono project me
+
+```xml
+<dependency>
+    <groupId>org.springframework.kafka</groupId>
+    <artifactId>spring-kafka</artifactId>
+</dependency>
+```
+
+Bas.
+
+Command bhi.
+
+Query bhi.
+
+---
+
+# Step 2 Create ProductEvent DTO
+
+Ye sabse important class hai.
+
+Command aur Query
+
+Dono isi object se baat karenge.
+
+```java
+package com.demo.command.dto;
+
+import com.demo.command.entity.Product;
+import lombok.*;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProductEvent {
+
+    private String eventType;
+
+    private Product product;
+
+}
+```
+
+---
+
+# 🤔 Teacher
+
+Ye DTO kyu banaya?
+
+Product hi bhej dete.
+
+---
+
+## 🙋 Student
+
+Sir Event Type kaise pata chalega?
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+Consumer ko pata hona chahiye
+
+Ye event
+
+Create hai?
+
+Update hai?
+
+Delete hai?
+
+Isliye
+
+```java
+private String eventType;
+```
+
+rakha.
+
+---
+
+# Example
+
+Create
+
+```json
+{
+   "eventType":"CREATE_PRODUCT",
+
+   "product":{
+
+      "id":1,
+
+      "name":"Laptop",
+
+      "price":90000
+
+   }
+
+}
+```
+
+Update
+
+```json
+{
+   "eventType":"UPDATE_PRODUCT",
+
+   "product":{
+
+      "id":1,
+
+      "name":"Laptop",
+
+      "price":100000
+
+   }
+
+}
+```
+
+Consumer sirf
+
+```java
+eventType
+```
+
+dekhega.
+
+Aur decide karega.
+
+---
+
+# Step 3 Producer Configuration
+
+Command Service
+
+```yaml
+spring:
+
+  kafka:
+
+    bootstrap-servers: localhost:9092
+
+    producer:
+
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+```
+
+Bas.
+
+Ye Producer Configuration hai.
+
+---
+
+# Step 4 Consumer Configuration
+
+Query Service
+
+```yaml
+spring:
+
+  kafka:
+
+    bootstrap-servers: localhost:9092
+
+    consumer:
+
+      group-id: product-group
+
+      auto-offset-reset: earliest
+
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+      properties:
+
+        spring.json.trusted.packages: "*"
+```
+
+Video me bhi trusted package diya tha.
+
+---
+
+# 🤔 Teacher
+
+Producer kya karega?
+
+---
+
+## 🙋 Student
+
+Sir Event bhejega.
+
+---
+
+## 👨‍🏫 Teacher
+
+Correct.
+
+---
+
+# Step 5 Inject KafkaTemplate
+
+Command Service
+
+```java
+@Service
+@RequiredArgsConstructor
+public class ProductCommandService {
+
+    private final ProductRepository repository;
+
+    private final KafkaTemplate<String,Object> kafkaTemplate;
+
+}
+```
+
+Bas.
+
+Is object se
+
+Kafka me event bhejte hain.
+
+---
+
+# Step 6 Create Topic
+
+Video me
+
+Topic Name
+
+```java
+product-event-topic
+```
+
+Tha.
+
+Ek constant bana lo.
+
+```java
+public class KafkaConstants {
+
+    public static final String PRODUCT_TOPIC
+            ="product-event-topic";
+
+}
+```
+
+---
+
+# Step 7 Create Product
+
+Ab dhyan se.
+
+Ye CQRS ka main code hai.
+
+```java
+public Product createProduct(ProductEvent event){
+
+    Product savedProduct
+            = repository.save(event.getProduct());
+
+    ProductEvent productEvent
+            = new ProductEvent(
+            "CREATE_PRODUCT",
+            savedProduct
+    );
+
+    kafkaTemplate.send(
+            KafkaConstants.PRODUCT_TOPIC,
+            productEvent
+    );
+
+    return savedProduct;
+
+}
+```
+
+---
+
+# Flow
+
+```text
+Save Product
+
+↓
+
+Database Updated
+
+↓
+
+Create Event
+
+↓
+
+Kafka
+
+↓
+
+Done
+```
+
+---
+
+# 🤔 Teacher
+
+Sir pehle Kafka bhejna hai
+
+ya
+
+Database save karna hai?
+
+---
+
+## 🙋 Student
+
+Database Save
+
+Fir Kafka
+
+---
+
+## 👨‍🏫 Teacher
+
+Correct.
+
+Ye bahut important interview question hai.
+
+---
+
+# Step 8 Update Product
+
+```java
+public Product updateProduct(
+        Long id,
+        ProductEvent event){
+
+    Product existing
+            = repository.findById(id)
+            .orElseThrow();
+
+    Product newProduct
+            = event.getProduct();
+
+    existing.setName(newProduct.getName());
+
+    existing.setDescription(newProduct.getDescription());
+
+    existing.setPrice(newProduct.getPrice());
+
+    Product updatedProduct
+            = repository.save(existing);
+
+    ProductEvent productEvent
+            = new ProductEvent(
+            "UPDATE_PRODUCT",
+            updatedProduct
+    );
+
+    kafkaTemplate.send(
+            KafkaConstants.PRODUCT_TOPIC,
+            productEvent
+    );
+
+    return updatedProduct;
+
+}
+```
+
+Same logic.
+
+Difference sirf
+
+```java
+UPDATE_PRODUCT
+```
+
+---
+
+# Flow
+
+```text
+Find Product
+
+↓
+
+Update Product
+
+↓
+
+Save
+
+↓
+
+Publish Event
+
+↓
+
+Kafka
+```
+
+---
+
+# Controller
+
+Ab Controller
+
+Product nahi lega.
+
+ProductEvent lega.
+
+```java
+@PostMapping
+public Product create(
+
+        @RequestBody ProductEvent event){
+
+    return service.createProduct(event);
+
+}
+```
+
+PUT
+
+```java
+@PutMapping("/{id}")
+public Product update(
+
+        @PathVariable Long id,
+
+        @RequestBody ProductEvent event){
+
+    return service.updateProduct(id,event);
+
+}
+```
+
+---
+
+# Postman Body
+
+Ab Product nahi bhejna.
+
+Ye bhejna.
+
+```json
+{
+   "eventType":"CREATE_PRODUCT",
+
+   "product":{
+
+      "name":"Laptop",
+
+      "description":"Gaming",
+
+      "price":90000
+
+   }
+
+}
+```
+
+Video me bhi isi wajah se error aaya tha.
+
+Pehle Product bhej raha tha.
+
+Baad me ProductEvent bhejna pada.
+
+---
+
+# Consumer Side
+
+Ab Query Service.
+
+---
+
+# DTO
+
+Same ProductEvent
+
+Copy kar dena.
+
+```java
+ProductEvent
+```
+
+Same class.
+
+---
+
+# Service
+
+Ab magic start.
+
+```java
+@Service
+@RequiredArgsConstructor
+public class ProductQueryService {
+
+    private final ProductRepository repository;
+
+}
+```
+
+---
+
+# Kafka Listener
+
+Sabse important annotation.
+
+```java
+@KafkaListener(
+
+        topics = "product-event-topic",
+
+        groupId = "product-group"
+
+)
+```
+
+Ye annotation
+
+Kafka ko bolta hai.
+
+> Is topic ko continuously suno.
+
+---
+
+# Method
+
+```java
+@KafkaListener(
+        topics = "product-event-topic",
+        groupId = "product-group"
+)
+public void processProductEvent(
+        ProductEvent event){
+
+}
+```
+
+Jab bhi
+
+Command Service
+
+Event bhejegi.
+
+Ye method automatically execute hoga.
+
+---
+
+# Create Logic
+
+```java
+if(event.getEventType()
+        .equals("CREATE_PRODUCT")){
+
+    repository.save(
+            event.getProduct()
+    );
+
+}
+```
+
+Bas.
+
+---
+
+# Flow
+
+```text
+Kafka
+
+↓
+
+Consumer
+
+↓
+
+Save Query DB
+```
+
+---
+
+# Update Logic
+
+```java
+if(event.getEventType()
+        .equals("UPDATE_PRODUCT")){
+
+    Product newProduct
+            = event.getProduct();
+
+    Product existing
+            = repository.findById(
+            newProduct.getId())
+            .orElseThrow();
+
+    existing.setName(newProduct.getName());
+
+    existing.setDescription(
+            newProduct.getDescription());
+
+    existing.setPrice(
+            newProduct.getPrice());
+
+    repository.save(existing);
+
+}
+```
+
+Same update logic.
+
+---
+
+# Complete Flow
+
+```text
+POST
+
+↓
+
+Controller
+
+↓
+
+Command Service
+
+↓
+
+Save Command DB
+
+↓
+
+Create Product Event
+
+↓
+
+Kafka
+
+↓
+
+Consumer
+
+↓
+
+Query Service
+
+↓
+
+Save Query DB
+
+↓
+
+GET
+
+↓
+
+Laptop
+```
+
+---
+
+# Update Flow
+
+```text
+PUT
+
+↓
+
+Command Service
+
+↓
+
+Update DB
+
+↓
+
+Kafka
+
+↓
+
+Consumer
+
+↓
+
+Update Query DB
+
+↓
+
+GET
+
+↓
+
+Updated Product
+```
+
+---
+
+# Video me Error Kyu Aya Tha?
+
+Video me
+
+ID
+
+```text
+53
+```
+
+Command DB me tha.
+
+Lekin
+
+Query DB me
+
+```text
+1
+
+2
+```
+
+Tha.
+
+Consumer
+
+```java
+findById(53)
+```
+
+kar raha tha.
+
+Result
+
+```java
+NoSuchElementException
+```
+
+Ye **Kafka ka issue nahi tha**, balki **database sequence mismatch** tha. Baad me instructor ne dono tables delete karke fresh data insert kiya, tab IDs sync ho gaye aur update event sahi chalne laga.
+
+---
+
+# Final Architecture
+
+```text
+                   Client
+
+        POST                     GET
+
+          |                       |
+
+          |                       |
+
+Command Service          Query Service
+
+      |                       |
+
+ Command DB             Query DB
+
+      |
+
+ Publish Event
+
+      |
+
+      Kafka
+
+      |
+
+Consume Event
+
+      |
+
+Query Database Updated
+
+      |
+
+ GET Returns Latest Data
+```
+
+---
+
+# Interview Questions
+
+## Q1 Why do we need ProductEvent?
+
+**Answer**
+
+ProductEvent contains both the Product data and the event type (like CREATE_PRODUCT or UPDATE_PRODUCT), so the consumer knows what action to perform.
+
+---
+
+## Q2 Why not send Product directly?
+
+**Answer**
+
+Because the consumer cannot determine whether it should create, update, or delete the record without knowing the event type.
+
+---
+
+## Q3 What does KafkaTemplate do?
+
+**Answer**
+
+`KafkaTemplate` is used by the producer to publish messages to a Kafka topic.
+
+---
+
+## Q4 What does @KafkaListener do?
+
+**Answer**
+
+`@KafkaListener` listens to a Kafka topic and automatically invokes the annotated method whenever a new message arrives.
+
+---
+
+## Q5 What is the role of groupId?
+
+**Answer**
+
+The `groupId` identifies the consumer group. Consumers in the same group share the processing of messages from a topic.
+
+---
+
+## Q6 Why save to the Command DB before publishing the event?
+
+**Answer**
+
+The source of truth is the Command Database. Only after the write succeeds should the event be published so the Query side receives valid data.
+
+---
+
+# 📝 Part 6 Summary
+
+```text
+Create Product
+
+↓
+
+Command Service
+
+↓
+
+Save Command DB
+
+↓
+
+ProductEvent
+
+↓
+
+KafkaTemplate.send()
+
+↓
+
+Kafka Topic
+
+↓
+
+@KafkaListener
+
+↓
+
+Query Service
+
+↓
+
+Save Query DB
+
+↓
+
+GET Returns Data
+```
+
+### 🚀 Part 7 me hum is project ka **end-to-end execution** dekhenge:
+
+* Project kaise run karna hai
+* Kafka kaise start karna hai
+* MySQL me tables verify karna
+* Postman testing (POST → GET → PUT)
+* Data synchronization live flow
+* Advantages & disadvantages of CQRS
+* **Complete interview questions** (advanced level) based on poore tutorial.
+
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================

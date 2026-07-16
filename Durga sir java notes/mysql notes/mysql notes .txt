@@ -1,3 +1,430 @@
+
+
+Interview ke liye agar tum **MySQL Normalization aur Views** acche se samajh loge, to ye topic bahut easy ho jayega. Main simple Hindi + examples ke saath explain karta hoon.
+
+---
+
+# 1. Normalization Kya Hai?
+
+**Definition:**
+Normalization ek process hai jisme database ko aise design kiya jata hai ki **duplicate (repeated) data kam ho**, data consistency bani rahe aur update/delete/insert karte time problems na aaye.
+
+### Easy Definition (Interview)
+
+> "Normalization is the process of organizing data into multiple related tables to reduce redundancy and improve data integrity."
+
+---
+
+## Example (Without Normalization)
+
+### Student Table
+
+| StudentID | Name  | Course | Teacher |
+| --------- | ----- | ------ | ------- |
+| 101       | Rahul | Java   | Amit    |
+| 102       | Priya | Java   | Amit    |
+| 103       | Aman  | SQL    | Rakesh  |
+| 104       | Neha  | Java   | Amit    |
+
+### Problem
+
+Teacher **Amit** 3 baar repeat hua.
+
+Agar Amit ka naam change karna ho
+
+Amit → Amit Sir
+
+To 3 rows update karni padegi.
+
+Agar ek row miss ho gayi to data inconsistent ho jayega.
+
+Isi problem ko solve karta hai **Normalization**.
+
+---
+
+# After Normalization
+
+## Student Table
+
+| StudentID | Name  | CourseID |
+| --------- | ----- | -------- |
+| 101       | Rahul | 1        |
+| 102       | Priya | 1        |
+| 103       | Aman  | 2        |
+
+## Course Table
+
+| CourseID | Course | Teacher |
+| -------- | ------ | ------- |
+| 1        | Java   | Amit    |
+| 2        | SQL    | Rakesh  |
+
+Ab teacher ek hi jagah stored hai.
+
+---
+
+# Types of Normalization
+
+Interview me mostly 1NF, 2NF aur 3NF puchte hain.
+
+---
+
+# 1NF (First Normal Form)
+
+## Rule
+
+Ek column me ek hi value honi chahiye.
+
+No multiple values.
+
+### Wrong Table
+
+| Student | Subjects |
+| ------- | -------- |
+| Rahul   | Java,SQL |
+
+Yaha Subjects me do values hain.
+
+---
+
+### Correct Table
+
+| Student | Subject |
+| ------- | ------- |
+| Rahul   | Java    |
+| Rahul   | SQL     |
+
+Ye 1NF hai.
+
+### Trick
+
+> One Cell = One Value
+
+Yaad rakhna:
+
+**1NF = Single Value**
+
+---
+
+# 2NF (Second Normal Form)
+
+Rule
+
+* Pehle 1NF hona chahiye
+* Partial dependency nahi honi chahiye.
+
+Simple language:
+
+Table me jo information kisi aur table me honi chahiye, use alag table me le jao.
+
+---
+
+### Example
+
+| StudentID | CourseID | CourseName |
+| --------- | -------- | ---------- |
+| 101       | 1        | Java       |
+| 102       | 1        | Java       |
+| 103       | 2        | SQL        |
+
+CourseName repeat ho raha hai.
+
+Separate table banao.
+
+Student Table
+
+| StudentID | CourseID |
+| --------- | -------- |
+| 101       | 1        |
+| 102       | 1        |
+
+Course Table
+
+| CourseID | CourseName |
+| -------- | ---------- |
+| 1        | Java       |
+| 2        | SQL        |
+
+Ye 2NF hai.
+
+### Trick
+
+> Remove Partial Dependency
+
+Yaad rakho
+
+**2NF = Split Repeated Information**
+
+---
+
+# 3NF (Third Normal Form)
+
+Rule
+
+* Pehle 2NF hona chahiye.
+* Transitive dependency nahi honi chahiye.
+
+Simple language
+
+Jo data kisi aur data par depend karta hai use alag table me rakho.
+
+---
+
+### Wrong Table
+
+| EmpID | DeptID | DeptName |
+| ----- | ------ | -------- |
+| 1     | 10     | HR       |
+| 2     | 20     | IT       |
+
+DeptName actually DeptID par depend karta hai.
+
+Separate table banao.
+
+Employee Table
+
+| EmpID | DeptID |
+| ----- | ------ |
+| 1     | 10     |
+| 2     | 20     |
+
+Department Table
+
+| DeptID | DeptName |
+| ------ | -------- |
+| 10     | HR       |
+| 20     | IT       |
+
+Ye 3NF hai.
+
+---
+
+### Trick
+
+3NF = Remove Indirect Dependency
+
+---
+
+# Interview Trick
+
+## 1NF
+
+One Cell One Value
+
+## 2NF
+
+Remove Partial Dependency
+
+## 3NF
+
+Remove Indirect Dependency
+
+---
+
+# View Kya Hai?
+
+View ek **Virtual Table** hoti hai.
+
+Isme actual data store nahi hota.
+
+Ye ek SQL Query ka saved result hota hai.
+
+---
+
+### Example
+
+Employee Table
+
+| ID | Name  | Salary |
+| -- | ----- | ------ |
+| 1  | Rahul | 30000  |
+| 2  | Priya | 50000  |
+
+View
+
+```sql
+CREATE VIEW Employee_View AS
+SELECT Name, Salary
+FROM Employee;
+```
+
+Ab
+
+```sql
+SELECT * FROM Employee_View;
+```
+
+Output
+
+| Name  | Salary |
+| ----- | ------ |
+| Rahul | 30000  |
+| Priya | 50000  |
+
+Ye real table nahi hai.
+
+Ye Employee table se data lekar show karta hai.
+
+---
+
+# View Ke Advantages
+
+✔ Security
+
+Sensitive columns hide kar sakte hain.
+
+Example
+
+Employee Table
+
+Name
+
+Salary
+
+Password
+
+User ko sirf Name aur Salary dikhao.
+
+Password hide.
+
+---
+
+✔ Complex Query Simple Ban Jati Hai
+
+Instead of writing
+
+```sql
+SELECT *
+FROM Employee
+JOIN Department
+JOIN Company
+```
+
+Har baar,
+
+Ek View bana lo.
+
+---
+
+✔ Reusability
+
+Ek baar View banao
+
+100 baar use karo.
+
+---
+
+# Types of Views
+
+## 1. Simple View
+
+Single Table
+
+Example
+
+```sql
+CREATE VIEW Emp_View AS
+SELECT Name, Salary
+FROM Employee;
+```
+
+Ye Simple View hai.
+
+---
+
+## 2. Complex View
+
+Multiple Tables
+
+```sql
+CREATE VIEW Employee_Department AS
+
+SELECT
+e.Name,
+d.DepartmentName
+
+FROM Employee e
+
+JOIN Department d
+
+ON e.DeptID=d.DeptID;
+```
+
+Ye Complex View hai.
+
+---
+
+## 3. Updatable View
+
+Is View ke through data update kar sakte hain.
+
+Example
+
+```sql
+UPDATE Emp_View
+
+SET Salary=50000
+
+WHERE Name='Rahul';
+```
+
+Ye original table ko update karega (agar view updatable conditions satisfy karta ho).
+
+---
+
+## 4. Read Only View
+
+Isme update nahi kar sakte.
+
+Sirf dekh sakte ho.
+
+```sql
+CREATE VIEW Emp_View AS
+
+SELECT Name
+
+FROM Employee
+
+WITH CHECK OPTION;
+```
+
+*(Note: `WITH CHECK OPTION` ka actual purpose ye ensure karna hota hai ki view ke through kiye gaye INSERT/UPDATE operations view ki condition ko violate na karein. Read-only views bhi ban sakti hain, lekin unka behavior query aur database features par depend karta hai.)*
+
+---
+
+# View vs Table
+
+| Table             | View                         |
+| ----------------- | ---------------------------- |
+| Actual Data Store | No Data Store (Virtual)      |
+| Physical Storage  | No Physical Storage for rows |
+| Fast              | Depends on underlying query  |
+| Can Insert        | Sometimes (depends on view)  |
+
+---
+
+# Interview Definitions (1 Line)
+
+**Normalization**
+
+> Process of reducing redundancy and improving data integrity by organizing data into related tables.
+
+**View**
+
+> A virtual table created from a SQL query. It does not store data itself but displays data from one or more tables.
+
+---
+
+## 📌 Yaad Rakhne ki Trick
+
+* **1NF** → **One cell = One value**
+* **2NF** → **Split repeated information into separate tables**
+* **3NF** → **Remove indirect dependency (data depending on another non-key column)**
+* **View** → **Saved SQL query that behaves like a table but usually doesn't store data**
+
+Ye concepts MySQL hi nahi, SQL Server, Oracle, PostgreSQL aur interview me generally sab databases ke liye same logic follow karte hain.
+
+=============================================================================
 1) To delete a table in MySQL, you can use the DROP TABLE statement.
 Basic Syntax:
 DROP TABLE table_name;

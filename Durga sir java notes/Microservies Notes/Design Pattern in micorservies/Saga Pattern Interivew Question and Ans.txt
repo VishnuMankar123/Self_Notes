@@ -1,0 +1,590 @@
+Perfect. 👍
+For interviews, **95% of the questions come from the concepts you learned in Parts 1–7.** I've prepared them in **simple Hindi-English** so they're easy to remember. These are based on your notes and the transcripts you shared.
+
+---
+
+# Saga Pattern Interview Questions & Answers (Hindi-English)
+
+---
+
+# 1. What is Saga Pattern?
+
+### Answer
+
+Saga Pattern ek **Design Pattern** hai jo **Microservices me Distributed Transaction** ko manage karta hai.
+
+Agar multiple services milke ek business process complete kar rahi hain aur beech me koi service fail ho jaye, to Saga Pattern **Compensating Transaction** chala kar system ko consistent bana deta hai.
+
+**Remember Line**
+
+> **Saga Pattern = Local Transaction + Compensating Transaction**
+
+---
+
+# 2. Why do we need Saga Pattern?
+
+### Answer
+
+Microservices me har service ka apna database hota hai.
+
+Normal database transaction multiple databases ko manage nahi kar sakta.
+
+Isliye Saga Pattern use karte hain.
+
+---
+
+# 3. Which problem does Saga Pattern solve?
+
+### Answer
+
+Saga Pattern **Distributed Transaction Problem** solve karta hai.
+
+---
+
+# 4. What is Distributed Transaction?
+
+### Answer
+
+Jab ek business transaction multiple microservices aur multiple databases me execute hota hai usko Distributed Transaction bolte hain.
+
+Example
+
+```text
+Order Service
+
+↓
+
+Payment Service
+
+↓
+
+Inventory Service
+```
+
+---
+
+# 5. Why can't we use @Transactional in Microservices?
+
+### Answer
+
+@Transactional sirf
+
+* One Application
+* One Database
+
+ke andar kaam karta hai.
+
+Microservices me
+
+* Multiple Services
+* Multiple Databases
+
+hote hain.
+
+Isliye @Transactional work nahi karta.
+
+---
+
+# 6. What is Local Transaction?
+
+### Answer
+
+Har Microservice apne database me jo transaction execute karti hai usko Local Transaction bolte hain.
+
+Example
+
+Order Service
+
+↓
+
+Create Order
+
+↓
+
+Commit
+
+---
+
+# 7. What is Compensating Transaction?
+
+### Answer
+
+Compensating Transaction ka matlab hai
+
+**Reverse Business Operation.**
+
+Example
+
+Payment Deduct
+
+↓
+
+Refund Payment
+
+---
+
+# 8. Difference between Rollback and Compensation?
+
+### Answer
+
+Rollback
+
+* Monolithic
+* Database rollback
+* Same transaction
+
+Compensation
+
+* Microservices
+* Reverse business logic
+* Different services
+
+---
+
+# 9. What is Eventual Consistency?
+
+### Answer
+
+Initially system inconsistent ho sakta hai.
+
+Compensation complete hone ke baad system phir consistent ho jata hai.
+
+Isko Eventual Consistency bolte hain.
+
+---
+
+# 10. What is an Inconsistent State?
+
+### Answer
+
+Jab kuch services success ho jaye aur koi service fail ho jaye.
+
+Example
+
+```text
+Order Created ✔
+
+Payment Success ✔
+
+Inventory Failed ❌
+```
+
+Ye inconsistent state hai.
+
+---
+
+# 11. Explain Saga Pattern with Amazon example.
+
+### Answer
+
+Customer order place karta hai.
+
+Order Service
+
+↓
+
+Payment Service
+
+↓
+
+Inventory Service
+
+↓
+
+Shipping Service
+
+Agar Inventory fail ho gaya
+
+↓
+
+Refund Payment
+
+↓
+
+Cancel Order
+
+Yehi Saga Pattern hai.
+
+---
+
+# 12. Does Saga Pattern use Rollback?
+
+### Answer
+
+No.
+
+Saga Pattern **Database Rollback** use nahi karta.
+
+Ye **Compensating Transaction** use karta hai.
+
+---
+
+# 13. What are the three components of Saga Pattern?
+
+### Answer
+
+1. Local Transaction
+
+2. Event
+
+3. Compensating Transaction
+
+---
+
+# 14. What is Event?
+
+### Answer
+
+Event ek message hota hai jo dusri service ko batata hai
+
+"Mera kaam complete ho gaya."
+
+Example
+
+```text
+OrderCreated
+
+PaymentCompleted
+
+InventoryReserved
+```
+
+---
+
+# 15. Why do we use Events?
+
+### Answer
+
+Direct service call avoid karne ke liye.
+
+Loose Coupling maintain karne ke liye.
+
+---
+
+# 16. Which brokers are used?
+
+### Answer
+
+Mostly
+
+* Kafka
+* RabbitMQ
+* ActiveMQ
+* Amazon SQS
+
+---
+
+# 17. What is Choreography Saga?
+
+### Answer
+
+Choreography me koi central controller nahi hota.
+
+Har service event publish karti hai.
+
+Dusri service us event ko consume karti hai.
+
+---
+
+# 18. Explain Choreography in one line.
+
+### Answer
+
+> **Services communicate directly using Events.**
+
+---
+
+# 19. Advantages of Choreography?
+
+### Answer
+
+* Loose Coupling
+* Highly Scalable
+* Easy to add new service
+* Asynchronous
+
+---
+
+# 20. Disadvantages of Choreography?
+
+### Answer
+
+* Debugging difficult
+* Event flow samajhna difficult
+* Circular dependency
+* Event storming
+
+---
+
+# 21. What is Orchestration Saga?
+
+### Answer
+
+Ek Central Orchestrator pura workflow control karta hai.
+
+Har service usi ke instruction pe kaam karti hai.
+
+---
+
+# 22. Explain Orchestrator in one line.
+
+### Answer
+
+> **Orchestrator is the Brain of Saga Pattern.**
+
+---
+
+# 23. What is Saga Orchestrator?
+
+### Answer
+
+Ek Central Service
+
+Jo decide karti hai
+
+* Next service kaunsi chalegi
+* Failure me compensation kaise hoga
+
+---
+
+# 24. Advantages of Orchestration?
+
+### Answer
+
+* Easy Debugging
+* Easy Monitoring
+* Easy Tracking
+* Better Control
+
+---
+
+# 25. Disadvantages of Orchestration?
+
+### Answer
+
+* Single Point of Failure
+* More Responsibility
+* Complex Orchestrator
+
+---
+
+# 26. Difference between Choreography and Orchestration?
+
+| Choreography        | Orchestration       |
+| ------------------- | ------------------- |
+| No Controller       | Central Controller  |
+| Event Driven        | Orchestrator Driven |
+| Difficult Debugging | Easy Debugging      |
+| Highly Scalable     | Easy Monitoring     |
+
+---
+
+# 27. Which approach is used in companies?
+
+### Answer
+
+Depends.
+
+Simple Project
+
+↓
+
+Choreography
+
+Enterprise Project
+
+↓
+
+Orchestration
+
+---
+
+# 28. What happens if Payment Service fails?
+
+### Answer
+
+Saga Compensating Transaction start karega.
+
+```text
+Refund Payment
+
+↓
+
+Cancel Order
+```
+
+---
+
+# 29. What is Loose Coupling?
+
+### Answer
+
+Ek service directly dusri service pe depend nahi hoti.
+
+Sirf Event publish karti hai.
+
+---
+
+# 30. Why is Kafka used?
+
+### Answer
+
+Kafka Event ko ek service se dusri service tak reliable way me pahunchata hai.
+
+---
+
+# 31. Why not use HTTP calls?
+
+### Answer
+
+HTTP me
+
+* Tight Coupling
+* Service Down issue
+* More latency
+
+Kafka asynchronous communication provide karta hai.
+
+---
+
+# 32. What is Event Driven Architecture?
+
+### Answer
+
+Service Event publish karti hai.
+
+Dusri service us Event ko consume karti hai.
+
+---
+
+# 33. Can Saga guarantee ACID?
+
+### Answer
+
+No.
+
+Saga ACID guarantee nahi karta.
+
+Saga **Eventual Consistency** provide karta hai.
+
+---
+
+# 34. Can Saga replace Database Transaction?
+
+### Answer
+
+No.
+
+Database ke andar
+
+@Transactional
+
+Use hoga.
+
+Microservices ke beech
+
+Saga Pattern use hoga.
+
+---
+
+# 35. Give one real-world example.
+
+### Answer
+
+Amazon
+
+```text
+Order
+
+↓
+
+Payment
+
+↓
+
+Inventory
+
+↓
+
+Shipping
+```
+
+Inventory fail
+
+↓
+
+Refund
+
+↓
+
+Cancel Order
+
+---
+
+# 36. Why is Saga important?
+
+### Answer
+
+Microservices me Data Consistency maintain karne ke liye.
+
+---
+
+# 37. What is the biggest challenge in Microservices?
+
+### Answer
+
+Distributed Transaction.
+
+---
+
+# 38. Can Saga be synchronous?
+
+### Answer
+
+Generally
+
+No.
+
+Mostly Event Driven aur Asynchronous hota hai.
+
+Lekin Orchestration me HTTP bhi use kar sakte hain.
+
+---
+
+# 39. What happens after Compensation?
+
+### Answer
+
+System phir se Consistent State me aa jata hai.
+
+---
+
+# 40. Explain Saga Pattern in 30 seconds.
+
+### Answer
+
+> **Saga Pattern Microservices me Distributed Transaction ko manage karta hai. Har service apna Local Transaction karti hai. Agar koi service fail ho jaye to Compensating Transaction execute hota hai jisse pehle wale successful operations reverse ho jate hain aur system Eventual Consistency maintain karta hai.**
+
+---
+
+# ⭐ Most Important Interview Questions (Must Prepare)
+
+These are the questions interviewers ask most often:
+
+1. What is Saga Pattern?
+2. Why Saga Pattern is required?
+3. Distributed Transaction kya hota hai?
+4. Why @Transactional doesn't work in Microservices?
+5. Local Transaction kya hai?
+6. Compensating Transaction kya hai?
+7. Rollback vs Compensation
+8. Eventual Consistency kya hai?
+9. Choreography vs Orchestration
+10. Kafka role in Saga Pattern
+11. Amazon Order Example explain karo.
+12. Real project me Saga kaise implement karoge?
+13. What happens when Payment or Inventory fails?
+14. Why use Events instead of HTTP?
+15. Which Saga approach do you prefer and why?
+
+If you can answer these 15 questions confidently, you'll be able to handle most **Saga Pattern** interview discussions for Java Spring Boot Microservices roles.
