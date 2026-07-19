@@ -1,0 +1,795 @@
+Perfect 👍
+
+Yehi best time hai interview preparation ka.
+
+Main **video ya transcript repeat nahi karunga**.
+
+Main sirf **Interview Questions + Answers** dunga jo **4-6 YOE Java Backend / DevOps / Kubernetes** interviews me puche jaate hain.
+
+**Language:** Hindi Wali English
+**Answer:** Short + Easy + Interview Ready
+**Level:** Basic → Intermediate → Practical → Scenario Based
+
+---
+
+# 📘 HELM Interview Questions & Answers
+
+# Section 1 : Basics
+
+---
+
+## Q1. What is Helm?
+
+### Answer
+
+Helm Kubernetes ka **Package Manager** hai.
+
+Jaise Ubuntu me **APT** use hota hai software install karne ke liye, waise Kubernetes me **Helm** use hota hai applications install, upgrade, rollback aur uninstall karne ke liye.
+
+Example:
+
+* Prometheus
+* Grafana
+* Nginx
+* ArgoCD
+
+Ye sab easily Helm se install ho jate hain.
+
+---
+
+## Q2. Why do we need Helm?
+
+### Answer
+
+Without Helm hume bahut saari YAML files manually manage karni padti hain.
+
+Example
+
+* Deployment
+* Service
+* ConfigMap
+* Secret
+* PVC
+* Ingress
+
+Helm in sab ko ek package (Chart) me convert kar deta hai.
+
+Sirf ek command se application install ho jati hai.
+
+---
+
+## Q3. What is the biggest advantage of Helm?
+
+### Answer
+
+Helm
+
+* YAML management easy karta hai
+* Reusability deta hai
+* Version management deta hai
+* Rollback support karta hai
+* Environment wise configuration allow karta hai
+
+---
+
+## Q4. kubectl aur Helm me difference?
+
+### Answer
+
+kubectl individual Kubernetes resources ko manage karta hai.
+
+Helm complete application ko manage karta hai.
+
+Example
+
+kubectl
+
+```bash
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl apply -f configmap.yaml
+```
+
+Helm
+
+```bash
+helm install payment payment-chart
+```
+
+Ek command me sab deploy.
+
+---
+
+## Q5. Can we deploy application without Helm?
+
+### Answer
+
+Haan.
+
+kubectl apply use karke deploy kar sakte hain.
+
+Lekin large projects me YAML files bahut zyada hoti hain.
+
+Maintenance difficult ho jata hai.
+
+Isliye companies Helm use karti hain.
+
+---
+
+# Section 2 : Repository, Chart & Release
+
+---
+
+## Q6. What is Repository?
+
+### Answer
+
+Repository ek storage hai jaha Helm Charts store hote hain.
+
+Example
+
+Bitnami Repository
+
+Usme
+
+* Redis
+* Kafka
+* Prometheus
+* MySQL
+
+ke Charts available hote hain.
+
+---
+
+## Q7. What is Chart?
+
+### Answer
+
+Chart ek package hai.
+
+Isme application deploy karne ke liye required saari YAML files hoti hain.
+
+Example
+
+* Deployment
+* Service
+* ConfigMap
+* Secret
+* Ingress
+
+---
+
+## Q8. What is Release?
+
+### Answer
+
+Release matlab deployed instance of Chart.
+
+Example
+
+Command
+
+```bash
+helm install my-nginx bitnami/nginx
+```
+
+Repository
+
+↓
+
+Bitnami
+
+Chart
+
+↓
+
+Nginx
+
+Release
+
+↓
+
+my-nginx
+
+---
+
+## Q9. Can one Chart have multiple Releases?
+
+### Answer
+
+Yes.
+
+Example
+
+```bash
+helm install dev-nginx bitnami/nginx
+
+helm install qa-nginx bitnami/nginx
+
+helm install prod-nginx bitnami/nginx
+```
+
+Same Chart
+
+Different Releases.
+
+---
+
+## Q10. Difference between Repository, Chart and Release?
+
+### Answer
+
+Repository
+
+↓
+
+Charts store karta hai.
+
+Chart
+
+↓
+
+Application package hota hai.
+
+Release
+
+↓
+
+Installed application hoti hai.
+
+---
+
+# Section 3 : Helm Architecture
+
+---
+
+## Q11. Helm v2 aur Helm v3 me difference?
+
+### Answer
+
+Helm v2
+
+Tiller use karta tha.
+
+Helm v3
+
+Tiller remove kar diya gaya.
+
+Ab Helm directly Kubernetes API se baat karta hai.
+
+---
+
+## Q12. Why was Tiller removed?
+
+### Answer
+
+Security issues.
+
+Maintenance issue.
+
+Har cluster me install karna padta tha.
+
+Isliye Helm v3 me remove kar diya.
+
+---
+
+## Q13. Helm Kubernetes se connect kaise karta hai?
+
+### Answer
+
+Helm same kubeconfig use karta hai jo kubectl use karta hai.
+
+Current Context ke basis pe cluster select karta hai.
+
+---
+
+## Q14. kubeconfig kya hota hai?
+
+### Answer
+
+Ye configuration file hoti hai.
+
+Isme
+
+* Cluster
+* User
+* Authentication
+* Context
+
+store hota hai.
+
+---
+
+## Q15. Current Context kya hota hai?
+
+### Answer
+
+Current Context batata hai
+
+Helm ya kubectl kis Kubernetes Cluster se connected hai.
+
+---
+
+# Section 4 : Helm Commands
+
+---
+
+## Q16. Helm version check kaise karte ho?
+
+### Answer
+
+```bash
+helm version
+```
+
+---
+
+## Q17. Repository kaise add karte ho?
+
+### Answer
+
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+```
+
+---
+
+## Q18. Repository update kaise karte ho?
+
+### Answer
+
+```bash
+helm repo update
+```
+
+---
+
+## Q19. Available Charts kaise search karte ho?
+
+### Answer
+
+```bash
+helm search repo bitnami
+```
+
+---
+
+## Q20. Specific Chart search?
+
+### Answer
+
+```bash
+helm search repo bitnami | grep nginx
+```
+
+---
+
+## Q21. Install ka command?
+
+### Answer
+
+```bash
+helm install my-nginx bitnami/nginx
+```
+
+---
+
+## Q22. Installed Releases kaise dekhte ho?
+
+### Answer
+
+```bash
+helm list
+```
+
+---
+
+## Q23. Release uninstall kaise karte ho?
+
+### Answer
+
+```bash
+helm uninstall my-nginx
+```
+
+---
+
+## Q24. Default values kaise dekhte ho?
+
+### Answer
+
+```bash
+helm show values bitnami/nginx
+```
+
+---
+
+# Section 5 : Chart Structure
+
+---
+
+## Q25. helm create kya karta hai?
+
+### Answer
+
+Ye complete Helm Chart structure generate karta hai.
+
+Command
+
+```bash
+helm create payment
+```
+
+---
+
+## Q26. Chart.yaml kya hota hai?
+
+### Answer
+
+Chart metadata.
+
+Contains
+
+* Name
+* Version
+* Description
+* appVersion
+
+---
+
+## Q27. values.yaml kya hota hai?
+
+### Answer
+
+Configuration file.
+
+Isme
+
+* Image
+* Replica
+* Port
+* Resources
+
+jaise values hoti hain.
+
+---
+
+## Q28. templates folder kya hota hai?
+
+### Answer
+
+Isme Kubernetes YAML files hoti hain.
+
+Example
+
+Deployment
+
+Service
+
+ConfigMap
+
+Secret
+
+---
+
+## Q29. charts folder?
+
+### Answer
+
+Dependency Charts ke liye.
+
+---
+
+## Q30. values.yaml use kyu karte hain?
+
+### Answer
+
+Ek hi template ko multiple environments me use karne ke liye.
+
+Dev
+
+QA
+
+Production
+
+Sirf values change hongi.
+
+---
+
+# Section 6 : Practical
+
+---
+
+## Q31. Company me Helm kaise use hota hai?
+
+### Answer
+
+Developer Docker Image banata hai.
+
+↓
+
+DevOps Helm Chart banata hai.
+
+↓
+
+Package karta hai.
+
+↓
+
+Repository me upload karta hai.
+
+↓
+
+Developers
+
+```bash
+helm install
+```
+
+karke deploy kar dete hain.
+
+---
+
+## Q32. helm package kya karta hai?
+
+### Answer
+
+Chart ko
+
+```
+.tgz
+```
+
+file me convert karta hai.
+
+---
+
+## Q33. helm repo index kya karta hai?
+
+### Answer
+
+Repository ke liye
+
+```
+index.yaml
+```
+
+generate karta hai.
+
+---
+
+## Q34. index.yaml kya hota hai?
+
+### Answer
+
+Repository ka catalogue.
+
+Isme available Charts ki information hoti hai.
+
+---
+
+## Q35. helm show values kya karta hai?
+
+### Answer
+
+Chart ka default
+
+values.yaml
+
+dikha deta hai.
+
+---
+
+## Q36. --set kab use karte ho?
+
+### Answer
+
+Quick changes ke liye.
+
+Example
+
+```bash
+helm install nginx bitnami/nginx --set replicaCount=3
+```
+
+---
+
+## Q37. values file kab use karte ho?
+
+### Answer
+
+Production deployment me.
+
+Example
+
+```bash
+helm install nginx -f prod-values.yaml
+```
+
+---
+
+# Section 7 : Scenario Based
+
+---
+
+## Q38.
+
+Interviewer:
+
+Production me replicas change karne hain.
+
+Deployment.yaml edit karoge?
+
+### Answer
+
+Nahi.
+
+values.yaml change karunga.
+
+Ya
+
+```bash
+--set replicaCount=5
+```
+
+use karunga.
+
+---
+
+## Q39.
+
+Interviewer:
+
+Application already install hai.
+
+New version deploy karni hai.
+
+### Answer
+
+Use
+
+```bash
+helm upgrade
+```
+
+---
+
+## Q40.
+
+Interviewer:
+
+Deployment fail ho gaya.
+
+Old version pe jana hai.
+
+### Answer
+
+Use
+
+```bash
+helm rollback
+```
+
+---
+
+## Q41.
+
+Interviewer:
+
+Company me 50 microservices hain.
+
+Har service ke liye alag YAML maintain karoge?
+
+### Answer
+
+Nahi.
+
+Har microservice ka Helm Chart banaunga.
+
+Templates reusable rahenge.
+
+---
+
+## Q42.
+
+Interviewer:
+
+Repository me Chart hi nahi hai.
+
+### Answer
+
+Official Helm Repository use karunga.
+
+Ya company ka internal Helm Repository.
+
+---
+
+## Q43.
+
+Interviewer:
+
+Company Nexus kyu use karti hai?
+
+### Answer
+
+Helm Charts store karne ke liye.
+
+Internal sharing ke liye.
+
+Version management ke liye.
+
+---
+
+# ⭐ 10 Rapid Fire Questions
+
+### Helm kya hai?
+
+Package Manager.
+
+---
+
+### Chart kya hai?
+
+Application Package.
+
+---
+
+### Repository?
+
+Charts Store.
+
+---
+
+### Release?
+
+Installed Chart.
+
+---
+
+### Tiller?
+
+Helm v2 component.
+
+---
+
+### values.yaml?
+
+Configuration.
+
+---
+
+### templates?
+
+YAML files.
+
+---
+
+### helm package?
+
+Create .tgz
+
+---
+
+### helm repo index?
+
+Create index.yaml
+
+---
+
+### helm install?
+
+Deploy Chart
+
+---
+
+# 🎯 Final Interview Tip
+
+**Interviewer ko sirf definition mat dena. Har answer me ek real example add karna.**
+
+Example:
+
+❌ **Chart is a package.**
+
+✅ **Chart is a package that contains Deployment, Service, ConfigMap, Secret, etc. For example, the Prometheus Helm Chart contains everything required to deploy Prometheus in Kubernetes.**
+
+Is tarah ka answer zyada practical lagta hai aur interviewer par better impression padta hai.

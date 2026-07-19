@@ -1,0 +1,1004 @@
+Perfect 👍. Ye approach interview ke liye best hai.
+
+Main **notes ke hisab se** interview questions aur answers banaunga. Language hogi **simple Hindi Wali English**, taaki tum easily revise kar sako. Ye questions tumhare uploaded notes par based hain.
+
+---
+
+# React Interview Questions & Answers (Part 1)
+
+## 1. React me kitne type ke Components hote hai?
+
+### Answer
+
+React me mainly **2 type ke components** hote hai.
+
+1. Class Component
+2. Functional Component
+
+Aaj ke time me mostly **Functional Components + Hooks** use hote hai.
+
+---
+
+## 2. Class Component kya hota hai?
+
+### Answer
+
+Class Component ES6 class se banta hai.
+
+Isme:
+
+* state hoti hai
+* lifecycle methods hote hai
+* this keyword use hota hai
+
+Pehle React me isi ka use hota tha.
+
+---
+
+## 3. Functional Component kya hota hai?
+
+### Answer
+
+Functional Component ek normal JavaScript function hota hai jo JSX return karta hai.
+
+Hooks aane ke baad ye state aur lifecycle dono support karta hai.
+
+Aaj ke time me isi ko prefer kiya jata hai.
+
+---
+
+## 4. Aaj ke time me kaunsa Component use karna chahiye?
+
+### Answer
+
+Functional Component.
+
+Reason:
+
+* Simple
+* Less code
+* Easy to read
+* Hooks support
+* Better performance
+
+---
+
+## 5. Functional Component ka sabse bada advantage kya hai?
+
+### Answer
+
+Hooks use kar sakte hai.
+
+Example:
+
+* useState
+* useEffect
+* useRef
+* useMemo
+
+---
+
+## 6. Class Component me state kaise banate hai?
+
+### Answer
+
+Constructor ke andar.
+
+```jsx
+this.state = {
+   count:0
+}
+```
+
+---
+
+## 7. Functional Component me state kaise banate hai?
+
+### Answer
+
+useState Hook se.
+
+```jsx
+const [count,setCount]=useState(0);
+```
+
+---
+
+# export default
+
+## 8. export default kya hota hai?
+
+### Answer
+
+Ye kisi component ko dusri file me use karne ke liye export karta hai.
+
+Example
+
+```jsx
+export default App;
+```
+
+---
+
+## 9. import ka use kyu karte hai?
+
+### Answer
+
+Dusri file se component ko lane ke liye.
+
+```jsx
+import App from "./App";
+```
+
+---
+
+## 10. Kya ek file me multiple default export ho sakte hai?
+
+### Answer
+
+❌ Nahi.
+
+Ek file me sirf **ek default export** ho sakta hai.
+
+---
+
+## 11. import karte waqt naam change kar sakte hai?
+
+### Answer
+
+✅ Haan.
+
+```jsx
+import MyApp from "./App";
+```
+
+Actual component App hi hai lekin import kisi bhi naam se kar sakte hai.
+
+---
+
+# Component Composition
+
+## 12. Component Composition kya hota hai?
+
+### Answer
+
+Ek component ke andar dusra component use karna.
+
+Example
+
+App
+
+↓
+
+Card
+
+↓
+
+Button
+
+Ye Component Composition kehlata hai.
+
+---
+
+## 13. Component Composition ka advantage kya hai?
+
+### Answer
+
+* Reusable code
+* Easy maintenance
+* Clean UI
+* Small components
+
+---
+
+## 14. Real life example of Component Composition?
+
+### Answer
+
+Example
+
+```
+App
+
+Navbar
+
+Logo
+
+Menu
+
+MenuItem
+
+Button
+```
+
+Har ek alag component hota hai.
+
+---
+
+# Angular + React
+
+## 15. Kya Angular ke andar React use kar sakte hai?
+
+### Answer
+
+✅ Haan.
+
+Lekin directly nahi.
+
+---
+
+## 16. Angular me React use karne ke methods?
+
+### Answer
+
+3 methods
+
+1. Web Component
+2. ReactDOM.render()
+3. Micro Frontend
+
+Interview me bas itna bolna enough hai.
+
+---
+
+## 17. Large Project me Angular aur React kaunsi approach use karte hai?
+
+### Answer
+
+Micro Frontend Architecture.
+
+---
+
+# JSX
+
+## 18. JSX kya hota hai?
+
+### Answer
+
+JSX JavaScript ka syntax extension hai.
+
+Ye HTML jaisa dikhta hai.
+
+Browser JSX ko directly nahi samajhta.
+
+Babel ise JavaScript me convert karta hai.
+
+---
+
+## 19. Kya JSX bina React ke use kar sakte hai?
+
+### Answer
+
+✅ Haan.
+
+JSX sirf syntax hai.
+
+React normally ise
+
+```jsx
+React.createElement()
+```
+
+me convert karta hai.
+
+Dusri libraries bhi JSX use kar sakti hai.
+
+---
+
+## 20. JSX ko JavaScript me kaun convert karta hai?
+
+### Answer
+
+Babel.
+
+---
+
+# Event Handling
+
+## 21. React me event kaise likhte hai?
+
+### Answer
+
+Camel Case me.
+
+Example
+
+```
+onClick
+
+onChange
+
+onSubmit
+```
+
+---
+
+## 22. JavaScript aur React Event me difference?
+
+### Answer
+
+JavaScript
+
+```
+onclick
+```
+
+React
+
+```
+onClick
+```
+
+---
+
+## 23. React me function kaise pass karte hai?
+
+### Answer
+
+```jsx
+<button onClick={handleClick}>
+```
+
+String pass nahi karte.
+
+---
+
+## 24. onChange kisliye use hota hai?
+
+### Answer
+
+Input field ki value lene ke liye.
+
+---
+
+## 25. event.target.value kya hota hai?
+
+### Answer
+
+Input box ki current value deta hai.
+
+---
+
+## 26. React me events kaunse type ke hote hai?
+
+### Answer
+
+Synthetic Events.
+
+Ye browser events ka wrapper hote hai.
+
+---
+
+# Arrow Function
+
+## 27. React me Normal Function aur Arrow Function dono use kar sakte hai?
+
+### Answer
+
+✅ Haan.
+
+Dono use kar sakte hai.
+
+---
+
+## 28. React me mostly kaunsa use hota hai?
+
+### Answer
+
+Arrow Function.
+
+---
+
+## 29. Arrow Function ka advantage kya hai?
+
+### Answer
+
+* Short syntax
+* Clean code
+* this automatically handle karta hai
+* bind nahi karna padta
+
+---
+
+## 30. Class Component me bind kyu karna padta tha?
+
+### Answer
+
+Normal function apna this lose kar deta tha.
+
+Isliye
+
+```jsx
+this.handleClick=this.handleClick.bind(this);
+```
+
+likhna padta tha.
+
+Arrow function me ye problem nahi hoti.
+
+---
+
+# ⭐ Interview Rapid Fire (1 Line Answers)
+
+### React me kitne Components hote hai?
+
+👉 2 (Class & Functional)
+
+### Aaj kaunsa use hota hai?
+
+👉 Functional Component
+
+### Hooks kis Component me use hote hai?
+
+👉 Functional Component
+
+### export default ka use?
+
+👉 Component export karne ke liye
+
+### import ka use?
+
+👉 Component import karne ke liye
+
+### JSX kya hai?
+
+👉 JavaScript ka syntax extension.
+
+### JSX ko JS me kaun convert karta hai?
+
+👉 Babel.
+
+### React Event kis format me likhte hai?
+
+👉 camelCase.
+
+### Input ki value kaise lete hai?
+
+👉 event.target.value
+
+### React Events kya kehlate hai?
+
+👉 Synthetic Events.
+
+### React me kaunsi function zyada use hoti hai?
+
+👉 Arrow Function.
+
+### Arrow Function ka biggest advantage?
+
+👉 `this` automatically handle karta hai.
+
+---
+
+Ye **Part 1** hai (30 interview questions). Is format me tum 2-3 baar revise karoge to interview me easily answer de paoge.
+
+Agle part me main **Props, State, JSX Rules, Conditional Rendering, List Rendering, Keys aur React Fragment** par **30+ interview questions with simple Hindi-English answers** banaunga.
+=======================================================================================================================
+Perfect. Ye tumhare notes ka **Interview Q&A** hai. Language intentionally **simple Hindi Wali English** rakhi hai taaki easily yaad ho jaye. Ye questions tumhare uploaded notes ke topics (State, Props, useState, useRef, Controlled vs Uncontrolled, DOM, `{}` etc.) par based hain.
+
+---
+
+# React Interview Questions & Answers (State, Props, DOM, useRef)
+
+---
+
+# State
+
+## 1. State kya hoti hai?
+
+### Answer
+
+State component ki **memory** hoti hai.
+
+Dynamic data state me store hota hai.
+
+State change hote hi component re-render hota hai.
+
+---
+
+## 2. State ko Functional Component me kaise banate hai?
+
+### Answer
+
+`useState()` Hook se.
+
+```jsx
+const [count, setCount] = useState(0);
+```
+
+---
+
+## 3. useState() kya return karta hai?
+
+### Answer
+
+Ye 2 values return karta hai.
+
+```jsx
+const [count, setCount] = useState(0);
+```
+
+* `count` → Current Value
+* `setCount` → Update Function
+
+---
+
+## 4. State ko direct change kar sakte hai?
+
+### Answer
+
+❌ Nahi.
+
+Wrong
+
+```jsx
+count = count + 1;
+```
+
+Correct
+
+```jsx
+setCount(count + 1);
+```
+
+---
+
+## 5. setCount() call karne ke baad kya hota hai?
+
+### Answer
+
+* State update hoti hai.
+* Component re-render hota hai.
+* React DOM update karta hai.
+
+---
+
+## 6. Class Component me state kaise banate hai?
+
+### Answer
+
+```jsx
+this.state = {
+   count:0
+}
+```
+
+Update
+
+```jsx
+this.setState({
+   count:1
+})
+```
+
+---
+
+## 7. Functional Component me state kaise update hoti hai?
+
+### Answer
+
+`setState` function se.
+
+Example
+
+```jsx
+setCount(count + 1);
+```
+
+---
+
+# Props
+
+## 8. Props kya hote hai?
+
+### Answer
+
+Props ka matlab Properties.
+
+Parent Component Child Component ko data bhejta hai.
+
+---
+
+## 9. Props ka flow kis direction me hota hai?
+
+### Answer
+
+Parent
+
+↓
+
+Child
+
+One Way Data Flow.
+
+---
+
+## 10. Kya Child Component props change kar sakta hai?
+
+### Answer
+
+❌ Nahi.
+
+Props Read Only hote hai.
+
+---
+
+## 11. Props aur State me difference?
+
+### Answer
+
+Props
+
+* Parent bhejta hai.
+* Read Only.
+
+State
+
+* Component khud manage karta hai.
+* Change ho sakti hai.
+
+---
+
+## 12. Props destructuring kya hota hai?
+
+Without
+
+```jsx
+props.name
+```
+
+With
+
+```jsx
+const Greeting = ({name}) => {}
+```
+
+### Answer
+
+Props object se values directly nikalna.
+
+Code clean aur readable ban jata hai.
+
+---
+
+# useRef
+
+## 13. useRef kya hai?
+
+### Answer
+
+useRef ek Hook hai.
+
+Ye kisi DOM element ka reference store karta hai.
+
+---
+
+## 14. useRef() kya return karta hai?
+
+### Answer
+
+Object return karta hai.
+
+```javascript
+{
+   current:null
+}
+```
+
+---
+
+## 15. inputRef.current kya hota hai?
+
+### Answer
+
+Input DOM element ka address.
+
+---
+
+## 16. inputRef.current.value kya deta hai?
+
+### Answer
+
+Input box ki current value.
+
+---
+
+## 17. useRef kab use karte hai?
+
+### Answer
+
+* Input value lena
+* Focus karna
+* DOM access karna
+* Video play/pause
+
+---
+
+## 18. useRef aur useState me difference?
+
+### Answer
+
+useState
+
+* UI update karta hai.
+* Re-render hota hai.
+
+useRef
+
+* Reference store karta hai.
+* Re-render nahi hota.
+
+---
+
+# Controlled vs Uncontrolled
+
+## 19. Controlled Component kya hota hai?
+
+### Answer
+
+Input ki value React State me store hoti hai.
+
+React input ko control karta hai.
+
+---
+
+## 20. Uncontrolled Component kya hota hai?
+
+### Answer
+
+Input ki value DOM me hoti hai.
+
+React `useRef` se value leta hai.
+
+---
+
+## 21. Forms me kaunsa use karna chahiye?
+
+### Answer
+
+Mostly
+
+✅ Controlled Component.
+
+---
+
+## 22. Controlled Component me input value kaha store hoti hai?
+
+### Answer
+
+React State me.
+
+---
+
+## 23. Uncontrolled Component me input value kaha store hoti hai?
+
+### Answer
+
+Browser DOM me.
+
+---
+
+# DOM
+
+## 24. DOM kya hai?
+
+### Answer
+
+DOM = Document Object Model.
+
+Browser HTML ka tree structure banata hai.
+
+Usi ko DOM bolte hai.
+
+---
+
+## 25. JavaScript DOM ko kaise access karti hai?
+
+### Answer
+
+```javascript
+document.getElementById()
+```
+
+---
+
+## 26. React directly DOM update karta hai?
+
+### Answer
+
+❌ Nahi.
+
+Pehle State update hoti hai.
+
+Fir React DOM update karta hai.
+
+---
+
+## 27. DOM update ka flow batao.
+
+### Answer
+
+```
+setState()
+
+↓
+
+State Change
+
+↓
+
+Component Re-render
+
+↓
+
+New JSX
+
+↓
+
+Compare
+
+↓
+
+DOM Update
+```
+
+---
+
+# Component
+
+## 28. React Functional Component kitne tarike se bana sakte hai?
+
+### Answer
+
+3 tarike
+
+* Function Declaration
+* Function Expression
+* Arrow Function
+
+---
+
+## 29. React kaise decide karta hai ye Component hai?
+
+### Answer
+
+Agar
+
+* Capital Letter
+* JSX return kare
+* `<Component />` se use ho
+
+To React usse Component maanta hai.
+
+---
+
+## 30. Normal Function aur Component me difference?
+
+### Answer
+
+Component
+
+```jsx
+<Greeting />
+```
+
+Normal Function
+
+```jsx
+greeting();
+```
+
+---
+
+# Curly Braces {}
+
+## 31. React me `{}` ka use kyu hota hai?
+
+### Answer
+
+JSX ke andar JavaScript likhne ke liye.
+
+---
+
+## 32. `{name}` ka matlab?
+
+### Answer
+
+Variable ki value print karna.
+
+---
+
+## 33. Double Curly Braces `{{}}` kyu use hote hai?
+
+### Answer
+
+Inline CSS ke liye.
+
+Example
+
+```jsx
+style={{color:"red"}}
+```
+
+Pehla `{}` → JSX
+
+Dusra `{}` → JavaScript Object
+
+---
+
+## 34. JSX ke andar kya-kya likh sakte hai?
+
+### Answer
+
+* Variable
+* Function Call
+* Calculation
+* Ternary Operator
+* map()
+
+---
+
+## 35. JSX ke andar if statement likh sakte hai?
+
+### Answer
+
+❌ Nahi.
+
+Sirf JavaScript Expressions likh sakte hai.
+
+Condition ke liye
+
+* Ternary
+* `&&`
+
+use karte hai.
+
+---
+
+# ⭐ Rapid Fire (1 Line Answers)
+
+**State kya hai?**
+👉 Component ki memory.
+
+**Props kya hai?**
+👉 Parent se Child ko data.
+
+**useState kya return karta hai?**
+👉 Value aur Setter Function.
+
+**Props mutable hai?**
+👉 Nahi.
+
+**State mutable hai?**
+👉 Haan (`setState`/`setCount` se).
+
+**useRef kya return karta hai?**
+👉 Object with `current`.
+
+**Controlled Component me value kaha hoti hai?**
+👉 React State me.
+
+**Uncontrolled Component me value kaha hoti hai?**
+👉 DOM me.
+
+**DOM ka full form?**
+👉 Document Object Model.
+
+**React DOM ko directly update karta hai?**
+👉 Nahi, pehle state update hoti hai.
+
+**React me `{}` kyu use karte hai?**
+👉 JSX ke andar JavaScript likhne ke liye.
+
+**Double Curly Braces kyu?**
+👉 Inline CSS Object ke liye.
+
+**Props kis direction me flow hoti hai?**
+👉 Parent → Child.
+
+**React me kaunsa form approach recommended hai?**
+👉 Controlled Component (`useState`).
+
+---
+
+Ye **35 interview questions** tumhare current React notes ke liye enough hain. Agar tum ye confidently answer kar loge, to React ke basic interview round ke kaafi questions cover ho jayenge.

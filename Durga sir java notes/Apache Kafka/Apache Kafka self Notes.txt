@@ -13,6 +13,21 @@ Step 3: Kafka Start Karo (naya CMD me)
 wget https://archive.apache.org/dist/kafka/3.5.0/kafka_2.13-3.5.0.tgz
 tar -xvzf kafka_2.13-3.5.0.tgz
 cd kafka_2.13-3.5.0
+
+
+bin/kafka-console-consumer.sh --topic location-updates-topic --from-beginning --bootstrap-server localhost:9092
+
+bin/kafka-console-consumer.sh --topic location-updates-topic --from-beginning --bootstrap-server localhost:9092
+
+
+produce:
+bin/kafka-console-producer.sh --topic location-updates-topic --bootstrap-server localhost:9092
+
+how we can go inside the container :
+
+docker ps
+docker exec -it <container_name> /bin/bash
+
 ================================================================================
 Got it 👍. Since you’ve extracted Kafka **3.5.0**, you can start **Zookeeper** and **Kafka broker** like this:
 

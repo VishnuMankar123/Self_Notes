@@ -627,7 +627,8 @@ export default App;
 Kya aap chahte ho mai ek **table bana kar difference samjhau State vs Props**? (bahut interview me pucha jata hai).
 
 ==========================================================================================================
-React Native me **props** (short for *properties*) ek tarah ka mechanism hai jo **parent component se child component ko data ya functions pass karne ke liye** use hota hai. Ye immutable hote hain, matlab child component unhe directly change nahi kar sakta.
+React Native me **props** (short for *properties*) ek tarah ka mechanism hai jo **parent component se child component ko data ya functions pass karne ke liye** use hota hai.
+Ye immutable hote hain, matlab child component unhe directly change nahi kar sakta.
 
 Chalo step by step samjhte hain:
 
@@ -1420,13 +1421,7 @@ function App() {
 
   return (
     <div>
-      {role === "admin" ? (
-        <h2>Welcome Admin</h2>
-      ) : role === "user" ? (
-        <h2>Welcome User</h2>
-      ) : (
-        <h2>Guest Access</h2>
-      )}
+      {role === "admin" ? (<h2>Welcome Admin</h2> ) : role === "user" ? (<h2>Welcome User</h2>) : (<h2>Guest Access</h2>)}
     </div>
   );
 }
@@ -3665,108 +3660,6 @@ function App() {
 ---
 
 Kya tum chahte ho mai ek **realistic example** bana kar dikhaun jisme child form me data enter kare aur wo parent list me add ho jaaye?
-
-==========================================================================================================
-Great question 👌 — ye React ka **very common pattern** hai:
-**Child → Parent communication** (data bhejna).
-
-React me **data hamesha top → down (parent → child)** flow karta hai, but agar child ko parent ko kuch batana ho, to hum **callback function props** ka use karte hain.
-
----
-
-## 🔹 Step by Step Example
-
-### 1. Parent me function banao
-
-Parent (`App`) me ek function banao jo child se data accept kare.
-
-```jsx
-function App() {
-  const handleDataFromChild = (data) => {
-    alert("Data received from child: " + data);
-  };
-
-  return (
-    <div>
-      <h2>Parent Component</h2>
-      <Child sendData={handleDataFromChild} />
-    </div>
-  );
-}
-```
-
-👉 Yaha `handleDataFromChild` ek function hai jo child se data lega.
-Aur usko **prop ke through** `Child` ko bheja (`sendData`).
-
----
-
-### 2. Child se data bhejo
-
-Child me event (button click) ke time parent ka function call kar do, aur apna data pass karo.
-
-```jsx
-function Child({ sendData }) {
-  const data = "Hello from Child!";
-
-  return (
-    <div>
-      <h3>Child Component</h3>
-      <button onClick={() => sendData(data)}>Send Data to Parent</button>
-    </div>
-  );
-}
-```
-
-👉 Jab button click hota hai → `sendData(data)` call hota hai → jo actually parent ka function hai.
-
----
-
-### ✅ Output
-
-* Button click karne pe `alert("Data received from child: Hello from Child!")` dikhega.
-
----
-
-## 🔹 Key Concept
-
-* Parent → child: props
-* Child → parent: **callback function via props**
-
----
-
-⚡ Example with your **Card** component:
-
-```jsx
-function Card({ title, onCardClick }) {
-  return (
-    <div style={{border: "1px solid gray", margin: "5px", padding: "10px"}}>
-      <h3>{title}</h3>
-      <button onClick={() => onCardClick(title)}>Send Title to Parent</button>
-    </div>
-  );
-}
-
-function App() {
-  const handleCardClick = (title) => {
-    alert("Parent got data: " + title);
-  };
-
-  return (
-    <div>
-      <Card title="React" onCardClick={handleCardClick} />
-      <Card title="JavaScript" onCardClick={handleCardClick} />
-      <Card title="Node.js" onCardClick={handleCardClick} />
-    </div>
-  );
-}
-```
-
-👉 Jab koi Card ka button click hota hai → uska `title` parent (`App`) ko chala jaata hai.
-
----
-
-Kya tum chahte ho mai ek **realistic example** bana kar dikhaun jisme child form me data enter kare aur wo parent list me add ho jaaye?
-
 ==========================================================================================================
 Ahh, ab hum baat kar rahe hain **“Lifting State Up”** ke bare me 👌
 
