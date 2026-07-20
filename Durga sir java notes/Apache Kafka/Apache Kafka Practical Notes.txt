@@ -1,6 +1,13598 @@
 video tutorial Link : https://docs.spring.io/spring-kafka/reference/index.html
 channel Name : official Spring documentation
 =======================================================================================================================
+Perfect. Yehi style mujhe chahiye tha. 👍
+
+Ek baat pehle clear kar deta hu.
+
+**Main documentation ko summarize nahi karunga.**
+Main usko **training notes** banaunga.
+
+Matlab agar tum ye notes 6 mahine baad bhi padho to documentation open karne ki jarurat na pade.
+
+Main har topic ko is format me banaunga.
+
+* 📖 Concept
+* 🤔 Why?
+* ⚙️ Practical
+* 💻 Code Explanation
+* 🔄 Internal Flow
+* ✅ Important Points
+* 📝 Short Revision Notes
+
+**Interview Questions abhi nahi.**
+
+---
+
+# Spring for Apache Kafka
+
+# Quick Tour
+
+---
+
+# Part 1 : Concept
+
+## What is Spring for Apache Kafka?
+
+Spring Kafka ek Spring Framework library hai jo Java applications ko Apache Kafka ke saath integrate karne ke liye use hoti hai.
+
+Simple language me,
+
+> Spring Kafka hume Producer aur Consumer banane ka easy tarika provide karta hai.
+
+Agar hum pure Kafka Java Client use kare to bahut sari configuration manually karni padti hai.
+
+Spring Kafka ye sari complexity hide kar deta hai.
+
+---
+
+## Without Spring Kafka
+
+```text
+Java Application
+        │
+        ▼
+Kafka Java Client
+        │
+        ▼
+Producer Configuration
+Consumer Configuration
+Serialization
+Connection
+Retry
+Error Handling
+Topic Management
+```
+
+Developer ko sab kuch manually likhna padta hai.
+
+---
+
+## With Spring Kafka
+
+```text
+Spring Boot Application
+        │
+        ▼
+Spring Kafka
+        │
+        ▼
+Kafka Broker
+```
+
+Spring Kafka automatically bahut sari configuration manage kar deta hai.
+
+Developer sirf business logic likhta hai.
+
+---
+
+# Why do we use Spring Kafka?
+
+Agar normal Kafka Client use kare to
+
+* Producer manually banana padta hai.
+* Consumer manually banana padta hai.
+* Configuration manually karni padti hai.
+* Listener create karna padta hai.
+* Serialization manually configure karni padti hai.
+* Error handling bhi manually karna padta hai.
+
+Spring Kafka ye sab easy bana deta hai.
+
+---
+
+## Real Project Example
+
+Suppose
+
+```text
+Order Service
+```
+
+Customer order place karta hai.
+
+Ab Order Service ko
+
+* Inventory Service
+* Payment Service
+* Notification Service
+
+sabko notify karna hai.
+
+Flow
+
+```text
+Order Service
+
+        │
+
+KafkaTemplate
+
+        │
+
+Kafka Topic
+
+        │
+
+Inventory Service
+
+Payment Service
+
+Notification Service
+```
+
+Ye sab Spring Kafka ke through bahut easily implement hota hai.
+
+---
+
+# Prerequisites
+
+Documentation me likha hai
+
+Before using Spring Kafka
+
+Apache Kafka install hona chahiye.
+
+Matlab
+
+```text
+Kafka Broker
+
+Running
+```
+
+hona chahiye.
+
+Example
+
+```text
+localhost:9092
+```
+
+Agar Kafka hi run nahi ho raha
+
+to Spring Boot connect hi nahi kar payega.
+
+---
+
+# Dependency
+
+Documentation me do cases diye gaye hain.
+
+---
+
+# Case 1
+
+Without Spring Boot
+
+Dependency
+
+```xml
+<dependency>
+    <groupId>org.springframework.kafka</groupId>
+    <artifactId>spring-kafka</artifactId>
+    <version>4.1.0</version>
+</dependency>
+```
+
+### Kab use karte hain?
+
+Jab project
+
+Spring Boot nahi hai.
+
+Example
+
+Simple Spring Framework Project
+
+Is case me
+
+Spring Kafka dependency manually add karni padegi.
+
+Aur version bhi manually dena padega.
+
+---
+
+# Case 2
+
+Spring Boot Project
+
+Dependency
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-kafka</artifactId>
+</dependency>
+```
+
+### Ye best approach hai.
+
+Spring Boot automatically
+
+* Compatible Spring Kafka Version
+* Kafka Client
+* Required Libraries
+
+sab download kar deta hai.
+
+Isliye version likhne ki jarurat nahi hoti.
+
+Spring Boot khud decide karta hai.
+
+---
+
+## Why Starter Dependency?
+
+Normal Dependency
+
+```text
+spring-kafka
+```
+
+Sirf Spring Kafka library laati hai.
+
+Lekin
+
+Starter
+
+```text
+spring-boot-starter-kafka
+```
+
+Automatically
+
+```text
+Spring Kafka
+
++
+
+Kafka Client
+
++
+
+Auto Configuration
+
++
+
+Required Dependencies
+```
+
+sab le aata hai.
+
+Isi liye real project me starter use karte hain.
+
+---
+
+# Best Way to Start
+
+Documentation recommend karti hai
+
+Use
+
+```text
+start.spring.io
+```
+
+Reason
+
+Ye automatically
+
+* Spring Boot Project
+* Maven
+* Gradle
+* Dependency
+* Folder Structure
+
+sab create kar deta hai.
+
+Hume manually kuch create nahi karna padta.
+
+---
+
+# Compatibility
+
+Current Documentation
+
+Works With
+
+| Component           | Version |
+| ------------------- | ------- |
+| Apache Kafka Client | 4.0.x   |
+| Spring Framework    | 7       |
+| Minimum Java        | 17      |
+
+Matlab
+
+Agar
+
+Java 11
+
+use karoge
+
+To ye latest version work nahi karega.
+
+---
+
+# Internal Architecture
+
+```text
+                Spring Boot
+
+                     │
+
+      spring-boot-starter-kafka
+
+                     │
+
+             Spring Kafka Library
+
+                     │
+
+           Kafka Java Client API
+
+                     │
+
+               Kafka Broker
+```
+
+Developer directly Kafka Client se deal nahi karta.
+
+Spring Kafka uske upar abstraction provide karta hai.
+
+---
+
+# Part 2 : Practical Implementation
+
+Ab documentation ek simple Producer aur Consumer application bana rahi hai.
+
+Hum bhi wahi banayenge.
+
+---
+
+## Step 1
+
+Create Project
+
+Spring Initializr
+
+Dependency
+
+```text
+Spring Web
+
+Spring for Apache Kafka
+```
+
+Bas.
+
+---
+
+## Step 2
+
+Kafka Run
+
+Broker
+
+```text
+localhost:9092
+```
+
+Running hona chahiye.
+
+---
+
+## Step 3
+
+Project Structure
+
+```text
+src
+
+ ├── controller
+
+ ├── service
+
+ ├── producer
+
+ ├── consumer
+
+ ├── config
+
+ └── Application.java
+```
+
+Ye structure hum poore course me use karenge.
+
+---
+
+## Step 4
+
+Application Class
+
+```java
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+
+}
+```
+
+### Explanation
+
+`@SpringBootApplication`
+
+Spring Boot ka entry point hai.
+
+Ye internally teen annotations ka combination hai:
+
+* `@Configuration`
+* `@EnableAutoConfiguration`
+* `@ComponentScan`
+
+`SpringApplication.run()`
+
+Application start karta hai aur Spring Context initialize karta hai.
+
+---
+
+## Step 5
+
+Create Topic Bean
+
+Documentation me
+
+```java
+@Bean
+public NewTopic topic() {
+
+    return TopicBuilder
+            .name("topic1")
+            .partitions(10)
+            .replicas(1)
+            .build();
+
+}
+```
+
+### Line by Line
+
+### @Bean
+
+Spring Context me object register karega.
+
+---
+
+### NewTopic
+
+Kafka Topic represent karta hai.
+
+---
+
+### TopicBuilder
+
+Topic create karne ke liye Builder Pattern.
+
+---
+
+### name()
+
+Topic ka naam.
+
+Example
+
+```text
+topic1
+```
+
+---
+
+### partitions(10)
+
+Topic ke andar
+
+10 partitions create honge.
+
+Parallel processing ke liye.
+
+---
+
+### replicas(1)
+
+Ek replica.
+
+Matlab backup copy.
+
+---
+
+### build()
+
+Topic object return karega.
+
+---
+
+# Internal Flow
+
+```text
+Application Start
+
+        │
+
+Spring Context Start
+
+        │
+
+@Bean Execute
+
+        │
+
+NewTopic Object
+
+        │
+
+Kafka Broker
+
+        │
+
+Topic Create
+```
+
+Agar topic already exist karta hai
+
+To naya topic create nahi hoga.
+
+---
+
+## Step 6
+
+Consumer
+
+Documentation
+
+```java
+@KafkaListener(
+      id="myId",
+      topics="topic1")
+```
+
+Meaning
+
+Spring automatically
+
+Topic ko continuously listen karega.
+
+Jaise hi message aayega
+
+ye method execute ho jayega.
+
+Example
+
+```text
+Kafka Topic
+
+        │
+
+Message
+
+        │
+
+@KafkaListener
+
+        │
+
+listen()
+
+        │
+
+Business Logic
+```
+
+---
+
+## Step 7
+
+Producer
+
+Documentation
+
+```java
+KafkaTemplate
+```
+
+Use karti hai.
+
+Ye Spring Kafka ka Producer API hai.
+
+Example
+
+```java
+template.send(
+        "topic1",
+        "test");
+```
+
+Meaning
+
+Topic
+
+```text
+topic1
+```
+
+me
+
+```text
+test
+```
+
+message bhejna.
+
+---
+
+# Internal Flow
+
+```text
+REST API
+
+      │
+
+Controller
+
+      │
+
+Service
+
+      │
+
+KafkaTemplate
+
+      │
+
+ProducerFactory
+
+      │
+
+Kafka Broker
+
+      │
+
+Topic
+```
+
+---
+
+## Step 8
+
+Consumer Flow
+
+```text
+Topic
+
+     │
+
+Kafka Broker
+
+     │
+
+Consumer
+
+     │
+
+@KafkaListener
+
+     │
+
+listen()
+
+     │
+
+Business Logic
+```
+
+---
+
+# Spring Boot vs Without Spring Boot
+
+| Spring Boot          | Without Spring Boot                       |
+| -------------------- | ----------------------------------------- |
+| Auto Configuration   | Manual Configuration                      |
+| KafkaTemplate Auto   | KafkaTemplate Bean Banana Padta Hai       |
+| ConsumerFactory Auto | Manually Banana Padta Hai                 |
+| ProducerFactory Auto | Manually Banana Padta Hai                 |
+| Listener Auto        | ListenerContainerFactory Banana Padta Hai |
+| Kam Code             | Zyada Boilerplate Code                    |
+
+Isliye real-world Spring Boot projects me `spring-boot-starter-kafka` use karna almost standard practice hai.
+
+---
+
+# Documentation ka Last Part (Without Spring Boot) - Samajhne Layak Baat
+
+Documentation ek non-Spring Boot example bhi dikhati hai. Isme tum dekhoge ki tumhe khud ye sab beans banana padte hain:
+
+* `ConsumerFactory`
+* `ProducerFactory`
+* `KafkaTemplate`
+* `ConcurrentKafkaListenerContainerFactory`
+* `@EnableKafka`
+
+**Abhi in classes ko yaad mat karo.** Ye sab hum alag chapters me detail me padhenge. Is Quick Tour ka purpose sirf ye dikhana hai ki **Spring Boot kitna kaam automatically kar deta hai.**
+
+---
+
+# 📝 Revision Notes
+
+### Spring Kafka Quick Tour
+
+* Spring Kafka Java application ko Kafka se connect karne ke liye use hota hai.
+* Spring Boot project me `spring-boot-starter-kafka` dependency use karte hain.
+* Kafka Broker pehle se run hona chahiye (e.g. `localhost:9092`).
+* `start.spring.io` se project banana easiest approach hai.
+* `@SpringBootApplication` application ka entry point hai.
+* `NewTopic` bean startup ke time topic create kar sakta hai.
+* `KafkaTemplate` message send karne ke liye use hota hai.
+* `@KafkaListener` message receive karne ke liye use hota hai.
+* Spring Boot bahut saari Kafka configuration automatically kar deta hai.
+* Without Spring Boot, ProducerFactory, ConsumerFactory, KafkaTemplate aur ListenerContainerFactory manually configure karne padte hain.
+
+---
+
+## 📌 Meri Suggestion
+
+Ye Quick Tour sirf overview hai. Isme bahut saare concepts (Topic, Partition, KafkaTemplate, `@KafkaListener`, ProducerFactory, ConsumerFactory, Offset, etc.) sirf introduce kiye gaye hain.
+
+Jab hum documentation ke next chapters (**Connecting to Kafka → Configuring Topics → Sending Messages → Receiving Messages**) padhenge, tab in sab concepts ko **line-by-line, practical implementation ke saath** detail me samjhenge. Is tarah tumhare notes bhi strong banenge aur practical knowledge bhi saath-saath build hogi.
+
+=======================================================================================================================
+Perfect. 👍
+Ab hum **actual documentation** padhna start kar rahe hain. Isliye ab se notes aur bhi structured honge, exactly training material ki tarah.
+
+> **Topic:** Connecting to Kafka
+
+---
+
+# Spring Kafka Documentation
+
+# Chapter 1 - Connecting to Kafka
+
+---
+
+# 📖 Introduction
+
+Jab hum Spring Boot Application aur Kafka ko connect karte hain, tab sirf ek connection nahi banta.
+
+Spring Kafka ke andar kuch important classes hoti hain jo Kafka se communication manage karti hain.
+
+Ye classes hain:
+
+```text
+1. KafkaAdmin
+
+2. ProducerFactory
+
+3. ConsumerFactory
+```
+
+In tino ka kaam alag hai.
+
+---
+
+# Overall Architecture
+
+```text
+                    Spring Boot Application
+
+                             │
+
+        ┌────────────────────┼────────────────────┐
+
+        │                    │                    │
+
+   KafkaAdmin         ProducerFactory      ConsumerFactory
+
+        │                    │                    │
+
+        └────────────────────┼────────────────────┘
+
+                             │
+
+                      Kafka Broker
+
+                     localhost:9092
+```
+
+Ye teen components milkar Kafka ke saath communication establish karte hain.
+
+---
+
+# 1. KafkaAdmin
+
+## Concept
+
+KafkaAdmin ka kaam Kafka Broker ke upar administrative operations perform karna hai.
+
+Simple language me
+
+> KafkaAdmin Topic create karta hai, Topic check karta hai aur Kafka ke resources manage karta hai.
+
+Ye message send ya receive nahi karta.
+
+Sirf Kafka ko configure karta hai.
+
+---
+
+## Real Project Example
+
+Application start hui.
+
+Spring ne dekha
+
+```java
+@Bean
+public NewTopic orderTopic() {
+
+}
+```
+
+Spring Kafka internally
+
+KafkaAdmin ko use karega.
+
+Flow
+
+```text
+Application Start
+
+        │
+
+KafkaAdmin
+
+        │
+
+Kafka Broker
+
+        │
+
+Create Topic
+```
+
+---
+
+## Remember
+
+KafkaAdmin
+
+✅ Topic Create
+
+✅ Topic Check
+
+❌ Message Send Nahi
+
+❌ Message Receive Nahi
+
+---
+
+# 2. ProducerFactory
+
+## Concept
+
+ProducerFactory ka kaam Producer banana hai.
+
+Ye khud message nahi bhejta.
+
+Ye Producer object create karta hai.
+
+Us Producer ko KafkaTemplate use karta hai.
+
+---
+
+Flow
+
+```text
+ProducerFactory
+
+        │
+
+Create Producer
+
+        │
+
+KafkaTemplate
+
+        │
+
+Send Message
+```
+
+---
+
+## Real Project
+
+Tum likhte ho
+
+```java
+kafkaTemplate.send(...)
+```
+
+Internally
+
+```text
+KafkaTemplate
+
+        │
+
+ProducerFactory
+
+        │
+
+Kafka Producer
+
+        │
+
+Kafka Broker
+```
+
+---
+
+Remember
+
+ProducerFactory
+
+✔ Producer banata hai
+
+✔ Connection maintain karta hai
+
+✔ KafkaTemplate ko Producer deta hai
+
+---
+
+# 3. ConsumerFactory
+
+ConsumerFactory ka kaam Consumer banana hai.
+
+Ye bhi khud message consume nahi karta.
+
+Ye Consumer object create karta hai.
+
+Us Consumer ko
+
+```java
+@KafkaListener
+```
+
+use karta hai.
+
+Flow
+
+```text
+ConsumerFactory
+
+       │
+
+Create Consumer
+
+       │
+
+KafkaListener
+
+       │
+
+Read Message
+```
+
+---
+
+# Summary
+
+| Class           | Responsibility        |
+| --------------- | --------------------- |
+| KafkaAdmin      | Topic Management      |
+| ProducerFactory | Producer Create Karna |
+| ConsumerFactory | Consumer Create Karna |
+
+---
+
+# KafkaResourceFactory
+
+Documentation bolti hai
+
+Starting version
+
+```text
+2.5
+```
+
+ye tino classes
+
+```text
+KafkaResourceFactory
+```
+
+ko extend karti hain.
+
+Matlab
+
+```text
+KafkaAdmin
+
+        ▲
+
+ProducerFactory
+
+        ▲
+
+ConsumerFactory
+
+        ▲
+
+KafkaResourceFactory
+```
+
+---
+
+## Why banaya?
+
+Pehle
+
+Bootstrap Server change karna easy nahi tha.
+
+Application restart karni padti thi.
+
+Version 2.5 ke baad
+
+Runtime pe bhi
+
+Kafka Server change kar sakte hain.
+
+---
+
+# Bootstrap Server
+
+Sabse pehle samajhte hain.
+
+Bootstrap Server kya hota hai?
+
+Example
+
+```properties
+spring.kafka.bootstrap-servers=localhost:9092
+```
+
+Matlab
+
+Application
+
+kis Kafka Broker se connect karegi.
+
+---
+
+Flow
+
+```text
+Spring Boot
+
+        │
+
+localhost:9092
+
+        │
+
+Kafka Broker
+```
+
+---
+
+# Runtime Bootstrap Server Change
+
+Documentation me method diya hai
+
+```java
+setBootstrapServersSupplier(() -> ...)
+```
+
+---
+
+Concept
+
+Normally
+
+```properties
+localhost:9092
+```
+
+Fix hota hai.
+
+Lekin
+
+Agar company ke paas
+
+2 Kafka Clusters hain
+
+```text
+Cluster A
+
+Cluster B
+```
+
+Aur runtime pe switch karna hai
+
+To
+
+```java
+setBootstrapServersSupplier()
+```
+
+use karte hain.
+
+---
+
+Example
+
+Suppose
+
+Morning
+
+```text
+localhost:9092
+```
+
+Evening
+
+```text
+192.168.1.10:9092
+```
+
+Without restart
+
+Server change.
+
+Ye Supplier har nayi connection banne par latest bootstrap server return karta hai.
+
+---
+
+# Why Existing Producer Change Nahi Hota?
+
+Documentation me likha hai
+
+Producer
+
+long-lived hota hai.
+
+Matlab
+
+Ek baar connection ban gaya
+
+To wahi use karta rahega.
+
+Isliye
+
+Server change karne ke baad
+
+Old Producer close karna padega.
+
+---
+
+Method
+
+```java
+producerFactory.reset()
+```
+
+---
+
+Flow
+
+```text
+Old Producer
+
+      │
+
+reset()
+
+      │
+
+Closed
+
+      │
+
+New Producer
+
+      │
+
+New Kafka Server
+```
+
+---
+
+# Consumer ke liye
+
+Consumer bhi long-lived hota hai.
+
+Isliye
+
+Sirf server change karna enough nahi.
+
+Consumer restart karna padega.
+
+Methods
+
+```java
+stop()
+
+start()
+```
+
+---
+
+Flow
+
+```text
+Consumer
+
+      │
+
+stop()
+
+      │
+
+Connection Close
+
+      │
+
+start()
+
+      │
+
+New Connection
+```
+
+---
+
+# KafkaListenerEndpointRegistry
+
+Question
+
+Agar
+
+```java
+@KafkaListener
+```
+
+use kar rahe hain
+
+To stop kaise kare?
+
+Answer
+
+```java
+KafkaListenerEndpointRegistry
+```
+
+Ye Spring ka registry object hai.
+
+Ye saare Kafka Listeners ko manage karta hai.
+
+---
+
+Flow
+
+```text
+KafkaListenerEndpointRegistry
+
+        │
+
+Listener 1
+
+Listener 2
+
+Listener 3
+```
+
+---
+
+Methods
+
+```java
+stop()
+
+start()
+```
+
+---
+
+# ABSwitchCluster
+
+Ye documentation ka interesting feature hai.
+
+---
+
+## Problem
+
+Company ke paas
+
+2 Kafka Clusters
+
+```text
+Primary Kafka
+
+Secondary Kafka
+```
+
+Kabhi
+
+Primary Down
+
+ho gaya.
+
+Application ko
+
+Secondary pe switch karna hai.
+
+---
+
+Spring Kafka ne
+
+```text
+ABSwitchCluster
+```
+
+provide kiya.
+
+---
+
+Flow
+
+```text
+Application
+
+      │
+
+ABSwitchCluster
+
+      │
+
+───────────────
+
+Primary
+
+Secondary
+
+───────────────
+```
+
+---
+
+Methods
+
+```java
+primary()
+```
+
+Primary cluster use karega.
+
+Aur
+
+```java
+secondary()
+```
+
+Backup cluster use karega.
+
+---
+
+Switch Process
+
+```text
+secondary()
+
+      │
+
+Producer reset()
+
+      │
+
+Consumer stop()
+
+      │
+
+Consumer start()
+
+      │
+
+Connected to Secondary Cluster
+```
+
+---
+
+# Factory Listeners
+
+Version
+
+```text
+2.5
+```
+
+se
+
+ProducerFactory aur ConsumerFactory me Listener laga sakte hain.
+
+---
+
+Question
+
+Listener kyu?
+
+Answer
+
+Jab
+
+Producer create ho
+
+ya
+
+Consumer create ho
+
+tab notification mil jaye.
+
+---
+
+Producer Listener
+
+```java
+producerAdded()
+
+producerRemoved()
+```
+
+---
+
+Flow
+
+```text
+Producer Created
+
+        │
+
+producerAdded()
+
+        │
+
+Log
+
+Metrics
+
+Monitoring
+```
+
+---
+
+Consumer Listener
+
+```java
+consumerAdded()
+
+consumerRemoved()
+```
+
+---
+
+Ye kab useful hai?
+
+Production me.
+
+Example
+
+Monitoring
+
+Logging
+
+Micrometer Metrics
+
+Audit
+
+---
+
+# Client ID
+
+Har Kafka Client ka ek unique ID hota hai.
+
+Example
+
+```text
+producer-1
+
+consumer-1
+
+admin-1
+```
+
+---
+
+Spring Boot 3.2 se
+
+Agar
+
+```properties
+spring.application.name=myapp
+```
+
+likha hai
+
+To
+
+Automatically
+
+Client ID
+
+change ho jayega.
+
+---
+
+Without
+
+```text
+producer-1
+```
+
+---
+
+With
+
+```text
+myapp-producer-1
+```
+
+---
+
+Consumer
+
+Without
+
+```text
+consumer-null-1
+```
+
+With
+
+```text
+myapp-consumer-1
+```
+
+---
+
+Admin
+
+Without
+
+```text
+adminclient-1
+```
+
+With
+
+```text
+myapp-admin-1
+```
+
+---
+
+# Why Useful?
+
+Suppose
+
+Server pe
+
+100 Applications chal rahi hain.
+
+Agar sabka
+
+Client ID
+
+```text
+producer-1
+```
+
+hoga.
+
+To identify karna mushkil hai.
+
+Lekin
+
+```text
+loan-service-producer-1
+
+payment-service-producer-1
+
+inventory-service-producer-1
+```
+
+To turant pata chal jayega ki kaunsi application connect hai.
+
+Ye debugging aur monitoring dono me bahut help karta hai.
+
+---
+
+# 💻 Practical Implementation
+
+> **Important:** Is chapter me hum koi coding implement **nahi** karenge.
+
+Reason?
+
+Ye chapter sirf Spring Kafka ke **core infrastructure components** introduce karta hai. Inki actual implementation next chapters me aayegi:
+
+* **KafkaAdmin** → Configuring Topics
+* **ProducerFactory** → Sending Messages
+* **ConsumerFactory** → Receiving Messages
+
+Abhi tumhe bas inka role samajhna hai.
+
+---
+
+# 📝 Quick Revision Notes
+
+## Connecting to Kafka
+
+* Spring Kafka me Kafka connection ke liye 3 main components hote hain:
+
+  * `KafkaAdmin`
+  * `ProducerFactory`
+  * `ConsumerFactory`
+* `KafkaAdmin` topic aur admin operations manage karta hai.
+* `ProducerFactory` Kafka Producer create karta hai.
+* `ConsumerFactory` Kafka Consumer create karta hai.
+* Ye tino `KafkaResourceFactory` ko extend karte hain (Spring Kafka 2.5+).
+* `bootstrap-servers` batata hai application kis Kafka Broker se connect karegi.
+* `setBootstrapServersSupplier()` runtime me naya Kafka cluster choose karne ki facility deta hai.
+* Producer ko naye broker se connect karne ke liye `DefaultKafkaProducerFactory.reset()` use hota hai.
+* Consumer ko naye broker se connect karne ke liye listener containers ko `stop()` aur `start()` karna padta hai.
+* `ABSwitchCluster` Primary aur Secondary Kafka cluster ke beech switch karne ke liye use hota hai.
+* Factory Listeners producer/consumer create ya close hone par notifications dete hain (monitoring aur metrics ke liye).
+* `spring.application.name` set karne se auto-generated Kafka client IDs meaningful ban jaate hain (jaise `loan-service-producer-1`), jo production troubleshooting me bahut useful hote hain.
+
+> **Ye chapter foundation hai.** Isme sirf infrastructure introduce hua hai. Agle chapters me hum in components ko practical project me implement karenge aur line-by-line code samjhenge.
+
+=======================================================================================================================
+Excellent. 👏
+**Ye Spring Kafka ka pehla actual practical chapter hai.** Agar tum ye chapter achhe se samajh gaye, to interview me "Spring Kafka Topic kaise create karte ho?" ya "KafkaAdmin kya hota hai?" jaise questions easily answer kar paoge.
+
+Main isko **actual training notes** ki tarah bana raha hu.
+
+---
+
+# Spring Kafka Documentation
+
+# Chapter 2 - Configuring Topics
+
+---
+
+# 📖 What is Topic Configuration?
+
+Sabse pehle ek question.
+
+## Kafka Topic create kab hota hai?
+
+Do tarike hain.
+
+### Method 1 (Manual)
+
+Kafka CLI se
+
+```bash
+kafka-topics.sh --create ...
+```
+
+Ya
+
+Kafka UI se
+
+Topic create karo.
+
+Fir application use karegi.
+
+---
+
+### Method 2 (Spring Kafka)
+
+Application start hote hi
+
+Spring automatically Topic create kar de.
+
+Ye kaam
+
+```text
+KafkaAdmin
+```
+
+karta hai.
+
+Isi chapter me wahi sikhaya gaya hai.
+
+---
+
+# Real Project Example
+
+Suppose hum Loan Application bana rahe hain.
+
+Humare paas ye Topics hain.
+
+```text
+loan-created
+
+loan-approved
+
+loan-rejected
+
+loan-payment
+```
+
+Developer ko manually 4 Topic create nahi karne.
+
+Application start hote hi
+
+Spring khud create karega.
+
+Flow
+
+```text
+Spring Boot Start
+
+        │
+
+KafkaAdmin
+
+        │
+
+Read NewTopic Beans
+
+        │
+
+Kafka Broker
+
+        │
+
+Topic Create
+```
+
+Yahi Configuring Topics ka main purpose hai.
+
+---
+
+# KafkaAdmin
+
+Documentation bolti hai
+
+Agar
+
+```java
+KafkaAdmin
+```
+
+Bean bana diya
+
+to Spring
+
+Topic create kar sakta hai.
+
+---
+
+## KafkaAdmin kya hai?
+
+Simple language me
+
+KafkaAdmin
+
+Kafka Broker ka administrator hai.
+
+Ye
+
+✔ Topic Create karta hai
+
+✔ Topic Modify karta hai
+
+✔ Topic Delete karta hai (Spring Kafka 4.0+)
+
+✔ Topic Information Read karta hai
+
+Ye kabhi message send nahi karta.
+
+---
+
+# Practical Implementation
+
+## Step 1
+
+Create KafkaAdmin Bean
+
+```java
+@Bean
+public KafkaAdmin admin() {
+
+    Map<String, Object> configs = new HashMap<>();
+
+    configs.put(
+            AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG,
+            "localhost:9092");
+
+    return new KafkaAdmin(configs);
+
+}
+```
+
+---
+
+# Line by Line Explanation
+
+## @Bean
+
+Spring Context me
+
+KafkaAdmin object register karega.
+
+---
+
+## Map<String,Object>
+
+Kafka Configuration store karega.
+
+Example
+
+```text
+bootstrap server
+
+security
+
+ssl
+
+authentication
+```
+
+sab isi Map me aata hai.
+
+---
+
+## BOOTSTRAP_SERVERS_CONFIG
+
+Ye batata hai
+
+Kafka Broker kaha chal raha hai.
+
+Example
+
+```text
+localhost:9092
+```
+
+---
+
+## new KafkaAdmin(configs)
+
+KafkaAdmin object create hua.
+
+Ab Spring
+
+Broker ke saath admin operation perform kar sakta hai.
+
+---
+
+# Internal Flow
+
+```text
+Application Start
+
+       │
+
+KafkaAdmin Bean
+
+       │
+
+Connect localhost:9092
+
+       │
+
+Broker Ready
+```
+
+---
+
+# NewTopic Bean
+
+Documentation
+
+```java
+@Bean
+public NewTopic topic1() {
+
+    return TopicBuilder
+            .name("thing1")
+            .partitions(10)
+            .replicas(3)
+            .compact()
+            .build();
+
+}
+```
+
+Ye sabse important code hai.
+
+---
+
+# NewTopic kya hai?
+
+Simple language me
+
+NewTopic
+
+Ek Java Object hai
+
+jo Kafka Topic ko represent karta hai.
+
+Jaise
+
+Employee class
+
+Employee ko represent karti hai.
+
+Waise hi
+
+NewTopic
+
+Kafka Topic ko represent karta hai.
+
+---
+
+# TopicBuilder
+
+Question
+
+TopicBuilder kyu banaya?
+
+Answer
+
+Pehle
+
+Topic object banana difficult tha.
+
+Spring Kafka 2.3 se
+
+Builder Pattern introduce hua.
+
+Ab Topic banana easy ho gaya.
+
+---
+
+# TopicBuilder Flow
+
+```text
+TopicBuilder
+
+      │
+
+Topic Name
+
+      │
+
+Partitions
+
+      │
+
+Replicas
+
+      │
+
+Configs
+
+      │
+
+build()
+
+      │
+
+NewTopic Object
+```
+
+---
+
+# name()
+
+```java
+.name("thing1")
+```
+
+Ye Topic ka naam hai.
+
+Real Project
+
+```text
+order-created
+
+payment-topic
+
+inventory-topic
+
+notification-topic
+```
+
+---
+
+# partitions()
+
+```java
+.partitions(10)
+```
+
+Matlab
+
+Topic ke andar
+
+10 partitions honge.
+
+---
+
+## Partition kya hota hai?
+
+Suppose
+
+1000 Messages hain.
+
+Agar
+
+Sirf 1 partition
+
+```text
+Topic
+
+ │
+
+Partition-0
+
+ │
+
+1000 Messages
+```
+
+Ek hi Consumer read karega.
+
+Slow.
+
+---
+
+Agar
+
+10 Partitions
+
+```text
+Topic
+
+ │
+
+P0
+
+P1
+
+P2
+
+P3
+
+...
+
+P9
+```
+
+10 Consumers
+
+parallel process kar sakte hain.
+
+Performance increase.
+
+---
+
+# replicas()
+
+```java
+.replicas(3)
+```
+
+Replica
+
+Backup Copy.
+
+---
+
+Example
+
+Broker
+
+```text
+Broker-1
+
+Broker-2
+
+Broker-3
+```
+
+Topic
+
+Replica
+
+```text
+Original
+
+↓
+
+Copy-1
+
+↓
+
+Copy-2
+```
+
+Agar
+
+Broker-1
+
+Down
+
+Ho gaya
+
+to
+
+Replica use hoga.
+
+Data loss nahi hoga.
+
+---
+
+# compact()
+
+Documentation
+
+```java
+.compact()
+```
+
+Ye
+
+Cleanup Policy
+
+change karta hai.
+
+Internally
+
+```properties
+cleanup.policy=compact
+```
+
+set karta hai.
+
+---
+
+## Compact kya hota hai?
+
+Normally
+
+Old Messages delete ho jate hain.
+
+Lekin
+
+Compact
+
+sirf latest value rakhta hai.
+
+---
+
+Example
+
+```text
+Key = User1
+
+Value = Pune
+
+```
+
+Fir
+
+```text
+User1
+
+Mumbai
+```
+
+Fir
+
+```text
+User1
+
+Delhi
+```
+
+Compaction ke baad
+
+Sirf
+
+```text
+User1
+
+Delhi
+```
+
+bachega.
+
+Purane records remove ho jayenge.
+
+---
+
+# config()
+
+Documentation
+
+```java
+.config(
+TopicConfig.COMPRESSION_TYPE_CONFIG,
+"zstd")
+```
+
+Matlab
+
+Topic level property set karna.
+
+Example
+
+Compression
+
+Retention
+
+Cleanup Policy
+
+Maximum Size
+
+etc.
+
+---
+
+Example
+
+```text
+compression.type
+
+=
+
+zstd
+```
+
+Message compress hokar store honge.
+
+Disk kam lagegi.
+
+Network bhi kam use hoga.
+
+---
+
+# build()
+
+Ye
+
+NewTopic Object
+
+return karta hai.
+
+---
+
+# Internal Flow
+
+```text
+TopicBuilder
+
+      │
+
+NewTopic
+
+      │
+
+Spring Context
+
+      │
+
+KafkaAdmin
+
+      │
+
+Kafka Broker
+
+      │
+
+Topic Created
+```
+
+---
+
+# Topic Without Partition and Replica
+
+Documentation
+
+Spring Kafka
+
+2.6 se
+
+Ye allowed hai.
+
+```java
+TopicBuilder
+
+.name("defaultBoth")
+
+.build();
+```
+
+Question
+
+Partition kaha gaya?
+
+Replica kaha gaya?
+
+Answer
+
+Broker
+
+Default value use karega.
+
+---
+
+Example
+
+Broker Configuration
+
+```properties
+num.partitions=3
+
+default.replication.factor=2
+```
+
+Application
+
+```java
+TopicBuilder
+
+.name("orders")
+
+.build();
+```
+
+Automatically
+
+```text
+Partition = 3
+
+Replica = 2
+```
+
+---
+
+# Practical Advice
+
+Real Project me
+
+Generally
+
+Partition
+
+aur
+
+Replica
+
+explicitly likhte hain.
+
+Taaki confusion na ho.
+
+---
+
+# Multiple Topics
+
+Version
+
+2.7
+
+Documentation
+
+```java
+KafkaAdmin.NewTopics
+```
+
+---
+
+Problem
+
+Pehle
+
+```java
+@Bean
+
+topic1()
+
+@Bean
+
+topic2()
+
+@Bean
+
+topic3()
+```
+
+Bahut saare Beans.
+
+---
+
+Solution
+
+```java
+@Bean
+
+KafkaAdmin.NewTopics
+```
+
+Ek hi Bean me
+
+Multiple Topics.
+
+---
+
+Flow
+
+```text
+NewTopics
+
+     │
+
+Topic1
+
+Topic2
+
+Topic3
+
+     │
+
+KafkaAdmin
+
+     │
+
+Kafka Broker
+```
+
+---
+
+# Spring Boot Special Feature
+
+Documentation bolti hai
+
+Spring Boot me
+
+```java
+KafkaAdmin
+```
+
+khud ban jata hai.
+
+Matlab
+
+Tumhe
+
+Ye
+
+```java
+@Bean
+
+KafkaAdmin
+```
+
+likhne ki zarurat nahi.
+
+Sirf
+
+```java
+@Bean
+
+NewTopic
+```
+
+likho.
+
+Spring Boot
+
+Automatically
+
+KafkaAdmin create kar dega.
+
+---
+
+# Broker Not Available
+
+Suppose
+
+Application start hui.
+
+Lekin
+
+Kafka Down.
+
+---
+
+Default Behaviour
+
+```text
+Application Start
+
+↓
+
+Kafka Not Available
+
+↓
+
+Warning Log
+
+↓
+
+Application Continue
+```
+
+Application band nahi hoti.
+
+---
+
+# fatalIfBrokerNotAvailable
+
+Agar
+
+```java
+admin.setFatalIfBrokerNotAvailable(true);
+```
+
+kar diya.
+
+To
+
+```text
+Application Start
+
+↓
+
+Kafka Down
+
+↓
+
+Application Fail
+```
+
+Ye production me useful hai jab Kafka ke bina application chalni hi nahi chahiye.
+
+---
+
+# initialize()
+
+Question
+
+Broker startup ke time down tha.
+
+Baad me start hua.
+
+Ab Topic create kaise kare?
+
+Answer
+
+```java
+admin.initialize();
+```
+
+Ye dubara KafkaAdmin ko topic creation try karne ke liye bolta hai.
+
+---
+
+# Existing Topic Update
+
+Documentation
+
+Agar
+
+Topic
+
+already exist karta hai.
+
+Aur
+
+NewTopic Bean
+
+me
+
+```java
+partitions(10)
+```
+
+hai.
+
+Lekin
+
+Broker pe
+
+5 partitions hain.
+
+To
+
+KafkaAdmin
+
+Automatically
+
+Partitions
+
+increase kar dega.
+
+---
+
+Important
+
+Partition
+
+increase
+
+ho sakta hai.
+
+Decrease
+
+nahi.
+
+---
+
+# Runtime Topic Management (Spring Kafka 2.7+)
+
+Ab Topic sirf startup pe hi nahi.
+
+Runtime pe bhi manage kar sakte ho.
+
+Methods
+
+```java
+createOrModifyTopics()
+
+describeTopics()
+
+deleteTopics()   // Spring Kafka 4.0+
+```
+
+---
+
+## createOrModifyTopics()
+
+Naya Topic create karega.
+
+Agar exist karta hai
+
+to modify karega.
+
+---
+
+## describeTopics()
+
+Topic ki information dega.
+
+Example
+
+```text
+Topic Name
+
+Partition Count
+
+Replica Count
+
+Configs
+```
+
+---
+
+## deleteTopics()
+
+Runtime pe
+
+Topic delete karega.
+
+---
+
+# AdminClient
+
+Question
+
+KafkaAdmin enough nahi?
+
+Answer
+
+Normally
+
+Haan.
+
+Lekin
+
+Advanced operation
+
+ke liye
+
+```java
+AdminClient
+```
+
+use karte hain.
+
+Example
+
+```java
+AdminClient
+
+client
+
+=
+
+AdminClient.create(...)
+```
+
+Ye Kafka ka official Java Client hai.
+
+---
+
+# Predicate<NewTopic>
+
+Ye advanced feature hai.
+
+Suppose
+
+2 Kafka Clusters hain.
+
+```text
+Cluster-A
+
+Cluster-B
+```
+
+Sab Topic
+
+har cluster pe nahi banana.
+
+Example
+
+```text
+Loan Topics
+
+↓
+
+Cluster-A
+
+Notification Topics
+
+↓
+
+Cluster-B
+```
+
+To
+
+```java
+admin.setCreateOrModifyTopic(...)
+```
+
+use karke decide kar sakte ho ki kaunsa `NewTopic` kis `KafkaAdmin` (cluster) ke liye create ya modify hoga.
+
+---
+
+# Internal Complete Flow
+
+```text
+Spring Boot Start
+
+        │
+
+Create KafkaAdmin
+
+        │
+
+Scan All NewTopic Beans
+
+        │
+
+TopicBuilder
+
+        │
+
+Create NewTopic Objects
+
+        │
+
+KafkaAdmin
+
+        │
+
+Connect Kafka Broker
+
+        │
+
+Check Topic Exists?
+
+      /       \
+    Yes       No
+    │          │
+Modify       Create
+    │          │
+    └──────┬───┘
+           │
+      Topic Ready
+```
+
+---
+
+# 📝 Revision Notes
+
+## Configuring Topics
+
+* `KafkaAdmin` Kafka Broker ke admin operations perform karta hai.
+* `NewTopic` ek Java object hai jo Kafka Topic ko represent karta hai.
+* `TopicBuilder` Builder Pattern se Topic create karna easy banata hai.
+* `name()` topic ka naam set karta hai.
+* `partitions()` parallel processing ke liye partition count define karta hai.
+* `replicas()` fault tolerance ke liye backup copies define karta hai.
+* `compact()` `cleanup.policy=compact` set karta hai aur har key ki latest value retain karta hai.
+* `config()` se topic-level properties (compression, retention, cleanup policy, etc.) set kar sakte hain.
+* Spring Kafka 2.6+ me partition aur replica omit karne par broker defaults use hote hain.
+* Spring Kafka 2.7+ me `KafkaAdmin.NewTopics` se ek bean me multiple topics define kar sakte hain.
+* Spring Boot me `KafkaAdmin` automatically configure ho jata hai; sirf `NewTopic` bean define karna hota hai.
+* `fatalIfBrokerNotAvailable(true)` application ko Kafka unavailable hone par fail kar deta hai.
+* `initialize()` baad me topic creation retry karne ke liye use hota hai.
+* Existing topic ke partitions increase kiye ja sakte hain; partitions decrease nahi kiye ja sakte.
+* Runtime topic operations: `createOrModifyTopics()`, `describeTopics()`, aur `deleteTopics()`.
+* Advanced Kafka administration ke liye `AdminClient` use hota hai.
+* `Predicate<NewTopic>` multiple Kafka clusters me selective topic creation ke liye use hota hai.
+
+---
+
+## 📌 Practical Reality
+
+Real Spring Boot projects me tum aksar sirf itna likhoge:
+
+```java
+@Bean
+public NewTopic orderCreatedTopic() {
+    return TopicBuilder
+            .name("order-created")
+            .partitions(3)
+            .replicas(1)
+            .build();
+}
+```
+
+Baaki `KafkaAdmin`, topic creation aur broker interaction ka kaam Spring Boot background me automatically handle kar leta hai. Isi wajah se Spring Kafka ka topic configuration bahut clean aur maintainable lagta hai.
+
+=======================================================================================================================
+# Spring Kafka - Part 1
+
+# **KafkaTemplate (Concept + Internal Working + Practical + Interview)**
+
+Based on your uploaded Spring Kafka notes. 
+
+---
+
+# 👨‍🏫 Teacher:
+
+Vishnu, aaj hum Spring Kafka ka sabse important class seekhenge.
+
+**KafkaTemplate**
+
+Agar Kafka interview me Spring Kafka pucha gaya,
+**90% chance hai KafkaTemplate ka question aayega.**
+
+---
+
+# Q1. Sir, KafkaTemplate kya hota hai?
+
+## 👨‍🎓 Student
+
+Sir,
+**KafkaTemplate ek Spring class hai jo Kafka Producer ko easy bana deti hai.**
+
+Iski help se hum Kafka Topic me message bhejte hain.
+
+---
+
+### Real Definition
+
+> KafkaTemplate is a Spring wrapper around Kafka Producer.
+
+---
+
+## Without KafkaTemplate
+
+Agar Spring Kafka nahi hota...
+
+To hume khud likhna padta
+
+```
+KafkaProducer
+
+ProducerRecord
+
+Properties
+
+Serializer
+
+ProducerConfig
+
+Callback
+
+Close Producer
+```
+
+Bahut saara code.
+
+---
+
+## With KafkaTemplate
+
+Bas
+
+```java
+kafkaTemplate.send("orders","Order Created");
+```
+
+Aur message Kafka me chala gaya.
+
+Isi liye Spring ne KafkaTemplate banaya.
+
+---
+
+# Real Life Example
+
+Socho tum courier bhejna chahte ho.
+
+Without Courier Service
+
+Tum khud
+
+* bike lekar jao
+* address dhundo
+* parcel deliver karo
+
+Bahut mehnat.
+
+---
+
+Courier Company
+
+Tum bas parcel do
+
+Aur bolo
+
+```
+Ye Pune bhejna hai.
+```
+
+Baaki sab courier company karegi.
+
+---
+
+Exactly
+
+```
+Courier Company
+
+=
+
+KafkaTemplate
+```
+
+Aur
+
+```
+Courier Boy
+
+=
+
+Kafka Producer
+```
+
+---
+
+# Internal Working
+
+```
+Application
+
+↓
+
+KafkaTemplate
+
+↓
+
+ProducerFactory
+
+↓
+
+Kafka Producer
+
+↓
+
+Kafka Broker
+
+↓
+
+Topic
+```
+
+---
+
+# Teacher
+
+Yaha actual message kaun bhej raha hai?
+
+---
+
+# Student
+
+Sir
+
+Producer.
+
+---
+
+# Teacher
+
+Fir KafkaTemplate kya kar raha hai?
+
+---
+
+# Student
+
+Sir
+
+Producer ko manage kar raha hai.
+
+Easy APIs provide kar raha hai.
+
+---
+
+# Internal Flow
+
+Suppose
+
+```java
+kafkaTemplate.send("payment","SUCCESS");
+```
+
+Internally
+
+Step 1
+
+KafkaTemplate
+
+↓
+
+ProducerFactory se Producer leta hai.
+
+↓
+
+Step 2
+
+ProducerRecord banata hai.
+
+↓
+
+Step 3
+
+Serializer call karta hai.
+
+↓
+
+Step 4
+
+Message bytes me convert hota hai.
+
+↓
+
+Step 5
+
+Broker ko bhej diya jata hai.
+
+---
+
+Diagram
+
+```
+send()
+
+↓
+
+KafkaTemplate
+
+↓
+
+ProducerFactory
+
+↓
+
+KafkaProducer
+
+↓
+
+Serializer
+
+↓
+
+Kafka Broker
+
+↓
+
+Topic
+```
+
+---
+
+# Q2. Sir KafkaTemplate khud Producer hai kya?
+
+## Student
+
+❌ Nahi.
+
+Ye Producer nahi hai.
+
+Ye Producer ko use karta hai.
+
+---
+
+Example
+
+Tum restaurant me waiter ko order dete ho.
+
+Waiter
+
+↓
+
+Kitchen
+
+↓
+
+Food.
+
+Yaha
+
+```
+Waiter
+
+=
+
+KafkaTemplate
+
+Kitchen
+
+=
+
+Kafka Producer
+
+Food
+
+=
+
+Kafka Message
+```
+
+---
+
+# Q3. Sir Kafka Producer aur KafkaTemplate me difference?
+
+| Kafka Producer    | KafkaTemplate     |
+| ----------------- | ----------------- |
+| Kafka Java Client | Spring Wrapper    |
+| More Code         | Less Code         |
+| Manual Config     | Spring Config     |
+| Manual Callback   | CompletableFuture |
+| Hard              | Easy              |
+
+---
+
+# Example
+
+Without Spring
+
+```java
+KafkaProducer producer=new KafkaProducer(props);
+
+producer.send(record);
+
+producer.close();
+```
+
+---
+
+Spring
+
+```java
+kafkaTemplate.send("orders","Created");
+```
+
+Bas.
+
+---
+
+# Q4. Sir KafkaTemplate ko kisne banaya?
+
+Answer
+
+Spring Kafka Team.
+
+Package
+
+```java
+org.springframework.kafka.core
+```
+
+Class
+
+```java
+KafkaTemplate
+```
+
+---
+
+# Q5. Sir KafkaTemplate ko object kaun banata hai?
+
+Hum nahi.
+
+Spring Bean banata hai.
+
+Example
+
+```java
+@Bean
+public KafkaTemplate<String,String> kafkaTemplate(
+ProducerFactory<String,String> producerFactory){
+
+    return new KafkaTemplate<>(producerFactory);
+
+}
+```
+
+---
+
+# Teacher
+
+Hum new KafkaTemplate() baar baar kyun nahi karte?
+
+---
+
+# Student
+
+Sir
+
+Spring singleton bean bana deta hai.
+
+Har jagah wahi use hota hai.
+
+---
+
+# Q6. Sir KafkaTemplate ko Producer kaise milta hai?
+
+Answer
+
+ProducerFactory.
+
+```
+KafkaTemplate
+
+↓
+
+ProducerFactory
+
+↓
+
+KafkaProducer
+```
+
+---
+
+Code
+
+```java
+@Bean
+public ProducerFactory<String,String> producerFactory(){
+
+    return new DefaultKafkaProducerFactory<>(configs);
+
+}
+```
+
+---
+
+# Real Project
+
+```
+Order Service
+
+↓
+
+KafkaTemplate
+
+↓
+
+ProducerFactory
+
+↓
+
+Kafka Producer
+
+↓
+
+Kafka Topic
+
+↓
+
+Inventory Service
+```
+
+---
+
+# Q7. Sir KafkaTemplate ko Topic kaise pata chalta hai?
+
+Hum batate hain.
+
+Example
+
+```java
+kafkaTemplate.send("payment-topic","Payment Success");
+```
+
+Topic
+
+```
+payment-topic
+```
+
+---
+
+Ya
+
+Default Topic
+
+```java
+kafkaTemplate.setDefaultTopic("payment-topic");
+```
+
+Fir
+
+```java
+kafkaTemplate.sendDefault("Success");
+```
+
+---
+
+# Q8. Sir KafkaTemplate kis-kis type ka data bhej sakta hai?
+
+Bahut kuch.
+
+```
+String
+
+Integer
+
+Long
+
+JSON
+
+Custom Object
+
+byte[]
+
+Avro
+
+Protobuf
+```
+
+Bas serializer hona chahiye.
+
+---
+
+Example
+
+```java
+Order order=new Order();
+
+kafkaTemplate.send("orders",order);
+```
+
+Yaha
+
+Serializer
+
+Order Object
+
+↓
+
+JSON
+
+↓
+
+Kafka
+
+---
+
+# Q9. Sir KafkaTemplate asynchronous hai ya synchronous?
+
+Default
+
+✅ Asynchronous.
+
+Matlab
+
+```
+Message bhej do.
+
+Wait mat karo.
+
+Apna next kaam karo.
+```
+
+Example
+
+```java
+kafkaTemplate.send("orders","Created");
+```
+
+Application rukti nahi.
+
+---
+
+# Why Async?
+
+Suppose
+
+1000 orders aa gaye.
+
+Agar sync hota
+
+```
+Order1
+
+wait
+
+Order2
+
+wait
+
+Order3
+
+wait
+```
+
+Bahut slow.
+
+---
+
+Async
+
+```
+Order1
+
+↓
+
+Order2
+
+↓
+
+Order3
+
+↓
+
+Order4
+
+↓
+
+Sab parallel send.
+```
+
+Performance increase.
+
+---
+
+# Q10. Sir kya KafkaTemplate guarantee deta hai ki message pahunch gaya?
+
+❌ Nahi.
+
+Sirf send request karta hai.
+
+Result baad me aata hai.
+
+Isliye
+
+```
+CompletableFuture
+```
+
+Return karta hai.
+
+Ye hum agle part me detail me dekhenge.
+
+---
+
+# Real Banking Example
+
+Customer
+
+↓
+
+Transfer Money
+
+↓
+
+REST API
+
+↓
+
+Payment Service
+
+↓
+
+KafkaTemplate
+
+↓
+
+payment-topic
+
+↓
+
+Fraud Service
+
+↓
+
+Notification Service
+
+↓
+
+Ledger Service
+
+Ek message se multiple services kaam karti hain.
+
+---
+
+# Internal Architecture
+
+```
+REST API
+
+↓
+
+Controller
+
+↓
+
+Service
+
+↓
+
+KafkaTemplate
+
+↓
+
+ProducerFactory
+
+↓
+
+KafkaProducer
+
+↓
+
+Serializer
+
+↓
+
+Kafka Broker
+
+↓
+
+Topic
+```
+
+---
+
+# Advantages of KafkaTemplate
+
+✅ Less code
+
+✅ Spring Integration
+
+✅ Easy configuration
+
+✅ Async Support
+
+✅ Retry Support
+
+✅ Transaction Support
+
+✅ CompletableFuture
+
+✅ Error Handling
+
+✅ Producer Listener
+
+---
+
+# Common Mistakes (Interview + Project)
+
+### ❌ Mistake 1
+
+Creating KafkaProducer manually.
+
+Instead
+
+Use
+
+```java
+KafkaTemplate
+```
+
+---
+
+### ❌ Mistake 2
+
+Creating KafkaTemplate object using
+
+```java
+new KafkaTemplate()
+```
+
+Wrong.
+
+Always use Spring Bean.
+
+---
+
+### ❌ Mistake 3
+
+Not configuring Serializer.
+
+Result
+
+```
+SerializationException
+```
+
+---
+
+### ❌ Mistake 4
+
+Ignoring send() result.
+
+Always handle success/failure in production.
+
+---
+
+# Interview Questions
+
+### Q1. What is KafkaTemplate?
+
+**Answer:**
+KafkaTemplate is a Spring Kafka class that wraps the Kafka Producer and provides simple methods to send messages to Kafka topics.
+
+---
+
+### Q2. Why do we use KafkaTemplate instead of KafkaProducer?
+
+**Answer:**
+Because it reduces boilerplate code, integrates with Spring, manages the producer through `ProducerFactory`, supports asynchronous sending, callbacks, retries, and transactions.
+
+---
+
+### Q3. Is KafkaTemplate itself a Producer?
+
+**Answer:**
+No. It is a wrapper/helper class that internally uses a Kafka Producer.
+
+---
+
+### Q4. Who creates KafkaTemplate?
+
+**Answer:**
+Spring creates it as a bean, usually using a `ProducerFactory`.
+
+---
+
+### Q5. Is KafkaTemplate synchronous?
+
+**Answer:**
+No. By default, it is asynchronous and returns a `CompletableFuture<SendResult<...>>`.
+
+---
+
+### Q6. What is the flow of sending a message?
+
+**Answer:**
+
+```
+Application
+   ↓
+KafkaTemplate
+   ↓
+ProducerFactory
+   ↓
+KafkaProducer
+   ↓
+Serializer
+   ↓
+Kafka Broker
+   ↓
+Topic
+```
+
+---
+
+# 📌 Key Points to Remember
+
+* **KafkaTemplate** is the main Spring class used to send messages to Kafka.
+* It wraps the **Kafka Producer** and simplifies message publishing.
+* It obtains producers from a **ProducerFactory**.
+* By default, sending is **asynchronous**.
+* It can send different payload types (String, JSON, Objects, byte[]), depending on the configured serializer.
+* In Spring applications, use the **KafkaTemplate bean** managed by Spring instead of creating it manually.
+
+---
+
+### ✅ Next Part (Part 2)
+
+In **Part 2**, we'll cover **all KafkaTemplate `send()` methods** in detail:
+
+* `send()`
+* `sendDefault()`
+* `send(ProducerRecord)`
+* `send(Message<?>)`
+* Which method to use in real projects
+* Internal flow of each method
+* Practical Spring Boot examples
+* Interview questions based on each method
+
+=======================================================================================================================
+# Spring Kafka - Part 2
+
+# **KafkaTemplate `send()` Methods (Complete Practical Guide)**
+
+Based on your uploaded Spring Kafka notes. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Part 1 me humne seekha tha ki **KafkaTemplate** message bhejne ke liye use hota hai.
+
+Ab sawal aata hai...
+
+**Message bhejne ke kitne tarike hote hain?**
+
+Spring Kafka me bahut saare `send()` methods hain, lekin project me sirf kuch hi frequently use hote hain.
+
+Aaj hum **har method** ko simple language aur real examples ke saath samjhenge.
+
+---
+
+# KafkaTemplate Methods Overview
+
+```java
+sendDefault(V data)
+
+sendDefault(K key, V data)
+
+sendDefault(Integer partition, K key, V data)
+
+sendDefault(Integer partition, Long timestamp, K key, V data)
+
+send(String topic, V data)
+
+send(String topic, K key, V data)
+
+send(String topic, Integer partition, K key, V data)
+
+send(String topic, Integer partition, Long timestamp, K key, V data)
+
+send(ProducerRecord<K,V> record)
+
+send(Message<?> message)
+```
+
+---
+
+# First Understanding
+
+Suppose hamare paas Topic hai
+
+```text
+orders-topic
+```
+
+Aur message hai
+
+```text
+Order Created
+```
+
+To KafkaTemplate ko minimum do cheeze chahiye
+
+* Topic
+* Message
+
+Baaki sab optional hai.
+
+---
+
+# Method 1
+
+# send(String topic, V data)
+
+---
+
+## 👨‍🏫 Teacher
+
+Ye sabse simple method hai.
+
+```java
+kafkaTemplate.send("orders-topic","Order Created");
+```
+
+---
+
+## Internal Working
+
+```text
+Topic
+↓
+
+orders-topic
+
+↓
+
+Message
+
+↓
+
+Order Created
+
+↓
+
+Kafka Broker
+```
+
+---
+
+## Real Example
+
+Customer ne order place kiya.
+
+```java
+public void placeOrder() {
+
+    kafkaTemplate.send("orders-topic","Order Created");
+
+}
+```
+
+Bas.
+
+---
+
+## Kab Use Karte Hai?
+
+✔ Simple notification
+
+✔ Logging
+
+✔ Event publish
+
+✔ Beginner Projects
+
+---
+
+# Interview
+
+### Q
+
+Sabse jyada use hone wala method?
+
+### Answer
+
+```java
+send(String topic, V data)
+```
+
+---
+
+# Method 2
+
+# send(String topic, K key, V data)
+
+---
+
+## Teacher
+
+Ab maan lo ek customer baar baar order karta hai.
+
+Customer
+
+```text
+101
+```
+
+Har baar uska order same partition me jana chahiye.
+
+Iske liye use hoti hai
+
+**Key**
+
+---
+
+Example
+
+```java
+kafkaTemplate.send(
+"orders-topic",
+"101",
+"Order Created");
+```
+
+---
+
+Yaha
+
+```text
+Topic
+
+↓
+
+orders-topic
+
+Key
+
+↓
+
+101
+
+Value
+
+↓
+
+Order Created
+```
+
+---
+
+## Question
+
+Key ka use kyun karte hain?
+
+---
+
+## Student
+
+Taaki same key wale records same partition me jaye.
+
+---
+
+## Real Banking Example
+
+```text
+Account No
+
+1001
+```
+
+Debit
+
+Credit
+
+Balance Update
+
+Ye sab same partition me jayega.
+
+Kyun?
+
+Ordering maintain karni hai.
+
+---
+
+## Without Key
+
+```text
+Order1
+
+Partition 0
+
+Order2
+
+Partition 3
+
+Order3
+
+Partition1
+```
+
+Sequence toot sakta hai.
+
+---
+
+## With Key
+
+```text
+Key =1001
+
+↓
+
+Hash
+
+↓
+
+Partition 2
+
+↓
+
+Saare records
+
+Partition2
+```
+
+Ordering maintained.
+
+---
+
+# Important Interview Point
+
+Key decides
+
+✔ Partition
+
+✔ Ordering
+
+---
+
+# Method 3
+
+# send(String topic,Integer partition,K key,V data)
+
+---
+
+Ab hum khud partition decide karenge.
+
+Example
+
+```java
+kafkaTemplate.send(
+"orders-topic",
+2,
+"101",
+"Order Created");
+```
+
+---
+
+Meaning
+
+Topic
+
+↓
+
+orders-topic
+
+Partition
+
+↓
+
+2
+
+Key
+
+↓
+
+101
+
+Message
+
+↓
+
+Order Created
+
+---
+
+## Question
+
+Sir key bhi diya aur partition bhi diya.
+
+Fir partition kaun decide karega?
+
+---
+
+## Student
+
+Sir
+
+Partition already diya hai.
+
+Hashing ignore hogi.
+
+Message directly
+
+Partition 2 me jayega.
+
+---
+
+## Kab use hota hai?
+
+Rare.
+
+Mostly
+
+Special routing.
+
+High priority data.
+
+Dedicated partition.
+
+---
+
+Example
+
+```text
+VIP Orders
+
+↓
+
+Partition 0
+```
+
+Normal Orders
+
+↓
+
+Partition 1
+
+---
+
+# Method 4
+
+# send(String topic,Integer partition,Long timestamp,K key,V data)
+
+---
+
+Ye previous method jaisa hi hai.
+
+Extra
+
+Timestamp.
+
+---
+
+Example
+
+```java
+kafkaTemplate.send(
+
+"orders-topic",
+
+2,
+
+System.currentTimeMillis(),
+
+"101",
+
+"Created"
+
+);
+```
+
+---
+
+Question
+
+Timestamp ka use?
+
+---
+
+Kafka record me event time save karna.
+
+---
+
+Example
+
+Payment hua
+
+10:15:02
+
+Ye timestamp future analytics ke liye useful hai.
+
+---
+
+Interview
+
+Topic configuration
+
+### CREATE_TIME
+
+User ka timestamp use hota hai.
+
+---
+
+### LOG_APPEND_TIME
+
+Broker apna timestamp use karta hai.
+
+User timestamp ignore.
+
+👉 Ye point Spring Kafka docs me bhi highlight hai. 
+
+---
+
+# Method 5
+
+# sendDefault(V data)
+
+---
+
+Question
+
+Default Topic kya hota hai?
+
+---
+
+Suppose
+
+```java
+template.setDefaultTopic("orders-topic");
+```
+
+Ab
+
+Har baar
+
+Topic nahi likhna.
+
+---
+
+Bas
+
+```java
+kafkaTemplate.sendDefault("Created");
+```
+
+Internally
+
+```text
+orders-topic
+
+↓
+
+Created
+```
+
+---
+
+Interview
+
+Ye tabhi chalega
+
+Jab
+
+Default Topic configured ho.
+
+---
+
+# Method 6
+
+# sendDefault(K key,V data)
+
+---
+
+Example
+
+```java
+kafkaTemplate.sendDefault(
+
+"101",
+
+"Created"
+
+);
+```
+
+---
+
+Internally
+
+```text
+orders-topic
+
+↓
+
+Key
+
+101
+
+↓
+
+Message
+```
+
+---
+
+# Method 7
+
+# sendDefault(partition,key,data)
+
+---
+
+Example
+
+```java
+kafkaTemplate.sendDefault(
+
+1,
+
+"101",
+
+"Created"
+
+);
+```
+
+---
+
+Meaning
+
+Default topic
+
+Partition 1
+
+Key
+
+Message
+
+---
+
+# Method 8
+
+# sendDefault(partition,timestamp,key,data)
+
+---
+
+Ye sab parameters combine karta hai.
+
+Project me bahut kam use hota hai.
+
+---
+
+# Method 9
+
+# send(ProducerRecord)
+
+---
+
+Question
+
+ProducerRecord kya hota hai?
+
+---
+
+ProducerRecord ek complete Kafka record hai.
+
+Isme hota hai
+
+✔ Topic
+
+✔ Partition
+
+✔ Key
+
+✔ Timestamp
+
+✔ Headers
+
+✔ Value
+
+---
+
+Example
+
+```java
+ProducerRecord<String,String> record =
+new ProducerRecord<>(
+"orders-topic",
+"101",
+"Created"
+);
+
+kafkaTemplate.send(record);
+```
+
+---
+
+Question
+
+Iska fayda?
+
+---
+
+Full control.
+
+---
+
+Real Example
+
+Headers bhi bhejne hain.
+
+Custom Metadata.
+
+Correlation Id.
+
+Tracing.
+
+To
+
+ProducerRecord use karte hain.
+
+---
+
+# Method 10
+
+# send(Message<?>)
+
+---
+
+Ye Spring Messaging use karta hai.
+
+---
+
+Example
+
+```java
+Message<String> message=
+
+MessageBuilder
+
+.withPayload("Created")
+
+.setHeader(
+
+KafkaHeaders.TOPIC,
+
+"orders-topic")
+
+.build();
+
+kafkaTemplate.send(message);
+```
+
+---
+
+Question
+
+Topic kaha gaya?
+
+---
+
+Header me.
+
+---
+
+Question
+
+Message body kaha hai?
+
+---
+
+Payload me.
+
+---
+
+Message Structure
+
+```text
+Message
+
+↓
+
+Payload
+
+↓
+
+Order Created
+
+↓
+
+Headers
+
+↓
+
+Topic
+
+↓
+
+Partition
+
+↓
+
+Key
+```
+
+---
+
+Project
+
+Spring Integration
+
+Spring Cloud Stream
+
+Messaging Framework
+
+---
+
+# Which Method is Used in Real Projects?
+
+| Method               | Usage                  |
+| -------------------- | ---------------------- |
+| send(topic,data)     | ⭐⭐⭐⭐⭐ Most Common      |
+| send(topic,key,data) | ⭐⭐⭐⭐⭐ Banking, Orders  |
+| send(record)         | ⭐⭐⭐⭐ Headers, Metadata |
+| send(message)        | ⭐⭐⭐ Spring Messaging   |
+| sendDefault()        | ⭐⭐ Small Projects      |
+| send(partition,...)  | ⭐ Rare                 |
+
+---
+
+# Internal Flow of send()
+
+```text
+Application
+
+↓
+
+KafkaTemplate.send()
+
+↓
+
+ProducerRecord
+
+↓
+
+Serializer
+
+↓
+
+KafkaProducer
+
+↓
+
+Kafka Broker
+
+↓
+
+Topic
+
+↓
+
+Partition
+```
+
+---
+
+# Common Mistakes
+
+### ❌ Mistake 1
+
+```java
+kafkaTemplate.send(
+"",
+"Hello");
+```
+
+Empty topic.
+
+Result
+
+```text
+InvalidTopicException
+```
+
+---
+
+### ❌ Mistake 2
+
+Wrong Serializer.
+
+Example
+
+Object bheja
+
+StringSerializer laga diya.
+
+Result
+
+```text
+SerializationException
+```
+
+---
+
+### ❌ Mistake 3
+
+Partition number
+
+```text
+10
+```
+
+Topic me partitions
+
+```text
+5
+```
+
+Result
+
+```text
+InvalidPartitionException
+```
+
+---
+
+### ❌ Mistake 4
+
+Using
+
+```java
+sendDefault()
+```
+
+Without default topic.
+
+Result
+
+Exception.
+
+---
+
+# Real Project Flow
+
+```text
+REST API
+
+↓
+
+OrderController
+
+↓
+
+OrderService
+
+↓
+
+KafkaTemplate
+
+↓
+
+send(topic,key,value)
+
+↓
+
+Kafka Broker
+
+↓
+
+orders-topic
+
+↓
+
+Inventory Service
+
+↓
+
+Payment Service
+
+↓
+
+Notification Service
+```
+
+---
+
+# Interview Questions
+
+## Q1. Difference between `send()` and `sendDefault()`?
+
+**Answer:**
+
+* `send()` requires the topic name in the method call.
+* `sendDefault()` sends to the default topic configured in the `KafkaTemplate`.
+
+---
+
+## Q2. Why do we pass a key?
+
+**Answer:**
+
+The key is used by Kafka to determine the partition (unless a partition is explicitly provided) and to maintain ordering for records with the same key.
+
+---
+
+## Q3. When should we use `ProducerRecord`?
+
+**Answer:**
+
+When we need complete control over the record, such as adding headers, custom timestamps, or other metadata.
+
+---
+
+## Q4. What is the difference between `send(ProducerRecord)` and `send(Message<?>)`?
+
+**Answer:**
+
+* `ProducerRecord` is the native Kafka API object.
+* `Message<?>` is the Spring Messaging abstraction, where Kafka details are carried in message headers.
+
+---
+
+## Q5. What happens internally when `send()` is called?
+
+**Answer:**
+
+```text
+KafkaTemplate
+      ↓
+Creates ProducerRecord
+      ↓
+Serializes the key/value
+      ↓
+KafkaProducer sends the record
+      ↓
+Broker stores it in the selected topic and partition
+```
+
+---
+
+# 📌 Key Points to Remember
+
+* `send(topic, data)` is the **most commonly used** method.
+* Use a **key** when you need ordering for related messages.
+* If a **partition** is provided explicitly, Kafka does not use the key to choose the partition.
+* `sendDefault()` works only when a **default topic** is configured.
+* `ProducerRecord` gives you full control over the Kafka record.
+* `Message<?>` integrates Kafka with the Spring Messaging framework.
+
+---
+
+## 🚀 Next Part (Part 3)
+
+In **Part 3**, we'll go deep into **Producer Configuration**:
+
+* `ProducerFactory`
+* `DefaultKafkaProducerFactory`
+* `producerConfigs()`
+* Every important producer property (`bootstrap.servers`, `acks`, `retries`, `linger.ms`, `batch.size`, `buffer.memory`, serializers, etc.)
+* How Spring Boot auto-configures producers
+* Real production configuration
+* Interview questions with practical scenarios
+
+=======================================================================================================================
+# Spring Kafka - Part 3
+
+# **Producer Configuration (ProducerFactory + DefaultKafkaProducerFactory + KafkaTemplate Bean)**
+
+Based on your uploaded Spring Kafka notes. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak humne seekha:
+
+✅ KafkaTemplate kya hai
+
+✅ `send()` methods
+
+Ab sabse important question aata hai...
+
+> **KafkaTemplate message bhej kaise paata hai?**
+
+Answer hai...
+
+👉 **ProducerFactory**
+
+Agar ProducerFactory nahi hoga to KafkaTemplate message nahi bhej sakta.
+
+---
+
+# Complete Flow
+
+```text
+Application
+
+↓
+
+KafkaTemplate
+
+↓
+
+ProducerFactory
+
+↓
+
+KafkaProducer
+
+↓
+
+Kafka Broker
+
+↓
+
+Topic
+```
+
+---
+
+# Q1. ProducerFactory kya hota hai?
+
+## 👨‍🎓 Student
+
+Sir,
+
+ProducerFactory ek factory class hai jo KafkaProducer object banati hai.
+
+KafkaTemplate directly Producer nahi banata.
+
+ProducerFactory se Producer leta hai.
+
+---
+
+## Simple Example
+
+Socho ek Car Factory hai.
+
+Car Factory
+
+↓
+
+Car banati hai.
+
+Tum directly Car nahi bana sakte.
+
+Factory se hi milegi.
+
+Exactly
+
+```text
+ProducerFactory
+
+↓
+
+KafkaProducer
+```
+
+---
+
+# Real Project Flow
+
+Suppose
+
+Customer Order Place karta hai.
+
+```text
+REST API
+
+↓
+
+OrderController
+
+↓
+
+OrderService
+
+↓
+
+KafkaTemplate
+
+↓
+
+ProducerFactory
+
+↓
+
+KafkaProducer
+
+↓
+
+Kafka Broker
+```
+
+---
+
+# Q2. KafkaTemplate khud Producer kyun nahi banata?
+
+Teacher
+
+Ye design aisa kyun banaya gaya?
+
+---
+
+Student
+
+Sir
+
+Separation of Responsibility.
+
+Har class ka ek hi kaam hona chahiye.
+
+---
+
+KafkaTemplate
+
+↓
+
+Sirf message bhejna.
+
+---
+
+ProducerFactory
+
+↓
+
+Producer banana.
+
+---
+
+Ye **SOLID Principle (Single Responsibility Principle)** ka bhi example hai.
+
+---
+
+# Official Configuration
+
+Spring Kafka Documentation me ProducerFactory bean banaya jata hai. 
+
+```java
+@Bean
+public ProducerFactory<String, String> producerFactory() {
+    return new DefaultKafkaProducerFactory<>(producerConfigs());
+}
+```
+
+---
+
+Question
+
+Ye bean kya karega?
+
+Answer
+
+Spring startup ke time
+
+↓
+
+ProducerFactory Bean banayega.
+
+↓
+
+KafkaTemplate isi Bean ko use karega.
+
+---
+
+# Q3. ProducerConfigs() kya hota hai?
+
+Teacher
+
+Producer banane ke liye Kafka ko configuration chahiye.
+
+Wo configuration kaha hoti hai?
+
+---
+
+Student
+
+ProducerConfigs()
+
+---
+
+Example
+
+```java
+@Bean
+public Map<String, Object> producerConfigs() {
+
+    Map<String,Object> props = new HashMap<>();
+
+    props.put(
+        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+        "localhost:9092");
+
+    props.put(
+        ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+        StringSerializer.class);
+
+    props.put(
+        ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+        StringSerializer.class);
+
+    return props;
+
+}
+```
+
+---
+
+# Internal Flow
+
+```text
+ProducerConfigs()
+
+↓
+
+Configuration Map
+
+↓
+
+ProducerFactory
+
+↓
+
+KafkaProducer
+
+↓
+
+KafkaTemplate
+```
+
+---
+
+# Most Important Producer Properties
+
+---
+
+# 1. bootstrap.servers
+
+```java
+ProducerConfig.BOOTSTRAP_SERVERS_CONFIG
+```
+
+Example
+
+```java
+props.put(
+ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+"localhost:9092");
+```
+
+---
+
+Question
+
+Ye kya hai?
+
+Answer
+
+Kafka Broker ka Address.
+
+---
+
+Example
+
+```text
+localhost:9092
+```
+
+Production
+
+```text
+kafka1:9092
+
+kafka2:9092
+
+kafka3:9092
+```
+
+---
+
+Question
+
+Ek broker hi kyun nahi dete?
+
+Answer
+
+Fault Tolerance.
+
+Agar ek broker down ho gaya.
+
+Producer dusre broker se connect ho jayega.
+
+---
+
+# 2. KEY_SERIALIZER
+
+```java
+ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG
+```
+
+Example
+
+```java
+StringSerializer.class
+```
+
+---
+
+Question
+
+Serializer kya karta hai?
+
+Answer
+
+Java Object
+
+↓
+
+Bytes
+
+Kafka sirf bytes samajhta hai.
+
+---
+
+Example
+
+```java
+String key = "101";
+```
+
+Internally
+
+```text
+"101"
+
+↓
+
+Byte[]
+
+↓
+
+Kafka
+```
+
+---
+
+# 3. VALUE_SERIALIZER
+
+```java
+ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG
+```
+
+Example
+
+```java
+StringSerializer.class
+```
+
+---
+
+Question
+
+Value Serializer ka kaam?
+
+Message ko bytes banana.
+
+---
+
+Example
+
+```java
+"Order Created"
+
+↓
+
+Byte[]
+
+↓
+
+Kafka
+```
+
+---
+
+# Why Serializer?
+
+Teacher
+
+Kafka String samajhta hai?
+
+---
+
+Student
+
+❌ Nahi
+
+Kafka sirf Bytes store karta hai.
+
+---
+
+Diagram
+
+```text
+Java Object
+
+↓
+
+Serializer
+
+↓
+
+Bytes
+
+↓
+
+Kafka Broker
+```
+
+---
+
+# Different Serializers
+
+| Serializer          | Use Case    |
+| ------------------- | ----------- |
+| StringSerializer    | String      |
+| IntegerSerializer   | Integer     |
+| LongSerializer      | Long        |
+| ByteArraySerializer | byte[]      |
+| JsonSerializer      | JSON Object |
+| AvroSerializer      | Avro        |
+
+---
+
+Example
+
+```java
+Order order = new Order();
+```
+
+Need
+
+```java
+JsonSerializer
+```
+
+---
+
+# Q4. DefaultKafkaProducerFactory kya hai?
+
+Teacher
+
+ProducerFactory interface hai.
+
+Actual implementation kaunsi hai?
+
+---
+
+Student
+
+```java
+DefaultKafkaProducerFactory
+```
+
+---
+
+Code
+
+```java
+@Bean
+public ProducerFactory<String,String> producerFactory(){
+
+    return new DefaultKafkaProducerFactory<>(producerConfigs());
+
+}
+```
+
+---
+
+Question
+
+Ye kya karega?
+
+Answer
+
+Configuration lekar Producer banayega.
+
+---
+
+Diagram
+
+```text
+Configuration
+
+↓
+
+DefaultKafkaProducerFactory
+
+↓
+
+KafkaProducer
+```
+
+---
+
+# Q5. KafkaTemplate Bean
+
+Documentation Example. 
+
+```java
+@Bean
+public KafkaTemplate<String,String> kafkaTemplate(
+ProducerFactory<String,String> producerFactory){
+
+    return new KafkaTemplate<>(producerFactory);
+
+}
+```
+
+---
+
+Question
+
+ProducerFactory constructor me kyun diya?
+
+Answer
+
+KafkaTemplate ko Producer chahiye.
+
+Wo ProducerFactory se milega.
+
+---
+
+Diagram
+
+```text
+ProducerFactory Bean
+
+↓
+
+KafkaTemplate Bean
+
+↓
+
+Application
+```
+
+---
+
+# Spring Boot Auto Configuration
+
+Teacher
+
+Real projects me kya hum itna code likhte hain?
+
+---
+
+Student
+
+Mostly **No**.
+
+Spring Boot automatically ye beans bana deta hai agar dependency aur properties sahi hain.
+
+Bas
+
+```properties
+spring.kafka.bootstrap-servers=localhost:9092
+```
+
+Aur serializers
+
+```properties
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+
+spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.StringSerializer
+```
+
+Spring Boot automatically
+
+* ProducerFactory
+* KafkaTemplate
+
+create kar deta hai.
+
+---
+
+# Manual vs Auto Configuration
+
+| Manual               | Spring Boot            |
+| -------------------- | ---------------------- |
+| ProducerFactory Bean | Auto                   |
+| KafkaTemplate Bean   | Auto                   |
+| Config Map           | application.properties |
+| More Code            | Less Code              |
+
+---
+
+# Real Project Example
+
+Order Object
+
+```java
+public class Order {
+
+    private Long id;
+
+    private String product;
+
+    private Double amount;
+
+}
+```
+
+Producer
+
+```java
+@Service
+public class OrderProducer {
+
+    @Autowired
+    private KafkaTemplate<String, Order> kafkaTemplate;
+
+    public void publish(Order order){
+
+        kafkaTemplate.send("orders-topic", order);
+
+    }
+
+}
+```
+
+Configuration
+
+```properties
+spring.kafka.bootstrap-servers=localhost:9092
+
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+
+spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
+```
+
+Flow
+
+```text
+Order Object
+
+↓
+
+JsonSerializer
+
+↓
+
+JSON Bytes
+
+↓
+
+Kafka Broker
+
+↓
+
+orders-topic
+```
+
+---
+
+# Common Mistakes
+
+### ❌ Wrong Serializer
+
+```java
+KafkaTemplate<String,Order>
+```
+
+But
+
+```properties
+StringSerializer
+```
+
+Result
+
+```text
+SerializationException
+```
+
+---
+
+### ❌ Wrong Broker Address
+
+```text
+localhost:9093
+```
+
+Broker
+
+```text
+localhost:9092
+```
+
+Result
+
+```text
+TimeoutException
+
+Connection Failed
+```
+
+---
+
+### ❌ Forgetting Serializer
+
+Result
+
+```text
+No Serializer Found
+```
+
+---
+
+### ❌ Creating KafkaProducer Manually
+
+Instead
+
+Use
+
+```text
+KafkaTemplate
+```
+
+---
+
+# Interview Questions
+
+## Q1. What is ProducerFactory?
+
+**Answer:**
+
+`ProducerFactory` is responsible for creating and managing `KafkaProducer` instances. `KafkaTemplate` uses it to obtain a producer.
+
+---
+
+## Q2. Why do we need ProducerFactory?
+
+**Answer:**
+
+It separates producer creation from message sending, making configuration reusable and allowing Spring to manage producer instances efficiently.
+
+---
+
+## Q3. What is DefaultKafkaProducerFactory?
+
+**Answer:**
+
+It is the default implementation of the `ProducerFactory` interface that creates `KafkaProducer` objects using the supplied configuration.
+
+---
+
+## Q4. What is the purpose of `bootstrap.servers`?
+
+**Answer:**
+
+It specifies the Kafka broker(s) that the producer connects to. In production, multiple broker addresses are usually provided for high availability.
+
+---
+
+## Q5. Why do we need serializers?
+
+**Answer:**
+
+Kafka stores data as bytes. Serializers convert Java objects (String, JSON, Integer, etc.) into bytes before sending them to Kafka.
+
+---
+
+## Q6. Does KafkaTemplate create KafkaProducer directly?
+
+**Answer:**
+
+No. It obtains a producer from the `ProducerFactory`.
+
+---
+
+## Q7. In Spring Boot, do we always create KafkaTemplate manually?
+
+**Answer:**
+
+No. Spring Boot auto-configures `ProducerFactory` and `KafkaTemplate` when the required dependencies and `spring.kafka.*` properties are present.
+
+---
+
+# 📌 Key Points to Remember
+
+* **ProducerFactory** creates `KafkaProducer` instances.
+* **DefaultKafkaProducerFactory** is the default implementation used in Spring Kafka.
+* **KafkaTemplate** depends on `ProducerFactory`; it does not create producers itself.
+* **bootstrap.servers** tells the producer how to connect to the Kafka cluster.
+* **Serializers** convert Java objects into bytes before sending them.
+* In most Spring Boot projects, **ProducerFactory** and **KafkaTemplate** are auto-configured through `application.properties` or `application.yml`.
+
+---
+
+# 🚀 Next Part (Part 4)
+
+In **Part 4**, we'll learn **Message Headers** in depth:
+
+* `KafkaHeaders.TOPIC`
+* `KafkaHeaders.KEY`
+* `KafkaHeaders.PARTITION`
+* `KafkaHeaders.TIMESTAMP`
+* How `send(Message<?>)` works internally
+* Custom headers (Correlation ID, Request ID, Trace ID)
+* Real microservices examples
+* Header-based routing and interview questions
+
+This topic becomes very important when working with **Spring Messaging**, **request-reply patterns**, and **distributed tracing** in production systems.
+
+=======================================================================================================================
+# Spring Kafka - Part 4
+
+# **Kafka Message Headers (KafkaHeaders) - Complete Practical Guide**
+
+Based on your uploaded Spring Kafka notes. This part focuses on **`send(Message<?>)`**, **Kafka headers**, and how Spring stores metadata while sending messages. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak humne sirf message bhejna seekha.
+
+Jaise
+
+```java
+kafkaTemplate.send("orders-topic","Order Created");
+```
+
+Lekin ek question hai...
+
+## Agar sirf message bhej diya...
+
+Consumer ko kaise pata chalega
+
+* Kis customer ka order hai?
+* Kis service ne bheja?
+* Request Id kya hai?
+* Trace Id kya hai?
+* Kis partition me jana hai?
+
+Ye sab information kaha store hoti hai?
+
+👉 **Kafka Headers**
+
+---
+
+# Q1. Kafka Header kya hota hai?
+
+## 👨‍🎓 Student
+
+Sir,
+
+Kafka Header message ke saath bheji jane wali **extra information (metadata)** hoti hai.
+
+Message aur Header alag cheeze hain.
+
+---
+
+## Real Life Example
+
+Courier Parcel
+
+```
+Inside Parcel
+
+↓
+
+Laptop
+```
+
+Outside Sticker
+
+```
+Receiver
+
+Address
+
+Phone Number
+
+Tracking Number
+```
+
+Laptop
+
+=
+
+Message
+
+Address Sticker
+
+=
+
+Header
+
+---
+
+Exactly Kafka me bhi
+
+```
+Message
+
+↓
+
+Order Created
+```
+
+Headers
+
+```
+Topic
+
+Key
+
+Partition
+
+Timestamp
+
+CorrelationId
+
+TraceId
+```
+
+---
+
+# Internal Structure
+
+```
+Kafka Record
+
+----------------------------
+
+Headers
+
+Topic
+
+Key
+
+Partition
+
+Timestamp
+
+CorrelationId
+
+----------------------------
+
+Payload
+
+Order Created
+
+----------------------------
+```
+
+---
+
+# Q2. Payload kya hota hai?
+
+Teacher
+
+Payload ka matlab?
+
+---
+
+Student
+
+Actual Data.
+
+Example
+
+```text
+Order Created
+```
+
+Ye Payload hai.
+
+---
+
+Diagram
+
+```
+Message
+
+↓
+
+Headers
+
+↓
+
+Metadata
+
+↓
+
+Payload
+
+↓
+
+Actual Data
+```
+
+---
+
+# Q3. Spring me Header kaise bhejte hain?
+
+Spring
+
+```java
+Message<String> message =
+MessageBuilder
+
+.withPayload("Order Created")
+
+.setHeader(
+KafkaHeaders.TOPIC,
+"orders-topic")
+
+.build();
+
+kafkaTemplate.send(message);
+```
+
+---
+
+Question
+
+Yaha actual message kya hai?
+
+Answer
+
+```
+Order Created
+```
+
+---
+
+Topic kaha gaya?
+
+Header me.
+
+---
+
+# MessageBuilder kya hai?
+
+Question
+
+Ye class kya karti hai?
+
+---
+
+Answer
+
+Message Object banati hai.
+
+Diagram
+
+```
+Payload
+
++
+
+Headers
+
+↓
+
+Message
+```
+
+---
+
+# Message<?> Structure
+
+```
+Message
+
+↓
+
+Payload
+
+↓
+
+Headers
+```
+
+---
+
+# Q4. KafkaHeaders.TOPIC
+
+Example
+
+```java
+.setHeader(
+KafkaHeaders.TOPIC,
+"orders-topic")
+```
+
+---
+
+Question
+
+Ye kya batata hai?
+
+Answer
+
+Message kis Topic me jana hai.
+
+---
+
+Flow
+
+```
+KafkaHeaders.TOPIC
+
+↓
+
+orders-topic
+
+↓
+
+Kafka Broker
+
+↓
+
+orders-topic
+```
+
+---
+
+# Q5. KafkaHeaders.KEY
+
+Example
+
+```java
+.setHeader(
+
+KafkaHeaders.KEY,
+
+"101")
+```
+
+---
+
+Question
+
+Key kyun dete hain?
+
+Answer
+
+Same key
+
+↓
+
+Same Partition
+
+↓
+
+Ordering maintained.
+
+---
+
+Bank Example
+
+Account
+
+1001
+
+Deposit
+
+Withdraw
+
+Balance
+
+Sab same partition me.
+
+---
+
+Diagram
+
+```
+KEY=1001
+
+↓
+
+Hash
+
+↓
+
+Partition 2
+
+↓
+
+Ordering
+```
+
+---
+
+# Q6. KafkaHeaders.PARTITION
+
+Example
+
+```java
+.setHeader(
+
+KafkaHeaders.PARTITION,
+
+2)
+```
+
+---
+
+Question
+
+Ye kya karta hai?
+
+Answer
+
+Message ko directly
+
+Partition 2 me bhejta hai.
+
+Hashing nahi hoti.
+
+---
+
+Example
+
+```
+VIP Orders
+
+↓
+
+Partition0
+```
+
+Normal Orders
+
+↓
+
+Partition1
+
+---
+
+# Q7. KafkaHeaders.TIMESTAMP
+
+Example
+
+```java
+.setHeader(
+
+KafkaHeaders.TIMESTAMP,
+
+System.currentTimeMillis())
+```
+
+---
+
+Question
+
+Timestamp ka use?
+
+Answer
+
+Record kis time create hua.
+
+---
+
+Example
+
+```
+Payment
+
+10:15:02 AM
+```
+
+Analytics
+
+Auditing
+
+Reports
+
+Sab me use hota hai.
+
+---
+
+Important
+
+Topic configuration
+
+### CREATE_TIME
+
+User timestamp save hota hai.
+
+---
+
+### LOG_APPEND_TIME
+
+Broker apna timestamp lagata hai.
+
+User timestamp ignore.
+
+Ye behavior Spring Kafka documentation me bhi explain kiya gaya hai. 
+
+---
+
+# Q8. Complete Example
+
+```java
+Message<String> message =
+MessageBuilder
+
+.withPayload("Order Created")
+
+.setHeader(KafkaHeaders.TOPIC,"orders-topic")
+
+.setHeader(KafkaHeaders.KEY,"101")
+
+.setHeader(KafkaHeaders.PARTITION,1)
+
+.setHeader(
+KafkaHeaders.TIMESTAMP,
+System.currentTimeMillis())
+
+.build();
+
+kafkaTemplate.send(message);
+```
+
+---
+
+Message internally
+
+```
+Payload
+
+↓
+
+Order Created
+
+Headers
+
+↓
+
+Topic
+
+orders-topic
+
+↓
+
+Key
+
+101
+
+↓
+
+Partition
+
+1
+
+↓
+
+Timestamp
+
+17215502000
+```
+
+---
+
+# Q9. Custom Headers
+
+Teacher
+
+Sirf Spring wale headers hi bhej sakte hain?
+
+---
+
+Student
+
+❌ Nahi.
+
+Apne bhi bana sakte hain.
+
+---
+
+Example
+
+```java
+Message<String> message =
+MessageBuilder
+
+.withPayload("Order Created")
+
+.setHeader("request-id","REQ-1001")
+
+.setHeader("user-id","101")
+
+.build();
+```
+
+---
+
+Question
+
+Real Project me kyun use karte hain?
+
+Answer
+
+Microservices.
+
+Distributed Tracing.
+
+Auditing.
+
+Logging.
+
+Security.
+
+---
+
+# Real Example
+
+Order Service
+
+↓
+
+Header
+
+```
+RequestId
+
+REQ-10001
+```
+
+Inventory Service
+
+↓
+
+Same RequestId
+
+↓
+
+Payment Service
+
+↓
+
+Same RequestId
+
+↓
+
+Notification Service
+
+↓
+
+Same RequestId
+
+Ab poora request trace ho sakta hai.
+
+---
+
+Diagram
+
+```
+Order Service
+
+↓
+
+RequestId
+
+REQ1001
+
+↓
+
+Inventory
+
+↓
+
+Payment
+
+↓
+
+Notification
+```
+
+---
+
+# Q10. Correlation Id
+
+Interview Favorite.
+
+Question
+
+Correlation Id kya hota hai?
+
+---
+
+Answer
+
+Request aur Reply ko match karne ke liye unique id.
+
+Example
+
+```
+Request
+
+CorrelationId
+
+ABC123
+```
+
+Reply
+
+```
+CorrelationId
+
+ABC123
+```
+
+Application samajh jata hai
+
+Ye reply isi request ka hai.
+
+---
+
+Request-Reply Flow
+
+```
+Client
+
+↓
+
+Request
+
+↓
+
+CorrelationId=ABC123
+
+↓
+
+Kafka
+
+↓
+
+Consumer
+
+↓
+
+Reply
+
+↓
+
+CorrelationId=ABC123
+
+↓
+
+Client
+```
+
+---
+
+# Q11. TraceId
+
+Question
+
+TraceId kya hota hai?
+
+---
+
+Answer
+
+Ek request poori journey me follow karne ke liye.
+
+Example
+
+```
+Gateway
+
+↓
+
+Order Service
+
+↓
+
+Payment
+
+↓
+
+Inventory
+
+↓
+
+Notification
+```
+
+Sab services same
+
+```
+TraceId
+```
+
+carry karti hain.
+
+---
+
+# Q12. Difference
+
+| Header        | Purpose               |
+| ------------- | --------------------- |
+| Key           | Partition Selection   |
+| Topic         | Destination Topic     |
+| Partition     | Fixed Partition       |
+| Timestamp     | Event Time            |
+| CorrelationId | Request-Reply Mapping |
+| TraceId       | Distributed Tracing   |
+| RequestId     | Request Tracking      |
+
+---
+
+# Real Microservice Flow
+
+```
+REST API
+
+↓
+
+Gateway
+
+↓
+
+Order Service
+
+↓
+
+KafkaTemplate
+
+↓
+
+Headers Added
+
+Topic
+
+Key
+
+TraceId
+
+RequestId
+
+↓
+
+Kafka Broker
+
+↓
+
+Inventory
+
+↓
+
+Payment
+
+↓
+
+Shipping
+
+↓
+
+Notification
+```
+
+---
+
+# Common Mistakes
+
+### ❌ Forgetting Topic
+
+```java
+.setHeader(
+KafkaHeaders.TOPIC,
+null)
+```
+
+Message send nahi hoga.
+
+---
+
+### ❌ Wrong Partition
+
+Topic
+
+3 Partitions
+
+Header
+
+```
+Partition=8
+```
+
+Result
+
+```
+InvalidPartitionException
+```
+
+---
+
+### ❌ Same Header Name
+
+```
+requestid
+```
+
+Aur
+
+```
+request-id
+```
+
+Confusion.
+
+Naming standard follow karo.
+
+---
+
+### ❌ Storing Large Data in Headers
+
+Wrong
+
+```
+Entire JSON
+```
+
+Header me.
+
+Header sirf metadata ke liye hota hai.
+
+Payload actual data ke liye.
+
+---
+
+# Interview Questions
+
+## Q1. What are Kafka Headers?
+
+**Answer:**
+
+Kafka Headers are metadata attached to a record. They carry information such as topic, key, partition, timestamp, correlation ID, and custom application-specific values without changing the message payload.
+
+---
+
+## Q2. What is the difference between Payload and Header?
+
+| Payload              | Header                       |
+| -------------------- | ---------------------------- |
+| Actual business data | Metadata about the message   |
+| Example: Order JSON  | Example: Topic, Key, TraceId |
+
+---
+
+## Q3. Why do we use `KafkaHeaders.KEY`?
+
+**Answer:**
+
+To ensure messages with the same key are routed to the same partition, preserving ordering.
+
+---
+
+## Q4. What is Correlation ID?
+
+**Answer:**
+
+A unique identifier used to match a reply with its original request in request-reply messaging.
+
+---
+
+## Q5. Why do microservices use Trace IDs?
+
+**Answer:**
+
+To trace a single request as it travels across multiple services, making debugging and monitoring much easier.
+
+---
+
+## Q6. Can we create custom Kafka headers?
+
+**Answer:**
+
+Yes. Spring's `MessageBuilder.setHeader()` allows us to add custom headers such as `request-id`, `user-id`, `tenant-id`, or `trace-id`.
+
+---
+
+# 📌 Key Points to Remember
+
+* A Kafka record consists of **Payload + Headers**.
+* **Payload** contains the actual business data.
+* **Headers** contain metadata such as topic, key, partition, timestamp, and custom values.
+* `MessageBuilder` is used to create a `Message<?>` with both payload and headers.
+* Common production headers include **Request ID**, **Correlation ID**, and **Trace ID**.
+* Headers make distributed systems easier to debug, trace, and monitor.
+
+---
+
+# 🚀 Next Part (Part 5)
+
+In **Part 5**, we'll cover one of the most important Spring Kafka topics:
+
+### **Asynchronous Message Sending (`CompletableFuture`)**
+
+We'll learn:
+
+* Why `KafkaTemplate.send()` returns `CompletableFuture`
+* `whenComplete()` callback
+* Success vs Failure handling
+* `SendResult`
+* `RecordMetadata`
+* `KafkaProducerException`
+* Real production error handling
+* Retry strategies
+* Complete Spring Boot practical examples
+* Interview questions based on asynchronous publishing
+
+This is one of the most frequently discussed topics in Spring Kafka production interviews.
+
+=======================================================================================================================
+# Spring Kafka - Part 5
+
+# **Asynchronous Message Sending (CompletableFuture) - Complete Practical Guide**
+
+Based on your uploaded Spring Kafka notes. This part covers how `KafkaTemplate.send()` works asynchronously, `CompletableFuture`, `whenComplete()`, `SendResult`, and production-style callback handling. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak hum sirf message bhej rahe the.
+
+```java
+kafkaTemplate.send("orders-topic", "Order Created");
+```
+
+Lekin ek question hai...
+
+**Hume kaise pata chalega ki message successfully Kafka Broker tak pahucha ya nahi?**
+
+Iska answer hai...
+
+👉 **CompletableFuture**
+
+---
+
+# Q1. `KafkaTemplate.send()` kya return karta hai?
+
+## 👨‍🎓 Student
+
+Sir,
+
+`send()` method **CompletableFuture<SendResult<K,V>>** return karta hai.
+
+Example
+
+```java
+CompletableFuture<SendResult<String, String>> future =
+        kafkaTemplate.send("orders-topic", "Order Created");
+```
+
+---
+
+# Question
+
+Sir ye Future kyun return karta hai?
+
+---
+
+## Answer
+
+Kyunki Kafka message **Asynchronously** bhejta hai.
+
+Application message bhejne ke baad wait nahi karti.
+
+---
+
+# Real Life Example
+
+Suppose tum Swiggy se order karte ho.
+
+```text
+Order Place
+
+↓
+
+Order Accepted
+
+↓
+
+Food Prepare
+
+↓
+
+Delivery Boy Assigned
+
+↓
+
+Delivered
+```
+
+Order place karte hi tum restaurant ke bahar wait nahi karte.
+
+Tum apna kaam continue karte ho.
+
+Exactly Kafka bhi aise hi kaam karta hai.
+
+---
+
+# Synchronous vs Asynchronous
+
+## Synchronous
+
+```text
+Send Message
+
+↓
+
+Wait
+
+↓
+
+Broker Reply
+
+↓
+
+Next Line Execute
+```
+
+Application ruk jaati hai.
+
+---
+
+## Asynchronous
+
+```text
+Send Message
+
+↓
+
+Immediately Next Line Execute
+
+↓
+
+Broker Background me Process karta hai
+
+↓
+
+Result baad me aata hai
+```
+
+---
+
+# Q2. CompletableFuture kya hota hai?
+
+## Student
+
+Sir,
+
+`CompletableFuture` Java ka class hai jo future me milne wale result ko represent karta hai.
+
+Simple language me
+
+> "Abhi message send ho raha hai, result baad me milega."
+
+---
+
+Example
+
+```java
+CompletableFuture<SendResult<String, String>> future =
+        kafkaTemplate.send("orders-topic", "Order Created");
+```
+
+---
+
+# Internal Flow
+
+```text
+Application
+
+↓
+
+KafkaTemplate.send()
+
+↓
+
+CompletableFuture Return
+
+↓
+
+Application Continue
+
+↓
+
+Kafka Producer
+
+↓
+
+Kafka Broker
+
+↓
+
+Success / Failure
+
+↓
+
+Future Complete
+```
+
+---
+
+# Q3. Result kaise milega?
+
+Answer
+
+`whenComplete()`
+
+---
+
+Example
+
+```java
+CompletableFuture<SendResult<String, String>> future =
+        kafkaTemplate.send("orders-topic", "Order Created");
+
+future.whenComplete((result, exception) -> {
+
+    if (exception == null) {
+
+        System.out.println("Message Sent Successfully");
+
+    } else {
+
+        System.out.println("Message Sending Failed");
+
+    }
+
+});
+```
+
+Ye pattern Spring Kafka documentation me recommend kiya gaya hai. 
+
+---
+
+# Question
+
+`whenComplete()` kab execute hota hai?
+
+---
+
+## Student
+
+Jab Kafka Broker response deta hai.
+
+Chahe success ho ya failure.
+
+---
+
+# Internal Flow
+
+```text
+send()
+
+↓
+
+Broker
+
+↓
+
+Success
+
+↓
+
+whenComplete()
+
+OR
+
+Failure
+
+↓
+
+whenComplete()
+```
+
+---
+
+# Q4. Success Case
+
+Example
+
+```java
+future.whenComplete((result, ex) -> {
+
+    if (ex == null) {
+
+        System.out.println("Order Published");
+
+    }
+
+});
+```
+
+Output
+
+```text
+Order Published
+```
+
+---
+
+# Q5. Failure Case
+
+Example
+
+```java
+future.whenComplete((result, ex) -> {
+
+    if (ex != null) {
+
+        System.out.println(ex.getMessage());
+
+    }
+
+});
+```
+
+Output
+
+```text
+Connection Refused
+
+OR
+
+Timeout
+
+OR
+
+Serialization Error
+```
+
+---
+
+# Real Project Example
+
+Suppose
+
+Customer Order Place karta hai.
+
+```text
+REST API
+
+↓
+
+Order Service
+
+↓
+
+KafkaTemplate
+
+↓
+
+orders-topic
+```
+
+Code
+
+```java
+public void publishOrder(Order order) {
+
+    kafkaTemplate.send("orders-topic", order)
+
+            .whenComplete((result, ex) -> {
+
+                if (ex == null) {
+
+                    System.out.println("Order Published");
+
+                } else {
+
+                    System.out.println("Publish Failed");
+
+                }
+
+            });
+
+}
+```
+
+---
+
+# Q6. SendResult kya hota hai?
+
+Question
+
+Success hua.
+
+Ab kya milega?
+
+---
+
+Answer
+
+`SendResult`
+
+Ye information deta hai
+
+* ProducerRecord
+* RecordMetadata
+
+---
+
+Diagram
+
+```text
+SendResult
+
+↓
+
+ProducerRecord
+
+↓
+
+RecordMetadata
+```
+
+---
+
+# Q7. ProducerRecord kya hota hai?
+
+Ye original message hai jo producer ne bheja.
+
+Example
+
+```text
+Topic
+
+orders-topic
+
+Key
+
+101
+
+Value
+
+Order Created
+```
+
+---
+
+# Q8. RecordMetadata kya hota hai?
+
+Ye broker ki taraf se aane wali information hai.
+
+Example
+
+* Topic Name
+* Partition
+* Offset
+* Timestamp
+
+---
+
+Diagram
+
+```text
+RecordMetadata
+
+↓
+
+Topic
+
+↓
+
+Partition
+
+↓
+
+Offset
+
+↓
+
+Timestamp
+```
+
+---
+
+# Example
+
+```java
+future.whenComplete((result, ex) -> {
+
+    if (ex == null) {
+
+        RecordMetadata metadata = result.getRecordMetadata();
+
+        System.out.println(metadata.topic());
+
+        System.out.println(metadata.partition());
+
+        System.out.println(metadata.offset());
+
+    }
+
+});
+```
+
+Suppose Output
+
+```text
+orders-topic
+
+Partition : 2
+
+Offset : 105
+```
+
+---
+
+# Q9. Offset kya hota hai?
+
+Offset ek unique sequence number hai.
+
+Example
+
+```text
+Partition 0
+
+Offset 0
+
+Order1
+
+Offset 1
+
+Order2
+
+Offset 2
+
+Order3
+```
+
+Har naye message ka offset increase hota hai.
+
+---
+
+# Q10. Exception kya ho sakti hai?
+
+Agar send fail ho gaya.
+
+Exception milegi.
+
+Spring Kafka docs ke according, exception ko `KafkaProducerException` ke roop me access kiya ja sakta hai aur usme failed `ProducerRecord` bhi available hota hai. 
+
+Example
+
+```text
+SerializationException
+
+TimeoutException
+
+Network Exception
+
+Broker Down
+```
+
+---
+
+# Q11. Blocking (Synchronous) Send
+
+Kabhi kabhi hume wait karna padta hai.
+
+Example
+
+```java
+kafkaTemplate.send("orders-topic", "Order Created")
+             .get();
+```
+
+Yaha
+
+Application wait karegi.
+
+Broker response ke baad hi next line chalegi.
+
+---
+
+Question
+
+Project me mostly kya use hota hai?
+
+Answer
+
+✅ Async
+
+Sync bahut kam use hota hai.
+
+---
+
+# Q12. Why Async is Better?
+
+Suppose
+
+1000 Orders
+
+Sync
+
+```text
+Order1
+
+↓
+
+Wait
+
+↓
+
+Order2
+
+↓
+
+Wait
+
+↓
+
+Order3
+```
+
+Slow.
+
+---
+
+Async
+
+```text
+Order1
+
+↓
+
+Order2
+
+↓
+
+Order3
+
+↓
+
+Order4
+
+↓
+
+Background Processing
+```
+
+Fast.
+
+---
+
+# Q13. Production Example
+
+```java
+@Service
+public class OrderProducer {
+
+    @Autowired
+    private KafkaTemplate<String, Order> kafkaTemplate;
+
+    public void publish(Order order) {
+
+        kafkaTemplate.send("orders-topic", order)
+
+                .whenComplete((result, ex) -> {
+
+                    if (ex == null) {
+
+                        System.out.println("Topic : "
+                                + result.getRecordMetadata().topic());
+
+                        System.out.println("Partition : "
+                                + result.getRecordMetadata().partition());
+
+                        System.out.println("Offset : "
+                                + result.getRecordMetadata().offset());
+
+                    } else {
+
+                        System.out.println("Error : "
+                                + ex.getMessage());
+
+                    }
+
+                });
+
+    }
+
+}
+```
+
+---
+
+# Complete Flow
+
+```text
+REST API
+
+↓
+
+Controller
+
+↓
+
+Order Service
+
+↓
+
+KafkaTemplate.send()
+
+↓
+
+CompletableFuture
+
+↓
+
+Broker
+
+↓
+
+Success / Failure
+
+↓
+
+whenComplete()
+
+↓
+
+RecordMetadata / Exception
+```
+
+---
+
+# Interview Questions
+
+## Q1. What does `KafkaTemplate.send()` return?
+
+**Answer:**
+
+It returns a `CompletableFuture<SendResult<K,V>>`, allowing asynchronous processing of the send result.
+
+---
+
+## Q2. Why does KafkaTemplate use `CompletableFuture`?
+
+**Answer:**
+
+Because Kafka sends messages asynchronously. The application can continue executing while Kafka processes the message in the background.
+
+---
+
+## Q3. What is `whenComplete()`?
+
+**Answer:**
+
+It is a callback that executes after the asynchronous operation finishes, whether it succeeds or fails.
+
+---
+
+## Q4. What information does `SendResult` contain?
+
+**Answer:**
+
+`SendResult` contains:
+
+* `ProducerRecord` (the message sent)
+* `RecordMetadata` (topic, partition, offset, timestamp returned by the broker)
+
+---
+
+## Q5. What is `RecordMetadata`?
+
+**Answer:**
+
+It contains metadata about the stored record, such as topic name, partition number, offset, and timestamp.
+
+---
+
+## Q6. What is the difference between Async and Sync send?
+
+| Async                             | Sync                                              |
+| --------------------------------- | ------------------------------------------------- |
+| Does not block the calling thread | Blocks until broker responds                      |
+| Returns `CompletableFuture`       | Uses `.get()` to wait                             |
+| Best for high throughput          | Used only when immediate confirmation is required |
+
+---
+
+# 📌 Key Points to Remember
+
+* `KafkaTemplate.send()` is **asynchronous by default**.
+* It returns a `CompletableFuture<SendResult<K,V>>`.
+* Use `whenComplete()` to handle both success and failure.
+* `SendResult` contains the original `ProducerRecord` and broker `RecordMetadata`.
+* `RecordMetadata` provides the topic, partition, offset, and timestamp.
+* Calling `.get()` makes the send operation synchronous and blocks the current thread until the broker responds.
+
+---
+
+# 🚀 Next Part (Part 6)
+
+In **Part 6**, we'll cover **ProducerListener**:
+
+* What is `ProducerListener`?
+* `onSuccess()`
+* `onError()`
+* `ProducerListener` vs `CompletableFuture`
+* Which one is preferred in production?
+* Logging, monitoring, and reusable callback handling
+* Practical Spring Boot implementation
+* Interview questions and real-world scenarios
+
+=======================================================================================================================
+# Spring Kafka - Part 6
+
+# **ProducerListener (Success & Error Callback) - Complete Practical Guide**
+
+Based on your uploaded Spring Kafka notes. This part covers **ProducerListener**, `onSuccess()`, `onError()`, how it differs from `CompletableFuture`, and where it is used in production. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Part 5 me humne dekha ki message send hone ke baad result lene ke liye hum use karte hain
+
+```java
+CompletableFuture
+```
+
+Lekin Spring Kafka ek aur feature deta hai...
+
+👉 **ProducerListener**
+
+Question hai...
+
+**Jab har jagah `whenComplete()` use kar sakte hain, to ProducerListener ki kya zarurat hai?**
+
+Aaj isi ko samjhenge.
+
+---
+
+# Q1. ProducerListener kya hota hai?
+
+## 👨‍🎓 Student
+
+Sir,
+
+**ProducerListener** ek callback interface hai.
+
+Jab Kafka message successfully send hota hai ya fail hota hai,
+
+Spring automatically iske methods call karta hai.
+
+---
+
+Simple Definition
+
+> **ProducerListener listens to the result of every message sent by KafkaTemplate.**
+
+---
+
+# Real Life Example
+
+Suppose courier company hai.
+
+Tum parcel bhejte ho.
+
+Thodi der baad courier company SMS bhejti hai.
+
+```text
+Parcel Delivered Successfully
+```
+
+Ya
+
+```text
+Delivery Failed
+```
+
+Ye notification dene wala
+
+=
+
+**ProducerListener**
+
+---
+
+# Internal Flow
+
+```text
+Application
+
+↓
+
+KafkaTemplate.send()
+
+↓
+
+Kafka Broker
+
+↓
+
+ProducerListener
+
+↓
+
+onSuccess()
+
+OR
+
+onError()
+```
+
+---
+
+# Q2. ProducerListener Interface
+
+Spring Kafka documentation me interface kuch is tarah hota hai. 
+
+```java
+public interface ProducerListener<K,V> {
+
+    default void onSuccess(
+            ProducerRecord<K,V> producerRecord,
+            RecordMetadata recordMetadata) {
+    }
+
+    default void onError(
+            ProducerRecord<K,V> producerRecord,
+            RecordMetadata recordMetadata,
+            Exception exception) {
+    }
+
+}
+```
+
+---
+
+Question
+
+Kitne methods hain?
+
+Answer
+
+```
+onSuccess()
+
+onError()
+```
+
+---
+
+# Q3. onSuccess() kab call hota hai?
+
+Jab Broker successfully message store kar deta hai.
+
+---
+
+Example
+
+```java
+@Override
+public void onSuccess(
+        ProducerRecord<String,String> record,
+        RecordMetadata metadata) {
+
+    System.out.println("Message Sent Successfully");
+
+}
+```
+
+---
+
+Flow
+
+```text
+KafkaTemplate
+
+↓
+
+Broker
+
+↓
+
+Success
+
+↓
+
+onSuccess()
+```
+
+---
+
+# Q4. onError() kab call hota hai?
+
+Jab message send nahi hota.
+
+Example
+
+```java
+@Override
+public void onError(
+        ProducerRecord<String,String> record,
+        RecordMetadata metadata,
+        Exception ex) {
+
+    System.out.println(ex.getMessage());
+
+}
+```
+
+---
+
+Possible Errors
+
+```
+SerializationException
+
+TimeoutException
+
+Network Error
+
+Broker Down
+```
+
+---
+
+# Q5. ProducerRecord kya hota hai?
+
+Question
+
+`onSuccess()` me
+
+```java
+ProducerRecord
+```
+
+kyun milta hai?
+
+---
+
+Answer
+
+Taaki hume pata chale
+
+Kaunsa message send hua tha.
+
+Example
+
+```text
+Topic
+
+orders-topic
+
+Key
+
+101
+
+Value
+
+Order Created
+```
+
+---
+
+# Q6. RecordMetadata kya hota hai?
+
+Broker ki taraf se aane wali information.
+
+Example
+
+```text
+Topic
+
+orders-topic
+
+Partition
+
+2
+
+Offset
+
+150
+
+Timestamp
+```
+
+---
+
+Code
+
+```java
+@Override
+public void onSuccess(
+        ProducerRecord<String,String> record,
+        RecordMetadata metadata) {
+
+    System.out.println(metadata.topic());
+
+    System.out.println(metadata.partition());
+
+    System.out.println(metadata.offset());
+
+}
+```
+
+---
+
+Suppose Output
+
+```text
+orders-topic
+
+Partition 2
+
+Offset 150
+```
+
+---
+
+# Q7. ProducerListener configure kaise karte hain?
+
+Example
+
+```java
+@Bean
+public KafkaTemplate<String,String> kafkaTemplate(
+        ProducerFactory<String,String> pf) {
+
+    KafkaTemplate<String,String> template =
+            new KafkaTemplate<>(pf);
+
+    template.setProducerListener(
+            new MyProducerListener());
+
+    return template;
+
+}
+```
+
+---
+
+Yaha
+
+```text
+KafkaTemplate
+
+↓
+
+ProducerListener Attach
+
+↓
+
+Har Send Monitor Hoga
+```
+
+---
+
+# Q8. Custom ProducerListener
+
+```java
+public class MyProducerListener
+        implements ProducerListener<String,String> {
+
+    @Override
+    public void onSuccess(
+            ProducerRecord<String,String> record,
+            RecordMetadata metadata) {
+
+        System.out.println(
+                "Published Successfully");
+
+    }
+
+    @Override
+    public void onError(
+            ProducerRecord<String,String> record,
+            RecordMetadata metadata,
+            Exception exception) {
+
+        System.out.println(
+                "Publishing Failed");
+
+    }
+
+}
+```
+
+---
+
+# Q9. Real Project Example
+
+Suppose
+
+Order Service
+
+↓
+
+Publish Order
+
+↓
+
+Kafka
+
+↓
+
+Inventory
+
+Har message ka log chahiye.
+
+```text
+Order Published Successfully
+
+Topic : orders-topic
+
+Partition : 1
+
+Offset : 500
+```
+
+Agar error
+
+```text
+Publishing Failed
+
+Reason
+
+Broker Down
+```
+
+Ye kaam ProducerListener easily kar deta hai.
+
+---
+
+# Q10. ProducerListener vs CompletableFuture
+
+Bahut Important Interview Question.
+
+| ProducerListener       | CompletableFuture         |
+| ---------------------- | ------------------------- |
+| Global callback        | Per message callback      |
+| Configure once         | Every send() call         |
+| Automatic              | Manual                    |
+| Good for Logging       | Good for Business Logic   |
+| Centralized Monitoring | Request Specific Handling |
+
+---
+
+Example
+
+### ProducerListener
+
+```text
+Har Message ka Log
+```
+
+Automatically.
+
+---
+
+### CompletableFuture
+
+```java
+kafkaTemplate.send(...)
+
+.whenComplete(...)
+```
+
+Sirf us message ke liye.
+
+---
+
+# Q11. Project me kya use hota hai?
+
+Answer
+
+Dono.
+
+Example
+
+ProducerListener
+
+↓
+
+Logging
+
+↓
+
+Metrics
+
+↓
+
+Monitoring
+
+---
+
+CompletableFuture
+
+↓
+
+Business Logic
+
+↓
+
+Retry
+
+↓
+
+Notification
+
+---
+
+Real Flow
+
+```text
+REST API
+
+↓
+
+KafkaTemplate.send()
+
+↓
+
+ProducerListener
+
+(Log Success)
+
+↓
+
+CompletableFuture
+
+(Business Action)
+```
+
+---
+
+# Q12. Default ProducerListener
+
+Question
+
+Agar hum koi ProducerListener configure nahi kare to?
+
+Answer
+
+Spring Kafka default me
+
+```text
+LoggingProducerListener
+```
+
+use karta hai.
+
+Ye
+
+* Success par kuch nahi karta.
+* Error hone par log likhta hai.
+
+Ye behavior Spring Kafka documentation me bhi mention hai. 
+
+---
+
+# Real Banking Example
+
+Customer Transfer
+
+↓
+
+KafkaTemplate
+
+↓
+
+payment-topic
+
+↓
+
+ProducerListener
+
+↓
+
+Log
+
+```text
+Payment Event Published Successfully
+
+Topic : payment-topic
+
+Partition : 0
+
+Offset : 2500
+```
+
+Agar fail
+
+```text
+Payment Event Failed
+
+Reason
+
+Broker Not Available
+```
+
+---
+
+# Complete Flow
+
+```text
+REST API
+
+↓
+
+Controller
+
+↓
+
+Order Service
+
+↓
+
+KafkaTemplate.send()
+
+↓
+
+Kafka Broker
+
+↓
+
+ProducerListener
+
+↓
+
+onSuccess()
+
+OR
+
+onError()
+```
+
+---
+
+# Interview Questions
+
+## Q1. What is ProducerListener?
+
+**Answer:**
+
+`ProducerListener` is a Spring Kafka callback interface that receives notifications when a message is successfully published or when publishing fails.
+
+---
+
+## Q2. Which methods are available in ProducerListener?
+
+**Answer:**
+
+* `onSuccess()`
+* `onError()`
+
+---
+
+## Q3. What information is available in `onSuccess()`?
+
+**Answer:**
+
+* `ProducerRecord` (the message that was sent)
+* `RecordMetadata` (topic, partition, offset, timestamp)
+
+---
+
+## Q4. What is the difference between ProducerListener and CompletableFuture?
+
+**Answer:**
+
+* **ProducerListener** is configured once and works for all messages.
+* **CompletableFuture** is used for handling the result of an individual `send()` operation.
+
+---
+
+## Q5. Why do companies use ProducerListener?
+
+**Answer:**
+
+For centralized logging, monitoring, metrics collection, auditing, and tracking the status of all producer messages without repeating callback code.
+
+---
+
+# ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**You already have `CompletableFuture.whenComplete()`. Why would you still use `ProducerListener`?**
+
+### Best Answer
+
+> "`CompletableFuture.whenComplete()` is useful when I want to perform business logic for a specific message, such as updating a database or triggering another workflow. `ProducerListener` is better for centralized concerns like logging, monitoring, metrics, and auditing because it automatically applies to every message sent by the `KafkaTemplate`. In many production systems, both are used together."
+
+---
+
+# 📌 Key Points to Remember
+
+* `ProducerListener` is a **global callback mechanism**.
+* It has two main methods: **`onSuccess()`** and **`onError()`**.
+* It receives both the original `ProducerRecord` and the broker's `RecordMetadata`.
+* `ProducerListener` is ideal for **logging, monitoring, and auditing**.
+* `CompletableFuture` is ideal for **message-specific business logic**.
+* If no custom listener is configured, Spring Kafka uses **`LoggingProducerListener`** by default.
+
+---
+
+# 🚀 Next Part (Part 7)
+
+In **Part 7**, we'll learn **`flush()` and Blocking vs Non-Blocking Send**:
+
+* What is `flush()`?
+* Why `flush()` is rarely needed
+* What is `linger.ms`?
+* Auto Flush
+* `KafkaTemplate(true)` (autoFlush)
+* Blocking with `Future.get()`
+* Performance impact
+* Real production scenarios
+* Interview questions based on `flush()` and batching
+
+=======================================================================================================================
+# Spring Kafka - Part 7
+
+# **flush(), linger.ms, Auto Flush & Blocking vs Non-Blocking Send**
+
+Based on your uploaded Spring Kafka notes. This part covers `flush()`, `linger.ms`, `autoFlush`, and when to use blocking (`get()`) versus non-blocking sends. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak humne ye code likha tha.
+
+```java
+kafkaTemplate.send("orders-topic", "Order Created");
+```
+
+Question...
+
+**Kya ye message immediately Kafka Broker ko chala jata hai?**
+
+## 👨‍🎓 Student
+
+Sir...
+
+**Not Always.**
+
+Kabhi message thodi der producer ke buffer me bhi ruk sakta hai.
+
+Isi concept ko samajhne ke liye hume do cheeze samajhni hongi.
+
+* **Buffer**
+* **linger.ms**
+
+---
+
+# Q1. Buffer kya hota hai?
+
+Producer har message ko turant network par nahi bhejta.
+
+Pehle message ko ek temporary memory me rakhta hai.
+
+Us memory ko kehte hain
+
+## Buffer
+
+---
+
+## Diagram
+
+```text
+Application
+
+↓
+
+Kafka Producer
+
+↓
+
+Buffer
+
+↓
+
+Kafka Broker
+```
+
+---
+
+## Example
+
+Suppose
+
+Application ne 3 messages bheje.
+
+```text
+Order 1
+
+Order 2
+
+Order 3
+```
+
+Producer
+
+```text
+Buffer
+
+Order1
+
+Order2
+
+Order3
+```
+
+Thodi der baad
+
+Sab ek saath Broker ko bhej diye.
+
+---
+
+# Question
+
+Sir aisa kyun karta hai?
+
+---
+
+## Answer
+
+Performance improve karne ke liye.
+
+Ek-ek message bhejne se better hai
+
+10 messages ek saath bhejna.
+
+---
+
+# Real Life Example
+
+Courier Company
+
+Agar sirf 1 parcel hai
+
+to truck turant nahi nikalta.
+
+Wo wait karta hai.
+
+Jab 50 parcel ho jaye
+
+tab truck nikalta hai.
+
+Exactly Kafka Producer bhi aisa hi karta hai.
+
+---
+
+# Q2. linger.ms kya hota hai?
+
+Ye Producer Configuration hai.
+
+Ye decide karta hai
+
+Producer kitni der wait kare.
+
+---
+
+Example
+
+```properties
+linger.ms=5
+```
+
+Meaning
+
+Producer
+
+Maximum
+
+```text
+5 milliseconds
+```
+
+wait karega.
+
+Agar tab tak aur messages aa gaye
+
+to batch bana dega.
+
+---
+
+## Diagram
+
+```text
+Message1
+
+↓
+
+Wait 5 ms
+
+↓
+
+Message2
+
+↓
+
+Message3
+
+↓
+
+Single Batch
+
+↓
+
+Kafka Broker
+```
+
+---
+
+# Question
+
+Agar 5 ms ke andar aur message nahi aaye?
+
+---
+
+## Answer
+
+Jo message hai
+
+usi ko bhej dega.
+
+---
+
+# Q3. Batching kya hota hai?
+
+Multiple messages
+
+↓
+
+Single Network Request
+
+Example
+
+Without Batch
+
+```text
+Order1
+
+↓
+
+Broker
+
+Order2
+
+↓
+
+Broker
+
+Order3
+
+↓
+
+Broker
+```
+
+Total
+
+3 Network Calls
+
+---
+
+With Batch
+
+```text
+Order1
+
+Order2
+
+Order3
+
+↓
+
+Single Batch
+
+↓
+
+Broker
+```
+
+Total
+
+1 Network Call
+
+---
+
+# Advantage
+
+✔ Better Performance
+
+✔ Less Network Overhead
+
+✔ High Throughput
+
+---
+
+# Q4. flush() kya hota hai?
+
+Question
+
+Suppose
+
+Producer buffer me messages hain.
+
+Lekin mujhe
+
+**abhi isi time**
+
+Broker ko bhejna hai.
+
+Kaise bhejenge?
+
+---
+
+Answer
+
+```java
+kafkaTemplate.flush();
+```
+
+---
+
+Meaning
+
+Buffer me jitne bhi pending messages hain
+
+sab immediately Broker ko bhej do.
+
+---
+
+Diagram
+
+```text
+Buffer
+
+Order1
+
+Order2
+
+Order3
+
+↓
+
+flush()
+
+↓
+
+Broker
+```
+
+---
+
+# Example
+
+```java
+kafkaTemplate.send("orders-topic","Order1");
+
+kafkaTemplate.send("orders-topic","Order2");
+
+kafkaTemplate.flush();
+```
+
+Result
+
+Dono messages immediately Broker ko chale jayenge.
+
+---
+
+# Q5. flush() kab use karte hain?
+
+Normally
+
+Kabhi nahi.
+
+Sirf special cases me.
+
+Example
+
+* Critical Financial Transaction
+* Application Shutdown
+* Testing
+* Immediate Delivery Required
+
+---
+
+# Q6. flush() ka drawback?
+
+Question
+
+Har message ke baad flush() kar diya.
+
+```java
+kafkaTemplate.send(...);
+
+kafkaTemplate.flush();
+```
+
+Kya problem hogi?
+
+---
+
+## Answer
+
+Batching khatam ho jayegi.
+
+Performance reduce hogi.
+
+Network Calls badh jayengi.
+
+---
+
+Wrong
+
+```text
+Message
+
+↓
+
+Flush
+
+↓
+
+Broker
+
+Message
+
+↓
+
+Flush
+
+↓
+
+Broker
+```
+
+---
+
+Correct
+
+```text
+Message
+
+↓
+
+Message
+
+↓
+
+Message
+
+↓
+
+Batch
+
+↓
+
+Broker
+```
+
+---
+
+# Q7. Auto Flush kya hota hai?
+
+Spring Kafka constructor deta hai.
+
+```java
+KafkaTemplate(producerFactory,true)
+```
+
+Yaha
+
+```text
+true
+
+=
+
+autoFlush
+```
+
+Har send() ke baad
+
+automatically flush() hoga.
+
+Spring Kafka documentation me iska mention hai ki autoFlush constructor har send ke baad flush trigger karta hai. 
+
+---
+
+Example
+
+```java
+KafkaTemplate<String,String> template =
+        new KafkaTemplate<>(producerFactory,true);
+```
+
+Ab
+
+```java
+template.send(...);
+```
+
+Automatically
+
+```text
+flush()
+```
+
+---
+
+# Q8. Kya Auto Flush production me use hota hai?
+
+Generally
+
+❌ No.
+
+Kyun?
+
+Performance kam ho jati hai.
+
+Batching ka benefit khatam.
+
+---
+
+# Q9. Blocking Send
+
+Part 5 me humne dekha tha
+
+```java
+kafkaTemplate.send(...)
+```
+
+Ye Async tha.
+
+---
+
+Blocking
+
+```java
+kafkaTemplate.send(...).get();
+```
+
+Yaha
+
+Application wait karegi.
+
+Broker response ke baad hi next line chalegi.
+
+---
+
+Diagram
+
+```text
+Send
+
+↓
+
+Wait
+
+↓
+
+Broker Response
+
+↓
+
+Next Line
+```
+
+---
+
+# Q10. Non Blocking Send
+
+```java
+kafkaTemplate.send(...)
+```
+
+Application
+
+Wait nahi karegi.
+
+---
+
+Diagram
+
+```text
+Send
+
+↓
+
+Next Line Execute
+
+↓
+
+Broker Background Me
+
+↓
+
+Callback
+```
+
+---
+
+# Q11. Difference
+
+| Blocking     | Non Blocking             |
+| ------------ | ------------------------ |
+| Uses `get()` | Uses `CompletableFuture` |
+| Waits        | Doesn't Wait             |
+| Slow         | Fast                     |
+| Rare         | Most Common              |
+
+---
+
+# Q12. Real Banking Example
+
+Money Transfer
+
+↓
+
+Payment Event
+
+↓
+
+Kafka
+
+Suppose
+
+Payment confirmation ke bina
+
+Transaction complete nahi kar sakte.
+
+Tab
+
+```java
+send().get()
+```
+
+use ho sakta hai.
+
+---
+
+Notification Service
+
+↓
+
+Email
+
+↓
+
+SMS
+
+↓
+
+Offers
+
+Yaha
+
+Async enough.
+
+No need to wait.
+
+---
+
+# Q13. flush() + get()
+
+Example
+
+```java
+kafkaTemplate.send("orders-topic","Order Created");
+
+kafkaTemplate.flush();
+
+kafkaTemplate.send("payment-topic","Payment Done")
+             .get();
+```
+
+Meaning
+
+First
+
+Pending messages send.
+
+Second
+
+Payment message bhejo.
+
+Uska confirmation bhi wait karo.
+
+---
+
+# Internal Flow
+
+```text
+Application
+
+↓
+
+KafkaTemplate
+
+↓
+
+Producer Buffer
+
+↓
+
+linger.ms
+
+↓
+
+Batch
+
+↓
+
+flush()
+
+↓
+
+Kafka Broker
+
+↓
+
+Success
+```
+
+---
+
+# Performance Comparison
+
+| Feature       | Without flush() | With flush() |
+| ------------- | --------------- | ------------ |
+| Batching      | ✅ Yes           | ❌ No         |
+| Performance   | High            | Lower        |
+| Network Calls | Less            | More         |
+| Throughput    | High            | Lower        |
+
+---
+
+# Interview Questions
+
+## Q1. What is `flush()`?
+
+**Answer:**
+
+`flush()` forces the producer to immediately send all buffered records to the Kafka broker without waiting for batching conditions.
+
+---
+
+## Q2. Why do producers buffer messages?
+
+**Answer:**
+
+To create batches, reduce network calls, and improve throughput.
+
+---
+
+## Q3. What is `linger.ms`?
+
+**Answer:**
+
+`linger.ms` is the maximum time the producer waits for additional messages before sending a batch.
+
+---
+
+## Q4. When should we use `flush()`?
+
+**Answer:**
+
+Only when immediate delivery is required, such as critical transactions, shutdown scenarios, or testing. It should not be used after every send in normal production code.
+
+---
+
+## Q5. What is Auto Flush?
+
+**Answer:**
+
+When `KafkaTemplate` is created with the `autoFlush` constructor (`new KafkaTemplate<>(producerFactory, true)`), it automatically calls `flush()` after each `send()`.
+
+---
+
+## Q6. What is the difference between Blocking and Non-Blocking send?
+
+**Answer:**
+
+* **Blocking:** Uses `.get()` and waits for the broker response.
+* **Non-Blocking:** Returns immediately with a `CompletableFuture` and handles the result asynchronously.
+
+---
+
+## Q7. Why is asynchronous sending preferred?
+
+**Answer:**
+
+It improves application throughput because threads are not blocked waiting for Kafka acknowledgments.
+
+---
+
+# ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**Your producer is configured with `linger.ms=10`. Immediately after calling `send()`, your application exits. What can happen?**
+
+### Best Answer
+
+> "The message may still be in the producer's buffer and might not be sent before the application exits. Before shutdown, the application should ensure pending messages are sent by allowing the producer to close gracefully or by explicitly flushing when appropriate."
+
+---
+
+# 📌 Key Points to Remember
+
+* Kafka producers use a **buffer** to batch messages before sending.
+* **`linger.ms`** controls how long the producer waits to form a batch.
+* **`flush()`** forces all buffered messages to be sent immediately.
+* Avoid calling `flush()` after every `send()` because it reduces batching and hurts performance.
+* **`autoFlush=true`** automatically flushes after each send but is rarely used in high-throughput production systems.
+* **Async (`CompletableFuture`)** is the default and preferred approach.
+* **Blocking (`get()`)** should be reserved for cases where immediate confirmation is essential.
+
+---
+
+# 🚀 Next Part (Part 8)
+
+In **Part 8**, we'll cover **RoutingKafkaTemplate**, including:
+
+* What is `RoutingKafkaTemplate`?
+* Why it was introduced in Spring Kafka
+* How it selects different `ProducerFactory` instances
+* Sending different payload types (String, `byte[]`, JSON)
+* Multiple serializers in one application
+* Real microservice use cases
+* Limitations (transactions, flush, metrics)
+* Practical Spring Boot examples and interview questions
+
+=======================================================================================================================
+# Spring Kafka - Part 8
+
+# **RoutingKafkaTemplate (Multiple ProducerFactory & Dynamic Routing)**
+
+Based on your uploaded Spring Kafka notes. This section covers **RoutingKafkaTemplate**, how it selects a producer at runtime, multiple serializers, limitations, and production use cases. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak hum ek hi `KafkaTemplate` use kar rahe the.
+
+Example
+
+```java
+kafkaTemplate.send("orders-topic","Order Created");
+```
+
+Question...
+
+**Agar ek application me multiple topics hain aur har topic ka serializer alag hai to?**
+
+Example
+
+```text
+orders-topic      → String
+
+image-topic       → byte[]
+
+payment-topic     → JSON
+
+audit-topic       → Avro
+```
+
+Kya hume 4 KafkaTemplate banane padenge?
+
+❌ No.
+
+Spring Kafka ne is problem ke liye diya hai
+
+# RoutingKafkaTemplate
+
+---
+
+# Q1. RoutingKafkaTemplate kya hota hai?
+
+## 👨‍🎓 Student
+
+Sir,
+
+**RoutingKafkaTemplate** ek special KafkaTemplate hai.
+
+Ye runtime par topic dekhkar decide karta hai ki kaunsa ProducerFactory use karna hai.
+
+Simple Definition
+
+> **One KafkaTemplate, Multiple ProducerFactories.**
+
+---
+
+# Real Life Example
+
+Suppose
+
+Courier Company
+
+Tum bolte ho
+
+```text
+India
+
+↓
+
+BlueDart
+```
+
+International
+
+↓
+
+DHL
+
+Heavy Parcel
+
+↓
+
+Transport Company
+
+Tumhe manually company choose nahi karni.
+
+System automatically choose karta hai.
+
+Exactly
+
+RoutingKafkaTemplate bhi
+
+Topic dekhkar
+
+Producer choose karta hai.
+
+---
+
+# Normal KafkaTemplate
+
+```text
+Application
+
+↓
+
+KafkaTemplate
+
+↓
+
+ProducerFactory
+
+↓
+
+Kafka Producer
+```
+
+Sirf
+
+**One ProducerFactory**
+
+---
+
+# RoutingKafkaTemplate
+
+```text
+Application
+
+↓
+
+RoutingKafkaTemplate
+
+↓
+
+Topic Check
+
+↓
+
+ProducerFactory A
+
+OR
+
+ProducerFactory B
+
+OR
+
+ProducerFactory C
+
+↓
+
+Kafka Producer
+```
+
+---
+
+# Q2. Spring ne RoutingKafkaTemplate kyun banaya?
+
+Suppose
+
+Tumhari company me
+
+```text
+orders-topic
+
+↓
+
+StringSerializer
+```
+
+Aur
+
+```text
+image-topic
+
+↓
+
+ByteArraySerializer
+```
+
+Aur
+
+```text
+payment-topic
+
+↓
+
+JsonSerializer
+```
+
+Ek hi KafkaTemplate
+
+sabko handle nahi kar sakta.
+
+---
+
+RoutingKafkaTemplate
+
+↓
+
+Automatically
+
+Correct ProducerFactory choose karega.
+
+---
+
+# Q3. ProducerFactory kaise choose hota hai?
+
+Spring
+
+Topic Name ko
+
+Regex Pattern se compare karta hai.
+
+Documentation me Pattern → ProducerFactory ka `LinkedHashMap` use kiya gaya hai. 
+
+---
+
+Diagram
+
+```text
+orders-topic
+
+↓
+
+Pattern Match
+
+↓
+
+String ProducerFactory
+```
+
+---
+
+```text
+image-topic
+
+↓
+
+Pattern Match
+
+↓
+
+ByteArray ProducerFactory
+```
+
+---
+
+# Q4. Official Configuration
+
+Documentation Example. 
+
+```java
+Map<Pattern, ProducerFactory<Object,Object>> map =
+        new LinkedHashMap<>();
+
+map.put(Pattern.compile("image.*"), imageProducerFactory);
+
+map.put(Pattern.compile(".*"), defaultProducerFactory);
+
+RoutingKafkaTemplate routingTemplate =
+        new RoutingKafkaTemplate(map);
+```
+
+---
+
+Question
+
+LinkedHashMap hi kyun?
+
+---
+
+Answer
+
+Kyunki
+
+Spring
+
+Top se Bottom
+
+Pattern check karta hai.
+
+First Match
+
+↓
+
+ProducerFactory select.
+
+---
+
+Example
+
+```text
+image-topic
+
+↓
+
+Pattern
+
+image.*
+
+↓
+
+Matched
+
+↓
+
+Byte ProducerFactory
+```
+
+---
+
+# Q5. Complete Flow
+
+Suppose
+
+Application
+
+```java
+routingTemplate.send("image-topic", imageBytes);
+```
+
+Internal Flow
+
+```text
+Application
+
+↓
+
+RoutingKafkaTemplate
+
+↓
+
+Topic = image-topic
+
+↓
+
+Regex Match
+
+↓
+
+ByteArray ProducerFactory
+
+↓
+
+Kafka Producer
+
+↓
+
+Kafka Broker
+```
+
+---
+
+# Q6. Multiple Serializer Example
+
+Suppose
+
+Configuration
+
+```text
+ProducerFactory 1
+
+↓
+
+StringSerializer
+```
+
+ProducerFactory 2
+
+↓
+
+ByteArraySerializer
+
+ProducerFactory 3
+
+↓
+
+JsonSerializer
+
+---
+
+Application
+
+↓
+
+RoutingKafkaTemplate
+
+↓
+
+Topic Check
+
+↓
+
+Correct ProducerFactory
+
+↓
+
+Kafka
+
+````
+
+---
+
+# Q7. Real Project Example
+
+Suppose
+
+E-Commerce Project
+
+---
+
+Order Service
+
+```text
+orders-topic
+
+↓
+
+JSON
+````
+
+---
+
+Image Service
+
+```text
+product-image-topic
+
+↓
+
+byte[]
+```
+
+---
+
+Audit Service
+
+```text
+audit-topic
+
+↓
+
+String
+```
+
+Without Routing
+
+3 KafkaTemplate.
+
+---
+
+With Routing
+
+Only
+
+1 RoutingKafkaTemplate.
+
+---
+
+Diagram
+
+```text
+REST API
+
+↓
+
+RoutingKafkaTemplate
+
+↓
+
+orders-topic
+
+↓
+
+Json Producer
+
+----------------
+
+product-image-topic
+
+↓
+
+Byte Producer
+
+----------------
+
+audit-topic
+
+↓
+
+String Producer
+```
+
+---
+
+# Q8. Example
+
+```java
+routingTemplate.send(
+        "orders-topic",
+        orderObject);
+```
+
+Automatically
+
+↓
+
+JsonSerializer
+
+---
+
+```java
+routingTemplate.send(
+        "product-image-topic",
+        imageBytes);
+```
+
+Automatically
+
+↓
+
+ByteArraySerializer
+
+---
+
+```java
+routingTemplate.send(
+        "audit-topic",
+        "Order Created");
+```
+
+Automatically
+
+↓
+
+StringSerializer
+
+---
+
+# Q9. Why Not Use One Serializer?
+
+Question
+
+Ek hi JsonSerializer laga dete?
+
+---
+
+Answer
+
+Har data JSON nahi hota.
+
+Example
+
+```text
+Image
+
+↓
+
+byte[]
+```
+
+Audio
+
+↓
+
+byte[]
+
+Video
+
+↓
+
+byte[]
+
+JSON Serializer
+
+Fail karega.
+
+---
+
+# Q10. Limitations
+
+Spring Documentation ke according
+
+RoutingKafkaTemplate
+
+**support nahi karta**
+
+❌ Transactions
+
+❌ flush()
+
+❌ execute()
+
+❌ metrics()
+
+Reason?
+
+Kyuki
+
+Topic pata chale bina
+
+Producer select nahi ho sakta.
+
+Aur in operations ke liye Producer pehle hi identify hona chahiye. 
+
+---
+
+# Question
+
+Flush kyun support nahi karta?
+
+---
+
+Answer
+
+Suppose
+
+Abhi tak koi Topic choose hi nahi hua.
+
+To
+
+Spring ko kaise pata chale
+
+Kaunsa Producer flush kare?
+
+Impossible.
+
+---
+
+# Q11. Difference
+
+| KafkaTemplate         | RoutingKafkaTemplate       |
+| --------------------- | -------------------------- |
+| One ProducerFactory   | Multiple ProducerFactories |
+| One Serializer        | Multiple Serializers       |
+| Fixed Producer        | Runtime Producer Selection |
+| Supports Transactions | ❌ No                       |
+| Supports flush()      | ❌ No                       |
+| Supports metrics()    | ❌ No                       |
+
+---
+
+# Q12. Production Example
+
+Company
+
+Event Driven Architecture
+
+---
+
+Topics
+
+```text
+customer-topic
+
+↓
+
+JSON
+```
+
+---
+
+audit-topic
+
+↓
+
+String
+
+---
+
+image-topic
+
+↓
+
+byte[]
+
+---
+
+Application
+
+↓
+
+RoutingKafkaTemplate
+
+↓
+
+Topic
+
+↓
+
+Correct ProducerFactory
+
+↓
+
+Broker
+
+---
+
+No need to create multiple KafkaTemplates.
+
+---
+
+# Internal Architecture
+
+```text
+Application
+
+↓
+
+RoutingKafkaTemplate
+
+↓
+
+Regex Pattern
+
+↓
+
+ProducerFactory
+
+↓
+
+Serializer
+
+↓
+
+Kafka Producer
+
+↓
+
+Broker
+
+↓
+
+Topic
+```
+
+---
+
+# Interview Questions
+
+## Q1. What is RoutingKafkaTemplate?
+
+**Answer:**
+
+`RoutingKafkaTemplate` is a Spring Kafka template that selects the appropriate `ProducerFactory` at runtime based on the destination topic.
+
+---
+
+## Q2. Why do we use RoutingKafkaTemplate?
+
+**Answer:**
+
+It allows a single application to send different types of data (String, JSON, `byte[]`, etc.) using different serializers without creating multiple `KafkaTemplate` instances.
+
+---
+
+## Q3. How does RoutingKafkaTemplate select the producer?
+
+**Answer:**
+
+It matches the destination topic name against an ordered map of **regular expression patterns** (`Pattern`) to `ProducerFactory` instances. The first matching pattern is used.
+
+---
+
+## Q4. Why is `LinkedHashMap` used?
+
+**Answer:**
+
+Because pattern matching is order-sensitive. Spring checks the patterns from top to bottom, so the most specific patterns should be added first.
+
+---
+
+## Q5. Does RoutingKafkaTemplate support transactions?
+
+**Answer:**
+
+No. It does not support transactions, `flush()`, `execute()`, or `metrics()` because the producer cannot be determined until the destination topic is known.
+
+---
+
+## Q6. When should we use RoutingKafkaTemplate?
+
+**Answer:**
+
+When an application needs to publish to different topics using different serializers or different producer configurations.
+
+---
+
+# ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**Your application publishes JSON messages to `orders-topic` and image files (`byte[]`) to `product-image-topic`. How would you design the producer?**
+
+### Best Answer
+
+> "I would use `RoutingKafkaTemplate` with multiple `ProducerFactory` instances. One producer factory would use `JsonSerializer` for JSON payloads, another would use `ByteArraySerializer` for image data. The `RoutingKafkaTemplate` would select the correct producer automatically based on the destination topic name."
+
+---
+
+# 📌 Key Points to Remember
+
+* `RoutingKafkaTemplate` selects the **ProducerFactory at runtime**.
+* It is ideal when **different topics require different serializers**.
+* It uses an ordered **`Pattern` → `ProducerFactory`** mapping.
+* **`LinkedHashMap`** preserves the matching order, so specific patterns should come first.
+* It **does not support** transactions, `flush()`, `execute()`, or `metrics()`.
+* It helps reduce the need for multiple `KafkaTemplate` beans in applications that publish multiple data types.
+
+---
+
+# 🚀 Next Part (Part 9)
+
+In **Part 9**, we'll cover **DefaultKafkaProducerFactory** in depth:
+
+* What is `DefaultKafkaProducerFactory`?
+* Singleton Producer vs `producerPerThread`
+* Why Spring uses a singleton producer by default
+* `closeThreadBoundProducer()`
+* Serializer objects vs Serializer classes
+* `Supplier<Serializer>`
+* `updateConfigs()` and `removeConfig()`
+* `reset()`
+* Real production architecture and interview questions
+
+This is one of the most important internals of Spring Kafka because **every `KafkaTemplate` ultimately depends on `DefaultKafkaProducerFactory`**.
+
+=======================================================================================================================
+# Spring Kafka - Part 9
+
+# **DefaultKafkaProducerFactory (Complete Practical Guide)**
+
+Based on your uploaded Spring Kafka notes. This part covers **DefaultKafkaProducerFactory**, singleton producer, `producerPerThread`, serializers, `Supplier<Serializer>`, `updateConfigs()`, `removeConfig()`, and `reset()`. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak humne dekha
+
+```text
+KafkaTemplate
+
+↓
+
+ProducerFactory
+
+↓
+
+KafkaProducer
+```
+
+Lekin ek question hai...
+
+**ProducerFactory actually Producer kaise banati hai?**
+
+Answer
+
+👉 **DefaultKafkaProducerFactory**
+
+Ye Spring Kafka ki sabse important classes me se ek hai.
+
+---
+
+# Complete Flow
+
+```text
+Application
+
+↓
+
+KafkaTemplate
+
+↓
+
+ProducerFactory
+
+↓
+
+DefaultKafkaProducerFactory
+
+↓
+
+KafkaProducer
+
+↓
+
+Kafka Broker
+```
+
+---
+
+# Q1. DefaultKafkaProducerFactory kya hai?
+
+## 👨‍🎓 Student
+
+Sir,
+
+**DefaultKafkaProducerFactory** `ProducerFactory` interface ki default implementation hai.
+
+Iska kaam hai
+
+✅ KafkaProducer banana
+
+✅ KafkaProducer manage karna
+
+✅ KafkaProducer reuse karna
+
+---
+
+## Code
+
+```java
+@Bean
+public ProducerFactory<String, String> producerFactory() {
+
+    return new DefaultKafkaProducerFactory<>(producerConfigs());
+
+}
+```
+
+---
+
+# Real Life Example
+
+Car Factory
+
+↓
+
+Car banati hai
+
+Car Factory
+
+=
+
+DefaultKafkaProducerFactory
+
+Car
+
+=
+
+KafkaProducer
+
+---
+
+# Q2. ProducerFactory aur DefaultKafkaProducerFactory me difference?
+
+| ProducerFactory      | DefaultKafkaProducerFactory |
+| -------------------- | --------------------------- |
+| Interface            | Implementation              |
+| Rule batata hai      | Actual Producer banata hai  |
+| Cannot create object | Can create object           |
+
+---
+
+Example
+
+```java
+ProducerFactory<String,String> pf
+```
+
+Actually object
+
+```java
+new DefaultKafkaProducerFactory<>(configs)
+```
+
+---
+
+# Q3. Kya har send() par naya KafkaProducer banta hai?
+
+Question
+
+Suppose
+
+```java
+kafkaTemplate.send(...);
+
+kafkaTemplate.send(...);
+
+kafkaTemplate.send(...);
+```
+
+Har baar naya Producer?
+
+---
+
+## Student
+
+❌ Nahi.
+
+By Default
+
+Sirf
+
+**One Producer**
+
+banta hai.
+
+---
+
+Diagram
+
+```text
+Application
+
+↓
+
+KafkaTemplate
+
+↓
+
+DefaultKafkaProducerFactory
+
+↓
+
+KafkaProducer
+
+↓
+
+Message1
+
+Message2
+
+Message3
+```
+
+Same Producer.
+
+---
+
+# Question
+
+Aisa kyun?
+
+---
+
+## Answer
+
+KafkaProducer banana expensive operation hai.
+
+Usme
+
+* Network Connection
+* Buffers
+* Metadata
+* Threads
+
+sab create hote hain.
+
+Har baar naya Producer banana
+
+bahut slow hoga.
+
+---
+
+# Real Life Example
+
+Suppose
+
+Office me Printer hai.
+
+Har print ke liye
+
+naya printer kharidoge?
+
+❌ No
+
+Same printer use karoge.
+
+Exactly
+
+Spring bhi
+
+same Producer reuse karta hai.
+
+---
+
+# Q4. Singleton Producer
+
+Spring Documentation ke according
+
+By Default
+
+**Singleton Producer**
+
+use hota hai. 
+
+Diagram
+
+```text
+Thread1
+
+↓
+
+KafkaProducer
+
+↑
+
+Thread2
+
+↑
+
+Thread3
+```
+
+Sab
+
+same Producer use karte hain.
+
+---
+
+# Question
+
+Advantage?
+
+---
+
+## Answer
+
+✔ Less Memory
+
+✔ Better Performance
+
+✔ Recommended by Kafka Team
+
+---
+
+# Q5. Problem with Singleton Producer
+
+Question
+
+Suppose
+
+Thread 1
+
+```java
+flush();
+```
+
+call karta hai.
+
+Thread2
+
+message bhej raha hai.
+
+Kya hoga?
+
+---
+
+Answer
+
+Thread2 ko wait karna pad sakta hai.
+
+Performance impact.
+
+Isliye Spring ne ek option diya.
+
+---
+
+# producerPerThread
+
+---
+
+# Q6. producerPerThread kya hai?
+
+Configuration
+
+```java
+DefaultKafkaProducerFactory<String,String> pf =
+        new DefaultKafkaProducerFactory<>(configs);
+
+pf.setProducerPerThread(true);
+```
+
+---
+
+Question
+
+Ab kya hoga?
+
+---
+
+Answer
+
+Har Thread
+
+apna alag Producer use karega.
+
+---
+
+Diagram
+
+```text
+Thread1
+
+↓
+
+Producer1
+
+----------------
+
+Thread2
+
+↓
+
+Producer2
+
+----------------
+
+Thread3
+
+↓
+
+Producer3
+```
+
+---
+
+Question
+
+Benefit?
+
+---
+
+Answer
+
+Ek thread flush kare
+
+to dusre thread par effect nahi padega.
+
+---
+
+# Q7. closeThreadBoundProducer()
+
+Question
+
+Har thread ka producer ban gaya.
+
+Kab close hoga?
+
+---
+
+Answer
+
+Documentation ke according
+
+User ko khud call karna padega.
+
+```java
+producerFactory.closeThreadBoundProducer();
+```
+
+
+
+---
+
+Question
+
+Ye kyun important hai?
+
+---
+
+Answer
+
+Agar close nahi karoge
+
+Memory Leak ho sakta hai.
+
+ThreadLocal me Producer reh jayega.
+
+---
+
+# Q8. Serializer configure kaise hota hai?
+
+Option 1
+
+Class
+
+```java
+props.put(
+ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+StringSerializer.class);
+```
+
+---
+
+Option 2
+
+Object
+
+```java
+new JsonSerializer()
+```
+
+---
+
+Option 3
+
+Supplier
+
+---
+
+# Q9. Supplier<Serializer>
+
+Question
+
+Supplier kyun?
+
+---
+
+Answer
+
+Har Producer ko
+
+alag Serializer Object chahiye.
+
+Example
+
+```java
+@Bean
+public ProducerFactory<Integer,Order> producerFactory() {
+
+    return new DefaultKafkaProducerFactory<>(
+
+            producerConfigs(),
+
+            null,
+
+            () -> new JsonSerializer<>()
+
+    );
+
+}
+```
+
+Documentation me bhi mention hai ki `Supplier<Serializer>` har Producer ke liye naya Serializer create kar sakta hai. 
+
+---
+
+Diagram
+
+```text
+Producer1
+
+↓
+
+JsonSerializer1
+
+----------------
+
+Producer2
+
+↓
+
+JsonSerializer2
+```
+
+---
+
+# Q10. updateConfigs()
+
+Question
+
+Suppose
+
+SSL Certificate change ho gaya.
+
+Application restart karna padega?
+
+---
+
+Answer
+
+Nahi.
+
+Spring ne
+
+```java
+updateConfigs()
+```
+
+diya hai.
+
+Example
+
+```java
+producerFactory.updateConfigs(updates);
+```
+
+Ye producer configuration update karta hai.
+
+---
+
+# Real Example
+
+```text
+Old SSL
+
+↓
+
+New SSL
+
+↓
+
+updateConfigs()
+
+↓
+
+New Producer
+```
+
+---
+
+# Important
+
+Existing Producer
+
+update nahi hota.
+
+Naya Producer banana padega.
+
+---
+
+# Q11. reset()
+
+Question
+
+Naya Producer kaise banega?
+
+---
+
+Answer
+
+```java
+producerFactory.reset();
+```
+
+Documentation ke according
+
+Reset
+
+purane Producer close karega
+
+aur next request par
+
+naya Producer banega. 
+
+---
+
+Flow
+
+```text
+Old Producer
+
+↓
+
+reset()
+
+↓
+
+Closed
+
+↓
+
+Next Send()
+
+↓
+
+New Producer
+```
+
+---
+
+# Q12. removeConfig()
+
+Configuration remove karna ho.
+
+Example
+
+```java
+producerFactory.removeConfig(
+ProducerConfig.CLIENT_ID_CONFIG);
+```
+
+Useful
+
+Dynamic Configuration.
+
+---
+
+# Q13. configure() Method
+
+Spring Kafka 2.8 se
+
+Agar Serializer object pass karte ho
+
+Spring automatically
+
+```text
+configure()
+```
+
+call karta hai.
+
+Tumhe manually configure nahi karna padta.
+
+
+
+---
+
+# Real Project Example
+
+Suppose
+
+Production
+
+```text
+Kafka Cluster
+
+↓
+
+Broker1
+
+Broker2
+
+Broker3
+```
+
+Application
+
+↓
+
+KafkaTemplate
+
+↓
+
+DefaultKafkaProducerFactory
+
+↓
+
+Singleton Producer
+
+↓
+
+Kafka Cluster
+
+High Performance.
+
+---
+
+# Complete Internal Flow
+
+```text
+Application
+
+↓
+
+KafkaTemplate
+
+↓
+
+ProducerFactory
+
+↓
+
+DefaultKafkaProducerFactory
+
+↓
+
+Singleton Producer
+
+↓
+
+Serializer
+
+↓
+
+Kafka Broker
+```
+
+---
+
+# When should producerPerThread be used?
+
+Normally
+
+```text
+Singleton Producer
+```
+
+is enough.
+
+Use
+
+```text
+producerPerThread=true
+```
+
+when
+
+* Heavy multi-threaded application
+* Frequent `flush()` calls
+* High concurrency with independent producer usage
+
+Most applications **do not need** it.
+
+---
+
+# Interview Questions
+
+## Q1. What is DefaultKafkaProducerFactory?
+
+**Answer:**
+
+It is the default implementation of `ProducerFactory` that creates and manages `KafkaProducer` instances for `KafkaTemplate`.
+
+---
+
+## Q2. Does Spring create a new KafkaProducer for every send()?
+
+**Answer:**
+
+No. By default, Spring creates a **singleton KafkaProducer** and reuses it for all send operations.
+
+---
+
+## Q3. Why does Spring use a singleton producer?
+
+**Answer:**
+
+Creating a KafkaProducer is expensive because it initializes network connections, buffers, metadata, and background threads. Reusing a single producer improves performance.
+
+---
+
+## Q4. What is `producerPerThread`?
+
+**Answer:**
+
+When enabled, `DefaultKafkaProducerFactory` creates a separate KafkaProducer for each thread, preventing one thread's `flush()` from affecting others.
+
+---
+
+## Q5. What must you do when using `producerPerThread=true`?
+
+**Answer:**
+
+Call `closeThreadBoundProducer()` after the producer is no longer needed to release thread-local resources.
+
+---
+
+## Q6. What is the purpose of `Supplier<Serializer>`?
+
+**Answer:**
+
+It creates a separate serializer instance for each producer instead of sharing a single serializer object.
+
+---
+
+## Q7. What is `updateConfigs()` used for?
+
+**Answer:**
+
+It updates producer configuration properties at runtime. Existing producers are not affected until new producers are created.
+
+---
+
+## Q8. Why is `reset()` required after `updateConfigs()`?
+
+**Answer:**
+
+Because existing producer instances continue using the old configuration. `reset()` closes them so that the next request creates new producers with the updated settings.
+
+---
+
+# ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**Your Kafka producer is using a singleton producer. One thread frequently calls `flush()`, and other threads experience delays. How would you solve this?**
+
+### Best Answer
+
+> "By default, `DefaultKafkaProducerFactory` uses a singleton producer shared by all threads. Frequent `flush()` calls can affect other threads. If this becomes a performance bottleneck, I can enable `producerPerThread=true`, which gives each thread its own producer. I would also ensure `closeThreadBoundProducer()` is called when the thread finishes using the producer."
+
+---
+
+# 📌 Key Points to Remember
+
+* `DefaultKafkaProducerFactory` is the default implementation of `ProducerFactory`.
+* It **creates and manages** `KafkaProducer` instances.
+* By default, Spring uses a **singleton KafkaProducer** shared across threads.
+* `producerPerThread=true` creates a separate producer for each thread.
+* When using `producerPerThread`, you must call **`closeThreadBoundProducer()`** to clean up thread-local producers.
+* `Supplier<Serializer>` creates a new serializer instance for each producer.
+* `updateConfigs()` changes producer configuration for future producers.
+* `reset()` closes existing producers so that new ones use the updated configuration.
+
+---
+
+# 🚀 Next Part (Part 10)
+
+In **Part 10**, we'll cover one of the most advanced Spring Kafka features:
+
+## **ReplyingKafkaTemplate (Request-Reply Pattern)**
+
+We'll learn:
+
+* What is `ReplyingKafkaTemplate`?
+* Why Kafka is normally asynchronous
+* How to implement Request → Reply over Kafka
+* `RequestReplyFuture`
+* `sendAndReceive()`
+* Reply Container
+* `@KafkaListener` + `@SendTo`
+* Correlation ID
+* Reply Topic
+* Timeout handling
+* Real Banking and E-commerce examples
+* Complete interview questions
+
+This is an advanced topic that is commonly discussed in senior backend and microservices interviews.
+
+=======================================================================================================================
+# Spring Kafka - Part 10
+
+# **ReplyingKafkaTemplate (Request-Reply Pattern) - Complete Practical Guide**
+
+Based on your uploaded Spring Kafka notes. This part covers **ReplyingKafkaTemplate**, `sendAndReceive()`, `RequestReplyFuture`, Reply Container, `@SendTo`, Correlation ID, Reply Topic, Timeout handling, and real production scenarios. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak hum jo Kafka use kar rahe the usme kya hota tha?
+
+```text
+Producer
+
+↓
+
+Kafka
+
+↓
+
+Consumer
+```
+
+Producer ko ye pata hi nahi chalta tha ki Consumer ne message process kiya ya nahi.
+
+Question...
+
+**Agar Producer ko Consumer se response chahiye to?**
+
+Example
+
+```text
+Payment Service
+
+↓
+
+Payment Successful?
+
+↓
+
+Yes / No
+```
+
+Iske liye Spring Kafka ne diya
+
+# ReplyingKafkaTemplate
+
+---
+
+# Q1. ReplyingKafkaTemplate kya hota hai?
+
+## 👨‍🎓 Student
+
+Sir,
+
+**ReplyingKafkaTemplate** Kafka me **Request → Reply** communication provide karta hai.
+
+Normal Kafka
+
+```text
+Request
+
+↓
+
+Done
+```
+
+ReplyingKafkaTemplate
+
+```text
+Request
+
+↓
+
+Consumer Process
+
+↓
+
+Reply
+
+↓
+
+Producer Receive
+```
+
+---
+
+# Real Life Example
+
+Restaurant
+
+Without Reply
+
+```text
+Customer
+
+↓
+
+Order
+
+↓
+
+Wait
+```
+
+Customer ko nahi pata order accept hua ya nahi.
+
+---
+
+With Reply
+
+```text
+Customer
+
+↓
+
+Order
+
+↓
+
+Kitchen
+
+↓
+
+Order Accepted
+
+↓
+
+Customer
+```
+
+Exactly
+
+ReplyingKafkaTemplate.
+
+---
+
+# Normal Kafka vs ReplyingKafkaTemplate
+
+| Normal Kafka          | ReplyingKafkaTemplate    |
+| --------------------- | ------------------------ |
+| Fire and Forget       | Request-Reply            |
+| Producer doesn't wait | Producer waits for reply |
+| One-way Communication | Two-way Communication    |
+
+---
+
+# Q2. Kab Use Karte Hai?
+
+Suppose
+
+Order Service
+
+↓
+
+Inventory Service
+
+Question
+
+Stock Available hai?
+
+Need
+
+```text
+YES
+
+OR
+
+NO
+```
+
+Reply chahiye.
+
+---
+
+Example
+
+```text
+Loan Service
+
+↓
+
+Fraud Check
+
+↓
+
+APPROVED
+
+OR
+
+REJECTED
+```
+
+Reply mandatory.
+
+---
+
+# Q3. sendAndReceive()
+
+ReplyingKafkaTemplate ka main method
+
+```java
+sendAndReceive()
+```
+
+Ye request bhejta hai
+
+Aur reply ka wait karta hai.
+
+Documentation me bhi ye primary API hai. 
+
+---
+
+Example
+
+```java
+ProducerRecord<String,String> record =
+        new ProducerRecord<>(
+                "payment-request",
+                "PAYMENT-101");
+
+RequestReplyFuture<String,String,String> future =
+        replyingKafkaTemplate.sendAndReceive(record);
+```
+
+---
+
+Flow
+
+```text
+Producer
+
+↓
+
+sendAndReceive()
+
+↓
+
+Kafka
+
+↓
+
+Consumer
+
+↓
+
+Reply
+
+↓
+
+Producer
+```
+
+---
+
+# Q4. RequestReplyFuture kya hota hai?
+
+Question
+
+Reply immediately milta hai?
+
+---
+
+Answer
+
+❌ Nahi.
+
+Reply aane me time lag sakta hai.
+
+Isliye
+
+```java
+RequestReplyFuture
+```
+
+return hota hai.
+
+Ye internally
+
+* Send Result
+* Reply Result
+
+dono ko manage karta hai.
+
+---
+
+Diagram
+
+```text
+sendAndReceive()
+
+↓
+
+RequestReplyFuture
+
+↓
+
+Send Future
+
+↓
+
+Reply Future
+```
+
+---
+
+# Q5. Reply Container kya hota hai?
+
+Question
+
+Reply receive kaun karega?
+
+---
+
+Answer
+
+Reply Container.
+
+Documentation Example
+
+```java
+@Bean
+public ReplyingKafkaTemplate<String,String,String>
+replyingTemplate(
+ProducerFactory<String,String> pf,
+ConcurrentMessageListenerContainer<String,String> repliesContainer){
+
+    return new ReplyingKafkaTemplate<>(
+            pf,
+            repliesContainer);
+
+}
+```
+
+
+
+---
+
+Flow
+
+```text
+Reply Topic
+
+↓
+
+Reply Container
+
+↓
+
+ReplyingKafkaTemplate
+```
+
+---
+
+# Q6. Reply Topic
+
+Question
+
+Consumer reply kaha bhejega?
+
+---
+
+Answer
+
+Ek alag topic me.
+
+Example
+
+```text
+Request Topic
+
+payment-request
+```
+
+Reply Topic
+
+```text
+payment-reply
+```
+
+---
+
+Flow
+
+```text
+Producer
+
+↓
+
+payment-request
+
+↓
+
+Consumer
+
+↓
+
+payment-reply
+
+↓
+
+Producer
+```
+
+---
+
+# Q7. Consumer Reply kaise bhejta hai?
+
+Spring
+
+```java
+@KafkaListener(
+        topics="payment-request")
+@SendTo
+public String checkPayment(String request){
+
+    return "SUCCESS";
+
+}
+```
+
+`@SendTo` automatically reply bhej deta hai.
+
+Documentation me ye pattern use kiya gaya hai. 
+
+---
+
+Flow
+
+```text
+Producer
+
+↓
+
+Request
+
+↓
+
+Consumer
+
+↓
+
+@SendTo
+
+↓
+
+Reply Topic
+
+↓
+
+Producer
+```
+
+---
+
+# Q8. Producer Reply kaise padhta hai?
+
+Example
+
+```java
+RequestReplyFuture<String,String,String> future =
+        replyingKafkaTemplate.sendAndReceive(record);
+
+ConsumerRecord<String,String> reply =
+        future.get();
+
+System.out.println(reply.value());
+```
+
+Output
+
+```text
+SUCCESS
+```
+
+---
+
+# Q9. Correlation ID
+
+Interview Favorite.
+
+Question
+
+Suppose
+
+100 requests ek saath bheji.
+
+Replies bhi 100 aayi.
+
+Kaise pata chalega
+
+kaunsi reply kis request ki hai?
+
+---
+
+Answer
+
+Correlation ID.
+
+Diagram
+
+```text
+Request
+
+Order101
+
+↓
+
+CorrelationId
+
+ABC101
+
+↓
+
+Reply
+
+↓
+
+CorrelationId
+
+ABC101
+```
+
+Matching ho gaya.
+
+Documentation ke according `KafkaHeaders.CORRELATION_ID` automatically use hota hai aur reply me echo kiya jata hai. 
+
+---
+
+# Q10. Reply Timeout
+
+Question
+
+Consumer ne reply hi nahi diya.
+
+Kya Producer life bhar wait karega?
+
+---
+
+Answer
+
+❌ No.
+
+Reply Timeout hota hai.
+
+Documentation ke according
+
+Default
+
+```text
+5 Seconds
+```
+
+Agar reply nahi aaya
+
+Exception.
+
+---
+
+Example
+
+```java
+replyingKafkaTemplate.sendAndReceive(
+        record,
+        Duration.ofSeconds(10));
+```
+
+10 sec wait karega.
+
+---
+
+# Q11. waitForAssignment()
+
+Question
+
+Application start hui.
+
+Reply Container ready nahi hai.
+
+Agar request bhej di?
+
+Reply miss ho sakti hai.
+
+---
+
+Solution
+
+```java
+replyingKafkaTemplate.waitForAssignment(
+        Duration.ofSeconds(10));
+```
+
+Ye ensure karta hai
+
+Reply container ready hai.
+
+Ye feature Spring Kafka me add kiya gaya hai. 
+
+---
+
+# Q12. Complete Flow
+
+```text
+Order Service
+
+↓
+
+ReplyingKafkaTemplate
+
+↓
+
+payment-request
+
+↓
+
+Kafka Broker
+
+↓
+
+Payment Service
+
+↓
+
+@KafkaListener
+
+↓
+
+Process Payment
+
+↓
+
+@SendTo
+
+↓
+
+payment-reply
+
+↓
+
+Reply Container
+
+↓
+
+ReplyingKafkaTemplate
+
+↓
+
+Order Service
+```
+
+---
+
+# Real Banking Example
+
+Customer
+
+↓
+
+Transfer Money
+
+↓
+
+Payment Service
+
+↓
+
+Fraud Service
+
+↓
+
+Reply
+
+```text
+APPROVED
+```
+
+OR
+
+```text
+REJECTED
+```
+
+Without reply
+
+Money transfer continue nahi kar sakte.
+
+---
+
+# E-Commerce Example
+
+Customer
+
+↓
+
+Buy Product
+
+↓
+
+Inventory Service
+
+↓
+
+Reply
+
+```text
+Stock Available
+```
+
+↓
+
+Order Confirm.
+
+---
+
+# Request vs Reply Topics
+
+| Request Topic     | Reply Topic     |
+| ----------------- | --------------- |
+| payment-request   | payment-reply   |
+| order-request     | order-reply     |
+| inventory-request | inventory-reply |
+
+---
+
+# Internal Architecture
+
+```text
+Producer
+
+↓
+
+ReplyingKafkaTemplate
+
+↓
+
+Request Topic
+
+↓
+
+Kafka Broker
+
+↓
+
+Consumer
+
+↓
+
+Business Logic
+
+↓
+
+@SendTo
+
+↓
+
+Reply Topic
+
+↓
+
+Reply Container
+
+↓
+
+RequestReplyFuture
+
+↓
+
+Producer
+```
+
+---
+
+# Interview Questions
+
+## Q1. What is ReplyingKafkaTemplate?
+
+**Answer:**
+
+`ReplyingKafkaTemplate` is a Spring Kafka template that implements the Request-Reply messaging pattern over Kafka.
+
+---
+
+## Q2. Why do we use ReplyingKafkaTemplate?
+
+**Answer:**
+
+When the producer requires a response from the consumer instead of using one-way asynchronous messaging.
+
+---
+
+## Q3. What is `sendAndReceive()`?
+
+**Answer:**
+
+It sends a request message and returns a `RequestReplyFuture` that completes when the reply is received or when a timeout occurs.
+
+---
+
+## Q4. What is `RequestReplyFuture`?
+
+**Answer:**
+
+It represents the asynchronous request-reply operation and provides access to both the send result and the reply.
+
+---
+
+## Q5. What is the purpose of `@SendTo`?
+
+**Answer:**
+
+`@SendTo` sends the return value of a `@KafkaListener` method to the reply topic.
+
+---
+
+## Q6. Why is Correlation ID required?
+
+**Answer:**
+
+It uniquely matches each reply with its corresponding request, especially when many requests are processed concurrently.
+
+---
+
+## Q7. Why do we need a Reply Container?
+
+**Answer:**
+
+The reply container listens on the reply topic and delivers the response back to the `ReplyingKafkaTemplate`.
+
+---
+
+## Q8. What happens if no reply is received?
+
+**Answer:**
+
+The request waits until the configured timeout expires, after which a timeout exception is raised.
+
+---
+
+# ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**Kafka is asynchronous by nature. Why would you use ReplyingKafkaTemplate instead of a REST API?**
+
+### Best Answer
+
+> "I would use `ReplyingKafkaTemplate` when the communication must remain event-driven and Kafka-based, but the caller still needs a response. It avoids mixing REST with Kafka, supports asynchronous request-reply messaging, and works well in microservice architectures where services already communicate through Kafka."
+
+---
+
+# 📌 Key Points to Remember
+
+* `ReplyingKafkaTemplate` implements the **Request-Reply** pattern over Kafka.
+* `sendAndReceive()` sends a request and waits asynchronously for a reply.
+* `RequestReplyFuture` represents the request-reply operation.
+* A dedicated **Reply Topic** and **Reply Container** are required.
+* `@KafkaListener` with `@SendTo` sends the reply automatically.
+* **Correlation ID** is used to match replies with requests.
+* A configurable **reply timeout** prevents waiting indefinitely.
+* `waitForAssignment()` helps ensure the reply listener is ready before sending requests.
+
+---
+
+# 🚀 Next Part (Part 11)
+
+In **Part 11**, we'll cover advanced ReplyingKafkaTemplate topics from the documentation:
+
+* `replyErrorChecker()`
+* Deserialization error handling
+* `KafkaHeaders.REPLY_TOPIC`
+* `KafkaHeaders.REPLY_PARTITION`
+* Shared Reply Topic
+* Custom Correlation Header Names
+* `sendAndReceive(Message<?>)`
+* `RequestReplyTypedMessageFuture`
+* Generic reply types (`List<Order>`, custom objects)
+* Production architecture and interview questions
+
+This is the most advanced section of the ReplyingKafkaTemplate documentation and is often relevant for senior Spring Kafka developers.
+
+=======================================================================================================================
+# Spring Kafka - Part 11
+
+# **Advanced ReplyingKafkaTemplate (Reply Headers, Error Handling, Typed Replies & Shared Reply Topics)**
+
+Based on your uploaded Spring Kafka notes. This part covers:
+
+* `replyErrorChecker()`
+* Deserialization Error Handling
+* `KafkaHeaders.REPLY_TOPIC`
+* `KafkaHeaders.REPLY_PARTITION`
+* Shared Reply Topic
+* `sendAndReceive(Message<?>)`
+* `RequestReplyTypedMessageFuture`
+* Custom Correlation Headers
+
+
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Part 10 me humne Request-Reply seekha.
+
+Ab maan lo...
+
+Application production me chali gayi.
+
+Aur problems aane lagi.
+
+* Reply hi nahi aaya.
+* Reply corrupt hai.
+* JSON parse nahi hua.
+* 100 clients ek hi reply topic use kar rahe hain.
+* Reply custom object hai.
+
+Ye sab kaise handle karenge?
+
+Isi ke liye Spring Kafka ne aur features diye hain.
+
+---
+
+# Complete Flow
+
+```text
+Producer
+
+↓
+
+ReplyingKafkaTemplate
+
+↓
+
+Request Topic
+
+↓
+
+Consumer
+
+↓
+
+Reply Topic
+
+↓
+
+Reply Container
+
+↓
+
+Reply Validation
+
+↓
+
+Application
+```
+
+---
+
+# Q1. replyErrorChecker() kya hota hai?
+
+Suppose
+
+Consumer reply bhej raha hai.
+
+Instead of
+
+```text
+SUCCESS
+```
+
+Consumer bhej raha hai
+
+```text
+Payment Failed
+
+Reason
+
+Insufficient Balance
+```
+
+Ye normal message nahi hai.
+
+Ye business error hai.
+
+Spring ne diya
+
+```java
+replyErrorChecker()
+```
+
+---
+
+## Example
+
+```java
+template.setReplyErrorChecker(record -> {
+
+    Header error =
+        record.headers()
+              .lastHeader("serverSentAnError");
+
+    if(error != null){
+
+        return new PaymentException(
+                new String(error.value()));
+    }
+
+    return null;
+
+});
+```
+
+Documentation me exactly ye concept diya gaya hai. 
+
+---
+
+Question
+
+Ye kya karega?
+
+---
+
+Answer
+
+Reply aane ke baad
+
+Header check karega.
+
+Agar Error Header mila
+
+↓
+
+Exception throw karega.
+
+---
+
+Flow
+
+```text
+Reply
+
+↓
+
+Header Check
+
+↓
+
+Error Header?
+
+↓
+
+Yes
+
+↓
+
+Throw Exception
+
+↓
+
+No
+
+↓
+
+Return Reply
+```
+
+---
+
+# Real Banking Example
+
+Fraud Service
+
+Reply
+
+```text
+APPROVED
+```
+
+OR
+
+```text
+REJECTED
+```
+
+Header
+
+```text
+fraudError=true
+```
+
+Producer
+
+↓
+
+replyErrorChecker()
+
+↓
+
+Business Exception
+
+---
+
+# Q2. Deserialization Error
+
+Question
+
+Suppose
+
+Consumer ne JSON bheja.
+
+Producer String expect kar raha tha.
+
+Kya hoga?
+
+---
+
+Answer
+
+Deserialization Exception.
+
+---
+
+Example
+
+Consumer
+
+```json
+{
+"id":101,
+"name":"Laptop"
+}
+```
+
+Producer
+
+Expect
+
+```java
+String
+```
+
+Result
+
+```text
+DeserializationException
+```
+
+---
+
+Solution
+
+Spring recommend karta hai
+
+```text
+ErrorHandlingDeserializer
+```
+
+Documentation me mention hai ki ReplyingKafkaTemplate ke saath ErrorHandlingDeserializer use karna useful hota hai. 
+
+---
+
+Flow
+
+```text
+Reply
+
+↓
+
+Deserializer
+
+↓
+
+Success
+
+↓
+
+Application
+
+OR
+
+↓
+
+DeserializationException
+```
+
+---
+
+# Q3. KafkaHeaders.REPLY_TOPIC
+
+Question
+
+Consumer ko kaise pata chale
+
+Reply kaha bhejna hai?
+
+Answer
+
+Request Header me
+
+```text
+KafkaHeaders.REPLY_TOPIC
+```
+
+---
+
+Diagram
+
+```text
+Request
+
+↓
+
+Header
+
+↓
+
+REPLY_TOPIC
+
+payment-reply
+```
+
+Consumer
+
+↓
+
+Reply
+
+↓
+
+payment-reply
+
+---
+
+Code
+
+```java
+record.headers().add(
+
+new RecordHeader(
+
+KafkaHeaders.REPLY_TOPIC,
+
+"payment-reply".getBytes()
+
+)
+
+);
+```
+
+Documentation me ye header reply destination batata hai. 
+
+---
+
+# Q4. KafkaHeaders.REPLY_PARTITION
+
+Question
+
+Reply Topic me bhi
+
+100 partitions hain.
+
+Reply kis partition me bhejna hai?
+
+Answer
+
+```text
+KafkaHeaders.REPLY_PARTITION
+```
+
+---
+
+Diagram
+
+```text
+Reply Topic
+
+↓
+
+Partition 5
+```
+
+---
+
+Question
+
+Kab use karte hain?
+
+Answer
+
+Jab
+
+Dedicated Partition
+
+chahiye.
+
+---
+
+# Q5. Shared Reply Topic
+
+Question
+
+Suppose
+
+10 Producer Applications hain.
+
+Sabka
+
+Reply Topic
+
+```text
+payment-reply
+```
+
+Ek hi hai.
+
+Problem hogi?
+
+---
+
+Answer
+
+Nahi.
+
+Spring support karta hai.
+
+Isko bolte hain
+
+## Shared Reply Topic
+
+Documentation me bhi ye feature explain hai. 
+
+---
+
+Flow
+
+```text
+Producer1
+
+↓
+
+payment-reply
+
+Producer2
+
+↓
+
+payment-reply
+
+Producer3
+
+↓
+
+payment-reply
+```
+
+Sab same topic use kar sakte hain.
+
+---
+
+# Question
+
+Fir reply kaise identify hoga?
+
+---
+
+Answer
+
+Correlation ID.
+
+---
+
+Diagram
+
+```text
+Request
+
+ABC101
+
+↓
+
+Reply
+
+ABC101
+
+Match
+```
+
+---
+
+# Q6. Unique GroupId
+
+Question
+
+Shared Reply Topic use karte waqt
+
+GroupId same hona chahiye?
+
+---
+
+Answer
+
+❌ No.
+
+Har instance ka
+
+Unique GroupId.
+
+Example
+
+```java
+container
+
+.getContainerProperties()
+
+.setGroupId(
+
+UUID.randomUUID().toString()
+
+);
+```
+
+Ye configuration documentation me diya gaya hai. 
+
+---
+
+Reason
+
+Har application ko
+
+apna reply receive hona chahiye.
+
+---
+
+# Q7. sendAndReceive(Message<?>)
+
+Ab tak
+
+Hum
+
+```java
+ProducerRecord
+```
+
+bhej rahe the.
+
+Spring ek aur option deta hai.
+
+```java
+sendAndReceive(Message<?>)
+```
+
+---
+
+Example
+
+```java
+Message<String> message =
+
+MessageBuilder
+
+.withPayload("Payment")
+
+.build();
+
+template.sendAndReceive(message);
+```
+
+Documentation me ye API Spring Messaging support ke liye introduce ki gayi hai. 
+
+---
+
+Question
+
+Kab use karte hain?
+
+Answer
+
+Jab Spring Messaging use ho.
+
+---
+
+# Q8. RequestReplyTypedMessageFuture
+
+Question
+
+Reply String nahi hai.
+
+Reply
+
+```java
+Order
+```
+
+object hai.
+
+Ya
+
+```java
+List<Order>
+```
+
+hai.
+
+Kaise receive karenge?
+
+---
+
+Answer
+
+```java
+RequestReplyTypedMessageFuture
+```
+
+---
+
+Example
+
+```java
+RequestReplyTypedMessageFuture<
+
+String,
+
+String,
+
+Order
+
+>
+```
+
+---
+
+Question
+
+List receive karni hai?
+
+---
+
+Example
+
+```java
+RequestReplyTypedMessageFuture<
+
+String,
+
+String,
+
+List<Order>
+
+>
+```
+
+Documentation me `ParameterizedTypeReference` ke saath ye example diya gaya hai. 
+
+---
+
+# Why ParameterizedTypeReference?
+
+Java
+
+Runtime par
+
+Generic Type lose kar deta hai.
+
+Spring ko batana padta hai
+
+Reply kis type ki hai.
+
+Example
+
+```java
+template.sendAndReceive(
+
+message,
+
+new ParameterizedTypeReference<List<Order>>() {}
+
+);
+```
+
+---
+
+Flow
+
+```text
+Reply
+
+↓
+
+JSON
+
+↓
+
+ParameterizedTypeReference
+
+↓
+
+List<Order>
+```
+
+---
+
+# Q9. Custom Correlation Header
+
+Normally
+
+Spring use karta hai
+
+```text
+KafkaHeaders.CORRELATION_ID
+```
+
+Lekin
+
+Agar Consumer
+
+Spring application nahi hai.
+
+Custom Header use karta hai.
+
+Example
+
+```text
+transaction-id
+```
+
+Spring allow karta hai
+
+Custom Correlation Header Name configure karna.
+
+Documentation me version 3.0 se iska support mention hai. 
+
+---
+
+# Q10. Reply Message
+
+Question
+
+Consumer
+
+Reply me
+
+Message<?> return kare
+
+to?
+
+Spring automatically
+
+Missing headers
+
+fill kar deta hai.
+
+Jaise
+
+* Reply Topic
+* Correlation ID
+* Reply Partition
+
+Ye behavior Spring Kafka 2.5 se available hai. 
+
+---
+
+# Complete Production Flow
+
+```text
+Order Service
+
+↓
+
+ReplyingKafkaTemplate
+
+↓
+
+Request Topic
+
+↓
+
+Payment Service
+
+↓
+
+Business Logic
+
+↓
+
+@SendTo
+
+↓
+
+Reply Topic
+
+↓
+
+Reply Container
+
+↓
+
+replyErrorChecker()
+
+↓
+
+Deserializer
+
+↓
+
+Typed Reply
+
+↓
+
+Application
+```
+
+---
+
+# Real Banking Example
+
+Customer
+
+↓
+
+Loan Apply
+
+↓
+
+Loan Service
+
+↓
+
+Fraud Service
+
+↓
+
+Credit Score Service
+
+↓
+
+Reply
+
+```text
+Approved
+```
+
+OR
+
+```text
+Rejected
+```
+
+If
+
+Error Header
+
+↓
+
+Business Exception
+
+---
+
+# Interview Questions
+
+## Q1. What is `replyErrorChecker()`?
+
+**Answer:**
+
+It checks the reply message after it is received. If it detects an application-specific error (usually through headers), it converts that into an exception instead of returning a successful reply.
+
+---
+
+## Q2. Why do we use `ErrorHandlingDeserializer`?
+
+**Answer:**
+
+It helps detect and safely handle deserialization failures instead of allowing malformed replies to crash request processing.
+
+---
+
+## Q3. What is `KafkaHeaders.REPLY_TOPIC`?
+
+**Answer:**
+
+It specifies the topic where the consumer should send the reply.
+
+---
+
+## Q4. What is `KafkaHeaders.REPLY_PARTITION`?
+
+**Answer:**
+
+It specifies the partition within the reply topic where the response should be sent.
+
+---
+
+## Q5. What is a Shared Reply Topic?
+
+**Answer:**
+
+Multiple producer instances use the same reply topic. Replies are matched to the correct request using the Correlation ID.
+
+---
+
+## Q6. Why should every instance have a unique Group ID when using a shared reply topic?
+
+**Answer:**
+
+So that every application instance receives replies independently, while Correlation IDs determine which reply belongs to which request.
+
+---
+
+## Q7. When do we use `RequestReplyTypedMessageFuture`?
+
+**Answer:**
+
+When the reply payload is a typed object (such as `Order`) or a generic type (such as `List<Order>`), instead of a simple `String`.
+
+---
+
+## Q8. Why do we need `ParameterizedTypeReference`?
+
+**Answer:**
+
+Because Java removes generic type information at runtime. `ParameterizedTypeReference` tells Spring the exact reply type to deserialize.
+
+---
+
+# ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**Suppose your Payment Service returns `List<Payment>` instead of `String`. How will ReplyingKafkaTemplate deserialize it correctly?**
+
+### Best Answer
+
+> "I would use `RequestReplyTypedMessageFuture` together with `ParameterizedTypeReference<List<Payment>>`. This preserves the generic type information so Spring can correctly deserialize the JSON reply into a `List<Payment>`."
+
+---
+
+# 📌 Key Points to Remember
+
+* **`replyErrorChecker()`** converts business-error replies into exceptions.
+* **`ErrorHandlingDeserializer`** helps handle deserialization failures safely.
+* **`KafkaHeaders.REPLY_TOPIC`** tells the consumer where to send the reply.
+* **`KafkaHeaders.REPLY_PARTITION`** controls which partition receives the reply.
+* **Shared Reply Topics** allow multiple clients to use the same reply topic, relying on **Correlation IDs** to match responses.
+* **`sendAndReceive(Message<?>)`** integrates ReplyingKafkaTemplate with Spring Messaging.
+* **`RequestReplyTypedMessageFuture`** supports strongly typed replies such as custom objects and generic collections.
+* **`ParameterizedTypeReference`** is required for generic reply types like `List<Order>`.
+
+---
+
+# 🚀 Next Part (Part 12)
+
+In **Part 12**, we'll cover **AggregatingReplyingKafkaTemplate (Scatter-Gather Pattern)**:
+
+* What is `AggregatingReplyingKafkaTemplate`?
+* Why normal `ReplyingKafkaTemplate` is not enough
+* Scatter-Gather architecture
+* Multiple consumers replying to one request
+* `releaseStrategy`
+* `returnPartialOnTimeout`
+* Aggregated replies vs partial replies
+* Manual acknowledgment requirements
+* Complete production examples
+* Advanced interview questions
+
+This is one of the most advanced features in Spring Kafka and is typically expected for senior backend or architect-level interviews.
+
+=======================================================================================================================
+# Spring Kafka - Part 12
+
+# **AggregatingReplyingKafkaTemplate (Scatter-Gather Pattern) - Complete Practical Guide**
+
+Based on your uploaded Spring Kafka notes. This part covers:
+
+* **AggregatingReplyingKafkaTemplate**
+* Scatter-Gather Pattern
+* Multiple Replies
+* `releaseStrategy`
+* `returnPartialOnTimeout`
+* Aggregated Results
+* Partial Results
+* Manual Ack Mode
+* Production Architecture
+
+
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Part 10 me humne **ReplyingKafkaTemplate** padha tha.
+
+Usme kya hota tha?
+
+```text
+Producer
+
+↓
+
+Consumer
+
+↓
+
+Reply
+```
+
+Sirf **1 Request**
+
+↓
+
+**1 Reply**
+
+---
+
+Ab ek question.
+
+Suppose
+
+Order Service ko
+
+3 services se reply chahiye.
+
+* Inventory Service
+* Pricing Service
+* Discount Service
+
+To kya hoga?
+
+Normal ReplyingKafkaTemplate
+
+handle kar payega?
+
+---
+
+# 👨‍🎓 Student
+
+❌ No Sir.
+
+Wo sirf
+
+**One Request**
+
+↓
+
+**One Reply**
+
+handle karta hai.
+
+---
+
+# Teacher
+
+Bilkul.
+
+Isi problem ke liye Spring Kafka ne banaya
+
+# AggregatingReplyingKafkaTemplate
+
+---
+
+# Q1. AggregatingReplyingKafkaTemplate kya hota hai?
+
+Simple Definition
+
+> **Ek Request bhejo aur Multiple Consumers se Reply collect karo.**
+
+Ye
+
+**Scatter-Gather Pattern**
+
+implement karta hai.
+
+---
+
+# Scatter-Gather kya hota hai?
+
+## Scatter
+
+Ek request
+
+↓
+
+Multiple services ko bhejna.
+
+## Gather
+
+Sab services ke replies
+
+↓
+
+Collect karna.
+
+---
+
+Diagram
+
+```text
+Order Service
+
+↓
+
+Request
+
+↓
+
+Kafka
+
+↓
+
+Inventory Service
+
+↓
+
+Pricing Service
+
+↓
+
+Discount Service
+
+↓
+
+Replies
+
+↓
+
+AggregatingReplyingKafkaTemplate
+
+↓
+
+Order Service
+```
+
+---
+
+# Real Life Example
+
+Suppose
+
+Tum Car Insurance lena chahte ho.
+
+Website
+
+↓
+
+Ek hi request bhejti hai.
+
+↓
+
+ICICI
+
+↓
+
+HDFC
+
+↓
+
+Bajaj
+
+↓
+
+Tata AIG
+
+↓
+
+Sab apna premium bhejte hain.
+
+↓
+
+Website sabko collect karti hai.
+
+↓
+
+Customer ko dikhati hai.
+
+Exactly
+
+Ye hi
+
+Scatter-Gather Pattern hai.
+
+---
+
+# Q2. Normal ReplyingKafkaTemplate vs AggregatingReplyingKafkaTemplate
+
+| ReplyingKafkaTemplate | AggregatingReplyingKafkaTemplate |
+| --------------------- | -------------------------------- |
+| One Reply             | Multiple Replies                 |
+| One Consumer          | Many Consumers                   |
+| Simple Request-Reply  | Scatter-Gather                   |
+| Single Result         | Collection of Results            |
+
+---
+
+# Q3. Internal Flow
+
+```text
+Producer
+
+↓
+
+AggregatingReplyingKafkaTemplate
+
+↓
+
+Kafka
+
+↓
+
+Consumer 1
+
+Consumer 2
+
+Consumer 3
+
+↓
+
+Replies
+
+↓
+
+Collection
+
+↓
+
+Producer
+```
+
+---
+
+# Q4. Constructor
+
+Documentation
+
+```java
+AggregatingReplyingKafkaTemplate<>(
+
+producerFactory,
+
+replyContainer,
+
+releaseStrategy
+
+)
+```
+
+Documentation ke according constructor me **ProducerFactory**, **Reply Container** aur **releaseStrategy** diya jata hai. 
+
+---
+
+Question
+
+Ye
+
+releaseStrategy
+
+kya hai?
+
+---
+
+# Q5. releaseStrategy
+
+Ye decide karta hai
+
+**Kab replies complete maan kar future return karna hai.**
+
+---
+
+Example
+
+```text
+Inventory Reply
+
+✓
+```
+
+Pricing Reply
+
+✓
+
+Discount Reply
+
+❌
+
+Abhi return kare?
+
+No.
+
+Wait.
+
+---
+
+Suppose
+
+Teen replies aa gaye.
+
+Ab
+
+releaseStrategy
+
+bolti hai
+
+Yes.
+
+Return.
+
+---
+
+Example
+
+```java
+coll -> coll.size()==3
+```
+
+Meaning
+
+3 replies aate hi
+
+Future complete.
+
+Documentation me bhi isi type ka example diya gaya hai. 
+
+---
+
+# Diagram
+
+```text
+Reply1
+
+↓
+
+Reply2
+
+↓
+
+Reply3
+
+↓
+
+releaseStrategy
+
+↓
+
+Complete Future
+```
+
+---
+
+# Q6. Example
+
+Suppose
+
+Need
+
+3 replies.
+
+```java
+AggregatingReplyingKafkaTemplate
+
+template =
+new AggregatingReplyingKafkaTemplate(
+
+producerFactory,
+
+container,
+
+replies -> replies.size()==3
+
+);
+```
+
+---
+
+Question
+
+2 replies aaye.
+
+Return hoga?
+
+---
+
+Answer
+
+❌ No.
+
+---
+
+3 replies aaye.
+
+↓
+
+Return.
+
+---
+
+# Q7. RequestReplyFuture
+
+Reply
+
+String nahi hota.
+
+Collection hota hai.
+
+Example
+
+```java
+RequestReplyFuture<
+
+Integer,
+
+String,
+
+Collection<ConsumerRecord<Integer,String>>
+
+>
+```
+
+Matlab
+
+Ek reply nahi
+
+Collection of replies.
+
+---
+
+Diagram
+
+```text
+Reply
+
+↓
+
+Collection
+
+↓
+
+Reply1
+
+Reply2
+
+Reply3
+```
+
+---
+
+# Q8. returnPartialOnTimeout
+
+Question
+
+Suppose
+
+Need
+
+3 replies.
+
+Lekin
+
+2 hi aaye.
+
+Third service down hai.
+
+Kya forever wait karega?
+
+---
+
+Answer
+
+❌ No.
+
+Spring ne diya
+
+```text
+returnPartialOnTimeout
+```
+
+---
+
+Example
+
+```java
+template.setReturnPartialOnTimeout(true);
+```
+
+Documentation me ye property available hai. 
+
+---
+
+Meaning
+
+Timeout hua.
+
+Jo replies aaye hain
+
+unko hi return kar do.
+
+---
+
+Diagram
+
+```text
+Reply1
+
+↓
+
+Reply2
+
+↓
+
+Timeout
+
+↓
+
+Partial Result
+```
+
+---
+
+# Without returnPartialOnTimeout
+
+```text
+Timeout
+
+↓
+
+KafkaReplyTimeoutException
+```
+
+---
+
+# With returnPartialOnTimeout
+
+```text
+Timeout
+
+↓
+
+Reply1
+
+Reply2
+
+↓
+
+Application
+```
+
+---
+
+# Q9. Aggregated Result
+
+Spring internally
+
+Ek artificial
+
+ConsumerRecord
+
+banata hai.
+
+Uske andar
+
+Collection hota hai.
+
+---
+
+Diagram
+
+```text
+Outer ConsumerRecord
+
+↓
+
+Reply1
+
+Reply2
+
+Reply3
+```
+
+Documentation me is outer record ko synthesized record bataya gaya hai. 
+
+---
+
+# Q10. Pseudo Topics
+
+Documentation me
+
+Do special topic names diye gaye hain.
+
+---
+
+Success
+
+```text
+aggregatedResults
+```
+
+---
+
+Timeout
+
+```text
+partialResultsAfterTimeout
+```
+
+Ye real Kafka topics nahi hain.
+
+Sirf internally identify karne ke liye use hote hain. 
+
+---
+
+# Diagram
+
+```text
+Normal
+
+↓
+
+aggregatedResults
+```
+
+Timeout
+
+↓
+
+partialResultsAfterTimeout
+
+---
+
+# Q11. Manual Ack
+
+Question
+
+Reply Container
+
+Auto Commit use karega?
+
+---
+
+Answer
+
+❌ No.
+
+Documentation ke according
+
+Need
+
+```text
+AckMode.MANUAL
+
+OR
+
+AckMode.MANUAL_IMMEDIATE
+```
+
+Aur
+
+```text
+enable.auto.commit=false
+```
+
+Ye isliye taaki replies lose na ho. 
+
+---
+
+# Flow
+
+```text
+Reply
+
+↓
+
+Manual Ack
+
+↓
+
+Commit
+```
+
+---
+
+# Q12. Duplicate Replies
+
+Question
+
+Rebalance hua.
+
+Reply dubara aa gaya.
+
+Kya hoga?
+
+---
+
+Answer
+
+Spring
+
+Duplicate replies
+
+ignore kar deta hai
+
+agar request already complete ho chuki ho.
+
+Documentation me ye behavior explain kiya gaya hai. 
+
+---
+
+# Q13. Real Banking Example
+
+Customer
+
+↓
+
+Loan Apply
+
+↓
+
+Loan Service
+
+↓
+
+Kafka
+
+↓
+
+Credit Score Service
+
+↓
+
+Fraud Service
+
+↓
+
+KYC Service
+
+↓
+
+Replies
+
+```text
+Credit Score
+
+750
+```
+
+```text
+Fraud
+
+No
+```
+
+```text
+KYC
+
+Verified
+```
+
+↓
+
+AggregatingReplyingKafkaTemplate
+
+↓
+
+Loan Decision
+
+---
+
+# E-Commerce Example
+
+Order Service
+
+↓
+
+Inventory
+
+↓
+
+Stock Available
+
+↓
+
+Pricing
+
+↓
+
+₹20000
+
+↓
+
+Discount
+
+↓
+
+10%
+
+↓
+
+Shipping
+
+↓
+
+2 Days
+
+↓
+
+Order Service
+
+Ab Order Service
+
+Sab replies dekhkar
+
+Final Response banata hai.
+
+---
+
+# Complete Architecture
+
+```text
+Order Service
+
+↓
+
+AggregatingReplyingKafkaTemplate
+
+↓
+
+Kafka
+
+↓
+
+Inventory
+
+↓
+
+Pricing
+
+↓
+
+Discount
+
+↓
+
+Shipping
+
+↓
+
+Replies
+
+↓
+
+Collection
+
+↓
+
+releaseStrategy
+
+↓
+
+Application
+```
+
+---
+
+# Interview Questions
+
+## Q1. What is AggregatingReplyingKafkaTemplate?
+
+**Answer:**
+
+It is a Spring Kafka template that implements the **Scatter-Gather** pattern by collecting replies from multiple consumers for a single request.
+
+---
+
+## Q2. Why do we need AggregatingReplyingKafkaTemplate?
+
+**Answer:**
+
+Because `ReplyingKafkaTemplate` supports only one reply, whereas some business scenarios require collecting replies from multiple services before proceeding.
+
+---
+
+## Q3. What is Scatter-Gather?
+
+**Answer:**
+
+Scatter means sending one request to multiple consumers, and Gather means collecting all their replies before returning the final result.
+
+---
+
+## Q4. What is `releaseStrategy`?
+
+**Answer:**
+
+It is a predicate that decides when enough replies have been received and the aggregated future can be completed.
+
+---
+
+## Q5. What is `returnPartialOnTimeout`?
+
+**Answer:**
+
+If enabled, the template returns the replies received before the timeout instead of throwing a timeout exception.
+
+---
+
+## Q6. Why does AggregatingReplyingKafkaTemplate require manual acknowledgment?
+
+**Answer:**
+
+To prevent losing reply messages while there are still outstanding requests waiting for additional replies.
+
+---
+
+## Q7. What are `aggregatedResults` and `partialResultsAfterTimeout`?
+
+**Answer:**
+
+They are internal pseudo-topic names used by Spring to indicate whether the replies are complete or partial after a timeout. They are **not actual Kafka topics**.
+
+---
+
+# ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**You need approval from Fraud Service, Credit Service, and KYC Service before approving a loan. Which Spring Kafka component will you use?**
+
+### Best Answer
+
+> "I would use `AggregatingReplyingKafkaTemplate` because it supports the Scatter-Gather pattern. The Loan Service sends one request, receives replies from all three services, uses a `releaseStrategy` to determine when all required replies have arrived, and can optionally enable `returnPartialOnTimeout` if partial results are acceptable."
+
+---
+
+# 📌 Key Points to Remember
+
+* `AggregatingReplyingKafkaTemplate` implements the **Scatter-Gather** pattern.
+* It is used when **one request requires multiple replies**.
+* `releaseStrategy` decides when to complete the aggregated result.
+* `returnPartialOnTimeout=true` returns available replies instead of throwing a timeout exception.
+* The returned value contains a **collection of ConsumerRecords**, not a single reply.
+* It requires **manual acknowledgment** (`AckMode.MANUAL` or `MANUAL_IMMEDIATE`) with `enable.auto.commit=false`.
+* Spring uses **`aggregatedResults`** and **`partialResultsAfterTimeout`** as internal pseudo-topic names.
+
+---
+
+# 🎯 Spring Kafka Sending Messages Module Status
+
+You have now completed the **entire "Sending Messages" module** from the Spring Kafka documentation:
+
+* ✅ Part 1 – KafkaTemplate
+* ✅ Part 2 – `send()` Methods
+* ✅ Part 3 – Producer Configuration
+* ✅ Part 4 – Message Headers
+* ✅ Part 5 – Asynchronous Sending (`CompletableFuture`)
+* ✅ Part 6 – `ProducerListener`
+* ✅ Part 7 – `flush()`, `linger.ms`, Blocking vs Non-Blocking
+* ✅ Part 8 – `RoutingKafkaTemplate`
+* ✅ Part 9 – `DefaultKafkaProducerFactory`
+* ✅ Part 10 – `ReplyingKafkaTemplate`
+* ✅ Part 11 – Advanced Reply Features
+* ✅ Part 12 – `AggregatingReplyingKafkaTemplate`
+
+After revising these 12 parts, you'll have covered the complete producer-side "Sending Messages" section of the Spring Kafka documentation.
+
+=======================================================================================================================
+=====================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
+=======================================================================================================================
 =======================================================================================================================
 =======================================================================================================================
 =======================================================================================================================
