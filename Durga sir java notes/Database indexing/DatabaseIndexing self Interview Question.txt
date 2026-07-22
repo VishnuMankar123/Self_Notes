@@ -1796,7 +1796,6 @@ log₂(Index Blocks) + 1
 ```
 
 ---
-
 ## Q115. Why is Binary Search possible in a Primary Index?
 
 **Answer:**

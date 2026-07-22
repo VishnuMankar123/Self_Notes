@@ -1,0 +1,2829 @@
+Perfect. Ye **Top 20 Interview Questions** hain jo **Introduction of Design Pattern** topic se frequently pooche jaate hain. Maine inhe tumhare notes ke hisaab se simple **Hindi wali English** me banaya hai taaki yaad rakhna easy ho. 
+
+---
+
+# Introduction of Design Pattern - Top 20 Interview Questions & Answers
+
+## Q1. What is a Design Pattern?
+
+### Answer
+
+Design Pattern ek **proven solution** hai jo software design ki **common problems** ko solve karta hai.
+
+Simple language me:
+
+> "Jab same problem baar-baar aati hai, uska industry me jo best solution use hota hai usko Design Pattern kehte hain."
+
+---
+
+## Q2. Why do we need Design Patterns?
+
+### Answer
+
+Har developer alag tareeke se code likh sakta hai.
+
+Design Pattern use karne se:
+
+* Standard solution milta hai.
+* Code maintainable hota hai.
+* Code reusable hota hai.
+* Team me sab same approach follow karte hain.
+
+---
+
+## Q3. Is Design Pattern a code?
+
+### Answer
+
+**No.**
+
+Ye ready-made code nahi hai.
+
+Ye sirf ek **idea** ya **blueprint** hai.
+
+Implementation hum Java, Python, C#, JavaScript kisi bhi language me kar sakte hain.
+
+---
+
+## Q4. What is the main objective of Design Patterns?
+
+### Answer
+
+Main objective hai:
+
+* Reusable code
+* Maintainable code
+* Scalable application
+* Common problems ka proven solution dena
+
+---
+
+## Q5. What is the difference between Design Pattern and Algorithm?
+
+### Answer
+
+| Algorithm              | Design Pattern                 |
+| ---------------------- | ------------------------------ |
+| Logic solve karta hai  | Design problem solve karta hai |
+| Step-by-step solution  | Best design approach           |
+| Example: Binary Search | Example: Singleton             |
+
+---
+
+## Q6. Who introduced the concept of Design Pattern?
+
+### Answer
+
+**Christopher Alexander**
+
+Year: **1977**
+
+Pehle Architecture field me introduce kiya gaya tha.
+
+---
+
+## Q7. Who popularized Design Patterns in Software Engineering?
+
+### Answer
+
+**Gang of Four (GoF)**
+
+Ye 4 authors hain:
+
+* Erich Gamma
+* Richard Helm
+* Ralph Johnson
+* John Vlissides
+
+1995 me inhone famous book publish ki thi.
+
+---
+
+## Q8. What is GoF?
+
+### Answer
+
+GoF ka full form hai:
+
+**Gang of Four**
+
+Ye 4 authors hain jinhone Design Patterns ko software industry me popular banaya.
+
+---
+
+## Q9. How many types of Design Patterns are there?
+
+### Answer
+
+Mainly **3 Types**
+
+1. Creational
+2. Structural
+3. Behavioral
+
+---
+
+## Q10. What is Creational Design Pattern?
+
+### Answer
+
+Ye Object Creation se related hota hai.
+
+Question:
+
+> Object kaise create kare?
+
+Examples
+
+* Singleton
+* Factory
+* Builder
+* Prototype
+* Abstract Factory
+
+---
+
+## Q11. What is Structural Design Pattern?
+
+### Answer
+
+Ye batata hai
+
+Classes aur Objects ko kaise organize kare.
+
+Examples
+
+* Adapter
+* Proxy
+* Decorator
+* Composite
+* Facade
+
+---
+
+## Q12. What is Behavioral Design Pattern?
+
+### Answer
+
+Ye batata hai
+
+Objects ek dusre ke saath communication kaise kare.
+
+Examples
+
+* Observer
+* Strategy
+* State
+* Command
+* Iterator
+
+---
+
+## Q13. Can we use Design Patterns in every project?
+
+### Answer
+
+Mostly **Yes**.
+
+Lekin har problem me Design Pattern use nahi karna chahiye.
+
+Jahan zarurat ho wahi use karo.
+
+---
+
+## Q14. What are the advantages of Design Patterns?
+
+### Answer
+
+* Code Reusable
+* Code Maintainable
+* Readable Code
+* Loose Coupling
+* Scalable Application
+* Industry Standard
+
+---
+
+## Q15. What are the disadvantages of Design Patterns?
+
+### Answer
+
+* Beginner ke liye difficult ho sakte hain.
+* Har problem me use nahi karna chahiye.
+* Galat jagah use karne se code unnecessary complex ho jata hai.
+
+---
+
+## Q16. What is Loose Coupling?
+
+### Answer
+
+Loose Coupling ka matlab
+
+Classes ek dusre par **kam depend** kare.
+
+Benefit:
+
+Ek class me change karne se dusri class par kam impact padta hai.
+
+---
+
+## Q17. When should we use Design Patterns?
+
+### Answer
+
+Jab
+
+* Code repeat ho raha ho.
+* Object creation complex ho.
+* Future me changes expected ho.
+* Multiple developers project par kaam kar rahe ho.
+* Maintainable code banana ho.
+
+---
+
+## Q18. Give some real-life examples of Design Patterns.
+
+### Answer
+
+* One Printer → Singleton
+* Car Factory → Factory Pattern
+* USB Adapter → Adapter Pattern
+* YouTube Notification → Observer Pattern
+* Restaurant Order → Factory Pattern
+
+---
+
+## Q19. Where are Design Patterns used in Spring Framework?
+
+### Answer
+
+Spring me bahut saare Design Patterns use hote hain.
+
+Examples
+
+| Spring Feature       | Design Pattern  |
+| -------------------- | --------------- |
+| @Service, @Component | Singleton       |
+| BeanFactory          | Factory         |
+| ApplicationContext   | Factory         |
+| @Transactional       | Proxy           |
+| JdbcTemplate         | Template Method |
+| Application Events   | Observer        |
+| Lombok @Builder      | Builder         |
+
+---
+
+## Q20. Is Design Pattern important for Java Interviews?
+
+### Answer
+
+**Yes.**
+
+Almost har Java aur Spring Boot interview me Design Patterns se questions pooche jaate hain.
+
+Agar Design Patterns clear hain to Spring Framework ko samajhna bhi easy ho jata hai.
+
+---
+
+# ⭐ Bonus Tricky Interview Questions
+
+### Q21. Is Design Pattern language dependent?
+
+**Answer**
+
+No.
+
+Design Pattern language independent hota hai.
+
+Java, Python, C#, JavaScript sab me implement kar sakte hain.
+
+---
+
+### Q22. Is Design Pattern mandatory?
+
+**Answer**
+
+No.
+
+Mandatory nahi hai.
+
+Lekin large applications aur enterprise projects me almost hamesha use hota hai.
+
+---
+
+### Q23. Why are Design Patterns called Best Practices?
+
+**Answer**
+
+Kyuki ye solutions real projects me baar-baar use hue hain aur industry me prove ho chuke hain.
+
+---
+
+## 🔥 Interview Tip
+
+Agar interviewer pooche:
+
+> **"Design Pattern kya hota hai?"**
+
+To 30-second ka answer do:
+
+> "Design Pattern ek proven solution hai jo software design ki common problems ko solve karta hai. Ye ready-made code nahi hota, balki ek blueprint ya best practice hoti hai. Isse code reusable, maintainable aur scalable banta hai. Java aur Spring Framework me Singleton, Factory, Builder, Proxy aur Observer jaise Design Patterns extensively use hote hain."
+=========================================================================================================================================
+# Singleton Design Pattern – 50 Advanced Interview Questions & Answers (4+ Years Java Backend)
+
+**Based on your Design Pattern notes** 
+
+> **Language:** Simple English + Hindi (Interview Style)
+
+---
+
+# Q1. What is Singleton Design Pattern?
+
+### Answer
+
+Singleton ek **Creational Design Pattern** hai jo ensure karta hai ki poore application me kisi class ka **sirf ek hi object** create ho aur wahi object sab jagah reuse ho.
+
+---
+
+# Q2. Why do we need Singleton Pattern?
+
+### Answer
+
+Jab kisi resource ka sirf ek hi instance chahiye ho.
+
+Example:
+
+* Database Connection
+* Logger
+* Cache Manager
+* Configuration Manager
+* Thread Pool
+
+---
+
+# Q3. Why is Singleton called a Creational Pattern?
+
+### Answer
+
+Kyuki iska main purpose **object creation ko control karna** hai.
+
+---
+
+# Q4. What is the biggest advantage of Singleton?
+
+### Answer
+
+Memory save hoti hai.
+
+Ek hi object reuse hota hai.
+
+---
+
+# Q5. Give some real-world examples of Singleton.
+
+### Answer
+
+* Printer
+* Database Connection
+* Logger
+* Cache Manager
+* Spring Bean
+* Configuration Object
+
+---
+
+# Q6. What are the steps to create Singleton?
+
+### Answer
+
+1. Private Constructor
+2. Private Static Instance
+3. Public Static getInstance()
+4. Return same object every time
+
+---
+
+# Q7. Why is constructor private?
+
+### Answer
+
+Taaki koi bhi class bahar se
+
+```java
+new Singleton();
+```
+
+na kar sake.
+
+---
+
+# Q8. Why is instance variable static?
+
+### Answer
+
+Static variable class ke saath belong karta hai.
+
+Object banne se pehle bhi available hota hai.
+
+---
+
+# Q9. Why is getInstance() static?
+
+### Answer
+
+Object ke bina hi method call karna hota hai.
+
+```java
+Singleton.getInstance();
+```
+
+---
+
+# Q10. Why not make constructor public?
+
+### Answer
+
+Public constructor hoga to unlimited objects ban jayenge.
+
+Singleton break ho jayega.
+
+---
+
+# Q11. What is Lazy Initialization?
+
+### Answer
+
+Object tab create hota hai jab first time zarurat padti hai.
+
+---
+
+# Q12. What is Eager Initialization?
+
+### Answer
+
+Object class load hote hi create ho jata hai.
+
+---
+
+# Q13. Which initialization is better?
+
+### Answer
+
+Mostly Lazy Initialization.
+
+Kyuki unnecessary object create nahi hota.
+
+---
+
+# Q14. Difference between Lazy and Eager?
+
+| Lazy                  | Eager                     |
+| --------------------- | ------------------------- |
+| Object later          | Object immediately        |
+| Memory efficient      | Memory waste ho sakti hai |
+| Better for large apps | Better for simple apps    |
+
+---
+
+# Q15. Can Singleton improve performance?
+
+### Answer
+
+Yes.
+
+Object baar-baar create nahi hota.
+
+Memory aur GC dono improve hote hain.
+
+---
+
+# Q16. How do you verify Singleton?
+
+### Answer
+
+HashCode check karo.
+
+```java
+System.out.println(s1.hashCode());
+System.out.println(s2.hashCode());
+```
+
+Dono same hone chahiye.
+
+---
+
+# Q17. What happens if we use new keyword?
+
+### Answer
+
+Naya object create hoga.
+
+Singleton fail ho jayega.
+
+---
+
+# Q18. Why is getInstance() called Factory Method?
+
+### Answer
+
+Kyuki ye object create karke return karta hai.
+
+---
+
+# Q19. What problem does Singleton solve?
+
+### Answer
+
+Unnecessary object creation.
+
+---
+
+# Q20. Can Singleton have parameters?
+
+### Answer
+
+Generally nahi.
+
+Ek hi object return hota hai.
+
+---
+
+# Q21. Is Singleton thread-safe?
+
+### Answer
+
+Simple Singleton thread-safe nahi hota.
+
+---
+
+# Q22. What problem occurs in multi-threading?
+
+### Answer
+
+Multiple threads same time object create kar sakte hain.
+
+Result
+
+2 objects ban sakte hain.
+
+---
+
+# Q23. What is Race Condition?
+
+### Answer
+
+Jab multiple threads ek hi resource ko ek saath access kare aur unpredictable result aaye.
+
+---
+
+# Q24. How do you make Singleton thread-safe?
+
+### Answer
+
+Using
+
+```java
+synchronized
+```
+
+---
+
+# Q25. Example of synchronized Singleton?
+
+```java
+public synchronized static Singleton getInstance()
+```
+
+---
+
+# Q26. What is drawback of synchronized method?
+
+### Answer
+
+Har call par lock lagta hai.
+
+Performance slow hoti hai.
+
+---
+
+# Q27. Better alternative?
+
+### Answer
+
+Synchronized Block.
+
+---
+
+# Q28. What gets locked?
+
+### Answer
+
+```java
+Singleton.class
+```
+
+---
+
+# Q29. Why is synchronized block faster?
+
+### Answer
+
+Sirf critical section lock hota hai.
+
+Pure method nahi.
+
+---
+
+# Q30. What is Double Checked Locking?
+
+### Answer
+
+Pehle check
+
+```java
+if(instance==null)
+```
+
+Fir synchronized block.
+
+Fir dobara check.
+
+Performance better hoti hai.
+
+---
+
+# Q31. Why is volatile used in Double Checked Locking?
+
+### Answer
+
+Object half-created state me visible na ho.
+
+Memory consistency maintain karta hai.
+
+---
+
+# Q32. Can Singleton be broken?
+
+### Answer
+
+Yes.
+
+Reflection
+
+Serialization
+
+Cloning
+
+---
+
+# Q33. How does Reflection break Singleton?
+
+### Answer
+
+Reflection private constructor access kar leti hai.
+
+---
+
+# Q34. How do you prevent Reflection?
+
+### Answer
+
+Constructor me check lagao.
+
+```java
+if(instance!=null)
+
+throw new RuntimeException();
+```
+
+---
+
+# Q35. How does Serialization break Singleton?
+
+### Answer
+
+Deserialize karne par naya object ban jata hai.
+
+---
+
+# Q36. Solution for Serialization?
+
+### Answer
+
+```java
+readResolve()
+```
+
+---
+
+# Q37. How does Cloning break Singleton?
+
+### Answer
+
+clone()
+
+Naya object create kar deta hai.
+
+---
+
+# Q38. Solution for Cloning?
+
+### Answer
+
+clone() override karo.
+
+Exception throw karo.
+
+---
+
+# Q39. Which Singleton implementation is safest?
+
+### Answer
+
+Enum Singleton.
+
+---
+
+# Q40. Why is Enum Singleton best?
+
+### Answer
+
+Reflection
+
+Serialization
+
+Cloning
+
+Teeno se safe.
+
+---
+
+# Q41. Can Spring Beans be Singleton?
+
+### Answer
+
+Yes.
+
+By default Spring Beans Singleton scope me hote hain.
+
+---
+
+# Q42. Which Spring annotations create Singleton Beans?
+
+### Answer
+
+```java
+@Component
+
+@Service
+
+@Repository
+
+@Controller
+```
+
+Default Singleton.
+
+---
+
+# Q43. Is Spring Singleton JVM Singleton?
+
+### Answer
+
+No.
+
+Spring Singleton means
+
+**One Bean Per Spring Container.**
+
+Pure JVM ke liye nahi.
+
+---
+
+# Q44. Difference between Java Singleton and Spring Singleton?
+
+### Answer
+
+Java Singleton
+
+Entire JVM me ek object.
+
+Spring Singleton
+
+Ek Spring IoC Container me ek bean.
+
+---
+
+# Q45. Where have you used Singleton in your project?
+
+### Answer
+
+Logger
+
+Configuration Class
+
+Redis Configuration
+
+Kafka Producer Configuration
+
+Connection Pool
+
+Spring Beans
+
+---
+
+# Q46. Can Singleton hold state?
+
+### Answer
+
+Kar sakta hai.
+
+Lekin mutable state avoid karni chahiye.
+
+---
+
+# Q47. Why should Singleton generally be stateless?
+
+### Answer
+
+Kyuki multiple threads same object use karte hain.
+
+State change hui to concurrency issue aa sakta hai.
+
+---
+
+# Q48. What are disadvantages of Singleton?
+
+### Answer
+
+* Difficult Testing
+* Global State
+* Hidden Dependency
+* Thread Safety Issues
+* Tight coupling agar galat use kare
+
+---
+
+# Q49. When should you NOT use Singleton?
+
+### Answer
+
+Jab har request ke liye alag object chahiye.
+
+Example
+
+Order
+
+Customer
+
+Invoice
+
+DTO
+
+Entity
+
+---
+
+# Q50. Interview Final Question
+
+### Interviewer:
+
+**Explain Singleton in one minute.**
+
+### Best Answer
+
+> "Singleton ek Creational Design Pattern hai jo ensure karta hai ki poore application me kisi class ka sirf ek hi object create ho aur wahi object reuse ho. Isko implement karne ke liye private constructor, private static instance aur public static getInstance() method use karte hain. Ye Database Connection, Logger, Cache Manager aur Spring Singleton Beans me bahut use hota hai. Multi-threaded environment me synchronized, Double Checked Locking ya Enum Singleton use karke thread-safe banaya jata hai."
+
+---
+
+# ⭐ Top 10 Follow-up Questions (Interviewer Favorites)
+
+1. Singleton aur Spring Singleton me kya difference hai?
+2. Constructor private kyu hota hai?
+3. Static method kyu use karte hain?
+4. Lazy vs Eager Initialization?
+5. Multi-threading me Singleton fail kyu hota hai?
+6. `volatile` keyword kyu use hota hai?
+7. Reflection Singleton ko kaise break karta hai?
+8. `readResolve()` kab call hota hai?
+9. Enum Singleton sabse safe kyu hai?
+10. Real project me Singleton kaha use kiya hai?
+
+Ye saare questions tumhare uploaded Singleton Design Pattern notes par based hain aur Java/Spring Boot interviews ke hisaab se prepare kiye gaye hain. 
+
+=========================================================================================================================================
+# Breaking Singleton Pattern – 25 Advanced Interview Questions & Answers (4+ Years Java Backend)
+
+**Based on your Design Pattern notes** 
+
+> **Language:** Simple English + Hindi (Interview Style)
+
+---
+
+# Q1. What does "Breaking Singleton" mean?
+
+### Answer
+
+Breaking Singleton ka matlab hai **Singleton Pattern ka rule tod dena**, yani sirf ek object ki jagah multiple objects create ho jana.
+
+---
+
+# Q2. How many ways can Singleton be broken?
+
+### Answer
+
+Java me mainly **3 ways** hain:
+
+* Reflection API
+* Serialization
+* Cloning
+
+---
+
+# Q3. Which way is most commonly asked in interviews?
+
+### Answer
+
+**Reflection API** sabse jyada interview me pucha jata hai.
+
+---
+
+# Q4. What is Reflection API?
+
+### Answer
+
+Reflection API Java ka feature hai jo runtime par class ke private constructor, methods aur fields ko access kar sakta hai.
+
+---
+
+# Q5. How does Reflection break Singleton?
+
+### Answer
+
+Reflection private constructor ko accessible bana deta hai.
+
+Fir
+
+```java
+constructor.newInstance();
+```
+
+call karke naya object create kar deta hai.
+
+Result:
+
+```
+Singleton Object 1
+
+Reflection
+
+↓
+
+Singleton Object 2
+```
+
+---
+
+# Q6. What is the purpose of `setAccessible(true)`?
+
+### Answer
+
+Ye private constructor ya private method ko temporarily accessible bana deta hai.
+
+Isi wajah se Reflection private constructor call kar sakta hai.
+
+---
+
+# Q7. How do you prevent Reflection from breaking Singleton?
+
+### Answer
+
+Constructor ke andar check lagate hain.
+
+```java
+private Singleton() {
+    if(instance != null){
+        throw new RuntimeException("Singleton already exists");
+    }
+}
+```
+
+---
+
+# Q8. Why does the constructor check work?
+
+### Answer
+
+Pehla object normal create hoga.
+
+Reflection jab second object banane ki koshish karega tab `instance != null` hoga aur exception throw ho jayegi.
+
+---
+
+# Q9. What is Serialization?
+
+### Answer
+
+Serialization ka matlab Java Object ko Byte Stream me convert karna.
+
+```
+Object
+
+↓
+
+File / Network
+```
+
+---
+
+# Q10. What is Deserialization?
+
+### Answer
+
+Byte Stream se object ko wapas Java Object banana.
+
+```
+File
+
+↓
+
+Java Object
+```
+
+---
+
+# Q11. How does Serialization break Singleton?
+
+### Answer
+
+Deserialize karte waqt Java naya object create kar deta hai.
+
+Result
+
+```
+Original Object
+
+↓
+
+Serialize
+
+↓
+
+Deserialize
+
+↓
+
+New Object
+```
+
+Singleton break ho jata hai.
+
+---
+
+# Q12. How do you prevent Serialization from breaking Singleton?
+
+### Answer
+
+`readResolve()` method use karte hain.
+
+```java
+protected Object readResolve() {
+    return instance;
+}
+```
+
+---
+
+# Q13. When is `readResolve()` called?
+
+### Answer
+
+Automatically **deserialization ke time** call hota hai.
+
+Ye existing Singleton object return karta hai.
+
+---
+
+# Q14. What is Cloning?
+
+### Answer
+
+Cloning ka matlab existing object ki exact copy banana.
+
+```java
+obj.clone();
+```
+
+---
+
+# Q15. How does Cloning break Singleton?
+
+### Answer
+
+clone() method ek naya object create kar deta hai.
+
+Result
+
+```
+Original Object
+
+↓
+
+clone()
+
+↓
+
+Duplicate Object
+```
+
+---
+
+# Q16. How do you prevent Cloning?
+
+### Answer
+
+clone() method override karke exception throw kar do.
+
+```java
+@Override
+protected Object clone() throws CloneNotSupportedException{
+    throw new CloneNotSupportedException();
+}
+```
+
+---
+
+# Q17. Instead of exception, can we return the same instance?
+
+### Answer
+
+Haan.
+
+```java
+@Override
+protected Object clone(){
+    return instance;
+}
+```
+
+Lekin exception throw karna better practice hai.
+
+---
+
+# Q18. Which Singleton implementation is safest?
+
+### Answer
+
+**Enum Singleton**
+
+```java
+public enum Singleton {
+    INSTANCE;
+}
+```
+
+---
+
+# Q19. Why is Enum Singleton safest?
+
+### Answer
+
+Kyuki Java internally ensure karta hai ki
+
+* Reflection
+* Serialization
+* Cloning
+
+kisi se bhi multiple objects create na ho.
+
+---
+
+# Q20. Which frameworks use Reflection?
+
+### Answer
+
+Reflection ka use hota hai:
+
+* Spring Framework
+* Hibernate
+* JUnit
+* Jackson
+* Dependency Injection
+
+---
+
+# Q21. Where is Serialization used in real projects?
+
+### Answer
+
+* Cache
+* Session Management
+* Distributed Systems
+* Network Communication
+* File Storage
+
+---
+
+# Q22. Where is Cloning used in real projects?
+
+### Answer
+
+* Prototype Pattern
+* Object Copy
+* Game Development
+* Undo/Redo Feature
+
+---
+
+# Q23. Which way is the most dangerous for Singleton?
+
+### Answer
+
+Reflection.
+
+Kyuki ye private constructor bhi access kar sakta hai.
+
+---
+
+# Q24. What follow-up questions are commonly asked after "What is Singleton?"
+
+### Answer
+
+Interviewer usually asks:
+
+* Reflection se Singleton kaise break hota hai?
+* `setAccessible(true)` kya karta hai?
+* `readResolve()` kab call hota hai?
+* clone() ka effect kya hai?
+* Enum Singleton best kyu hai?
+
+---
+
+# Q25. Explain Breaking Singleton in one minute.
+
+### Best Interview Answer
+
+> **"Singleton Pattern ensure karta hai ki application me sirf ek hi object ho. Lekin ise Reflection, Serialization aur Cloning ke through break kiya ja sakta hai. Reflection private constructor ko access karta hai, Serialization deserialization ke time naya object bana deti hai aur Cloning duplicate object create kar deti hai. Inke solutions respectively constructor check, `readResolve()` aur clone override karna hain. Java me Enum Singleton sabse safe implementation mana jata hai kyuki ye in teeno problems se protected hota hai."**
+
+---
+
+# ⭐ Top Interview Follow-up Questions
+
+1. Reflection API kya hoti hai?
+2. `setAccessible(true)` kya karta hai?
+3. Reflection se Singleton kaise break hota hai?
+4. Serialization kya hoti hai?
+5. Deserialization kya hoti hai?
+6. `readResolve()` ka purpose kya hai?
+7. Cloning Singleton ko kaise affect karti hai?
+8. clone() ko override kyu karte hain?
+9. Enum Singleton sabse safe kyu hai?
+10. Real project me Reflection aur Serialization kaha use kiya hai?
+
+Ye saare questions tumhare uploaded **Breaking Singleton** notes ke basis par prepare kiye gaye hain aur Java/Spring Boot interviews ke liye relevant hain. 
+
+=========================================================================================================================================
+# Factory Design Pattern – 40 Advanced Interview Questions & Answers (4+ Years Java Backend)
+
+**Based on your Design Pattern notes** 
+
+> **Language:** Simple English + Hindi (Interview Style)
+
+---
+
+# Q1. What is Factory Design Pattern?
+
+### Answer
+
+Factory Pattern ek **Creational Design Pattern** hai jo object creation ki responsibility **Factory Class** ko de deta hai.
+
+Client sirf request karta hai, Factory object create karke return karti hai.
+
+---
+
+# Q2. Why do we use Factory Pattern?
+
+### Answer
+
+Jab multiple objects create karne ho aur client ko implementation details nahi pata honi chahiye.
+
+---
+
+# Q3. Why is it called a Creational Pattern?
+
+### Answer
+
+Kyuki iska main purpose **object create karna** hai.
+
+---
+
+# Q4. What problem does Factory Pattern solve?
+
+### Answer
+
+Ye direct object creation (`new`) ko avoid karta hai aur object creation ko centralize karta hai.
+
+---
+
+# Q5. What is the biggest advantage of Factory Pattern?
+
+### Answer
+
+**Loose Coupling.**
+
+Client implementation ko nahi jaanta.
+
+---
+
+# Q6. Explain Factory Pattern in one line.
+
+### Answer
+
+> "Client object create nahi karta, Factory object create karke return karti hai."
+
+---
+
+# Q7. What are the main components of Factory Pattern?
+
+### Answer
+
+* Interface / Parent Class
+* Concrete Classes
+* Factory Class
+* Client
+
+---
+
+# Q8. Why do we use an Interface in Factory Pattern?
+
+### Answer
+
+Taaki client implementation ke bajay interface ke through kaam kare.
+
+Ye loose coupling provide karta hai.
+
+---
+
+# Q9. What is the role of Factory Class?
+
+### Answer
+
+Input ke basis par correct object create karke return karna.
+
+---
+
+# Q10. What is Factory Method?
+
+### Answer
+
+Jo method object create karke return kare usko Factory Method kehte hain.
+
+Example
+
+```java
+EmployeeFactory.getEmployee("Android");
+```
+
+---
+
+# Q11. Why is Factory Method generally static?
+
+### Answer
+
+Taaki Factory ka object banane ki zarurat na pade.
+
+Direct call kar sakte hain.
+
+```java
+EmployeeFactory.getEmployee("Web");
+```
+
+---
+
+# Q12. How does client create an object?
+
+### Answer
+
+Client sirf Factory Method call karta hai.
+
+```java
+Employee emp =
+EmployeeFactory.getEmployee("Android");
+```
+
+---
+
+# Q13. Does client know which object is created?
+
+### Answer
+
+No.
+
+Client sirf interface ko jaanta hai.
+
+Factory decide karti hai kaunsa object create hoga.
+
+---
+
+# Q14. Why is direct object creation a bad practice?
+
+### Answer
+
+Agar class change hui to har jagah code change karna padega.
+
+---
+
+# Q15. Explain Tight Coupling.
+
+### Answer
+
+```java
+Employee emp = new AndroidDeveloper();
+```
+
+Client directly implementation se connected hai.
+
+---
+
+# Q16. Explain Loose Coupling.
+
+### Answer
+
+```java
+Employee emp =
+EmployeeFactory.getEmployee(type);
+```
+
+Client sirf Factory aur Interface ko jaanta hai.
+
+---
+
+# Q17. What is Runtime Object Creation?
+
+### Answer
+
+Runtime me input ke basis par object create hota hai.
+
+Example
+
+Android → AndroidDeveloper
+
+Web → WebDeveloper
+
+---
+
+# Q18. What happens if a new Developer type is added?
+
+### Answer
+
+Factory me ek new condition add karni padegi.
+
+Client code same rahega.
+
+---
+
+# Q19. What are the advantages of Factory Pattern?
+
+### Answer
+
+* Loose Coupling
+* Centralized Object Creation
+* Easy Maintenance
+* Better Readability
+* Reusable Code
+
+---
+
+# Q20. What are the disadvantages?
+
+### Answer
+
+* Factory class badi ho sakti hai.
+* Har naye type ke liye Factory modify karni padti hai.
+* Small projects me overkill hai.
+
+---
+
+# Q21. Give a real-life example.
+
+### Answer
+
+Car Factory.
+
+Customer sirf bolta hai BMW chahiye.
+
+Factory BMW bana ke de deti hai.
+
+---
+
+# Q22. Give another real-life example.
+
+### Answer
+
+Restaurant.
+
+Customer Pizza order karta hai.
+
+Kitchen object create karti hai.
+
+---
+
+# Q23. What is centralized object creation?
+
+### Answer
+
+Saare object creation ek hi Factory class me hoti hai.
+
+---
+
+# Q24. Can Factory return different object types?
+
+### Answer
+
+Yes.
+
+Same Factory different child class ke objects return kar sakti hai.
+
+---
+
+# Q25. Why is Factory Pattern better than using `new`?
+
+### Answer
+
+Client implementation se independent rehta hai.
+
+Maintenance easy ho jati hai.
+
+---
+
+# Q26. What is the Open/Closed Principle in Factory?
+
+### Answer
+
+New functionality add kar sakte hain.
+
+Existing client code change nahi hota.
+
+---
+
+# Q27. Which SOLID principle is mostly followed?
+
+### Answer
+
+Open/Closed Principle.
+
+Aur Dependency Inversion bhi indirectly support karta hai.
+
+---
+
+# Q28. Can Factory return null?
+
+### Answer
+
+Kar sakti hai.
+
+Lekin better hai Exception throw kare ya Optional use kare.
+
+---
+
+# Q29. Where is Factory Pattern used in Java?
+
+### Answer
+
+* Calendar.getInstance()
+* NumberFormat.getInstance()
+* DriverManager.getConnection()
+
+---
+
+# Q30. Where is Factory Pattern used in Spring?
+
+### Answer
+
+* BeanFactory
+* ApplicationContext
+
+Ye Beans create karte hain.
+
+---
+
+# Q31. Is `BeanFactory` really a Factory Pattern?
+
+### Answer
+
+Yes.
+
+Ye required bean create karke return karta hai.
+
+---
+
+# Q32. Difference between Factory Pattern and Constructor?
+
+### Answer
+
+Constructor me client object create karta hai.
+
+Factory me Factory object create karti hai.
+
+---
+
+# Q33. Difference between Factory Pattern and Singleton?
+
+### Answer
+
+Factory Pattern → Multiple type ke objects create karta hai.
+
+Singleton → Sirf ek object create karta hai.
+
+---
+
+# Q34. Difference between Factory Pattern and Builder?
+
+### Answer
+
+Factory object create karti hai.
+
+Builder complex object ko step-by-step build karta hai.
+
+---
+
+# Q35. Can Factory return Singleton objects?
+
+### Answer
+
+Yes.
+
+Factory Singleton object bhi return kar sakti hai.
+
+---
+
+# Q36. What is your project example of Factory Pattern?
+
+### Answer
+
+Spring Boot me BeanFactory aur ApplicationContext.
+
+SLF4J me LoggerFactory.
+
+Database Connection create karne me.
+
+---
+
+# Q37. What happens if client creates object directly?
+
+### Answer
+
+Tight coupling increase ho jayegi.
+
+Maintenance difficult ho jayegi.
+
+---
+
+# Q38. Explain Factory Pattern with Employee example.
+
+### Answer
+
+Employee Interface.
+
+AndroidDeveloper aur WebDeveloper implementation.
+
+EmployeeFactory input ke basis par object return karti hai.
+
+---
+
+# Q39. Which interview follow-up questions are common?
+
+### Answer
+
+* Loose Coupling kya hai?
+* Factory Method kya hai?
+* Factory static kyu hoti hai?
+* Factory aur Abstract Factory me difference?
+* Spring me Factory kaha use hoti hai?
+
+---
+
+# Q40. Explain Factory Pattern in one minute.
+
+### Best Interview Answer
+
+> **"Factory Pattern ek Creational Design Pattern hai jo object creation ki responsibility Factory Class ko deta hai. Client directly `new` keyword use nahi karta. Factory input ke basis par required object create karke return karti hai. Isse Loose Coupling, centralized object creation aur maintainability improve hoti hai. Spring Framework me `BeanFactory`, `ApplicationContext`, aur Java me `Calendar.getInstance()` aur `DriverManager.getConnection()` Factory Pattern ke common examples hain."**
+
+---
+
+# ⭐ Top 10 Interview Follow-up Questions
+
+1. Factory Pattern kyu use karte hain?
+2. Factory Method kya hota hai?
+3. Factory Method static kyu hota hai?
+4. Factory Pattern loose coupling kaise provide karta hai?
+5. Factory aur Singleton me difference?
+6. Factory aur Builder me difference?
+7. Factory aur Abstract Factory me difference?
+8. Spring me Factory Pattern kaha use hota hai?
+9. `BeanFactory` aur `ApplicationContext` ka role kya hai?
+10. Real project me Factory Pattern kaha use kiya hai?
+
+Ye saare questions tumhare uploaded **Factory Design Pattern** notes ke basis par prepare kiye gaye hain aur Java/Spring Boot interviews ke liye relevant hain. 
+
+=========================================================================================================================================
+# Abstract Factory Design Pattern – 40 Advanced Interview Questions & Answers (4+ Years Java Backend)
+
+**Based on your Design Pattern notes** 
+
+> **Language:** Simple English + Hindi (Interview Style)
+
+---
+
+# Q1. What is Abstract Factory Design Pattern?
+
+### Answer
+
+Abstract Factory ek **Creational Design Pattern** hai jo **Factory of Factories** provide karta hai.
+
+Matlab ek Factory directly object create nahi karti, balki dusri Factory ki help se object create karti hai.
+
+---
+
+# Q2. Why is it called "Factory of Factories"?
+
+### Answer
+
+Kyuki ye object directly create nahi karti.
+
+Flow:
+
+```text
+Client
+   ↓
+EmployeeFactory
+   ↓
+AndroidFactory
+   ↓
+AndroidDeveloper
+```
+
+Factory ek aur Factory ko use karti hai.
+
+---
+
+# Q3. Which category does Abstract Factory belong to?
+
+### Answer
+
+**Creational Design Pattern**
+
+Kyuki iska main kaam object creation hai.
+
+---
+
+# Q4. Why do we need Abstract Factory?
+
+### Answer
+
+Jab bahut saare related objects create karne ho aur Factory class bahut badi ho rahi ho.
+
+Ye object creation ko aur modular bana deta hai.
+
+---
+
+# Q5. What problem does Abstract Factory solve?
+
+### Answer
+
+Ye large Factory class ki problem solve karta hai.
+
+Har object ke liye alag Factory bana deta hai.
+
+---
+
+# Q6. What is the biggest advantage of Abstract Factory?
+
+### Answer
+
+**High Flexibility + Better Loose Coupling**
+
+---
+
+# Q7. Explain Abstract Factory in one line.
+
+### Answer
+
+> "Abstract Factory ek Factory of Factories hai jo related object families create karti hai."
+
+---
+
+# Q8. What are the main components of Abstract Factory?
+
+### Answer
+
+* Interface
+* Concrete Classes
+* Abstract Factory
+* Concrete Factories
+* Main Factory
+* Client
+
+---
+
+# Q9. What is the role of Abstract Factory?
+
+### Answer
+
+Common contract provide karna.
+
+Har Concrete Factory usko implement karti hai.
+
+---
+
+# Q10. Why do we create Concrete Factories?
+
+### Answer
+
+Har Concrete Factory ek specific object create karti hai.
+
+Example:
+
+* AndroidFactory
+* WebFactory
+* ManagerFactory
+
+---
+
+# Q11. What is the role of EmployeeFactory?
+
+### Answer
+
+EmployeeFactory sirf Abstract Factory ko call karti hai.
+
+Actual object creation Concrete Factory karti hai.
+
+---
+
+# Q12. Does EmployeeFactory know which object is created?
+
+### Answer
+
+No.
+
+Usko sirf
+
+```java
+factory.createEmployee();
+```
+
+call karna hota hai.
+
+---
+
+# Q13. Who decides which object is created?
+
+### Answer
+
+Concrete Factory.
+
+Example
+
+AndroidFactory
+
+↓
+
+AndroidDeveloper
+
+---
+
+# Q14. Explain the flow of Abstract Factory.
+
+### Answer
+
+```text
+Client
+
+↓
+
+EmployeeFactory
+
+↓
+
+Abstract Factory
+
+↓
+
+Concrete Factory
+
+↓
+
+Object
+```
+
+---
+
+# Q15. How is it different from Factory Pattern?
+
+### Answer
+
+Factory me
+
+Factory → Object
+
+Abstract Factory me
+
+Factory → Factory → Object
+
+---
+
+# Q16. Why is one extra layer added?
+
+### Answer
+
+Implementation ko aur hide karne ke liye.
+
+Flexibility increase hoti hai.
+
+---
+
+# Q17. What is Loose Coupling?
+
+### Answer
+
+Classes directly ek dusre par depend nahi hoti.
+
+Implementation change hone par client code change nahi hota.
+
+---
+
+# Q18. Does Abstract Factory provide Loose Coupling?
+
+### Answer
+
+Yes.
+
+Client sirf Factory ko jaanta hai.
+
+Concrete implementation nahi.
+
+---
+
+# Q19. What happens if a new Employee type is added?
+
+### Answer
+
+Sirf
+
+* New Employee Class
+* New Concrete Factory
+
+banani padegi.
+
+Existing code same rahega.
+
+---
+
+# Q20. Which SOLID Principle is mainly followed?
+
+### Answer
+
+Open/Closed Principle.
+
+New Factory add karo.
+
+Existing code change mat karo.
+
+---
+
+# Q21. Can it follow Dependency Inversion Principle?
+
+### Answer
+
+Yes.
+
+Client abstraction par depend karta hai.
+
+Concrete classes par nahi.
+
+---
+
+# Q22. What are the advantages?
+
+### Answer
+
+* Loose Coupling
+* High Flexibility
+* Scalable
+* Easy Maintenance
+* Easy Extension
+
+---
+
+# Q23. What are the disadvantages?
+
+### Answer
+
+* Bahut saari classes ban jati hain.
+* Beginners ko complex lagta hai.
+* Small projects ke liye unnecessary.
+
+---
+
+# Q24. Explain with Employee example.
+
+### Answer
+
+Employee Interface.
+
+↓
+
+AndroidDeveloper
+
+↓
+
+AndroidFactory
+
+↓
+
+EmployeeFactory
+
+↓
+
+Client
+
+---
+
+# Q25. Real-life example?
+
+### Answer
+
+Amazon Payment System.
+
+Payment
+
+↓
+
+UPI Factory
+
+Card Factory
+
+Wallet Factory
+
+---
+
+# Q26. Another real-life example?
+
+### Answer
+
+GUI Framework.
+
+Windows Button
+
+Mac Button
+
+Linux Button
+
+Har OS ki alag Factory.
+
+---
+
+# Q27. Can Abstract Factory create multiple object families?
+
+### Answer
+
+Yes.
+
+Isi purpose ke liye use hota hai.
+
+---
+
+# Q28. Why not use one big Factory?
+
+### Answer
+
+Factory bahut badi aur difficult ho jayegi.
+
+Maintain karna mushkil ho jayega.
+
+---
+
+# Q29. Is Abstract Factory scalable?
+
+### Answer
+
+Yes.
+
+Large enterprise applications ke liye best hai.
+
+---
+
+# Q30. Where is Abstract Factory used in Java?
+
+### Answer
+
+Java GUI libraries
+
+XML Parsers
+
+JDBC Driver implementations
+
+---
+
+# Q31. Where is Abstract Factory used in Spring?
+
+### Answer
+
+Bean creation process.
+
+BeanFactory
+
+↓
+
+ApplicationContext
+
+↓
+
+Different Bean implementations
+
+---
+
+# Q32. Difference between Factory and Abstract Factory?
+
+### Answer
+
+| Factory        | Abstract Factory     |
+| -------------- | -------------------- |
+| One Factory    | Factory of Factories |
+| Direct Object  | Indirect Object      |
+| Less Flexible  | More Flexible        |
+| Small Projects | Large Projects       |
+
+---
+
+# Q33. Difference between Abstract Factory and Builder?
+
+### Answer
+
+Abstract Factory
+
+Related objects create karta hai.
+
+Builder
+
+Complex object step-by-step build karta hai.
+
+---
+
+# Q34. Difference between Abstract Factory and Singleton?
+
+### Answer
+
+Singleton
+
+Ek object.
+
+Abstract Factory
+
+Multiple related objects.
+
+---
+
+# Q35. Can we combine Singleton and Abstract Factory?
+
+### Answer
+
+Yes.
+
+Har Concrete Factory khud Singleton ho sakti hai.
+
+Ye enterprise projects me common hai.
+
+---
+
+# Q36. How is Open/Closed Principle achieved?
+
+### Answer
+
+New Factory add karte hain.
+
+Purani Factory aur Client change nahi karte.
+
+---
+
+# Q37. How is Dependency Inversion achieved?
+
+### Answer
+
+Client
+
+↓
+
+Abstract Factory
+
+↓
+
+Concrete Factory
+
+Client abstraction par depend karta hai.
+
+---
+
+# Q38. What is your project example?
+
+### Answer
+
+Spring Boot
+
+ApplicationContext
+
+BeanFactory
+
+Different Bean implementations
+
+Theme based UI
+
+Payment Gateway integrations
+
+---
+
+# Q39. What follow-up questions are commonly asked?
+
+### Answer
+
+* Factory vs Abstract Factory?
+* Factory of Factories kya hota hai?
+* Extra layer kyu add ki?
+* Open/Closed Principle kaise follow karta hai?
+* Real project example?
+
+---
+
+# Q40. Explain Abstract Factory in one minute.
+
+### Best Interview Answer
+
+> **"Abstract Factory ek Creational Design Pattern hai jise Factory of Factories bhi kehte hain. Isme object directly create nahi hota, balki ek Factory dusri Factory ki help se required object create karti hai. Isse Loose Coupling, Flexibility aur Scalability improve hoti hai. Jab multiple related object families create karni hoti hain, tab Abstract Factory best choice hoti hai. Spring Framework ke BeanFactory aur ApplicationContext ke concepts me bhi is pattern ka use dekhne ko milta hai."**
+
+---
+
+# ⭐ Top 10 Interview Follow-up Questions
+
+1. Abstract Factory ko Factory of Factories kyu bolte hain?
+2. Factory aur Abstract Factory me exact difference?
+3. Extra abstraction layer ka benefit kya hai?
+4. Large projects me Abstract Factory kyu use hota hai?
+5. Open/Closed Principle kaise follow karta hai?
+6. Dependency Inversion Principle kaise support karta hai?
+7. Spring Framework me iska concept kaha dikhta hai?
+8. Real project me kaha use kiya?
+9. Builder aur Abstract Factory me difference?
+10. Agar kal ek naya `DesignerFactory` add karna ho to kya changes karoge?
+
+Ye saare questions tumhare uploaded **Abstract Factory Design Pattern** notes ke basis par prepare kiye gaye hain aur Java/Spring Boot interviews ke liye relevant hain. 
+
+=========================================================================================================================================
+Absolutely. Here are **40 Advanced Builder Design Pattern Interview Questions & Answers** in **simple Hinglish**, suitable for **Java Backend (3–6 Years Experience)** interviews.
+
+**Based on your Builder Design Pattern notes.** 
+
+---
+
+# Builder Design Pattern – 40 Advanced Interview Questions & Answers
+
+## Q1. What is Builder Design Pattern?
+
+### Answer
+
+Builder Pattern ek **Creational Design Pattern** hai jo **complex object ko step-by-step create** karta hai.
+
+Isme hum constructor me saare parameters pass nahi karte.
+
+Instead
+
+```text
+Builder
+
+↓
+
+Set Properties
+
+↓
+
+build()
+
+↓
+
+Object
+```
+
+---
+
+# Q2. Why do we need Builder Pattern?
+
+### Answer
+
+Jab object me bahut saare fields ho.
+
+Example
+
+Employee
+
+Order
+
+User
+
+Request DTO
+
+Configuration Object
+
+---
+
+# Q3. Which category does Builder Pattern belong to?
+
+### Answer
+
+Creational Design Pattern.
+
+Kyuki iska kaam object banana hai.
+
+---
+
+# Q4. What problem does Builder Pattern solve?
+
+### Answer
+
+Ye solve karta hai
+
+* Constructor with too many parameters
+* Constructor overloading
+* Optional parameters
+* Poor readability
+
+---
+
+# Q5. Explain Builder Pattern in one line.
+
+### Answer
+
+> "Builder Pattern creates complex objects step-by-step using method chaining."
+
+---
+
+# Q6. Why not use constructor?
+
+### Answer
+
+Agar constructor me 20 parameters honge to
+
+* difficult to read
+* parameter order yaad rakhna padega
+* bugs aa sakte hain
+
+---
+
+# Q7. What is Constructor Overloading problem?
+
+### Answer
+
+Different combinations ke liye bahut saare constructors banane padte hain.
+
+Example
+
+```java
+User()
+
+User(id)
+
+User(id,name)
+
+User(id,name,email)
+
+User(id,name,email,phone)
+```
+
+Maintain karna difficult ho jata hai.
+
+---
+
+# Q8. What are optional parameters?
+
+### Answer
+
+Jo fields mandatory nahi hain.
+
+Example
+
+Phone
+
+Address
+
+Coupon
+
+Gift Message
+
+---
+
+# Q9. How does Builder solve optional parameters?
+
+### Answer
+
+Jo field chahiye sirf wahi set karo.
+
+Baaki methods call hi mat karo.
+
+---
+
+# Q10. What are the main components of Builder Pattern?
+
+### Answer
+
+* Main Class
+* Private Constructor
+* Builder Class
+* Builder Methods
+* build() Method
+
+---
+
+# Q11. Why is constructor private?
+
+### Answer
+
+Taaki object sirf Builder hi create kare.
+
+---
+
+# Q12. Why do Builder methods return Builder object?
+
+### Answer
+
+Method Chaining ke liye.
+
+---
+
+# Q13. What is Method Chaining?
+
+### Answer
+
+Ek method ke baad dusra method continuously call karna.
+
+Example
+
+```java
+User.builder()
+
+.name("Rahul")
+
+.email("abc@gmail.com")
+
+.build();
+```
+
+---
+
+# Q14. What is build() method?
+
+### Answer
+
+Ye final object create karta hai.
+
+---
+
+# Q15. What happens inside build()?
+
+### Answer
+
+Builder ki values final object me copy hoti hain.
+
+---
+
+# Q16. Can Builder create immutable objects?
+
+### Answer
+
+Yes.
+
+Builder mostly immutable object create karne ke liye use hota hai.
+
+---
+
+# Q17. What is Immutable Object?
+
+### Answer
+
+Object create hone ke baad uska data change nahi hota.
+
+Setter nahi hota.
+
+---
+
+# Q18. Why no setter in immutable class?
+
+### Answer
+
+Taaki object ka state kabhi change na ho.
+
+---
+
+# Q19. Does Builder use Setter internally?
+
+### Answer
+
+No.
+
+Builder apni fields maintain karta hai.
+
+Final object constructor se create hota hai.
+
+---
+
+# Q20. Can Builder validate data?
+
+### Answer
+
+Yes.
+
+Validation build() method me kar sakte hain.
+
+Example
+
+Email null hai ya nahi.
+
+Age valid hai ya nahi.
+
+---
+
+# Q21. What are the advantages of Builder Pattern?
+
+### Answer
+
+* Readable Code
+* Method Chaining
+* Optional Fields
+* Immutable Objects
+* Easy Maintenance
+
+---
+
+# Q22. What are disadvantages?
+
+### Answer
+
+* Extra Builder class
+* Boilerplate code
+* Small classes ke liye unnecessary
+
+---
+
+# Q23. Difference between Builder and Factory?
+
+### Answer
+
+Factory object create karti hai.
+
+Builder complex object step-by-step banata hai.
+
+---
+
+# Q24. Difference between Builder and Singleton?
+
+### Answer
+
+Singleton
+
+Ek object.
+
+Builder
+
+Complex object creation.
+
+---
+
+# Q25. Difference between Builder and Abstract Factory?
+
+### Answer
+
+Abstract Factory
+
+Related object families create karta hai.
+
+Builder
+
+Ek complex object create karta hai.
+
+---
+
+# Q26. Is Builder thread-safe?
+
+### Answer
+
+Normally nahi.
+
+Har thread apna Builder object use karta hai.
+
+---
+
+# Q27. Why is Builder more readable?
+
+### Answer
+
+Kyuki property ka naam clearly dikhta hai.
+
+```java
+.name("Rahul")
+
+.email("abc@gmail.com")
+```
+
+---
+
+# Q28. Is parameter order important?
+
+### Answer
+
+No.
+
+Builder me order matter nahi karta.
+
+---
+
+# Q29. What is real-world example?
+
+### Answer
+
+Amazon Order.
+
+Bahut saari fields.
+
+Builder best option hai.
+
+---
+
+# Q30. Another real-world example?
+
+### Answer
+
+HTTP Request Builder.
+
+```java
+HttpRequest.newBuilder()
+
+.uri(uri)
+
+.GET()
+
+.build();
+```
+
+---
+
+# Q31. Where is Builder used in Java?
+
+### Answer
+
+* StringBuilder
+* ProcessBuilder
+* HttpRequest.Builder
+
+---
+
+# Q32. Where is Builder used in Spring Boot?
+
+### Answer
+
+* Configuration Objects
+* Request DTO
+* Response DTO
+* Lombok @Builder
+
+---
+
+# Q33. What is Lombok @Builder?
+
+### Answer
+
+Ye automatically Builder class generate karta hai.
+
+---
+
+# Q34. Example of Lombok Builder?
+
+### Answer
+
+```java
+@Builder
+public class User {
+
+private int id;
+
+private String name;
+
+}
+```
+
+Object
+
+```java
+User.builder()
+
+.id(1)
+
+.name("Rahul")
+
+.build();
+```
+
+---
+
+# Q35. Can Builder enforce mandatory fields?
+
+### Answer
+
+Yes.
+
+Validation build() me kar sakte hain.
+
+---
+
+# Q36. Which SOLID Principle is supported?
+
+### Answer
+
+Single Responsibility Principle.
+
+Object creation alag class handle karti hai.
+
+---
+
+# Q37. What is your project example?
+
+### Answer
+
+Request DTO
+
+Response DTO
+
+Configuration Object
+
+Notification Request
+
+Email Request
+
+Payment Request
+
+---
+
+# Q38. Which interview follow-up questions are common?
+
+### Answer
+
+* Method Chaining kya hai?
+* build() kya karta hai?
+* Constructor private kyu hai?
+* Immutable object kaise banta hai?
+* Lombok Builder internally kaise work karta hai?
+
+---
+
+# Q39. When should you NOT use Builder?
+
+### Answer
+
+Jab class me sirf 2–3 fields ho.
+
+Simple constructor hi enough hai.
+
+---
+
+# Q40. Explain Builder Pattern in one minute.
+
+### Best Interview Answer
+
+> **"Builder Pattern ek Creational Design Pattern hai jo complex object ko step-by-step create karta hai. Ye tab use hota hai jab object me bahut saare mandatory aur optional parameters hote hain. Isme Builder class method chaining ke through values set karti hai aur build() method final immutable object return karta hai. Isse code readable, maintainable aur flexible ban jata hai. Java me StringBuilder, HttpRequest.Builder aur Lombok @Builder iske common examples hain."**
+
+---
+
+# ⭐ Top 10 Interview Follow-up Questions
+
+1. Builder Pattern ki need kyu padi?
+2. Constructor Overloading ki problem kya hai?
+3. Method Chaining kya hoti hai?
+4. build() method kya karta hai?
+5. Builder immutable object kaise banata hai?
+6. Builder aur Factory Pattern me difference?
+7. Builder aur Abstract Factory me difference?
+8. Lombok `@Builder` internally kya generate karta hai?
+9. Real project me Builder kaha use kiya?
+10. Agar object me sirf 3 fields hain to Builder use karoge ya constructor? Kyu?
+
+Ye questions tumhare uploaded **Builder Design Pattern** notes ke basis par prepare kiye gaye hain aur Java/Spring Boot interviews ke liye optimized hain. 
+
+
+=========================================================================================================================================
+=========================================================================================================================================
+=========================================================================================================================================
+=========================================================================================================================================
+=========================================================================================================================================
+=========================================================================================================================================
+=========================================================================================================================================
+=========================================================================================================================================
+=========================================================================================================================================
+=========================================================================================================================================
+=========================================================================================================================================
