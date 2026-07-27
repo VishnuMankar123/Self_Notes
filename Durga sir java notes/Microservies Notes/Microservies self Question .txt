@@ -6622,4 +6622,66 @@ Let�s say you're running a **Java Spring Boot API**:
 
 If you tell me **your specific use case**, I can guide you better on **which one suits you best**.
 ========================================================================================
+1) Find second highest salary ?
 
+SELECT MAX(salary)
+FROM emp
+WHERE salary < (SELECT MAX(salary) FROM emp);
+
+2) find 4th highest salary 
+SELECT salary
+FROM emp
+ORDER BY salary DESC
+LIMIT 1 OFFSET 3;
+	
+3) find name of the employees whose name start with "V"
+
+SELECT * FROM employee WHERE full_name LIKE 'Vish%';
+select * from emp where name like "v%";
+
+4) find name of employess whose name fourth latter is h;
+select * from emp where name like "_ _ _h%";
+
+5) write the Query to display the first recored form the table 
+ select * from emp where id =(select min(id) from emp);
+ 
+6) write the Query to display the Last recored form the table 
+ select * from emp where id =(select max(id) from emp);
+ 
+7) 	Find employees who don't belong to any department
+SELECT * FROM emp WHERE dept_id IS NULL;
+
+8)Find duplicate records (by name)
+SELECT name, COUNT(*) FROM emp GROUP BY name HAVING COUNT(*) > 1;
+
+9)	Count employees department-wise
+SELECT dept_id, COUNT(*) FROM emp GROUP BY dept_id;
+
+10)Highest salary department-wise
+SELECT dept_id, MAX(salary) FROM emp GROUP BY dept_id;
+
+11) Find employees with salary between 40000 and 60000
+SELECT * FROM emp WHERE salary BETWEEN 40000 AND 60000;
+
+12)Find total salary expense
+select max(salary) from emp;
+
+
+ Syntax to Find Even and Odd Records:
+Assuming your table is ep and column is emp_id:
+
+🔹 1. Find Even Records:
+sql
+Copy
+Edit
+SELECT * FROM ep
+WHERE emp_id % 2 = 0;
+✅ This returns rows where emp_id is divisible by 2 (even numbers).
+
+🔹 2. Find Odd Records:
+sql
+Copy
+Edit
+SELECT * FROM ep
+WHERE emp_id % 2 <> 0;
+✅ This returns rows where emp_id is not divisible by 2 (odd numbers).

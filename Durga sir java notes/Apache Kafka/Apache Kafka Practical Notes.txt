@@ -1,5 +1,7 @@
 video tutorial Link : https://docs.spring.io/spring-kafka/reference/index.html
 channel Name : official Spring documentation
+
+Ye notes maine actul spring kafak docoumentatoin se banai hai last topic konasa cover houa hai ye bhi last me diya gaya hai ye notes Bahut badi hai Jab tumhara pass time ho tab padhna
 =======================================================================================================================
 Perfect. Yehi style mujhe chahiye tha. 👍
 
@@ -13585,15 +13587,7328 @@ You have now completed the **entire "Sending Messages" module** from the Spring 
 After revising these 12 parts, you'll have covered the complete producer-side "Sending Messages" section of the Spring Kafka documentation.
 
 =======================================================================================================================
+Perfect. Ye approach mujhe pasand aaya. 👍
+
+Ab hum **ek documentation topic = ek complete note** banayenge.
+
+Isliye aaj hum sirf **Message Listeners** complete karenge.
+
+Ye notes tumhare Producer wale notes ki tarah honge:
+
+* 👨‍🏫 Teacher → 👨‍🎓 Student
+* Simple Hindi-English
+* Real Example
+* Internal Working
+* Diagram
+* Practical
+* Interview Questions
+
+Based on the Spring Kafka documentation you shared. 
+
+---
+
+# Spring Kafka - Receiving Messages
+
+# Topic 1 - Message Listeners
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Producer side me humne message bhejna seekha.
+
+Ab question hai...
+
+**Message receive kaun karega?**
+
+---
+
+# 👨‍🎓 Student
+
+Sir,
+
+Consumer receive karega.
+
+---
+
+# Teacher
+
+Consumer receive karega...
+
+Lekin **Consumer ko kaise pata chalega ki naya message aaya hai?**
+
+Iske liye Spring Kafka use karta hai
+
+# Message Listener
+
+---
+
+# Q1. Message Listener kya hota hai?
+
+## Student
+
+Sir,
+
+**Message Listener ek callback interface hai.**
+
+Jab Kafka me naya message aata hai,
+
+Spring automatically listener ko call karta hai.
+
+---
+
+Simple Definition
+
+> **Message Listener is responsible for receiving and processing Kafka messages.**
+
+---
+
+# Real Life Example
+
+Suppose
+
+Door Bell hai.
+
+Guest aaya.
+
+Bell baji.
+
+Tum door open karte ho.
+
+Yaha
+
+```text
+Door Bell
+
+↓
+
+Message Arrived
+
+↓
+
+You Open Door
+```
+
+Exactly
+
+```text
+Kafka Broker
+
+↓
+
+Message Arrived
+
+↓
+
+Message Listener
+
+↓
+
+Business Logic
+```
+
+---
+
+# Internal Flow
+
+```text
+Producer
+
+↓
+
+Kafka Broker
+
+↓
+
+Consumer Poll()
+
+↓
+
+Message Listener
+
+↓
+
+Business Logic
+```
+
+---
+
+# Q2. Listener ki zarurat kyun hai?
+
+Question
+
+Consumer continuously Kafka ko check karega?
+
+---
+
+Answer
+
+Internally
+
+Consumer
+
+```java
+poll()
+```
+
+call karta hai.
+
+Agar message mil gaya
+
+↓
+
+Spring Listener ko call kar deta hai.
+
+Tumhe manually poll() nahi likhna padta.
+
+---
+
+Diagram
+
+```text
+Kafka Broker
+
+↓
+
+poll()
+
+↓
+
+ConsumerRecord
+
+↓
+
+Message Listener
+
+↓
+
+onMessage()
+```
+
+---
+
+# Q3. ConsumerRecord kya hota hai?
+
+Question
+
+Listener ko kya receive hota hai?
+
+---
+
+Answer
+
+```java
+ConsumerRecord<K,V>
+```
+
+Ye Kafka ka object hai.
+
+Isme hota hai
+
+* Topic
+* Partition
+* Offset
+* Key
+* Value
+* Timestamp
+
+---
+
+Example
+
+```text
+Topic
+
+orders-topic
+
+Key
+
+101
+
+Value
+
+Order Created
+
+Partition
+
+2
+
+Offset
+
+25
+```
+
+Ye sab
+
+ConsumerRecord ke andar hota hai.
+
+---
+
+# Q4. Sabse Basic Listener
+
+Spring Kafka ka sabse simple listener
+
+```java
+public interface MessageListener<K,V>{
+
+    void onMessage(
+        ConsumerRecord<K,V> data
+    );
+
+}
+```
+
+
+
+---
+
+Question
+
+Kitna message receive karega?
+
+---
+
+Answer
+
+Ek baar me
+
+**Sirf ek record**
+
+---
+
+Example
+
+```text
+Order1
+
+↓
+
+onMessage()
+
+↓
+
+Process
+```
+
+Next
+
+```text
+Order2
+
+↓
+
+onMessage()
+
+↓
+
+Process
+```
+
+---
+
+# Real Project Example
+
+```java
+public class OrderListener
+implements MessageListener<String,String>{
+
+    @Override
+    public void onMessage(
+            ConsumerRecord<String,String> record){
+
+        System.out.println(record.value());
+
+    }
+
+}
+```
+
+Output
+
+```text
+Order Created
+```
+
+---
+
+# Q5. onMessage() kya hota hai?
+
+Question
+
+Spring baar baar
+
+```java
+onMessage()
+```
+
+kyun call karta hai?
+
+---
+
+Answer
+
+Har baar
+
+naya Kafka Record aata hai
+
+↓
+
+onMessage()
+
+execute hota hai.
+
+---
+
+Diagram
+
+```text
+Message1
+
+↓
+
+onMessage()
+
+----------------
+
+Message2
+
+↓
+
+onMessage()
+
+----------------
+
+Message3
+
+↓
+
+onMessage()
+```
+
+---
+
+# Q6. Message Listener kitne types ke hote hain?
+
+Documentation ke according
+
+Total
+
+# 8 Types
+
+
+
+| Listener                                       | Purpose                         |
+| ---------------------------------------------- | ------------------------------- |
+| MessageListener                                | Single Record                   |
+| AcknowledgingMessageListener                   | Single Record + Manual Ack      |
+| ConsumerAwareMessageListener                   | Single Record + Consumer Access |
+| AcknowledgingConsumerAwareMessageListener      | Single + Ack + Consumer         |
+| BatchMessageListener                           | Batch Records                   |
+| BatchAcknowledgingMessageListener              | Batch + Manual Ack              |
+| BatchConsumerAwareMessageListener              | Batch + Consumer                |
+| BatchAcknowledgingConsumerAwareMessageListener | Batch + Ack + Consumer          |
+
+---
+
+# Question
+
+Sir
+
+8 Interfaces kyun banaye?
+
+Ek hi interface bana dete.
+
+---
+
+# Answer
+
+Har project ki requirement alag hoti hai.
+
+Kisi ko
+
+Sirf Message chahiye.
+
+Kisi ko
+
+Manual Commit.
+
+Kisi ko
+
+Consumer Object.
+
+Kisi ko
+
+Batch Processing.
+
+Isliye Spring ne alag interfaces diye.
+
+---
+
+# Understanding the 8 Listeners
+
+Instead of remembering names,
+
+Sirf ye formula yaad rakho.
+
+---
+
+## Formula
+
+```text
+Record
+
+OR
+
+Batch
+```
+
+*
+
+```text
+Ack
+
+(Optional)
+```
+
+*
+
+```text
+Consumer
+
+(Optional)
+```
+
+Bas.
+
+Ye combination mila kar
+
+8 interfaces ban gaye.
+
+---
+
+# Record Listener
+
+Ek record.
+
+```text
+Order1
+
+↓
+
+Listener
+
+↓
+
+Done
+```
+
+---
+
+# Batch Listener
+
+Multiple records.
+
+```text
+Order1
+
+Order2
+
+Order3
+
+↓
+
+Listener
+
+↓
+
+Done
+```
+
+---
+
+# Ack Listener
+
+Message process hone ke baad
+
+Hum khud bolenge
+
+```text
+Commit Offset
+```
+
+---
+
+# ConsumerAware Listener
+
+Listener ke paas
+
+Kafka Consumer object bhi aata hai.
+
+---
+
+# Q7. Record Listener vs Batch Listener
+
+| Record Listener      | Batch Listener             |
+| -------------------- | -------------------------- |
+| One Record           | Multiple Records           |
+| `ConsumerRecord`     | `List<ConsumerRecord>`     |
+| Better for real-time | Better for bulk processing |
+
+---
+
+# Real Example
+
+Payment Service
+
+```text
+Payment1
+
+↓
+
+Immediately Process
+```
+
+Record Listener.
+
+---
+
+Report Generation
+
+```text
+1000 Messages
+
+↓
+
+Batch Process
+```
+
+Batch Listener.
+
+---
+
+# Q8. Consumer Object kya hota hai?
+
+Kuch interfaces me
+
+```java
+Consumer<?,?>
+```
+
+milta hai.
+
+Example
+
+```java
+void onMessage(
+
+ConsumerRecord data,
+
+Consumer consumer
+
+)
+```
+
+---
+
+Question
+
+Ye Consumer kyun diya?
+
+---
+
+Answer
+
+Kabhi kabhi
+
+Consumer ki information
+
+ya metrics
+
+access karni hoti hai.
+
+Lekin
+
+Documentation clearly bolti hai
+
+❌ Consumer ke offset ya position manually change mat karo.
+
+Wo Listener Container manage karta hai. 
+
+---
+
+# Q9. Acknowledgment kya hota hai?
+
+Kuch listeners me
+
+```java
+Acknowledgment
+```
+
+object milta hai.
+
+Example
+
+```java
+void onMessage(
+
+ConsumerRecord data,
+
+Acknowledgment ack
+
+)
+```
+
+Question
+
+Ye kyun?
+
+Answer
+
+Manual Offset Commit ke liye.
+
+Hum detail me **"Manually Committing Offsets"** topic me padhenge.
+
+---
+
+# Complete Architecture
+
+```text
+Producer
+
+↓
+
+Kafka Broker
+
+↓
+
+Consumer
+
+↓
+
+poll()
+
+↓
+
+ConsumerRecord
+
+↓
+
+Message Listener
+
+↓
+
+Business Logic
+
+↓
+
+Offset Commit
+```
+
+---
+
+# Real Banking Example
+
+Customer
+
+↓
+
+Transfer Money
+
+↓
+
+Kafka Topic
+
+↓
+
+Payment Consumer
+
+↓
+
+Message Listener
+
+↓
+
+Validate Payment
+
+↓
+
+Update Database
+
+↓
+
+Commit Offset
+
+---
+
+# Interview Questions
+
+## Q1. What is a Message Listener?
+
+**Answer:**
+
+A Message Listener is a callback interface that Spring Kafka invokes whenever new messages are received from Kafka.
+
+---
+
+## Q2. What is the purpose of `onMessage()`?
+
+**Answer:**
+
+`onMessage()` is the callback method where the application processes the received Kafka record.
+
+---
+
+## Q3. What does `ConsumerRecord` contain?
+
+**Answer:**
+
+It contains:
+
+* Topic
+* Partition
+* Offset
+* Key
+* Value
+* Timestamp
+
+---
+
+## Q4. How many Message Listener interfaces are available?
+
+**Answer:**
+
+Spring Kafka provides **8 Message Listener interfaces** for different processing requirements.
+
+---
+
+## Q5. What is the difference between Record Listener and Batch Listener?
+
+**Answer:**
+
+A Record Listener processes one `ConsumerRecord` at a time, whereas a Batch Listener processes a `List<ConsumerRecord>` in a single call.
+
+---
+
+## Q6. Why do some listeners receive an `Acknowledgment` object?
+
+**Answer:**
+
+It is used for manual offset commits when using manual acknowledgment modes.
+
+---
+
+## Q7. Why do some listeners receive the `Consumer` object?
+
+**Answer:**
+
+To access consumer-related information such as metrics. However, applications should not modify consumer positions or committed offsets because the listener container manages them.
+
+---
+
+# ⭐ Interview Trick
+
+Interviewer:
+
+**Why are there 8 Message Listener interfaces?**
+
+Best Answer:
+
+> "Spring Kafka provides different listener interfaces to support different use cases. The combinations are based on three capabilities:
+>
+> * Record vs Batch processing
+> * Automatic vs Manual acknowledgment
+> * With or without access to the Kafka `Consumer` object.
+>   This gives flexibility without forcing every application to use unnecessary features."
+
+---
+
+# 📌 Key Points to Remember
+
+* **Message Listener** receives Kafka messages.
+* **`onMessage()`** is the callback method invoked for each received message (or batch).
+* **`ConsumerRecord`** contains both the message and its metadata.
+* Spring Kafka provides **8 listener interfaces** to support different processing styles.
+* The interfaces differ based on:
+
+  * Record vs Batch processing
+  * Manual acknowledgment support
+  * Access to the `Consumer` object
+* **Never modify consumer offsets or positions directly from the listener**, because the listener container manages them.
+
+---
+
+## 🚀 Next Topic
+
+The next documentation topic is:
+
+# **Message Listener Containers**
+
+We'll cover:
+
+* `KafkaMessageListenerContainer`
+* `ConcurrentMessageListenerContainer`
+* Internal Architecture
+* Single-thread vs Multi-thread Consumption
+* `ContainerProperties`
+* `ConsumerFactory`
+* Concurrency
+* Real Project Examples
+* Interview Questions
+
+Ye topic **@KafkaListener ke andar internally kya hota hai**, uska foundation hai.
+
 =====================================================================================================================
+# Spring Kafka - Receiving Messages
+
+# Topic 2 - Part 1
+
+# **KafkaMessageListenerContainer (Basics)**
+
+Based on the Spring Kafka documentation you shared. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Pichle topic me humne Message Listener padha.
+
+Question...
+
+**Listener ko message kaun deta hai?**
+
+Kya Kafka Broker directly Listener ko call karta hai?
+
+---
+
+# 👨‍🎓 Student
+
+Sir...
+
+Nahi pata.
+
+---
+
+# Teacher
+
+Exactly.
+
+Yahi kaam karta hai
+
+# KafkaMessageListenerContainer
+
+Ye Spring Kafka ki sabse important classes me se ek hai.
+
+---
+
+# Real Flow
+
+```text
+Producer
+
+↓
+
+Kafka Broker
+
+↓
+
+Kafka Consumer
+
+↓
+
+KafkaMessageListenerContainer
+
+↓
+
+Message Listener
+
+↓
+
+Business Logic
+```
+
+---
+
+# Q1. KafkaMessageListenerContainer kya hota hai?
+
+## Student
+
+Sir,
+
+KafkaMessageListenerContainer ek Spring class hai.
+
+Ye Kafka Consumer ko manage karti hai.
+
+Ye continuously Kafka Broker se message receive karti hai aur Message Listener ko call karti hai.
+
+---
+
+Simple Definition
+
+> **KafkaMessageListenerContainer manages the Kafka Consumer and delivers received messages to the Message Listener.**
+
+---
+
+# Real Life Example
+
+Suppose
+
+Courier Office
+
+Tum parcel receive karne wale employee ho.
+
+Har baar customer ko gate tak jaake check nahi karna padta.
+
+Receptionist continuously parcels receive karti hai.
+
+Fir tumhe de deti hai.
+
+Exactly
+
+```text
+Kafka Broker
+
+↓
+
+KafkaMessageListenerContainer
+
+↓
+
+Message Listener
+```
+
+---
+
+# Q2. KafkaMessageListenerContainer ki zarurat kyun hai?
+
+Question
+
+Hum directly Consumer use kar sakte hain?
+
+---
+
+Answer
+
+Technically
+
+Yes.
+
+Lekin
+
+Fir tumhe khud likhna padega
+
+* Consumer Create
+* poll()
+* Thread Management
+* Offset Commit
+* Retry
+* Error Handling
+* Shutdown
+
+Spring ye sab automatically karta hai.
+
+---
+
+Diagram
+
+Without Spring
+
+```text
+Consumer
+
+↓
+
+poll()
+
+↓
+
+Thread
+
+↓
+
+Offset
+
+↓
+
+Listener
+```
+
+Sab manually.
+
+---
+
+With Spring
+
+```text
+KafkaMessageListenerContainer
+
+↓
+
+Everything Managed
+```
+
+---
+
+# Q3. Internal Working
+
+Container start hota hai.
+
+↓
+
+Consumer create karta hai.
+
+↓
+
+Broker se connect hota hai.
+
+↓
+
+Continuously
+
+```java
+poll()
+```
+
+call karta hai.
+
+↓
+
+Message mila.
+
+↓
+
+Listener ko call karta hai.
+
+↓
+
+Offset Commit.
+
+---
+
+Diagram
+
+```text
+Container Start
+
+↓
+
+Create Consumer
+
+↓
+
+poll()
+
+↓
+
+ConsumerRecord
+
+↓
+
+Listener
+
+↓
+
+Business Logic
+
+↓
+
+Commit Offset
+```
+
+---
+
+# Q4. Constructor
+
+Documentation
+
+```java
+public KafkaMessageListenerContainer(
+
+ConsumerFactory<K,V> consumerFactory,
+
+ContainerProperties containerProperties
+
+)
+```
+
+
+
+---
+
+Question
+
+Constructor me
+
+2 cheeze kyun hain?
+
+---
+
+Answer
+
+## ConsumerFactory
+
+Consumer banayega.
+
+---
+
+## ContainerProperties
+
+Container ka configuration.
+
+---
+
+Diagram
+
+```text
+ConsumerFactory
+
+↓
+
+Kafka Consumer
+
+------------------
+
+ContainerProperties
+
+↓
+
+Topics
+
+Listener
+
+AckMode
+
+Properties
+```
+
+---
+
+# Q5. ConsumerFactory kya hota hai?
+
+Question
+
+Container khud Consumer banata hai?
+
+---
+
+Answer
+
+❌ No.
+
+ConsumerFactory banati hai.
+
+Container sirf use karta hai.
+
+---
+
+Diagram
+
+```text
+ConsumerFactory
+
+↓
+
+KafkaConsumer
+
+↓
+
+KafkaMessageListenerContainer
+```
+
+---
+
+Example
+
+```java
+DefaultKafkaConsumerFactory<Integer,String>
+
+consumerFactory
+```
+
+↓
+
+Kafka Consumer.
+
+---
+
+# Q6. ContainerProperties kya hota hai?
+
+Question
+
+Container ko kaise pata chale
+
+kis Topic ko listen karna hai?
+
+---
+
+Answer
+
+ContainerProperties.
+
+Ye container ka configuration object hai.
+
+Documentation ke according
+
+3 constructors hain.
+
+
+
+---
+
+# Constructor 1
+
+## Topics
+
+```java
+new ContainerProperties(
+
+"orders-topic"
+
+);
+```
+
+Meaning
+
+Sirf
+
+orders-topic
+
+listen karo.
+
+---
+
+Diagram
+
+```text
+orders-topic
+
+↓
+
+Container
+
+↓
+
+Listener
+```
+
+---
+
+# Constructor 2
+
+## Topic Pattern
+
+```java
+new ContainerProperties(
+
+Pattern.compile("order.*")
+
+);
+```
+
+Meaning
+
+Jitne topics
+
+order
+
+se start hote hain.
+
+Sab listen karo.
+
+---
+
+Example
+
+```text
+order-created
+
+order-updated
+
+order-deleted
+```
+
+Sab match.
+
+---
+
+# Constructor 3
+
+## TopicPartitionOffset
+
+Question
+
+Mujhe sirf
+
+Topic
+
+nahi
+
+Specific Partition chahiye.
+
+---
+
+Example
+
+```java
+new TopicPartitionOffset(
+
+"orders-topic",
+
+0
+)
+```
+
+Meaning
+
+Sirf
+
+Partition 0
+
+consume karo.
+
+Documentation ke according
+
+Initial Offset bhi specify kar sakte ho.
+
+
+
+---
+
+Diagram
+
+```text
+orders-topic
+
+↓
+
+Partition0
+
+↓
+
+Container
+```
+
+---
+
+# Q7. TopicPattern kab use hota hai?
+
+Suppose
+
+Company daily
+
+new topics create karti hai.
+
+```text
+payment-jan
+
+payment-feb
+
+payment-mar
+```
+
+Har baar code change nahi karna.
+
+Use
+
+```java
+Pattern.compile(
+
+"payment.*"
+
+)
+```
+
+Automatically
+
+Sab topics consume honge.
+
+---
+
+# Q8. Initial Offset
+
+Question
+
+Container start hua.
+
+Offset kaha se start kare?
+
+Beginning?
+
+Ya
+
+End?
+
+---
+
+Documentation
+
+Positive Offset
+
+```text
+100
+```
+
+Meaning
+
+Offset 100 se start.
+
+---
+
+Negative Offset
+
+```text
+-10
+```
+
+Meaning
+
+Last ke
+
+10 messages.
+
+
+
+---
+
+# Diagram
+
+```text
+Partition
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+Offset = -2
+
+↓
+
+Message9
+
+Message10
+```
+
+---
+
+# Q9. Message Listener kaise attach karte hain?
+
+Documentation Example
+
+```java
+ContainerProperties props =
+
+new ContainerProperties(
+
+"orders-topic"
+
+);
+
+props.setMessageListener(
+
+new MessageListener<Integer,String>(){
+
+...
+
+}
+
+);
+```
+
+
+
+---
+
+Flow
+
+```text
+ContainerProperties
+
+↓
+
+setMessageListener()
+
+↓
+
+KafkaMessageListenerContainer
+```
+
+---
+
+# Q10. Complete Example
+
+```java
+ContainerProperties props =
+
+new ContainerProperties(
+
+"orders-topic"
+
+);
+
+props.setMessageListener(
+
+new MessageListener<Integer,String>(){
+
+@Override
+
+public void onMessage(
+
+ConsumerRecord<Integer,String> record){
+
+System.out.println(
+
+record.value()
+
+);
+
+}
+
+}
+
+);
+
+DefaultKafkaConsumerFactory<Integer,String>
+
+factory =
+
+new DefaultKafkaConsumerFactory<>(
+
+consumerProps()
+
+);
+
+KafkaMessageListenerContainer<Integer,String>
+
+container =
+
+new KafkaMessageListenerContainer<>(
+
+factory,
+
+props
+
+);
+```
+
+Ye documentation ka basic example hai. 
+
+---
+
+# Q11. Deserializer
+
+Question
+
+Producer
+
+Serializer use karta tha.
+
+Consumer?
+
+---
+
+Answer
+
+Deserializer.
+
+Diagram
+
+```text
+Kafka Broker
+
+↓
+
+Bytes
+
+↓
+
+Deserializer
+
+↓
+
+Java Object
+```
+
+---
+
+Example
+
+```java
+StringDeserializer
+```
+
+↓
+
+String
+
+---
+
+```java
+JsonDeserializer
+```
+
+↓
+
+Order Object
+
+---
+
+# Q12. Supplier<Deserializer>
+
+Question
+
+Har Consumer
+
+same Deserializer use karega?
+
+---
+
+Answer
+
+Option hai.
+
+Documentation
+
+```java
+DefaultKafkaConsumerFactory<>(
+
+props,
+
+null,
+
+() -> new CustomDeserializer()
+
+)
+```
+
+Har Consumer
+
+apna Deserializer object banayega.
+
+
+
+---
+
+# Why Supplier?
+
+Example
+
+```text
+Consumer1
+
+↓
+
+Deserializer1
+
+-----------------
+
+Consumer2
+
+↓
+
+Deserializer2
+```
+
+Shared object nahi.
+
+---
+
+# Q13. Complete Internal Architecture
+
+```text
+Producer
+
+↓
+
+Kafka Broker
+
+↓
+
+Kafka Consumer
+
+↓
+
+Deserializer
+
+↓
+
+KafkaMessageListenerContainer
+
+↓
+
+Message Listener
+
+↓
+
+Business Logic
+```
+
+---
+
+# Real Banking Example
+
+Customer
+
+↓
+
+Money Transfer
+
+↓
+
+Kafka Topic
+
+↓
+
+KafkaMessageListenerContainer
+
+↓
+
+Payment Listener
+
+↓
+
+Validate Payment
+
+↓
+
+Update Database
+
+↓
+
+Commit Offset
+
+---
+
+# Interview Questions
+
+## Q1. What is KafkaMessageListenerContainer?
+
+**Answer:**
+
+`KafkaMessageListenerContainer` is a Spring Kafka component that manages a Kafka consumer, continuously polls the broker for messages, and delivers them to the configured `MessageListener`.
+
+---
+
+## Q2. Why do we need KafkaMessageListenerContainer?
+
+**Answer:**
+
+It manages consumer creation, polling, threading, offset commits, lifecycle, and listener invocation, so developers don't need to handle these responsibilities manually.
+
+---
+
+## Q3. What are the constructor arguments of KafkaMessageListenerContainer?
+
+**Answer:**
+
+* `ConsumerFactory`
+* `ContainerProperties`
+
+---
+
+## Q4. What is the purpose of ConsumerFactory?
+
+**Answer:**
+
+It creates Kafka consumer instances used by the listener container.
+
+---
+
+## Q5. What is ContainerProperties?
+
+**Answer:**
+
+It is a configuration object for the listener container that defines topics, topic patterns, partitions, listeners, acknowledgment settings, and other container behaviors.
+
+---
+
+## Q6. What are the three ways to configure ContainerProperties?
+
+**Answer:**
+
+* Using topic names
+* Using a regular expression (`Pattern`)
+* Using `TopicPartitionOffset`
+
+---
+
+## Q7. What is TopicPattern?
+
+**Answer:**
+
+A regular expression used to subscribe dynamically to multiple topics whose names match the pattern.
+
+---
+
+## Q8. Why do consumers use Deserializers?
+
+**Answer:**
+
+Kafka stores messages as bytes. Deserializers convert those bytes into Java objects such as `String`, `Order`, or other domain classes.
+
+---
+
+## ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**Why don't we directly use KafkaConsumer instead of KafkaMessageListenerContainer?**
+
+### Best Answer
+
+> "Although we can use `KafkaConsumer` directly, we would then have to manually manage polling, thread lifecycle, offset commits, error handling, and shutdown logic. `KafkaMessageListenerContainer` handles all these responsibilities automatically and integrates them with Spring's programming model."
+
+---
+
+# 📌 Key Points to Remember
+
+* `KafkaMessageListenerContainer` manages the **Kafka Consumer lifecycle**.
+* It continuously calls `poll()` and forwards received records to the configured `MessageListener`.
+* It is created using a **ConsumerFactory** and **ContainerProperties**.
+* `ContainerProperties` can subscribe using:
+
+  * Topic names
+  * Topic patterns (regex)
+  * Specific partitions (`TopicPartitionOffset`)
+* Consumers use **Deserializers** to convert Kafka bytes into Java objects.
+* `Supplier<Deserializer>` creates a separate deserializer instance for each consumer.
+
+---
+
+# 🚀 Next Part (Topic 2 – Part 2)
+
+We'll cover **ConcurrentMessageListenerContainer**, including:
+
+* Why do we need concurrency?
+* `setConcurrency()`
+* Multiple `KafkaMessageListenerContainer` instances
+* Multi-threaded consumption
+* Partition assignment
+* `RangeAssignor` vs `RoundRobinAssignor`
+* Static Membership
+* `client.id`
+* `metrics()`
+* `idleBetweenPolls`
+* Real production architecture and interview questions.
+
 =======================================================================================================================
+Ye topic interview me bahut pucha jata hai. Chalo ekdum simple language me samajhte hain. 
+
+---
+
+# Pehle Rebalance kya hota hai?
+
+Maan lo tumhare paas ek Topic hai.
+
+```text
+Orders Topic
+
+Partition-0
+Partition-1
+Partition-2
+```
+
+Aur 3 Consumers hain.
+
+```text
+Consumer-1 → Partition-0
+
+Consumer-2 → Partition-1
+
+Consumer-3 → Partition-2
+```
+
+Sab kuch sahi chal raha hai.
+
+---
+
+## Ab Consumer-2 restart ho gaya
+
+```text
+Consumer-2
+
+↓
+
+Restart
+```
+
+Kafka sochega:
+
+> "Ek consumer chala gaya aur phir wapas aaya. Chalo partitions dobara distribute karte hain."
+
+Is process ko **Rebalance** bolte hain.
+
+```text
+Before Restart
+
+C1 → P0
+
+C2 → P1
+
+C3 → P2
+
+-------------------
+
+After Restart
+
+Kafka Again Assigns
+
+C1 → ?
+
+C2 → ?
+
+C3 → ?
+```
+
+Is rebalance ke time:
+
+* Kuch seconds ke liye message processing ruk sakti hai.
+* Sab consumers ko phir se partition assignment milta hai.
+
+---
+
+# Problem kya hai?
+
+Maan lo tum application deploy karte ho.
+
+Har deployment me service restart hoti hai.
+
+Har restart ke baad:
+
+```text
+Restart
+
+↓
+
+Rebalance
+
+↓
+
+Restart
+
+↓
+
+Rebalance
+
+↓
+
+Restart
+
+↓
+
+Rebalance
+```
+
+Har baar unnecessary rebalance.
+
+Ye performance ko affect karta hai.
+
+---
+
+# Static Membership kya karta hai?
+
+Static Membership Kafka ko bolta hai:
+
+> **"Ye consumer naya nahi hai, ye wahi purana consumer hai jo restart hua hai."**
+
+Consumer ki ek permanent identity hoti hai.
+
+Example:
+
+```text
+Consumer-1
+
+group.instance.id = order-service-1
+
+--------------------
+
+Consumer-2
+
+group.instance.id = order-service-2
+
+--------------------
+
+Consumer-3
+
+group.instance.id = order-service-3
+```
+
+Ab agar `order-service-2` restart hua,
+
+Kafka kahega:
+
+> "Iska ID same hai. Ye wahi consumer hai."
+
+Isliye unnecessary rebalance avoid ho jata hai.
+
+---
+
+# Real Life Example
+
+### Without Static Membership
+
+Office me employees hain.
+
+```text
+Rahul
+
+Amit
+
+Rohit
+```
+
+Rahul lunch par gaya.
+
+Manager bola:
+
+> "Rahul chala gaya. Sab desks dobara allocate karo."
+
+Jab Rahul wapas aaya:
+
+> "Phir se desks allocate karo."
+
+Har baar desk change.
+
+---
+
+### With Static Membership
+
+Har employee ka permanent desk number hai.
+
+```text
+Rahul → Desk-1
+
+Amit → Desk-2
+
+Rohit → Desk-3
+```
+
+Rahul lunch par gaya.
+
+Wapas aaya.
+
+Manager bola:
+
+> "Ye wahi Rahul hai. Isko Desk-1 hi do."
+
+Koi re-allocation nahi.
+
+Yahi **Static Membership** hai.
+
+---
+
+# Spring Kafka me
+
+Tumhare notes me likha hai:
+
+```text
+group.instance.id
+
+↓
+
+order-group-1
+
+order-group-2
+
+order-group-3
+```
+
+Spring automatically unique IDs generate kar sakta hai (jaise suffix `-1`, `-2`, `-3`), jisse har consumer ki stable identity bani rehti hai. 
+
+---
+
+# Without Static Membership
+
+```text
+Application Restart
+
+↓
+
+Consumer Leaves
+
+↓
+
+Kafka Rebalance
+
+↓
+
+Consumer Joins
+
+↓
+
+Kafka Rebalance Again
+```
+
+---
+
+# With Static Membership
+
+```text
+Application Restart
+
+↓
+
+Same group.instance.id
+
+↓
+
+Kafka Pehchan Leta Hai
+
+↓
+
+No Unnecessary Rebalance
+```
+
+---
+
+# Interview Answer
+
+**Q. What is Static Membership in Kafka?**
+
+**Answer:**
+
+> **Static Membership** is a Kafka feature that gives each consumer a stable identity using `group.instance.id`. When a consumer restarts with the same ID, Kafka recognizes it as the same member and avoids unnecessary consumer group rebalances, improving availability and reducing downtime.
+
+---
+
+## Shortcut yaad rakhna
+
+* ❌ **Without Static Membership** = Restart → Rebalance
+* ✅ **With Static Membership** = Restart → Same Identity → No unnecessary Rebalance
+
+### Ek line me:
+
+**Static Membership ka purpose hai consumer ko ek permanent identity dena, taki application restart hone par Kafka usko naya consumer na samjhe aur unnecessary rebalance na kare.**
+
 =======================================================================================================================
+# Spring Kafka - Receiving Messages
+
+# Topic 2 - Part 2
+
+# **ConcurrentMessageListenerContainer (Concurrency & Multi-threading)**
+
+Based on the Spring Kafka documentation you shared. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Pichle Part me humne padha
+
+```text
+KafkaMessageListenerContainer
+```
+
+Ye ek Consumer create karta hai.
+
+Question...
+
+**Agar Topic me 10 lakh messages aa jaye to?**
+
+Ek Consumer sab process karega?
+
+---
+
+# 👨‍🎓 Student
+
+Sir,
+
+Kar to lega.
+
+Lekin bahut time lagega.
+
+---
+
+# Teacher
+
+Bilkul.
+
+Isi problem ko solve karne ke liye Spring Kafka ne diya
+
+# ConcurrentMessageListenerContainer
+
+---
+
+# Q1. ConcurrentMessageListenerContainer kya hota hai?
+
+## Student
+
+Sir,
+
+ConcurrentMessageListenerContainer ek Spring class hai.
+
+Ye internally multiple
+
+```text
+KafkaMessageListenerContainer
+```
+
+create karti hai.
+
+Har container alag thread me run karta hai.
+
+---
+
+## Simple Definition
+
+> **ConcurrentMessageListenerContainer provides multi-threaded message consumption by creating multiple KafkaMessageListenerContainer instances.**
+
+---
+
+# Real Life Example
+
+Suppose
+
+Ek Bank Counter hai.
+
+100 Customers line me khade hain.
+
+### Single Counter
+
+```text
+Customer1
+
+↓
+
+Customer2
+
+↓
+
+Customer3
+```
+
+Slow.
+
+---
+
+### Three Counters
+
+```text
+Counter1
+
+↓
+
+Customer1
+
+Customer4
+
+Customer7
+
+-------------------
+
+Counter2
+
+↓
+
+Customer2
+
+Customer5
+
+Customer8
+
+-------------------
+
+Counter3
+
+↓
+
+Customer3
+
+Customer6
+
+Customer9
+```
+
+Fast.
+
+Exactly
+
+ConcurrentMessageListenerContainer bhi yehi karta hai.
+
+---
+
+# Q2. Internal Architecture
+
+```text
+Application
+
+↓
+
+ConcurrentMessageListenerContainer
+
+↓
+
+KafkaMessageListenerContainer-1
+
+↓
+
+Consumer-1
+
+------------------------
+
+KafkaMessageListenerContainer-2
+
+↓
+
+Consumer-2
+
+------------------------
+
+KafkaMessageListenerContainer-3
+
+↓
+
+Consumer-3
+
+↓
+
+Kafka Broker
+```
+
+Documentation ke according, ConcurrentMessageListenerContainer internally one or more `KafkaMessageListenerContainer` instances create karta hai. 
+
+---
+
+# Q3. Constructor
+
+```java
+public ConcurrentMessageListenerContainer(
+
+ConsumerFactory<K,V> consumerFactory,
+
+ContainerProperties containerProperties
+
+)
+```
+
+Ye constructor almost
+
+KafkaMessageListenerContainer
+
+jaisa hi hai.
+
+Difference sirf
+
+Concurrency.
+
+---
+
+# Q4. Concurrency kya hota hai?
+
+Question
+
+Container ko kaise pata chale
+
+kitne Consumers banane hain?
+
+---
+
+Answer
+
+```java
+container.setConcurrency(3);
+```
+
+Meaning
+
+Spring
+
+3
+
+KafkaMessageListenerContainer
+
+banayega.
+
+Documentation me ye example diya gaya hai. 
+
+---
+
+# Diagram
+
+```text
+Concurrency = 3
+
+↓
+
+Container1
+
+↓
+
+Consumer1
+
+----------------
+
+Container2
+
+↓
+
+Consumer2
+
+----------------
+
+Container3
+
+↓
+
+Consumer3
+```
+
+---
+
+# Q5. Real Example
+
+Suppose
+
+Topic
+
+```text
+orders-topic
+```
+
+Partitions
+
+```text
+P0
+
+P1
+
+P2
+```
+
+Concurrency
+
+```java
+container.setConcurrency(3);
+```
+
+Result
+
+```text
+Consumer1
+
+↓
+
+Partition0
+
+----------------
+
+Consumer2
+
+↓
+
+Partition1
+
+----------------
+
+Consumer3
+
+↓
+
+Partition2
+```
+
+Sab parallel process karenge.
+
+---
+
+# Q6. Agar Partitions kam ho to?
+
+Suppose
+
+Topic
+
+Sirf
+
+2 Partitions.
+
+Concurrency
+
+```java
+setConcurrency(5)
+```
+
+Question
+
+5 Consumers chalenge?
+
+---
+
+Answer
+
+❌ Nahi.
+
+Sirf
+
+2 Consumers active honge.
+
+3 idle rahenge.
+
+Reason
+
+Ek Partition ko ek Consumer hi consume kar sakta hai.
+
+---
+
+Diagram
+
+```text
+Partition0
+
+↓
+
+Consumer1
+
+----------------
+
+Partition1
+
+↓
+
+Consumer2
+
+----------------
+
+Consumer3
+
+Idle
+
+Consumer4
+
+Idle
+
+Consumer5
+
+Idle
+```
+
+---
+
+# Q7. Partition Assignment
+
+Question
+
+Kafka decide kaise karta hai
+
+kaunsa Consumer
+
+kaunsa Partition lega?
+
+---
+
+Answer
+
+Partition Assignor.
+
+Default
+
+```text
+RangeAssignor
+```
+
+Documentation me bhi ye default bataya gaya hai. 
+
+---
+
+# Example
+
+3 Topics
+
+```text
+Order
+
+5 Partitions
+
+--------------
+
+Payment
+
+5 Partitions
+
+--------------
+
+Customer
+
+5 Partitions
+```
+
+Concurrency
+
+15
+
+Question
+
+15 Consumers active honge?
+
+---
+
+Answer
+
+❌ Nahi.
+
+Default
+
+RangeAssignor
+
+ke wajah se
+
+Sirf
+
+5 Consumers active honge.
+
+Har Consumer ko
+
+3 Partitions milenge.
+
+---
+
+# Diagram
+
+```text
+Consumer1
+
+↓
+
+Order-P0
+
+Payment-P0
+
+Customer-P0
+
+--------------------
+
+Consumer2
+
+↓
+
+Order-P1
+
+Payment-P1
+
+Customer-P1
+```
+
+---
+
+# Q8. RoundRobinAssignor
+
+Question
+
+Mujhe
+
+sab Consumers use karne hain.
+
+---
+
+Answer
+
+Use
+
+```text
+RoundRobinAssignor
+```
+
+Configuration
+
+```properties
+spring.kafka.consumer.properties.partition.assignment.strategy=\
+
+org.apache.kafka.clients.consumer.RoundRobinAssignor
+```
+
+Documentation me ye recommended configuration hai. 
+
+---
+
+Difference
+
+### RangeAssignor
+
+```text
+Consumer1
+
+↓
+
+Topic1-P0
+
+Topic2-P0
+```
+
+---
+
+### RoundRobin
+
+```text
+Consumer1
+
+↓
+
+Topic1-P0
+
+--------------
+
+Consumer2
+
+↓
+
+Topic2-P0
+
+--------------
+
+Consumer3
+
+↓
+
+Topic3-P0
+```
+
+Better distribution.
+
+---
+
+# Q9. Static Membership
+
+Question
+
+Application restart hui.
+
+Har baar rebalance hoga?
+
+---
+
+Answer
+
+Normally
+
+Yes.
+
+Spring
+
+Static Membership support karta hai.
+
+Documentation ke according
+
+`group.instance.id`
+
+automatically
+
+```text
+-n
+```
+
+suffix ke saath generate hota hai.
+
+Example
+
+```text
+order-group-1
+
+order-group-2
+
+order-group-3
+```
+
+Isse unnecessary rebalance kam hota hai. 
+
+---
+
+# Q10. client.id
+
+Question
+
+Sab Consumers ka naam same hoga?
+
+---
+
+Answer
+
+Nahi.
+
+Suppose
+
+```text
+client.id=order-service
+```
+
+Spring automatically banayega
+
+```text
+order-service-0
+
+order-service-1
+
+order-service-2
+```
+
+Documentation me ye behavior mention hai. 
+
+---
+
+# Q11. metrics()
+
+Question
+
+Consumer ka health kaise dekhen?
+
+---
+
+Answer
+
+Container
+
+```java
+metrics()
+```
+
+provide karta hai.
+
+Concurrent Container
+
+Sab Consumers ki metrics return karta hai.
+
+Example
+
+```text
+Consumer1 Metrics
+
+Consumer2 Metrics
+
+Consumer3 Metrics
+```
+
+---
+
+# Q12. idleBetweenPolls
+
+Question
+
+Consumer continuously
+
+poll()
+
+karta rahega?
+
+---
+
+Answer
+
+Documentation me
+
+```text
+idleBetweenPolls
+```
+
+property di gayi hai.
+
+Ye
+
+Do
+
+poll()
+
+ke beech
+
+sleep karwati hai.
+
+Example
+
+```java
+containerProperties
+
+.setIdleBetweenPolls(
+
+1000
+);
+```
+
+Meaning
+
+1 second sleep.
+
+---
+
+# Complete Flow
+
+```text
+Kafka Broker
+
+↓
+
+ConcurrentMessageListenerContainer
+
+↓
+
+Container1
+
+↓
+
+Consumer1
+
+↓
+
+Partition0
+
+------------------
+
+Container2
+
+↓
+
+Consumer2
+
+↓
+
+Partition1
+
+------------------
+
+Container3
+
+↓
+
+Consumer3
+
+↓
+
+Partition2
+
+↓
+
+Message Listener
+
+↓
+
+Business Logic
+```
+
+---
+
+# Real Banking Example
+
+Bank
+
+Transactions Topic
+
+Partitions
+
+```text
+P0
+
+P1
+
+P2
+
+P3
+```
+
+Concurrency
+
+```text
+4
+```
+
+Result
+
+4 Consumers
+
+Parallel
+
+Transaction Processing.
+
+---
+
+# Interview Questions
+
+## Q1. What is ConcurrentMessageListenerContainer?
+
+**Answer:**
+
+It is a Spring Kafka listener container that enables concurrent message consumption by creating multiple `KafkaMessageListenerContainer` instances.
+
+---
+
+## Q2. What does `setConcurrency(3)` do?
+
+**Answer:**
+
+It creates three delegate `KafkaMessageListenerContainer` instances, each with its own Kafka consumer thread.
+
+---
+
+## Q3. Can concurrency be greater than the number of partitions?
+
+**Answer:**
+
+Yes, but extra consumers remain idle because a partition can be assigned to only one consumer within a consumer group.
+
+---
+
+## Q4. What is the default partition assignment strategy?
+
+**Answer:**
+
+The default strategy is **RangeAssignor**.
+
+---
+
+## Q5. When should RoundRobinAssignor be used?
+
+**Answer:**
+
+When partitions should be distributed more evenly across all consumers, especially when consuming from multiple topics.
+
+---
+
+## Q6. What is Static Membership?
+
+**Answer:**
+
+Static Membership reduces unnecessary consumer group rebalances during application restarts by using stable `group.instance.id` values.
+
+---
+
+## Q7. What is `idleBetweenPolls`?
+
+**Answer:**
+
+It introduces a configurable delay between consecutive `poll()` calls, reducing CPU usage when appropriate.
+
+---
+
+# ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**You have a topic with 3 partitions and configure `setConcurrency(10)`. How many consumers will actually process messages?**
+
+### Best Answer
+
+> "Only three consumers will actively process messages because each partition can be assigned to only one consumer within a consumer group. The remaining seven consumers will stay idle."
+
+---
+
+# 📌 Key Points to Remember
+
+* `ConcurrentMessageListenerContainer` enables **multi-threaded message consumption**.
+* It internally creates multiple `KafkaMessageListenerContainer` instances.
+* `setConcurrency(n)` controls how many consumer threads are created.
+* **Concurrency should generally not exceed the number of partitions** for effective utilization.
+* The default partition assignment strategy is **RangeAssignor**.
+* **RoundRobinAssignor** provides more even partition distribution across consumers.
+* **Static Membership** helps reduce unnecessary rebalances.
+* `metrics()` exposes metrics for all underlying consumers.
+* `idleBetweenPolls` adds a delay between `poll()` operations when needed.
+
+---
+
+# 🚀 Next Part (Topic 2 – Part 3)
+
+We'll cover **RecordInterceptor & BatchInterceptor**, including:
+
+* What is `RecordInterceptor`?
+* What is `BatchInterceptor`?
+* `ConsumerAwareRecordInterceptor`
+* `CompositeRecordInterceptor`
+* `CompositeBatchInterceptor`
+* `interceptBeforeTx`
+* Logging, validation, auditing, security use cases
+* Real production examples
+* Interview questions
+
 =======================================================================================================================
+Perfect. Ye **Topic 3 – Manually Committing Offsets** ka first subsection hai. Isko hum **Part 1** me cover karenge.
+
+---
+
+# Spring Kafka - Receiving Messages
+
+# Topic 3 - Part 1
+
+# **Manual Offset Commit, asyncAcks & Ordered Acknowledgment**
+
+Based on the Spring Kafka documentation you shared. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Sabse pehle ek simple question.
+
+Kafka ko kaise pata chalta hai ki
+
+**Consumer ne message successfully process kar liya?**
+
+---
+
+# 👨‍🎓 Student
+
+Sir...
+
+Offset Commit se.
+
+---
+
+# Teacher
+
+Bilkul.
+
+Offset hi Kafka ka progress tracker hai.
+
+---
+
+# Q1. Offset kya hota hai?
+
+Har message ka ek unique number hota hai.
+
+Usko kehte hain
+
+# Offset
+
+Example
+
+```text
+Partition-0
+
+Offset
+
+0 → Order1
+
+1 → Order2
+
+2 → Order3
+
+3 → Order4
+
+4 → Order5
+```
+
+Agar Consumer
+
+Offset 2 tak process kar chuka hai
+
+to Kafka ko pata hai
+
+Next message
+
+Offset 3 se bhejna hai.
+
+---
+
+# Q2. Offset Commit kya hota hai?
+
+Offset Commit ka matlab
+
+Kafka ko batana
+
+```text
+"Main yahan tak message successfully process kar chuka hoon."
+```
+
+Example
+
+```text
+Order1 ✅
+
+Order2 ✅
+
+Order3 ✅
+
+Commit Offset = 2
+```
+
+Ab application restart hui.
+
+Kafka
+
+Offset 3 se start karega.
+
+---
+
+# Q3. Auto Commit vs Manual Commit
+
+## Auto Commit
+
+Kafka khud offset commit karega.
+
+```text
+Receive Message
+
+↓
+
+Process
+
+↓
+
+Kafka Automatically Commit
+```
+
+Easy hai.
+
+Lekin control kam hai.
+
+---
+
+## Manual Commit
+
+Application khud decide karegi
+
+Kab commit karna hai.
+
+```text
+Receive Message
+
+↓
+
+Business Logic
+
+↓
+
+Database Save
+
+↓
+
+acknowledge()
+
+↓
+
+Commit Offset
+```
+
+Zyada reliable.
+
+---
+
+# Q4. MANUAL AckMode kya hai?
+
+Spring Kafka me
+
+```text
+AckMode.MANUAL
+```
+
+ka matlab
+
+Application khud offset commit karegi.
+
+Example
+
+```java
+ack.acknowledge();
+```
+
+Tabhi offset commit hoga.
+
+---
+
+# Q5. MANUAL_IMMEDIATE kya hai?
+
+Question
+
+MANUAL aur MANUAL_IMMEDIATE me difference?
+
+---
+
+## MANUAL
+
+```text
+acknowledge()
+
+↓
+
+Container decide karega
+
+kab commit karna hai.
+```
+
+---
+
+## MANUAL_IMMEDIATE
+
+```text
+acknowledge()
+
+↓
+
+Immediately Commit Offset
+```
+
+---
+
+# Comparison
+
+| MANUAL          | MANUAL_IMMEDIATE   |
+| --------------- | ------------------ |
+| Commit later    | Commit immediately |
+| Better batching | Immediate commit   |
+
+---
+
+# Q6. Ordered Acknowledgment
+
+Documentation ke according
+
+Normally
+
+Acknowledgment
+
+same order me hona chahiye.
+
+Example
+
+Messages
+
+```text
+Offset0
+
+Offset1
+
+Offset2
+
+Offset3
+```
+
+Correct
+
+```text
+ack(0)
+
+↓
+
+ack(1)
+
+↓
+
+ack(2)
+
+↓
+
+ack(3)
+```
+
+---
+
+Question
+
+Agar
+
+```text
+ack(2)
+
+↓
+
+ack(0)
+
+↓
+
+ack(1)
+```
+
+karen?
+
+---
+
+Answer
+
+Normally
+
+Allowed nahi hai.
+
+Reason
+
+Kafka sirf
+
+Last committed offset
+
+store karta hai.
+
+Har record ka status
+
+store nahi karta.
+
+Documentation me ye clearly mention hai. 
+
+---
+
+# Q7. Kafka har record ka status kyun nahi rakhta?
+
+Suppose
+
+```text
+Offset0
+
+Offset1
+
+Offset2
+
+Offset3
+```
+
+Kafka sirf
+
+```text
+Committed Offset = 2
+```
+
+store karega.
+
+Ye store nahi karega
+
+```text
+Offset0 = Done
+
+Offset1 = Pending
+
+Offset2 = Done
+```
+
+Isliye
+
+Ordered acknowledgment zaruri hota hai.
+
+---
+
+# Q8. asyncAcks kya hai?
+
+Spring Kafka 2.8 se
+
+Ek naya feature aaya
+
+```text
+asyncAcks
+```
+
+Documentation ke according
+
+Ye
+
+Out-of-order acknowledgment
+
+allow karta hai. 
+
+---
+
+Configuration
+
+```java
+containerProperties.setAsyncAcks(true);
+```
+
+---
+
+# Q9. asyncAcks kaise kaam karta hai?
+
+Suppose
+
+Poll me
+
+4 messages aaye.
+
+```text
+Offset0
+
+Offset1
+
+Offset2
+
+Offset3
+```
+
+Application
+
+Parallel processing kar rahi hai.
+
+Result
+
+```text
+Offset2
+
+Done
+
+------------
+
+Offset0
+
+Done
+
+------------
+
+Offset3
+
+Done
+
+------------
+
+Offset1
+
+Done
+```
+
+Ye normal order nahi hai.
+
+---
+
+Normally
+
+Problem.
+
+---
+
+Lekin
+
+```text
+asyncAcks=true
+```
+
+ho to
+
+Spring wait karega.
+
+Jab
+
+Offset1 bhi complete ho jayega
+
+Tab
+
+Saare pending commits
+
+ek saath kar dega.
+
+---
+
+Diagram
+
+```text
+Poll
+
+↓
+
+0
+
+1
+
+2
+
+3
+
+↓
+
+Ack(2)
+
+↓
+
+Wait
+
+↓
+
+Ack(0)
+
+↓
+
+Wait
+
+↓
+
+Ack(3)
+
+↓
+
+Wait
+
+↓
+
+Ack(1)
+
+↓
+
+Commit 0-3
+```
+
+---
+
+# Q10. Consumer Pause
+
+Question
+
+Spring wait kyun karta hai?
+
+---
+
+Answer
+
+Documentation ke according
+
+Jab tak
+
+Previous poll ke
+
+saare acknowledgments
+
+complete nahi hote
+
+Consumer
+
+Pause ho jata hai.
+
+```text
+Poll
+
+↓
+
+Process
+
+↓
+
+Waiting for Missing Ack
+
+↓
+
+Consumer Paused
+
+↓
+
+All Ack Received
+
+↓
+
+Resume Poll
+```
+
+
+
+---
+
+# Q11. asyncAcks ka drawback
+
+Documentation me important warning di gayi hai.
+
+Async processing se
+
+Duplicate Messages
+
+ka chance badh jata hai.
+
+Example
+
+```text
+Offset0
+
+Done
+
+------------
+
+Offset1
+
+Processing
+
+------------
+
+Application Crash
+```
+
+Restart ke baad
+
+Kafka
+
+Offset1 dobara bhej sakta hai.
+
+Isliye
+
+Application
+
+Idempotent honi chahiye.
+
+---
+
+# Q12. nack() asyncAcks ke saath kyun use nahi kar sakte?
+
+Documentation
+
+```text
+asyncAcks=true
+
+↓
+
+nack()
+
+Not Supported
+```
+
+Reason
+
+Spring already
+
+Out-of-order acknowledgments
+
+manage kar raha hota hai.
+
+Negative acknowledgment ke saath
+
+Ye logic conflict karega.
+
+Isliye
+
+Documentation clearly bolti hai
+
+**asyncAcks aur nack() ek saath use nahi kar sakte.** 
+
+---
+
+# Real Banking Example
+
+Suppose
+
+4 Transactions
+
+```text
+T1
+
+T2
+
+T3
+
+T4
+```
+
+Different threads me process ho rahe hain.
+
+Complete order
+
+```text
+T3
+
+T1
+
+T4
+
+T2
+```
+
+Without asyncAcks
+
+Problem.
+
+With asyncAcks
+
+Spring wait karega.
+
+Sab complete hone ke baad
+
+Commit karega.
+
+---
+
+# Internal Flow
+
+```text
+Kafka Broker
+
+↓
+
+poll()
+
+↓
+
+Offsets
+
+0
+
+1
+
+2
+
+3
+
+↓
+
+Parallel Processing
+
+↓
+
+asyncAcks
+
+↓
+
+Missing Ack?
+
+↓
+
+Yes → Wait
+
+↓
+
+No
+
+↓
+
+Commit Offset
+
+↓
+
+Next Poll
+```
+
+---
+
+# Interview Questions
+
+## Q1. Why are acknowledgments normally required in order?
+
+**Answer:**
+
+Because Kafka stores only the **last committed offset** for a partition. It does not maintain acknowledgment status for individual records.
+
+---
+
+## Q2. What is `asyncAcks`?
+
+**Answer:**
+
+`asyncAcks` allows records from the same poll to be acknowledged in any order. Spring delays the commit until all missing acknowledgments are received.
+
+---
+
+## Q3. What happens when `asyncAcks=true`?
+
+**Answer:**
+
+The consumer pauses after the current poll until all acknowledgments from that poll are completed. Only then are offsets committed and polling resumes.
+
+---
+
+## Q4. What is the drawback of `asyncAcks`?
+
+**Answer:**
+
+It increases the possibility of **duplicate message delivery** if the application fails before all acknowledgments are committed.
+
+---
+
+## Q5. Can `nack()` be used with `asyncAcks`?
+
+**Answer:**
+
+No. Spring Kafka does not support `nack()` when `asyncAcks` is enabled.
+
+---
+
+# ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**Your application processes Kafka records asynchronously using multiple threads. Messages complete out of order. Which Spring Kafka feature helps manage acknowledgments?**
+
+### Best Answer
+
+> "I would enable `asyncAcks`. It allows acknowledgments to occur out of order while the listener container defers committing offsets until all records from the same poll have been acknowledged. I also understand that this increases the possibility of duplicate deliveries after failures, and `nack()` cannot be used with `asyncAcks`."
+
+---
+
+# 📌 Key Points to Remember
+
+* **Offset** identifies the position of a message within a partition.
+* **Offset Commit** tells Kafka which messages have been processed successfully.
+* `AckMode.MANUAL` lets the application control when offsets are committed.
+* `AckMode.MANUAL_IMMEDIATE` commits offsets immediately after `acknowledge()`.
+* By default, acknowledgments must happen **in offset order**.
+* `asyncAcks=true` allows **out-of-order acknowledgments** for records from the same poll.
+* While waiting for missing acknowledgments, the **consumer is paused**.
+* `asyncAcks` increases the risk of **duplicate deliveries** after failures.
+* **`nack()` is not supported with `asyncAcks`.**
+
+---
+
+# 🚀 Next Part (Topic 3 – Part 2)
+
+We'll cover the **different `AckMode` values** in detail:
+
+* `AckMode.RECORD`
+* `AckMode.BATCH`
+* `AckMode.TIME`
+* `AckMode.COUNT`
+* `AckMode.COUNT_TIME`
+
+with practical diagrams, timelines, real project scenarios, and interview questions.
+
 =======================================================================================================================
+Perfect. Ye **Receiving Messages** ka next independent topic hai. Ye bahut bada topic nahi hai, isliye isko **1 complete note** me hi cover karte hain.
+
+---
+
+# Spring Kafka - Receiving Messages
+
+# Topic 4 - Asynchronous `@KafkaListener` Return Types
+
+Based on the Spring Kafka documentation you shared (Spring Kafka 3.2+). 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak humne jo `@KafkaListener` dekha tha usme method kuch aisa tha.
+
+```java
+@KafkaListener(topics = "orders")
+public void consume(String message) {
+
+    saveOrder(message);
+
+}
+```
+
+Question...
+
+Ye method kab complete hota hai?
+
+---
+
+# 👨‍🎓 Student
+
+Sir,
+
+Jab
+
+```java
+saveOrder()
+```
+
+complete ho jata hai.
+
+---
+
+# Teacher
+
+Bilkul.
+
+Ye hai
+
+# Synchronous Processing
+
+---
+
+# Synchronous Flow
+
+```text
+Kafka Message
+
+↓
+
+Listener
+
+↓
+
+Business Logic
+
+↓
+
+Method Finish
+
+↓
+
+Ack
+```
+
+---
+
+# Q1. Asynchronous `@KafkaListener` kya hota hai?
+
+Spring Kafka 3.2 se
+
+Listener
+
+Async return type
+
+support karta hai.
+
+Documentation ke according
+
+Ye return types supported hain.
+
+* `CompletableFuture<?>`
+* `Mono<?>`
+* Kotlin `suspend` functions
+
+
+
+---
+
+## Simple Definition
+
+> **Asynchronous @KafkaListener allows the listener to complete its work asynchronously instead of blocking the listener thread.**
+
+---
+
+# Real Life Example
+
+Suppose
+
+Payment Service
+
+↓
+
+Fraud API Call
+
+↓
+
+Email Service
+
+↓
+
+Database
+
+Ye sab
+
+5 seconds lete hain.
+
+Agar
+
+Listener wait karega
+
+↓
+
+Consumer slow ho jayega.
+
+---
+
+Instead
+
+Async use karo.
+
+---
+
+# Q2. Normal Listener vs Async Listener
+
+## Normal
+
+```java
+@KafkaListener(topics="orders")
+public void consume(String msg){
+
+    process(msg);
+
+}
+```
+
+Method
+
+Wait karega.
+
+---
+
+## Async
+
+```java
+@KafkaListener(topics="orders")
+public CompletableFuture<String> consume(String msg){
+
+    return CompletableFuture.completedFuture("Done");
+
+}
+```
+
+Documentation example bhi isi pattern ka hai. 
+
+---
+
+# Flow
+
+```text
+Message
+
+↓
+
+Listener
+
+↓
+
+CompletableFuture
+
+↓
+
+Background Processing
+
+↓
+
+Complete
+
+↓
+
+Ack
+```
+
+---
+
+# Q3. CompletableFuture kyun use karte hain?
+
+Question
+
+Future return karne ka benefit?
+
+---
+
+Answer
+
+Listener thread
+
+Block nahi hota.
+
+Long-running task
+
+Background me complete hota hai.
+
+---
+
+Example
+
+```text
+Receive Order
+
+↓
+
+Call Payment API
+
+↓
+
+Call Inventory API
+
+↓
+
+Send Email
+
+↓
+
+Complete Future
+```
+
+---
+
+# Q4. Mono<?> kya hota hai?
+
+Agar project
+
+Spring WebFlux
+
+use karta hai.
+
+To
+
+```java
+@KafkaListener
+public Mono<Void> consume(String msg){
+
+    return Mono.empty();
+
+}
+```
+
+Documentation me Mono bhi supported return type hai. 
+
+---
+
+# Q5. Async Return Type detect hote hi kya hota hai?
+
+Ye documentation ka bahut important point hai.
+
+Spring automatically
+
+```text
+AckMode.MANUAL
+```
+
+use karta hai.
+
+Aur
+
+Out-of-order commits
+
+enable kar deta hai.
+
+Matlab
+
+Tum manually configure nahi karte.
+
+Spring khud detect kar leta hai.
+
+
+
+---
+
+# Flow
+
+```text
+CompletableFuture Detected
+
+↓
+
+AckMode.MANUAL
+
+↓
+
+Async Processing
+
+↓
+
+Future Complete
+
+↓
+
+Ack
+```
+
+---
+
+# Q6. Ack kab hota hai?
+
+Question
+
+Method return hote hi?
+
+---
+
+Answer
+
+❌ Nahi.
+
+Documentation ke according
+
+Ack tab hota hai
+
+jab
+
+Async operation
+
+complete hota hai.
+
+---
+
+Diagram
+
+```text
+Receive Message
+
+↓
+
+Future Start
+
+↓
+
+Processing
+
+↓
+
+Future Complete
+
+↓
+
+Offset Commit
+```
+
+---
+
+# Q7. Async me Error aaya to?
+
+Suppose
+
+```text
+Payment API Failed
+```
+
+Ab?
+
+Documentation ke according
+
+Ye depend karta hai
+
+Container Error Handler
+
+par.
+
+Agar
+
+Recoverable Error hai
+
+↓
+
+Recover ho sakta hai.
+
+Otherwise
+
+DLT
+
+ya Retry
+
+Container configuration ke hisab se hoga.
+
+
+
+---
+
+# Q8. Listener ke andar Exception aa gaya
+
+Question
+
+Future banne se pehle hi
+
+Exception aa gaya.
+
+Example
+
+```java
+throw new RuntimeException();
+```
+
+Kya hoga?
+
+---
+
+Answer
+
+Documentation
+
+Bahut important warning deti hai.
+
+Tumhe
+
+Exception
+
+Catch karna chahiye.
+
+Aur
+
+Ek proper
+
+Async Return Object
+
+return karna chahiye.
+
+Example
+
+```java
+try{
+
+   ...
+
+}
+catch(Exception e){
+
+   return CompletableFuture.failedFuture(e);
+
+}
+```
+
+Agar Future object hi create nahi hua
+
+to
+
+Async mechanism kaam nahi karega.
+
+
+
+---
+
+# Q9. KafkaListenerErrorHandler
+
+Question
+
+Async Listener me
+
+Error Handler chalega?
+
+---
+
+Answer
+
+Yes.
+
+Documentation ke according
+
+Agar
+
+```java
+KafkaListenerErrorHandler
+```
+
+configured hai
+
+to
+
+Async failure ke baad
+
+Ye invoke hota hai.
+
+
+
+---
+
+# Flow
+
+```text
+Message
+
+↓
+
+Async Listener
+
+↓
+
+Exception
+
+↓
+
+KafkaListenerErrorHandler
+
+↓
+
+Recovery / Retry
+```
+
+---
+
+# Q10. Real Banking Example
+
+Customer
+
+↓
+
+Transfer Request
+
+↓
+
+Kafka Listener
+
+↓
+
+Fraud Service Call
+
+↓
+
+Credit Service Call
+
+↓
+
+AML Service Call
+
+↓
+
+All Async
+
+↓
+
+Future Complete
+
+↓
+
+Ack Offset
+
+Agar
+
+Fraud Service
+
+Fail
+
+↓
+
+Error Handler
+
+↓
+
+Retry
+
+---
+
+# Complete Internal Flow
+
+```text
+Kafka Broker
+
+↓
+
+@KafkaListener
+
+↓
+
+CompletableFuture
+
+↓
+
+Background Task
+
+↓
+
+Complete
+
+↓
+
+Ack
+
+↓
+
+Next Message
+```
+
+---
+
+# Practical Example
+
+```java
+@KafkaListener(topics = "orders")
+public CompletableFuture<String> consume(String order){
+
+    return CompletableFuture.supplyAsync(() -> {
+
+        processOrder(order);
+
+        return "SUCCESS";
+
+    });
+
+}
+```
+
+---
+
+# Interview Questions
+
+## Q1. Which asynchronous return types are supported by `@KafkaListener`?
+
+**Answer:**
+
+Spring Kafka 3.2 supports:
+
+* `CompletableFuture<?>`
+* `Mono<?>`
+* Kotlin `suspend` functions
+
+---
+
+## Q2. Why use asynchronous `@KafkaListener`?
+
+**Answer:**
+
+To execute long-running tasks asynchronously without blocking the listener thread.
+
+---
+
+## Q3. When is the offset acknowledged in an asynchronous listener?
+
+**Answer:**
+
+The offset is acknowledged **after the asynchronous operation completes successfully**, not when the listener method returns.
+
+---
+
+## Q4. Does Spring automatically change AckMode for async listeners?
+
+**Answer:**
+
+Yes. When Spring detects an asynchronous return type, it automatically switches to **`AckMode.MANUAL`** and enables out-of-order commits.
+
+---
+
+## Q5. What happens if the async result completes with an error?
+
+**Answer:**
+
+The container's configured error handler decides whether the message should be retried, recovered, or sent to a dead-letter topic.
+
+---
+
+## Q6. Why should exceptions be caught before creating the async result?
+
+**Answer:**
+
+If the listener throws an exception before returning a `CompletableFuture` or `Mono`, the asynchronous processing pipeline cannot start. Therefore, catch the exception and return an appropriate async result.
+
+---
+
+## Q7. Is `KafkaListenerErrorHandler` supported with asynchronous listeners?
+
+**Answer:**
+
+Yes. If configured, it is invoked when the asynchronous operation completes with a failure.
+
+---
+
+# ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**Your Kafka listener calls three external REST APIs, each taking 2–3 seconds. How would you improve throughput?**
+
+### Best Answer
+
+> "I would return a `CompletableFuture` (or `Mono` in a reactive application) from the `@KafkaListener`. Spring Kafka automatically switches to `AckMode.MANUAL`, acknowledges the offset only after the asynchronous work completes successfully, and delegates failures to the configured container error handler."
+
+---
+
+# 📌 Key Points to Remember
+
+* Spring Kafka **3.2+** supports **asynchronous `@KafkaListener` return types**.
+* Supported types:
+
+  * `CompletableFuture<?>`
+  * `Mono<?>`
+  * Kotlin `suspend` functions
+* Spring **automatically switches to `AckMode.MANUAL`** for async listeners.
+* Offset acknowledgment happens **after the async task completes**, not immediately.
+* If the async task fails, the **container error handler** determines recovery behavior.
+* Catch exceptions that occur **before creating the async return object**, and return an appropriate failed async result.
+* `KafkaListenerErrorHandler` is supported with asynchronous listeners.
+
+---
+
+## ✅ Topic Status
+
+You have now completed:
+
+* ✅ Topic 1 – Message Listeners
+* ✅ Topic 2 – Message Listener Containers
+* ✅ Topic 3 – Manual Offset Commit (Part 1)
+* ✅ Topic 4 – Asynchronous `@KafkaListener` Return Types
+
+---
+
+# 🚀 Next Topic
+
+The next and **most important** consumer topic is:
+
+# **Topic 5 – `@KafkaListener` Annotation**
+
+We'll split it into **3 parts** because it's huge:
+
+* **Part 1:** Basics, Syntax, `topics`, `groupId`, `id`, `containerFactory`
+* **Part 2:** Method parameters (`@Header`, `ConsumerRecord`, `Acknowledgment`, `Consumer`, payload conversion)
+* **Part 3:** Advanced attributes, SpEL, concurrency, error handling, practical scenarios, and interview questions.
+
 =======================================================================================================================
+# Spring Kafka - Receiving Messages
+
+# Topic 5 - Part 1
+
+# **@KafkaListener Annotation (Basics & Configuration)**
+
+Based on the Spring Kafka documentation you shared. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak humne seekha
+
+* Message Listener
+* Listener Container
+* Manual Offset Commit
+* Async Listener
+
+Ab ek question...
+
+**Hum apni method ko Kafka Consumer kaise banate hain?**
+
+---
+
+# 👨‍🎓 Student
+
+Sir...
+
+`@KafkaListener`
+
+---
+
+# Teacher
+
+Bilkul.
+
+Spring Kafka me
+
+# `@KafkaListener`
+
+sabse important annotation hai.
+
+Almost har Spring Kafka project me ye use hota hai.
+
+---
+
+# Q1. @KafkaListener kya hota hai?
+
+Simple Definition
+
+> **`@KafkaListener` kisi Spring bean ki method ko Kafka Consumer bana deta hai.**
+
+Documentation ke according
+
+`@KafkaListener` bean method ko Listener Container ke saath register karta hai.
+
+Internally
+
+Spring us method ko
+
+```text
+MessagingMessageListenerAdapter
+```
+
+me wrap karta hai.
+
+
+
+---
+
+# Real Life Example
+
+Suppose
+
+Restaurant me
+
+Customer order deta hai.
+
+Chef continuously gate par khada nahi rehta.
+
+Waiter order lekar
+
+Chef ko deta hai.
+
+Exactly
+
+```text
+Kafka Broker
+
+↓
+
+Listener Container
+
+↓
+
+MessagingMessageListenerAdapter
+
+↓
+
+@KafkaListener Method
+```
+
+---
+
+# Internal Architecture
+
+```text
+Producer
+
+↓
+
+Kafka Broker
+
+↓
+
+ConcurrentMessageListenerContainer
+
+↓
+
+MessagingMessageListenerAdapter
+
+↓
+
+@KafkaListener Method
+
+↓
+
+Business Logic
+```
+
+---
+
+# Q2. @KafkaListener internally kaise kaam karta hai?
+
+Flow
+
+```text
+Application Start
+
+↓
+
+Spring Scan
+
+↓
+
+@KafkaListener Found
+
+↓
+
+Listener Container Create
+
+↓
+
+Kafka Consumer Create
+
+↓
+
+poll()
+
+↓
+
+Message
+
+↓
+
+Listener Method
+```
+
+---
+
+# Q3. Sabse Basic Example
+
+```java
+@Component
+public class OrderListener {
+
+    @KafkaListener(
+        topics = "orders-topic"
+    )
+    public void consume(String message){
+
+        System.out.println(message);
+
+    }
+
+}
+```
+
+---
+
+Question
+
+Message aaya
+
+↓
+
+Kya Spring
+
+`consume()`
+
+ko khud call karega?
+
+---
+
+Answer
+
+✔ Yes.
+
+Tumhe manually call nahi karna.
+
+---
+
+# Q4. @EnableKafka kya hota hai?
+
+Question
+
+Spring ko kaise pata chale
+
+Kafka Listener enable karna hai?
+
+---
+
+Answer
+
+Configuration class me
+
+```java
+@EnableKafka
+```
+
+lagate hain.
+
+Example
+
+```java
+@Configuration
+@EnableKafka
+public class KafkaConfig {
+
+}
+```
+
+Documentation ke according
+
+`@EnableKafka` required hai taaki Spring Kafka listener infrastructure enable ho sake. 
+
+---
+
+# Flow
+
+```text
+@EnableKafka
+
+↓
+
+Enable Listener Processing
+
+↓
+
+Detect @KafkaListener
+
+↓
+
+Create Listener Container
+```
+
+---
+
+# Q5. KafkaListenerContainerFactory kya hota hai?
+
+Question
+
+Listener Container
+
+kaun banata hai?
+
+---
+
+Answer
+
+```text
+KafkaListenerContainerFactory
+```
+
+---
+
+Diagram
+
+```text
+KafkaListenerContainerFactory
+
+↓
+
+ConcurrentMessageListenerContainer
+
+↓
+
+Kafka Consumer
+```
+
+---
+
+Question
+
+Default Bean Name?
+
+---
+
+Answer
+
+```text
+kafkaListenerContainerFactory
+```
+
+Ye documentation me mention hai. 
+
+---
+
+# Q6. ConcurrentKafkaListenerContainerFactory
+
+Question
+
+Actual implementation
+
+kaunsi use hoti hai?
+
+---
+
+Answer
+
+Mostly
+
+```java
+ConcurrentKafkaListenerContainerFactory
+```
+
+---
+
+Example
+
+```java
+@Bean
+ConcurrentKafkaListenerContainerFactory<Integer,String>
+kafkaListenerContainerFactory(){
+
+    ConcurrentKafkaListenerContainerFactory<Integer,String>
+    factory =
+    new ConcurrentKafkaListenerContainerFactory<>();
+
+    return factory;
+
+}
+```
+
+Documentation me bhi yehi example diya gaya hai. 
+
+---
+
+# Internal Flow
+
+```text
+ConcurrentKafkaListenerContainerFactory
+
+↓
+
+ConcurrentMessageListenerContainer
+
+↓
+
+Kafka Consumer
+```
+
+---
+
+# Q7. ConsumerFactory ka use?
+
+Question
+
+Consumer
+
+kaun create karega?
+
+---
+
+Answer
+
+```text
+ConsumerFactory
+
+↓
+
+DefaultKafkaConsumerFactory
+
+↓
+
+Kafka Consumer
+```
+
+---
+
+Example
+
+```java
+factory.setConsumerFactory(
+    consumerFactory()
+);
+```
+
+---
+
+# Q8. id Attribute
+
+Question
+
+```java
+@KafkaListener(
+id="orderListener"
+)
+```
+
+Ye
+
+id
+
+kya hai?
+
+---
+
+Answer
+
+Ye
+
+Listener Container ki unique identity hai.
+
+Documentation ke according
+
+Starting from Spring Kafka 2.0,
+
+agar `groupId` explicitly na diya ho,
+
+to
+
+`id`
+
+Consumer Group ID ke roop me bhi use ho sakta hai.
+
+
+
+---
+
+Example
+
+```java
+@KafkaListener(
+
+id="paymentListener"
+
+)
+```
+
+---
+
+# Q9. topics Attribute
+
+Question
+
+Consumer
+
+kis Topic ko consume karega?
+
+---
+
+Answer
+
+```java
+@KafkaListener(
+
+topics="orders-topic"
+
+)
+```
+
+---
+
+Multiple Topics
+
+```java
+@KafkaListener(
+
+topics={
+"orders",
+"payments",
+"emails"
+
+}
+
+)
+```
+
+Documentation me ye support diya gaya hai. 
+
+---
+
+# Diagram
+
+```text
+orders-topic
+
+↓
+
+@KafkaListener
+```
+
+---
+
+# Q10. groupId
+
+Question
+
+Consumer Group
+
+annotation me kaise denge?
+
+---
+
+Example
+
+```java
+@KafkaListener(
+
+topics="orders",
+
+groupId="order-group"
+
+)
+```
+
+---
+
+Meaning
+
+Ye listener
+
+order-group
+
+ka member hoga.
+
+---
+
+# Q11. clientIdPrefix
+
+Question
+
+Monitoring me
+
+Consumer ka naam kaise identify karenge?
+
+---
+
+Answer
+
+```java
+@KafkaListener(
+
+clientIdPrefix="order-service"
+
+)
+```
+
+Documentation ke according
+
+Spring automatically suffix add karta hai.
+
+Example
+
+```text
+order-service-0
+
+order-service-1
+
+order-service-2
+```
+
+Concurrency use hone par
+
+Ye numbering hoti hai.
+
+
+
+---
+
+# Q12. containerFactory
+
+Question
+
+Agar
+
+Multiple ContainerFactory
+
+ho to?
+
+---
+
+Answer
+
+```java
+@KafkaListener(
+
+topics="orders",
+
+containerFactory=
+
+"batchFactory"
+
+)
+```
+
+Meaning
+
+Default factory nahi.
+
+batchFactory use karo.
+
+---
+
+# Q13. autoStartup
+
+Question
+
+Application start hote hi
+
+Listener start ho?
+
+---
+
+Answer
+
+Default
+
+Yes.
+
+Agar
+
+```java
+@KafkaListener(
+
+autoStartup="false"
+
+)
+```
+
+Listener create hoga.
+
+Lekin
+
+Automatically start nahi hoga.
+
+Documentation me ye attribute available hai. 
+
+---
+
+# Q14. concurrency
+
+Question
+
+Annotation se hi
+
+Concurrency set kar sakte hain?
+
+---
+
+Answer
+
+Yes.
+
+```java
+@KafkaListener(
+
+topics="orders",
+
+concurrency="3"
+
+)
+```
+
+Meaning
+
+3 Consumer Threads.
+
+Documentation ke according
+
+Ye container factory ki concurrency ko override kar sakta hai.
+
+
+
+---
+
+# Complete Configuration Example
+
+```java
+@KafkaListener(
+
+id="orderListener",
+
+topics="orders-topic",
+
+groupId="order-group",
+
+clientIdPrefix="order",
+
+concurrency="3"
+
+)
+
+public void consume(String msg){
+
+    System.out.println(msg);
+
+}
+```
+
+---
+
+# Complete Internal Flow
+
+```text
+@EnableKafka
+
+↓
+
+Spring Scan
+
+↓
+
+@KafkaListener
+
+↓
+
+KafkaListenerContainerFactory
+
+↓
+
+ConcurrentMessageListenerContainer
+
+↓
+
+Kafka Consumer
+
+↓
+
+poll()
+
+↓
+
+Message
+
+↓
+
+Listener Method
+```
+
+---
+
+# Real Banking Example
+
+Customer
+
+↓
+
+Transfer Money
+
+↓
+
+Kafka Topic
+
+↓
+
+@KafkaListener
+
+↓
+
+Payment Service
+
+↓
+
+Validate Transaction
+
+↓
+
+Update Database
+
+↓
+
+Commit Offset
+
+---
+
+# Interview Questions
+
+## Q1. What is `@KafkaListener`?
+
+**Answer:**
+
+`@KafkaListener` is a Spring Kafka annotation that marks a bean method as a Kafka message listener.
+
+---
+
+## Q2. What happens internally when Spring finds `@KafkaListener`?
+
+**Answer:**
+
+Spring creates a `MessagingMessageListenerAdapter`, configures a listener container, creates a Kafka consumer, and starts polling the configured topic.
+
+---
+
+## Q3. Why do we use `@EnableKafka`?
+
+**Answer:**
+
+It enables Spring Kafka's listener infrastructure so that `@KafkaListener` annotations are detected and processed.
+
+---
+
+## Q4. What is the default listener container factory bean name?
+
+**Answer:**
+
+`kafkaListenerContainerFactory`
+
+---
+
+## Q5. Which listener container factory is commonly used?
+
+**Answer:**
+
+`ConcurrentKafkaListenerContainerFactory`
+
+---
+
+## Q6. What is the purpose of the `id` attribute?
+
+**Answer:**
+
+It uniquely identifies the listener container. If `groupId` is not specified, it can also be used as the consumer group ID.
+
+---
+
+## Q7. What is the purpose of the `topics` attribute?
+
+**Answer:**
+
+It specifies the Kafka topic or topics that the listener should consume.
+
+---
+
+## Q8. What is `groupId`?
+
+**Answer:**
+
+It specifies the Kafka Consumer Group for that listener.
+
+---
+
+## Q9. What is `clientIdPrefix`?
+
+**Answer:**
+
+It sets the prefix for the Kafka consumer `client.id`. Spring appends `-0`, `-1`, etc., when concurrency is greater than one.
+
+---
+
+## Q10. Why do we use `containerFactory`?
+
+**Answer:**
+
+To select a specific `KafkaListenerContainerFactory`, such as one configured for batch listeners or manual acknowledgment.
+
+---
+
+## Q11. What is `autoStartup`?
+
+**Answer:**
+
+It controls whether the listener starts automatically when the application starts.
+
+---
+
+## Q12. Can concurrency be configured directly on `@KafkaListener`?
+
+**Answer:**
+
+Yes. The `concurrency` attribute overrides the container factory's default concurrency.
+
+---
+
+# ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**You have one listener for real-time processing and another for batch processing. How would you configure them?**
+
+### Best Answer
+
+> "I would create two different `ConcurrentKafkaListenerContainerFactory` beans. The real-time listener would use the default factory, while the batch listener would specify `containerFactory = "batchFactory"` in the `@KafkaListener` annotation."
+
+---
+
+# 📌 Key Points to Remember
+
+* `@KafkaListener` converts a Spring bean method into a **Kafka Consumer**.
+* Internally, Spring wraps it in a **`MessagingMessageListenerAdapter`**.
+* `@EnableKafka` enables listener processing.
+* The default factory bean name is **`kafkaListenerContainerFactory`**.
+* `ConcurrentKafkaListenerContainerFactory` creates **`ConcurrentMessageListenerContainer`** instances.
+* `topics` specifies which Kafka topics to consume.
+* `groupId` specifies the consumer group.
+* `clientIdPrefix` customizes the Kafka consumer `client.id`.
+* `containerFactory` selects a custom listener container factory.
+* `autoStartup` controls automatic listener startup.
+* `concurrency` configures parallel consumer threads directly on the annotation.
+
+---
+
+# 🚀 Next Part (Topic 5 – Part 2)
+
+We'll cover the **most practical part** of `@KafkaListener`:
+
+* `topics`
+* `topicPattern`
+* `topicPartitions`
+* `@TopicPartition`
+* `@PartitionOffset`
+* `SeekPosition`
+* `ConsumerRecord`
+* `Acknowledgment`
+* `@Payload`
+* `@Header`
+* `ConsumerRecordMetadata`
+* Manual Acknowledgment with `@KafkaListener`
+* Real production examples and interview questions.
+
 =======================================================================================================================
+# Spring Kafka - Receiving Messages
+
+# Topic 5 - Part 2
+
+# **@KafkaListener (Topic Assignment, Method Parameters & Manual Acknowledgment)**
+
+Based on the Spring Kafka documentation you shared. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Pichle Part me humne sikha
+
+* `@KafkaListener`
+* `topics`
+* `groupId`
+* `containerFactory`
+* `concurrency`
+
+Ab question...
+
+**Consumer ko exactly kis Topic ya Partition se message lena hai?**
+
+Aur
+
+**Listener method me kya-kya parameters le sakte hain?**
+
+Ye sab aaj seekhenge.
+
+---
+
+# Q1. Topic configure karne ke kitne tarike hain?
+
+Documentation ke according
+
+`@KafkaListener` me
+
+Topic configure karne ke
+
+**3 ways** hain.
+
+
+
+---
+
+## 1. topics
+
+Sabse common.
+
+```java
+@KafkaListener(
+    topics = "orders-topic"
+)
+```
+
+Meaning
+
+```text
+Sirf orders-topic consume karo.
+```
+
+---
+
+## 2. topicPattern
+
+Regex se.
+
+```java
+@KafkaListener(
+    topicPattern = "order.*"
+)
+```
+
+Example
+
+```text
+order-created
+
+order-updated
+
+order-cancelled
+```
+
+Sab consume honge.
+
+---
+
+## 3. topicPartitions
+
+Specific Partition.
+
+```java
+@KafkaListener(
+
+topicPartitions = {
+
+@TopicPartition(
+
+topic="orders",
+
+partitions={"0","1"}
+
+)
+
+}
+
+)
+```
+
+Meaning
+
+Sirf
+
+Partition 0
+
+aur
+
+Partition 1.
+
+---
+
+# Interview Trick
+
+| Attribute       | Use             |
+| --------------- | --------------- |
+| topics          | Fixed Topic     |
+| topicPattern    | Regex           |
+| topicPartitions | Fixed Partition |
+
+---
+
+# Q2. Multiple Topics consume kaise karte hain?
+
+Example
+
+```java
+@KafkaListener(
+
+topics = {
+
+"orders",
+
+"payments",
+
+"emails"
+
+}
+
+)
+```
+
+Ek Listener
+
+Teen Topics consume karega.
+
+Documentation me multiple topics supported hain. 
+
+---
+
+# Q3. topicPattern kab use karte hain?
+
+Suppose
+
+Har month
+
+Naya Topic banta hai.
+
+```text
+payment-jan
+
+payment-feb
+
+payment-mar
+```
+
+Har baar code change nahi karna.
+
+Use
+
+```java
+topicPattern = "payment.*"
+```
+
+Automatic.
+
+---
+
+# Q4. TopicPartition kya hota hai?
+
+Question
+
+Topic nahi
+
+Sirf
+
+Partition 2 consume karna hai.
+
+---
+
+Answer
+
+```java
+@TopicPartition(
+
+topic="orders",
+
+partitions="2"
+
+)
+```
+
+---
+
+Diagram
+
+```text
+orders-topic
+
+↓
+
+Partition0
+
+Partition1
+
+Partition2
+
+↑
+
+Consumer
+```
+
+---
+
+# Q5. PartitionOffset
+
+Question
+
+Partition 0
+
+Lekin
+
+Offset 100 se start karna hai.
+
+---
+
+Example
+
+```java
+@PartitionOffset(
+
+partition="0",
+
+initialOffset="100"
+
+)
+```
+
+Meaning
+
+Offset
+
+100
+
+se consume karo.
+
+Documentation me ye feature diya gaya hai. 
+
+---
+
+# Q6. Wildcard Partition
+
+Question
+
+Har partition
+
+Offset 0
+
+se start karna hai.
+
+---
+
+Answer
+
+```java
+@PartitionOffset(
+
+partition="*",
+
+initialOffset="0"
+
+)
+```
+
+Spring 2.5.5 se support.
+
+
+
+---
+
+# Q7. Partition Range
+
+Spring 2.6.4 se.
+
+Example
+
+```java
+partitions="0-5"
+```
+
+Meaning
+
+```text
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+```
+
+Sab.
+
+Documentation me partition ranges supported hain. 
+
+---
+
+# Q8. SeekPosition
+
+Spring 3.2
+
+New Feature.
+
+```java
+@PartitionOffset(
+
+partition="0",
+
+seekPosition="BEGINNING"
+
+)
+```
+
+Options
+
+```text
+BEGINNING
+
+END
+
+TIMESTAMP
+```
+
+Documentation ke according
+
+TIMESTAMP use karoge
+
+to
+
+initialOffset
+
+timestamp ban jata hai.
+
+
+
+---
+
+# Q9. Listener method me String
+
+Sabse simple.
+
+```java
+@KafkaListener(topics="orders")
+
+public void consume(
+
+String message
+
+){
+
+}
+```
+
+---
+
+# Q10. ConsumerRecord
+
+Question
+
+Topic
+
+Offset
+
+Partition
+
+bhi chahiye.
+
+---
+
+Answer
+
+```java
+public void consume(
+
+ConsumerRecord<Integer,String>
+
+record
+
+)
+```
+
+---
+
+Diagram
+
+```text
+ConsumerRecord
+
+↓
+
+Topic
+
+↓
+
+Partition
+
+↓
+
+Offset
+
+↓
+
+Key
+
+↓
+
+Value
+```
+
+---
+
+# Q11. Manual Ack
+
+Question
+
+Manual Commit karna hai.
+
+---
+
+Example
+
+```java
+public void consume(
+
+String message,
+
+Acknowledgment ack
+
+){
+
+ack.acknowledge();
+
+}
+```
+
+Documentation
+
+Manual AckMode hona chahiye.
+
+Otherwise
+
+Acknowledgment
+
+null
+
+hoga.
+
+
+
+---
+
+# Q12. Spring 4.1 Feature
+
+Ab
+
+Annotation se hi
+
+AckMode set kar sakte hain.
+
+```java
+@KafkaListener(
+
+topics="orders",
+
+ackMode="MANUAL"
+
+)
+```
+
+Documentation me ye naya feature diya gaya hai. 
+
+---
+
+# Q13. Consumer Object
+
+Question
+
+Consumer bhi chahiye.
+
+---
+
+Example
+
+```java
+public void consume(
+
+String message,
+
+Consumer<?,?> consumer
+
+)
+```
+
+Mostly
+
+Metrics
+
+ke liye.
+
+---
+
+# Q14. @Payload
+
+Question
+
+Actual message
+
+kaise milega?
+
+---
+
+Example
+
+```java
+public void consume(
+
+@Payload
+
+String order
+
+)
+```
+
+Ye payload ko bind karta hai.
+
+---
+
+# Q15. @Header
+
+Question
+
+Offset
+
+Topic
+
+Partition
+
+kaise milega?
+
+---
+
+Example
+
+```java
+public void consume(
+
+@Payload String order,
+
+@Header(
+
+KafkaHeaders.RECEIVED_TOPIC
+
+)
+
+String topic
+
+)
+```
+
+Documentation me
+
+Headers available hain.
+
+* RECEIVED_TOPIC
+* RECEIVED_PARTITION
+* RECEIVED_KEY
+* OFFSET
+* RECEIVED_TIMESTAMP
+
+
+
+---
+
+# Diagram
+
+```text
+Kafka Message
+
+↓
+
+Payload
+
+↓
+
+Headers
+
+↓
+
+Listener
+```
+
+---
+
+# Q16. ConsumerRecordMetadata
+
+Spring 2.5
+
+New Feature.
+
+Instead of
+
+Bahut saare headers
+
+Use
+
+```java
+ConsumerRecordMetadata
+```
+
+Example
+
+```java
+public void consume(
+
+String msg,
+
+ConsumerRecordMetadata meta
+
+)
+```
+
+Isme
+
+Topic
+
+Partition
+
+Offset
+
+Timestamp
+
+sab milta hai.
+
+Documentation me ye feature explain hai. 
+
+---
+
+# Real Banking Example
+
+Money Transfer
+
+↓
+
+Kafka Topic
+
+↓
+
+@KafkaListener
+
+↓
+
+ConsumerRecord
+
+↓
+
+Offset
+
+↓
+
+Database Save
+
+↓
+
+Acknowledgment
+
+↓
+
+Commit Offset
+
+---
+
+# Complete Flow
+
+```text
+Kafka Broker
+
+↓
+
+@KafkaListener
+
+↓
+
+ConsumerRecord
+
+↓
+
+Payload
+
+↓
+
+Headers
+
+↓
+
+Business Logic
+
+↓
+
+Acknowledgment
+
+↓
+
+Commit Offset
+```
+
+---
+
+# Interview Questions
+
+## Q1. What are the three ways to subscribe to topics in `@KafkaListener`?
+
+**Answer:**
+
+* `topics`
+* `topicPattern`
+* `topicPartitions`
+
+---
+
+## Q2. When should `topicPattern` be used?
+
+**Answer:**
+
+When topic names are dynamic and can be matched using a regular expression.
+
+---
+
+## Q3. What is `@TopicPartition`?
+
+**Answer:**
+
+It allows the listener to consume only specific partitions of a topic.
+
+---
+
+## Q4. What is `@PartitionOffset`?
+
+**Answer:**
+
+It specifies the initial offset from which consumption should start for a partition.
+
+---
+
+## Q5. What is `SeekPosition`?
+
+**Answer:**
+
+It allows consumption to start from the **BEGINNING**, **END**, or a specific **TIMESTAMP**.
+
+---
+
+## Q6. Why use `ConsumerRecord` instead of `String`?
+
+**Answer:**
+
+Because `ConsumerRecord` provides metadata such as topic, partition, offset, key, and timestamp along with the message.
+
+---
+
+## Q7. When do we use `Acknowledgment`?
+
+**Answer:**
+
+For manual offset commits using `ack.acknowledge()`.
+
+---
+
+## Q8. Why can `Acknowledgment` be `null`?
+
+**Answer:**
+
+If the listener container is not configured with a manual acknowledgment mode, Spring does not provide an `Acknowledgment` object.
+
+---
+
+## Q9. What is the purpose of `@Header`?
+
+**Answer:**
+
+It injects Kafka metadata such as topic, partition, key, offset, and timestamp into the listener method.
+
+---
+
+## Q10. What is `ConsumerRecordMetadata`?
+
+**Answer:**
+
+It is a convenience object that provides consumer record metadata without requiring multiple `@Header` parameters.
+
+---
+
+# ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**You need to consume only Partition 0 from `orders-topic`, start from Offset 100, manually commit offsets, and also log the topic and partition. How would you implement it?**
+
+### Best Answer
+
+> "I would use `@KafkaListener` with `@TopicPartition` and `@PartitionOffset(initialOffset="100")`. I would accept an `Acknowledgment` parameter and call `ack.acknowledge()` after successful processing. For metadata, I would either use `@Header(KafkaHeaders.RECEIVED_TOPIC)` and `@Header(KafkaHeaders.RECEIVED_PARTITION)` or simply inject `ConsumerRecordMetadata`."
+
+---
+
+# 📌 Key Points to Remember
+
+* Topic subscription methods:
+
+  * `topics`
+  * `topicPattern`
+  * `topicPartitions`
+* `@TopicPartition` assigns specific partitions.
+* `@PartitionOffset` sets the starting offset.
+* `SeekPosition` supports `BEGINNING`, `END`, and `TIMESTAMP`.
+* `ConsumerRecord` provides both payload and Kafka metadata.
+* `Acknowledgment` is used for **manual offset commits**.
+* `@Header` injects Kafka headers into the listener method.
+* `ConsumerRecordMetadata` is a cleaner way to access metadata.
+
+---
+
+# 🚀 Next Part (Topic 5 – Part 3)
+
+We'll cover the advanced features of `@KafkaListener`:
+
+* Batch Listeners (`List<String>`, `List<ConsumerRecord>`, `ConsumerRecords`)
+* `List<Message<?>>`
+* Batch Factory
+* `batch=true`
+* Annotation `properties`
+* SpEL (`#{}`), Property Placeholders (`${}`)
+* `__listener`
+* `beanRef`
+* `idIsGroup`
+* Per-listener consumer properties
+* Production best practices
+* Complete interview questions
+
 =======================================================================================================================
+# Spring Kafka - Receiving Messages
+
+# Topic 5 - Part 3
+
+# **@KafkaListener (Batch Listeners, SpEL, Properties & Advanced Features)**
+
+Based on the Spring Kafka documentation you shared. 
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak humne seekha
+
+* Basic `@KafkaListener`
+* Topic Assignment
+* Manual Ack
+* `@Header`
+* `ConsumerRecord`
+
+Ab question...
+
+**Agar mujhe ek-ek message nahi, ek saath 100 messages process karne ho to?**
+
+---
+
+# 👨‍🎓 Student
+
+Sir,
+
+Batch Listener use karenge.
+
+---
+
+# Teacher
+
+Bilkul.
+
+Aaj hum `@KafkaListener` ke advanced features seekhenge.
+
+---
+
+# Q1. Batch Listener kya hota hai?
+
+Normally
+
+```text
+Message1
+
+↓
+
+Listener
+
+----------------
+
+Message2
+
+↓
+
+Listener
+```
+
+Ek message.
+
+---
+
+Batch Listener
+
+```text
+Message1
+
+Message2
+
+Message3
+
+Message4
+
+↓
+
+One Listener Call
+```
+
+Documentation ke according Batch Listener `poll()` me aaye poore batch ko receive karta hai. 
+
+---
+
+# Q2. Batch Listener enable kaise karte hain?
+
+Container Factory me
+
+```java
+factory.setBatchListener(true);
+```
+
+Example
+
+```java
+@Bean
+public KafkaListenerContainerFactory<?> batchFactory() {
+
+    ConcurrentKafkaListenerContainerFactory<Integer,String> factory =
+            new ConcurrentKafkaListenerContainerFactory<>();
+
+    factory.setConsumerFactory(consumerFactory());
+
+    factory.setBatchListener(true);
+
+    return factory;
+}
+```
+
+Documentation me ye configuration diya gaya hai. 
+
+---
+
+# Internal Flow
+
+```text
+Kafka Broker
+
+↓
+
+poll()
+
+↓
+
+100 Records
+
+↓
+
+Batch Listener
+
+↓
+
+Business Logic
+```
+
+---
+
+# Q3. Batch Listener me List<String>
+
+Example
+
+```java
+@KafkaListener(
+topics="orders",
+containerFactory="batchFactory"
+)
+
+public void consume(
+
+List<String> orders
+
+){
+
+}
+```
+
+Spring
+
+Saare payloads
+
+List me de dega.
+
+---
+
+# Q4. Batch Listener me Headers
+
+Question
+
+Topic
+
+Partition
+
+Offset
+
+kaise milega?
+
+---
+
+Answer
+
+```java
+public void consume(
+
+List<String> orders,
+
+@Header(KafkaHeaders.RECEIVED_PARTITION)
+
+List<Integer> partitions,
+
+@Header(KafkaHeaders.OFFSET)
+
+List<Long> offsets
+
+)
+```
+
+Documentation me ye example diya gaya hai. 
+
+---
+
+Diagram
+
+```text
+Payload1
+
+Offset1
+
+---------------
+
+Payload2
+
+Offset2
+
+---------------
+
+Payload3
+
+Offset3
+```
+
+---
+
+# Q5. List<Message<?>>
+
+Question
+
+Payload ke saath
+
+Headers bhi chahiye.
+
+---
+
+Answer
+
+```java
+public void consume(
+
+List<Message<?>> list
+
+)
+```
+
+Har Message object me
+
+* Payload
+* Headers
+
+milte hain.
+
+Documentation me ye support diya gaya hai. 
+
+---
+
+# Q6. List<ConsumerRecord>
+
+Question
+
+Original Kafka Record chahiye.
+
+---
+
+Example
+
+```java
+public void consume(
+
+List<ConsumerRecord<Integer,String>>
+
+records
+
+)
+```
+
+Isme
+
+Topic
+
+Partition
+
+Offset
+
+Key
+
+Value
+
+sab milega.
+
+---
+
+# Q7. ConsumerRecords
+
+Spring 2.2
+
+Support.
+
+Example
+
+```java
+public void consume(
+
+ConsumerRecords<?,?>
+
+records
+
+)
+```
+
+Benefit
+
+Methods
+
+```text
+partitions()
+
+records(topicPartition)
+```
+
+use kar sakte ho.
+
+Documentation me ye feature explain hai. 
+
+---
+
+# Q8. Batch Filtering
+
+Question
+
+Batch me
+
+10 Records aaye.
+
+3 Invalid hain.
+
+Filter kar sakte hain?
+
+---
+
+Answer
+
+Yes.
+
+Batch Listener me
+
+RecordFilterStrategy
+
+use hota hai.
+
+Spring 2.8 se
+
+Entire batch
+
+ek saath filter kar sakte hain.
+
+
+
+---
+
+# Q9. Annotation Properties
+
+Question
+
+Sirf is listener ke liye
+
+Consumer property change karni hai.
+
+---
+
+Answer
+
+```java
+@KafkaListener(
+
+topics="orders",
+
+properties={
+
+"max.poll.records=100",
+
+"max.poll.interval.ms:60000"
+
+}
+
+)
+```
+
+Ye sirf
+
+Is Listener
+
+par apply hogi.
+
+Documentation me ye feature diya gaya hai. 
+
+---
+
+# Q10. groupId
+
+Question
+
+Annotation se hi
+
+Consumer Group de sakte hain?
+
+---
+
+Answer
+
+Yes.
+
+```java
+@KafkaListener(
+
+topics="orders",
+
+groupId="order-group"
+
+)
+```
+
+---
+
+# Q11. id vs groupId
+
+Documentation ka important point.
+
+Agar
+
+```java
+@KafkaListener(
+
+id="orders"
+
+)
+```
+
+Aur
+
+`groupId`
+
+nahi diya.
+
+To
+
+Default
+
+```text
+groupId = id
+```
+
+ban sakta hai.
+
+Agar purana behavior chahiye
+
+Use
+
+```text
+idIsGroup=false
+```
+
+
+
+---
+
+# Comparison
+
+| id                          | groupId        |
+| --------------------------- | -------------- |
+| Listener Identity           | Consumer Group |
+| Default group ban sakta hai | Explicit Group |
+
+---
+
+# Q12. Property Placeholder
+
+Example
+
+```java
+@KafkaListener(
+
+topics="${kafka.topic}"
+
+)
+```
+
+Meaning
+
+application.properties
+
+```properties
+kafka.topic=orders
+```
+
+Spring automatically value replace karega.
+
+---
+
+# Q13. SpEL Expression
+
+Example
+
+```java
+@KafkaListener(
+
+topics="#{myBean.topic}"
+
+)
+```
+
+Spring runtime par
+
+Bean se value lega.
+
+Documentation me SpEL support mention hai. 
+
+---
+
+# Q14. __listener
+
+Spring 2.1.2
+
+Special Token.
+
+Example
+
+```java
+@KafkaListener(
+
+topics="#{__listener.topic}"
+
+)
+```
+
+Meaning
+
+Current Listener object ki
+
+property use karo.
+
+Documentation me ye pseudo bean explain hai. 
+
+---
+
+# Q15. beanRef
+
+Question
+
+Agar
+
+Actual bean ka naam
+
+__listener
+
+hi ho?
+
+---
+
+Answer
+
+Use
+
+```java
+@KafkaListener(
+
+beanRef="__x"
+
+)
+```
+
+Documentation me `beanRef` isi purpose ke liye diya gaya hai. 
+
+---
+
+# Complete Flow
+
+```text
+Kafka Broker
+
+↓
+
+Batch Poll
+
+↓
+
+List<ConsumerRecord>
+
+↓
+
+@KafkaListener
+
+↓
+
+Business Logic
+
+↓
+
+Ack
+
+↓
+
+Commit Offset
+```
+
+---
+
+# Real Banking Example
+
+Bank
+
+Transactions Topic
+
+↓
+
+poll()
+
+↓
+
+200 Transactions
+
+↓
+
+Batch Listener
+
+↓
+
+Fraud Check
+
+↓
+
+DB Update
+
+↓
+
+Commit Offset
+
+Batch Processing
+
+↓
+
+Fast Processing
+
+---
+
+# Interview Questions
+
+## Q1. What is a Batch Listener?
+
+**Answer:**
+
+A Batch Listener receives all records returned by a single `poll()` call instead of processing one record at a time.
+
+---
+
+## Q2. How do you enable Batch Listener?
+
+**Answer:**
+
+Call
+
+```java
+factory.setBatchListener(true);
+```
+
+on the `ConcurrentKafkaListenerContainerFactory`.
+
+---
+
+## Q3. What are the supported batch method parameter types?
+
+**Answer:**
+
+* `List<String>`
+* `List<Message<?>>`
+* `List<ConsumerRecord<?,?>>`
+* `ConsumerRecords<?,?>`
+
+---
+
+## Q4. Why use `ConsumerRecords` instead of `List<ConsumerRecord>`?
+
+**Answer:**
+
+Because `ConsumerRecords` provides additional APIs such as `partitions()` and `records(TopicPartition)`.
+
+---
+
+## Q5. Can batch listeners receive headers?
+
+**Answer:**
+
+Yes. Metadata such as offsets, partitions, topics, and keys can be injected as parallel lists using `@Header`.
+
+---
+
+## Q6. What is the `properties` attribute of `@KafkaListener`?
+
+**Answer:**
+
+It allows overriding Kafka consumer properties for a specific listener without changing the global consumer factory configuration.
+
+---
+
+## Q7. What is the difference between `id` and `groupId`?
+
+**Answer:**
+
+* `id` identifies the listener.
+* `groupId` identifies the Kafka consumer group.
+* If `groupId` is not specified, `id` can be used as the group ID by default.
+
+---
+
+## Q8. What is `idIsGroup`?
+
+**Answer:**
+
+Setting `idIsGroup=false` restores the older behavior where the listener `id` is **not** automatically used as the consumer group ID.
+
+---
+
+## Q9. What is SpEL in `@KafkaListener`?
+
+**Answer:**
+
+SpEL (Spring Expression Language) allows dynamic values such as bean properties using expressions like `#{...}`.
+
+---
+
+## Q10. What is the purpose of `__listener`?
+
+**Answer:**
+
+`__listener` is a special pseudo bean that refers to the current listener instance, allowing expressions like `#{__listener.topic}`.
+
+---
+
+# ⭐ Real Interview Scenario
+
+### Interviewer:
+
+**Your application receives nearly 50,000 messages every minute. Would you use a Record Listener or a Batch Listener?**
+
+### Best Answer
+
+> "If the business requirement allows batch processing, I would use a Batch Listener because it processes all records from a single `poll()` call together. This reduces listener invocations and improves throughput. If every message must be processed independently with low latency, I would use a Record Listener instead."
+
+---
+
+# 📌 Key Points to Remember
+
+* Batch Listener processes **multiple records in one method call**.
+* Enable it using `factory.setBatchListener(true)`.
+* Supported parameters:
+
+  * `List<String>`
+  * `List<Message<?>>`
+  * `List<ConsumerRecord<?,?>>`
+  * `ConsumerRecords<?,?>`
+* Batch listeners can receive metadata using `@Header`.
+* `properties` overrides Kafka consumer properties for a single listener.
+* `id` identifies the listener, while `groupId` identifies the consumer group.
+* `idIsGroup=false` prevents `id` from becoming the default group ID.
+* SpEL (`#{...}`) and property placeholders (`${...}`) support dynamic configuration.
+* `__listener` refers to the current listener bean instance.
+* `beanRef` changes the default pseudo bean name if needed.
+
+---
+
+# ✅ Topic 5 – @KafkaListener Status
+
+You have now completed the complete `@KafkaListener` topic:
+
+* ✅ Part 1 – Basics & Configuration
+* ✅ Part 2 – Topic Assignment, Method Parameters & Manual Ack
+* ✅ Part 3 – Batch Listeners, Properties & Advanced Features
+
+This is one of the **highest-weightage topics** in Spring Kafka interviews and forms the foundation for almost every real-world Kafka consumer implementation.
+
 =======================================================================================================================
+
+Next topic : https://docs.spring.io/spring-kafka/reference/kafka/receiving-messages/listener-group-id.html
 =======================================================================================================================
 =======================================================================================================================
 =======================================================================================================================
