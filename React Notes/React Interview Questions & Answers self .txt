@@ -1002,3 +1002,4 @@ use karte hai.
 ---
 
 Ye **35 interview questions** tumhare current React notes ke liye enough hain. Agar tum ye confidently answer kar loge, to React ke basic interview round ke kaafi questions cover ho jayenge.
+=============================================================================================================================================

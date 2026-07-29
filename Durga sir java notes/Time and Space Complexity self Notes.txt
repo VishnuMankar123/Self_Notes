@@ -1,0 +1,2109 @@
+Bilkul Vishnu. Ye notes maine **interview point of view** se banaye hain. Isme ratne wali definitions nahi hain, balki concept hai jo tum interview me apne words me explain kar sakte ho.
+
+---
+
+# Time Complexity & Space Complexity Interview Notes
+
+---
+
+# 1. Time Complexity
+
+## Time Complexity kya hai?
+
+### Interview me aise bolo:
+
+> **Time Complexity batati hai ki input size badhne par algorithm kitna work karega ya kitne operations perform karega. Ye actual seconds nahi batati, sirf growth batati hai.**
+
+---
+
+## Easy Example
+
+```java
+for(int i=0;i<n;i++){
+    System.out.println(i);
+}
+```
+
+Agar
+
+```
+n = 5
+```
+
+Loop
+
+```
+5 times
+```
+
+Agar
+
+```
+n = 100
+```
+
+Loop
+
+```
+100 times
+```
+
+Isliye
+
+```
+Time Complexity = O(n)
+```
+
+---
+
+# 2. Space Complexity
+
+## Space Complexity kya hai?
+
+### Interview me aise bolo:
+
+> **Space Complexity batati hai ki algorithm ko execute karne ke liye extra memory kitni chahiye. Hum input ki memory nahi, sirf extra memory count karte hain.**
+
+---
+
+## Example
+
+```java
+int a = 10;
+int b = 20;
+```
+
+Sirf
+
+```
+2 variables
+```
+
+Chahe input kuch bhi ho.
+
+```
+Space Complexity = O(1)
+```
+
+---
+
+## Example
+
+```java
+int arr[] = new int[n];
+```
+
+Agar
+
+```
+n = 10
+```
+
+Memory
+
+```
+10 integers
+```
+
+Agar
+
+```
+n = 1000
+```
+
+Memory
+
+```
+1000 integers
+```
+
+```
+Space Complexity = O(n)
+```
+
+---
+
+# Big-O Notation
+
+## O kya hota hai?
+
+> **O ka matlab Order of Growth hai. Ye batata hai ki input badhne par algorithm ki performance kis rate se grow karegi.**
+
+Example
+
+```
+O(1)
+O(log n)
+O(n)
+O(n²)
+```
+
+Yaha
+
+```
+n = Number of Inputs
+```
+
+---
+
+# O(1)
+
+## Meaning
+
+Constant Time
+
+Input kitna bhi ho
+
+```
+Work same
+```
+
+Example
+
+```java
+System.out.println(arr[5]);
+```
+
+Chahe
+
+```
+10 elements
+```
+
+ya
+
+```
+10 lakh elements
+```
+
+Ek hi operation
+
+```
+O(1)
+```
+
+---
+
+# O(n)
+
+## Meaning
+
+Linear Time
+
+Input double
+
+↓
+
+Work double
+
+Example
+
+```java
+for(int i=0;i<n;i++){
+}
+```
+
+```
+O(n)
+```
+
+---
+
+# O(n²)
+
+## Meaning
+
+Nested Loop
+
+Example
+
+```java
+for(int i=0;i<n;i++){
+
+    for(int j=0;j<n;j++){
+
+    }
+
+}
+```
+
+Outer
+
+```
+n
+```
+
+Inner
+
+```
+n
+```
+
+Total
+
+```
+n × n
+
+= n²
+```
+
+```
+O(n²)
+```
+
+---
+
+# O(log n)
+
+## Meaning
+
+Har step me data half ho jata hai.
+
+Example
+
+Binary Search
+
+```
+1000
+
+↓
+
+500
+
+↓
+
+250
+
+↓
+
+125
+
+↓
+
+62
+
+↓
+
+31
+
+↓
+
+15
+
+↓
+
+7
+
+↓
+
+3
+
+↓
+
+1
+```
+
+Har baar
+
+```
+Half
+```
+
+Isliye
+
+```
+O(log n)
+```
+
+---
+
+# Real Life Examples
+
+## O(1)
+
+TV ON
+
+Ek button dabaya.
+
+Bas.
+
+---
+
+## O(n)
+
+Class me Vishnu ko dhoondhna.
+
+Har student dekhna padega.
+
+---
+
+## O(log n)
+
+Dictionary me word search karna.
+
+Beech se start karte hain.
+
+Har baar half pages remove.
+
+---
+
+## O(n²)
+
+Class ke har student ko har student se introduce karwana.
+
+100 students
+
+↓
+
+```
+100 ×100
+```
+
+---
+
+# Factorial Example
+
+## Using Loop
+
+```java
+public static long factorial(int n){
+
+    long fact=1;
+
+    for(int i=1;i<=n;i++){
+
+        fact*=i;
+
+    }
+
+    return fact;
+
+}
+```
+
+### Time Complexity
+
+Loop
+
+↓
+
+```
+n times
+```
+
+```
+O(n)
+```
+
+### Space Complexity
+
+Variables
+
+```
+fact
+
+i
+```
+
+Bas.
+
+```
+O(1)
+```
+
+---
+
+## Factorial using Recursion
+
+```java
+public static long factorial(int n){
+
+    if(n==1)
+        return 1;
+
+    return n*factorial(n-1);
+
+}
+```
+
+Call Stack
+
+```
+factorial(5)
+
+↓
+
+factorial(4)
+
+↓
+
+factorial(3)
+
+↓
+
+factorial(2)
+
+↓
+
+factorial(1)
+```
+
+### Time Complexity
+
+```
+O(n)
+```
+
+### Space Complexity
+
+Har function call memory use karta hai.
+
+```
+5 Calls
+
+↓
+
+5 Stack Frames
+```
+
+```
+O(n)
+```
+
+---
+
+# Kaise Identify Kare?
+
+| Code Pattern  | Time     | Space |
+| ------------- | -------- | ----- |
+| `arr[i]`      | O(1)     | O(1)  |
+| Single Loop   | O(n)     | O(1)  |
+| Nested Loop   | O(n²)    | O(1)  |
+| Binary Search | O(log n) | O(1)  |
+| New Array     | O(n)     | O(n)  |
+| Recursion     | O(n)     | O(n)  |
+
+---
+
+# Interview Questions
+
+### Q1. What is Time Complexity?
+
+> Time Complexity batati hai ki input size badhne par algorithm kitna work karega.
+
+---
+
+### Q2. What is Space Complexity?
+
+> Space Complexity batati hai ki algorithm ko execute karne ke liye extra memory kitni chahiye.
+
+---
+
+### Q3. Difference between Time and Space Complexity?
+
+| Time Complexity           | Space Complexity             |
+| ------------------------- | ---------------------------- |
+| Measures execution growth | Measures extra memory growth |
+| Focuses on speed          | Focuses on RAM usage         |
+
+---
+
+### Q4. Which is better?
+
+```
+O(1)
+
+>
+
+O(log n)
+
+>
+
+O(n)
+
+>
+
+O(n log n)
+
+>
+
+O(n²)
+
+>
+
+O(2ⁿ)
+```
+
+---
+
+# Interview Tricks
+
+### Agar
+
+```java
+arr[5]
+```
+
+👉 O(1)
+
+---
+
+### Agar
+
+```java
+for(...)
+```
+
+👉 O(n)
+
+---
+
+### Agar
+
+```java
+for(...)
+    for(...)
+```
+
+👉 O(n²)
+
+---
+
+### Agar
+
+```
+Half Data
+```
+
+👉 O(log n)
+
+---
+
+### Agar
+
+```
+New Array/List/Map
+```
+
+👉 Space = O(n)
+
+---
+
+### Agar
+
+```
+Recursion
+```
+
+👉 Space = O(n)
+
+---
+
+# ⭐ Final 30-Second Interview Answer
+
+> **Time Complexity batati hai ki input size badhne par algorithm kitne operations perform karega, jabki Space Complexity batati hai ki algorithm ko execute karne ke liye extra memory kitni chahiye. Dono ko Big-O notation jaise O(1), O(log n), O(n) aur O(n²) se represent kiya jata hai. Lower complexity generally better hoti hai kyunki algorithm zyada efficient hota hai.**
+
+---
+
+Ye notes **4–6 YOE Java Backend interviews** ke liye kaafi hain. Inke baad tum kisi bhi program (factorial, palindrome, reverse string, binary search, sorting, etc.) ki **Time aur Space Complexity** confidently explain kar paoge.
+===================================================================================================================================
+Bahut achha question. 👍 **Ye point bahut students ko confuse karta hai.**
+
+Tumne pucha:
+
+```java
+int arr[] = new int[n];
+```
+
+Maine bola tha:
+
+```
+Time = O(1)
+Space = O(n)
+```
+
+Tumhara doubt hai **Time O(1) kaise? Array to n size ka bana hai!**
+
+Chalo step by step samajhte hain.
+
+---
+
+# Pehle ye samjho
+
+Time Complexity aur Space Complexity **alag-alag cheezein measure karti hain.**
+
+### Time Complexity
+
+👉 Kitna **kaam (operations)** hua?
+
+### Space Complexity
+
+👉 Kitni **extra memory** use hui?
+
+---
+
+# Example 1
+
+```java
+int a = 10;
+```
+
+CPU ne kya kiya?
+
+Bas ek variable banaya.
+
+```
+Operation = 1
+```
+
+```
+Time = O(1)
+```
+
+Memory
+
+```
+1 integer
+```
+
+```
+Space = O(1)
+```
+
+---
+
+# Example 2
+
+```java
+int arr[] = new int[5];
+```
+
+Memory me kya bana?
+
+```
++----+----+----+----+----+
+| 0  | 0  | 0  | 0  | 0  |
++----+----+----+----+----+
+```
+
+Memory kitni lagi?
+
+5 integers
+
+```
+Space = O(5)
+```
+
+General form me
+
+```
+Space = O(n)
+```
+
+---
+
+# Agar
+
+```java
+int arr[] = new int[1000];
+```
+
+Memory
+
+```
+1000 integers
+```
+
+```
+Space = O(n)
+```
+
+---
+
+# Time O(1) kyu?
+
+Code dekho
+
+```java
+int arr[] = new int[n];
+```
+
+Ye **sirf ek statement** hai.
+
+CPU ko sirf ye instruction mila:
+
+> "n size ka array allocate karo."
+
+Program me **loop nahi chal raha**.
+
+Tumne khud `n` baar kuch execute nahi kiya.
+
+Isliye interview level par is statement ki **Time Complexity O(1)** mani jati hai.
+
+---
+
+# Compare karo
+
+### Case 1
+
+```java
+int arr[] = new int[n];
+```
+
+Operations
+
+```
+1 statement
+```
+
+```
+Time = O(1)
+```
+
+Memory
+
+```
+n integers
+```
+
+```
+Space = O(n)
+```
+
+---
+
+### Case 2
+
+```java
+int arr[] = new int[n];
+
+for(int i=0;i<n;i++){
+
+    arr[i]=i;
+
+}
+```
+
+Ab kya hua?
+
+Loop
+
+↓
+
+```
+n times
+```
+
+Ab CPU
+
+```
+arr[0]
+
+arr[1]
+
+arr[2]
+
+...
+
+arr[n-1]
+```
+
+sab fill kar raha hai.
+
+Ab
+
+```
+Time = O(n)
+
+Space = O(n)
+```
+
+---
+
+# Ek aur Example
+
+```java
+ArrayList<Integer> list = new ArrayList<>();
+```
+
+Abhi list empty hai.
+
+```
+Time = O(1)
+
+Space = O(1)
+```
+
+Lekin
+
+```java
+for(int i=0;i<n;i++){
+
+    list.add(i);
+
+}
+```
+
+Ab
+
+```
+Time = O(n)
+
+Space = O(n)
+```
+
+---
+
+# Interview Trick
+
+Har baar ye 2 questions pucho:
+
+### Question 1
+
+**Kitni baar code execute hua?**
+
+```java
+int arr[] = new int[n];
+```
+
+Sirf **1 baar**.
+
+👉 Time = **O(1)**
+
+---
+
+### Question 2
+
+**Memory kitni reserve hui?**
+
+```
+n elements
+```
+
+👉 Space = **O(n)**
+
+---
+
+# Ek Important Note (Advanced)
+
+Agar tum operating system ya JVM ke **internal implementation** ki baat karo, to array allocate karne me memory initialize karne ka kaam ho sakta hai, jiska actual cost `O(n)` ho sakta hai. Lekin **Data Structures & Algorithms interviews** me hum complexity **algorithm ke perspective** se nikalte hain. Isliye:
+
+```java
+int arr[] = new int[n];
+```
+
+ko generally:
+
+* **Time = O(1)**
+* **Space = O(n)**
+
+mana jata hai.
+
+---
+
+## 📌 Main tumhe sirf formulas nahi sikhana chahta.
+
+Main tumhe **"Time & Space Complexity kaise sochte hain"** sikhana chahta hoon.
+
+Uske liye hum **50 Java programs** lenge aur har program me ye 4 steps follow karenge:
+
+1. Dry Run
+2. Time Complexity kaise nikali
+3. Space Complexity kaise nikali
+4. Interview me 20-second explanation
+
+Ye complete karne ke baad tum kisi bhi naye program ki complexity khud nikal paoge.
+
+====================================================================================================================================
+Bahut achha. **Ab mujhe samajh aa gaya tum kahan atak rahe ho.**
+
+Tum **formula yaad kar rahe ho**, lekin **Space Complexity ka matlab hi clear nahi hua hai.**
+
+Main bilkul basic se samjhata hoon.
+
+---
+
+# Sabse pehle ek question.
+
+Tumhare room me ek table hai.
+
+Us table par sirf ye rakha hai:
+
+```
+Mobile
+```
+
+Kitni jagah (space) use hui?
+
+👉 Thodi si.
+
+---
+
+Ab table par ye rakho.
+
+```
+Mobile
+Laptop
+Bag
+Bottle
+Books
+```
+
+Ab kitni jagah use hui?
+
+👉 Pehle se zyada.
+
+## Yahi Space Complexity hai.
+
+**Jitni extra memory use hogi, utni Space Complexity badhegi.**
+
+---
+
+# Example 1
+
+```java
+int a = 10;
+int b = 20;
+```
+
+Memory me kya bana?
+
+```
+Memory
+
++------+
+| a=10 |
++------+
+
++------+
+| b=20 |
++------+
+```
+
+Sirf **2 variables**.
+
+Chahe input 10 ho ya 10000.
+
+Memory hamesha 2 hi variables ki.
+
+```
+Space = O(1)
+```
+
+---
+
+# Example 2
+
+```java
+int arr[] = new int[5];
+```
+
+Memory
+
+```
++----+----+----+----+----+
+| 0  | 0  | 0  | 0  | 0  |
++----+----+----+----+----+
+```
+
+Kitne boxes bane?
+
+👉 **5**
+
+---
+
+Agar
+
+```java
+int arr[] = new int[100];
+```
+
+Memory
+
+```
++----+----+----+----+----+----+----+....100 boxes
+```
+
+Kitne boxes?
+
+👉 **100**
+
+Input badha.
+
+Memory bhi badhi.
+
+```
+Space = O(n)
+```
+
+---
+
+# Example 3 (Yehi tumhara doubt hai)
+
+```java
+String s = "HELLO";
+
+StringBuilder sb = new StringBuilder();
+
+for(char c : s.toCharArray()){
+
+    sb.append(c);
+
+}
+```
+
+### Start
+
+Memory
+
+```
+String
+
+HELLO
+```
+
+Ye input hai.
+
+**Input ko Space Complexity me count nahi karte.**
+
+---
+
+### StringBuilder bana
+
+```
+sb
+
+[]
+```
+
+Abhi empty hai.
+
+---
+
+### First Iteration
+
+```
+sb
+
+[H]
+```
+
+Extra Memory
+
+```
+1 character
+```
+
+---
+
+### Second Iteration
+
+```
+sb
+
+[H E]
+```
+
+Extra Memory
+
+```
+2 characters
+```
+
+---
+
+### Third
+
+```
+[H E L]
+```
+
+---
+
+### Fourth
+
+```
+[H E L L]
+```
+
+---
+
+### Fifth
+
+```
+[H E L L O]
+```
+
+Ab StringBuilder me kitne characters hain?
+
+👉 **5**
+
+---
+
+Agar input hota
+
+```
+HELLOWORLD
+```
+
+StringBuilder
+
+```
+H E L L O W O R L D
+```
+
+Kitne characters?
+
+👉 **10**
+
+---
+
+Agar input me
+
+1000 characters
+
+To StringBuilder me?
+
+👉 **1000 characters**
+
+---
+
+Isliye
+
+```
+Extra Memory
+
+↓
+
+Input ke saath badh rahi hai
+
+↓
+
+Space = O(n)
+```
+
+---
+
+# Ek aur Example
+
+```java
+List<Integer> list = new ArrayList<>();
+
+list.add(10);
+```
+
+Memory
+
+```
+[10]
+```
+
+---
+
+```java
+list.add(20);
+```
+
+Memory
+
+```
+[10,20]
+```
+
+---
+
+```java
+list.add(30);
+```
+
+Memory
+
+```
+[10,20,30]
+```
+
+Har add ke saath memory badh rahi hai.
+
+```
+Space = O(n)
+```
+
+---
+
+# Ab ye dekho
+
+```java
+for(int i=0;i<n;i++){
+
+    System.out.println(i);
+
+}
+```
+
+Memory me kya store hua?
+
+Kuch bhi nahi.
+
+Har baar print hua aur khatam.
+
+Sirf
+
+```
+i
+```
+
+variable hai.
+
+Chahe loop 10 baar chale ya 10 lakh baar.
+
+Variable ek hi hai.
+
+```
+Space = O(1)
+```
+
+---
+
+# Golden Rule
+
+## Question 1
+
+**Kya naya Array bana?**
+
+```java
+new int[n]
+```
+
+✅ Space = O(n)
+
+---
+
+## Question 2
+
+**Kya nayi List bani?**
+
+```java
+ArrayList
+```
+
+Aur usme n elements add hue.
+
+✅ Space = O(n)
+
+---
+
+## Question 3
+
+**Kya StringBuilder me n characters store hue?**
+
+✅ Space = O(n)
+
+---
+
+## Question 4
+
+**Sirf variables hain?**
+
+```java
+int i;
+int sum;
+```
+
+✅ Space = O(1)
+
+---
+
+# ⭐ Sabse Important Concept
+
+Main tumse ek question puchhta hoon.
+
+```java
+for(int i=0;i<1000000;i++){
+
+    System.out.println(i);
+
+}
+```
+
+Ye loop **10 lakh baar** chala.
+
+### Batao:
+
+Loop ke baad memory me kya bacha?
+
+Sirf
+
+```
+i
+```
+
+Variable.
+
+10 lakh numbers memory me save hue?
+
+❌ Nahi.
+
+Sirf print hue.
+
+Isliye
+
+```
+Space = O(1)
+```
+
+---
+
+Lekin agar main ye karu:
+
+```java
+List<Integer> list = new ArrayList<>();
+
+for(int i=0;i<1000000;i++){
+
+    list.add(i);
+
+}
+```
+
+Ab kya hua?
+
+Memory me save hua:
+
+```
+0
+1
+2
+3
+4
+...
+1000000
+```
+
+Ab 10 lakh numbers memory me pade hain.
+
+Isliye:
+
+```
+Space = O(n)
+```
+
+---
+
+## 💡 Mujhe lagta hai tumhari confusion ek hi jagah hai:
+
+**Tum "print karna" aur "memory me store karna" dono ko same samajh rahe ho.**
+
+Ye dono alag cheezein hain.
+
+* **Print** → Memory nahi badhti → `O(1)` Space
+* **Store (Array/List/StringBuilder)** → Memory badhti hai → `O(n)` Space
+
+Agar ye concept clear ho gaya, to tum 90% Space Complexity khud nikal loge.
+
+====================================================================================================================================
+Bilkul! **Yahi actual skill hai interview ki.** 🎯
+
+Tumhe **O(n), O(log n)** yaad karna nahi hai.
+
+Tumhe **kisi bhi program ko dekhkar uski Time aur Space Complexity nikalna aana chahiye.**
+
+Aur uske liye ek **algorithm (steps)** hota hai.
+
+Main tumhe wahi sikhata hu.
+
+---
+
+# Step-by-Step Formula (Lifetime)
+
+Jab bhi koi program mile, ye 5 questions pucho.
+
+---
+
+# STEP 1 - Loop hai ya nahi?
+
+Agar
+
+```java
+for(int i=0;i<n;i++)
+```
+
+To
+
+Loop
+
+↓
+
+```text
+n times
+```
+
+Time
+
+```text
+O(n)
+```
+
+---
+
+# Example
+
+```java
+for(int i=0;i<n;i++){
+
+    System.out.println(i);
+
+}
+```
+
+Questions
+
+Loop kitni baar?
+
+↓
+
+n
+
+Answer
+
+```text
+Time = O(n)
+
+Space = O(1)
+```
+
+---
+
+# STEP 2 - Nested Loop hai?
+
+Example
+
+```java
+for(int i=0;i<n;i++){
+
+    for(int j=0;j<n;j++){
+
+        System.out.println(i+j);
+
+    }
+
+}
+```
+
+Questions
+
+Outer
+
+↓
+
+n
+
+Inner
+
+↓
+
+n
+
+Total
+
+↓
+
+n × n
+
+↓
+
+```text
+O(n²)
+```
+
+Variables
+
+```text
+i
+
+j
+```
+
+Bas
+
+```text
+Space = O(1)
+```
+
+---
+
+# STEP 3 - Half ho raha hai?
+
+Example
+
+```java
+while(low<=high){
+
+    int mid=(low+high)/2;
+
+    if(arr[mid]==key)
+        return mid;
+
+    if(key>arr[mid])
+        low=mid+1;
+
+    else
+        high=mid-1;
+
+}
+```
+
+Question
+
+Har step me
+
+```text
+Half Data
+```
+
+remove ho raha?
+
+Yes.
+
+```text
+Time = O(log n)
+```
+
+Variables
+
+```text
+low
+
+high
+
+mid
+```
+
+Bas.
+
+```text
+Space = O(1)
+```
+
+---
+
+# STEP 4 - New Array bana?
+
+Example
+
+```java
+int result[]=new int[n];
+```
+
+Question
+
+Extra memory?
+
+↓
+
+n
+
+Answer
+
+```text
+Space = O(n)
+```
+
+---
+
+# STEP 5 - Recursion hai?
+
+Example
+
+```java
+factorial(5)
+```
+
+Call
+
+↓
+
+```text
+5
+
+↓
+
+4
+
+↓
+
+3
+
+↓
+
+2
+
+↓
+
+1
+```
+
+Kitne Stack Frames?
+
+↓
+
+n
+
+Answer
+
+```text
+Time = O(n)
+
+Space = O(n)
+```
+
+---
+
+# Ab 10 Programs Solve Karte Hai
+
+---
+
+# Program 1
+
+```java
+System.out.println("Hello");
+```
+
+Questions
+
+Loop?
+
+No
+
+Recursion?
+
+No
+
+Array?
+
+No
+
+Answer
+
+```text
+Time = O(1)
+
+Space = O(1)
+```
+
+---
+
+# Program 2
+
+```java
+for(int i=0;i<n;i++){
+
+}
+```
+
+Loop
+
+↓
+
+n
+
+Answer
+
+```text
+Time = O(n)
+
+Space = O(1)
+```
+
+---
+
+# Program 3
+
+```java
+for(int i=0;i<n;i++){
+
+    for(int j=0;j<n;j++){
+
+    }
+
+}
+```
+
+Outer
+
+↓
+
+n
+
+Inner
+
+↓
+
+n
+
+Total
+
+↓
+
+n²
+
+Answer
+
+```text
+Time = O(n²)
+
+Space = O(1)
+```
+
+---
+
+# Program 4
+
+```java
+for(int i=0;i<n;i++){
+
+    for(int j=0;j<m;j++){
+
+    }
+
+}
+```
+
+Outer
+
+↓
+
+n
+
+Inner
+
+↓
+
+m
+
+Answer
+
+```text
+Time = O(n*m)
+
+Space = O(1)
+```
+
+---
+
+# Program 5
+
+```java
+int arr[]=new int[n];
+```
+
+Loop?
+
+No
+
+Array?
+
+Yes
+
+Answer
+
+```text
+Time = O(1)
+
+Space = O(n)
+```
+
+---
+
+# Program 6
+
+```java
+ArrayList<Integer> list
+=
+new ArrayList<>();
+```
+
+Question
+
+List empty hai.
+
+Memory
+
+↓
+
+Constant
+
+```text
+Time = O(1)
+
+Space = O(1)
+```
+
+Agar
+
+```java
+for(int i=0;i<n;i++){
+
+    list.add(i);
+
+}
+```
+
+Ab
+
+List me
+
+n elements
+
+```text
+Time = O(n)
+
+Space = O(n)
+```
+
+---
+
+# Program 7
+
+```java
+StringBuilder sb
+=
+new StringBuilder();
+
+for(char c:s.toCharArray()){
+
+    sb.append(c);
+
+}
+```
+
+Loop
+
+↓
+
+n
+
+StringBuilder
+
+↓
+
+n characters
+
+Answer
+
+```text
+Time = O(n)
+
+Space = O(n)
+```
+
+---
+
+# Program 8
+
+```java
+Collections.sort(list);
+```
+
+Java TimSort
+
+```text
+Time = O(n log n)
+
+Space = O(n)
+```
+
+---
+
+# Program 9
+
+```java
+Arrays.sort(arr);
+```
+
+Primitive Array
+
+```text
+Dual Pivot Quick Sort
+
+Average
+
+O(n log n)
+
+Space
+
+O(log n)
+```
+
+---
+
+# Program 10
+
+```java
+public int fact(int n){
+
+    if(n==1)
+        return 1;
+
+    return n*fact(n-1);
+
+}
+```
+
+Calls
+
+↓
+
+n
+
+Answer
+
+```text
+Time
+
+O(n)
+
+Space
+
+O(n)
+```
+
+---
+
+# Interview Shortcut
+
+## Question 1
+
+Loop kitne hain?
+
+| Loops       | Time  |
+| ----------- | ----- |
+| No Loop     | O(1)  |
+| One Loop    | O(n)  |
+| Two Loops   | O(n²) |
+| Three Loops | O(n³) |
+
+---
+
+## Question 2
+
+Har step me data half?
+
+↓
+
+Yes
+
+↓
+
+```text
+O(log n)
+```
+
+---
+
+## Question 3
+
+New Array/List/Map bana?
+
+↓
+
+Yes
+
+↓
+
+```text
+Space = O(n)
+```
+
+---
+
+## Question 4
+
+Recursion?
+
+↓
+
+Yes
+
+↓
+
+```text
+Space = O(n)
+```
+
+---
+
+# Real Interview
+
+Interviewer
+
+Reverse String
+
+```java
+String reverse(String s){
+
+    StringBuilder sb
+    =
+    new StringBuilder();
+
+    for(int i=s.length()-1;i>=0;i--){
+
+        sb.append(s.charAt(i));
+
+    }
+
+    return sb.toString();
+
+}
+```
+
+Tum kaise sochoge?
+
+Loop?
+
+↓
+
+n
+
+StringBuilder?
+
+↓
+
+n
+
+Answer
+
+```text
+Time
+
+O(n)
+
+Space
+
+O(n)
+```
+
+---
+
+# ⭐ Ye hai asli trick jo interviewer dekhte hain
+
+Har code ko dekhkar sirf ye 4 questions pucho:
+
+1. **Kitne loops hain?** → Time
+2. **Data half ho raha hai?** → O(log n)
+3. **New memory (array/list/map/stringbuilder) ban rahi hai?** → Space
+4. **Recursion hai?** → Stack Space
+
+---
+
+## 📚 Main tumhare liye ek complete module bana sakta hoon:
+
+**"100 Java Programs + Time Complexity + Space Complexity + Dry Run + Interview Logic"**
+
+Isme har program ke niche ye 4 cheeze hongi:
+
+* ✅ Dry Run
+* ✅ Time Complexity kaise nikali (step by step)
+* ✅ Space Complexity kaise nikali
+* ✅ Interview me 20-second explanation
+
+Agar tum ye 100 programs kar loge, to interview me **koi bhi program de diya jaye**, tum uski complexity khud nikal paoge.

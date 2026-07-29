@@ -1,0 +1,6293 @@
+Excellent! Yehi sahi starting point hai. Agar **Module 1 (Stream Basics)** strong ho gaya, to baaki Java 8 (filter, map, groupingBy, reduce, etc.) bahut easy lagne lagega.
+
+Main tumhe **interview + practical + logic building** style me sikhaunga.
+
+---
+
+# MODULE 1 : Java 8 Stream Basics
+
+## Part 1 : Stream Kya Hai?
+
+### Definition (Interview)
+
+**Stream is a sequence of elements that supports functional operations to process data without modifying the original collection.**
+
+### Simple Hindi-English
+
+Socho tumhare paas ek List hai.
+
+```java
+List<String> names =
+Arrays.asList("Vishnu","Rahul","Amit");
+```
+
+Ab tum
+
+* filter karna chahte ho
+* sort karna chahte ho
+* uppercase karna chahte ho
+* count karna chahte ho
+
+Ye sab kaam Stream karta hai.
+
+So,
+
+```text
+Collection
+      |
+      v
+  Stream
+      |
+      v
+Processing
+      |
+      v
+Result
+```
+
+---
+
+# Real Life Example
+
+Socho Amazon Warehouse hai.
+
+```
+Products
+
+↓
+
+Filter Electronics
+
+↓
+
+Sort Price
+
+↓
+
+Discount
+
+↓
+
+Pack
+
+↓
+
+Deliver
+```
+
+Java Stream bhi exactly yehi karta hai.
+
+```
+List
+
+↓
+
+Filter
+
+↓
+
+Map
+
+↓
+
+Sort
+
+↓
+
+Collect
+```
+
+---
+
+# Stream ki Definition Simple Language
+
+> Stream data ko process karta hai.
+>
+> Original data ko change nahi karta.
+
+Example
+
+```java
+List<Integer> list =
+Arrays.asList(5,2,1,4,3);
+
+list.stream()
+.sorted()
+.forEach(System.out::println);
+```
+
+Output
+
+```
+1
+2
+3
+4
+5
+```
+
+Original List
+
+```
+5 2 1 4 3
+```
+
+Still same.
+
+---
+
+# Important Interview Point
+
+## Stream Original Collection Change Nahi Karta
+
+Example
+
+```java
+List<Integer> list =
+Arrays.asList(5,2,1);
+
+list.stream()
+.sorted()
+.forEach(System.out::println);
+
+System.out.println(list);
+```
+
+Output
+
+```
+1
+2
+5
+
+[5,2,1]
+```
+
+Original list same hai.
+
+**Interview Question**
+
+**Q : Does Stream modify original Collection?**
+
+**Answer**
+
+**No. Stream never modifies the original collection. It only processes data and returns a new result.**
+
+---
+
+# Why Stream Introduced?
+
+Java 7 me
+
+```java
+for(int i=0;i<list.size();i++){
+
+}
+```
+
+ya
+
+```java
+for(Integer i:list){
+
+}
+```
+
+Bahut saara boilerplate code.
+
+Java 8 ne kaha
+
+```
+Less Code
+
+Readable
+
+Functional Programming
+
+Parallel Processing
+```
+
+Isliye Stream introduce hua.
+
+---
+
+# Stream Pipeline
+
+Har Stream program me 3 parts hote hain.
+
+```
+Source
+
+↓
+
+Intermediate Operations
+
+↓
+
+Terminal Operation
+```
+
+Ye bahut important hai.
+
+Har interview me poochte hain.
+
+---
+
+# Example
+
+```java
+List<String> names =
+Arrays.asList("Amit","Rahul","Ankit");
+```
+
+```
+Source
+
+↓
+
+names.stream()
+
+↓
+
+filter()
+
+↓
+
+map()
+
+↓
+
+collect()
+```
+
+Pipeline
+
+```
+List
+
+↓
+
+Stream
+
+↓
+
+Filter
+
+↓
+
+Map
+
+↓
+
+Collect
+```
+
+---
+
+# Source Kya Hai?
+
+Jaha se Stream start hoti hai.
+
+Example
+
+```java
+list.stream()
+```
+
+Source = List
+
+Example
+
+```java
+Arrays.stream(arr)
+```
+
+Source = Array
+
+Example
+
+```java
+Stream.of(...)
+```
+
+Source = Values
+
+---
+
+# Interview Question
+
+### Stream ke Source kya ho sakte hain?
+
+Answer
+
+```
+Collection
+
+Array
+
+Stream.of()
+
+Files
+
+BufferedReader
+
+Random
+
+IntStream
+
+LongStream
+
+DoubleStream
+```
+
+---
+
+# Stream Pipeline Example
+
+```java
+List<String> names =
+Arrays.asList("Amit","Rahul","Ankit");
+```
+
+```
+names.stream()
+
+↓
+
+filter()
+
+↓
+
+map()
+
+↓
+
+collect()
+```
+
+Har Stream isi structure me hota hai.
+
+---
+
+# Flow Diagram
+
+```
+Collection
+
+↓
+
+stream()
+
+↓
+
+filter()
+
+↓
+
+map()
+
+↓
+
+sorted()
+
+↓
+
+collect()
+
+↓
+
+Result
+```
+
+Ye diagram yaad kar lo.
+
+---
+
+# Stream Components
+
+Har Stream me sirf 3 cheeze hoti hain.
+
+```
+Source
+
+Intermediate
+
+Terminal
+```
+
+---
+
+# Source Example
+
+```java
+List<String> list =
+Arrays.asList("A","B");
+```
+
+```
+list.stream()
+```
+
+Source.
+
+---
+
+# Intermediate Example
+
+```java
+filter()
+
+map()
+
+sorted()
+
+distinct()
+
+limit()
+
+skip()
+```
+
+Ye sab intermediate hain.
+
+---
+
+# Terminal Example
+
+```java
+collect()
+
+count()
+
+forEach()
+
+reduce()
+
+findFirst()
+
+min()
+
+max()
+```
+
+Ye sab terminal hain.
+
+---
+
+# Most Important Rule
+
+```
+One Stream
+
+↓
+
+Multiple Intermediate
+
+↓
+
+Only One Terminal
+```
+
+Example
+
+```java
+list.stream()
+.filter(...)
+.map(...)
+.sorted()
+.collect(Collectors.toList());
+```
+
+Valid.
+
+---
+
+# Invalid Example
+
+```java
+list.stream()
+.collect(...)
+.collect(...);
+```
+
+Galat.
+
+Terminal ke baad stream khatam.
+
+---
+
+# Stream Execution
+
+Question
+
+Ye code execute hoga?
+
+```java
+list.stream()
+.filter(i->i>5);
+```
+
+Answer
+
+NO
+
+Kyun?
+
+Kyunki terminal operation nahi hai.
+
+---
+
+# Correct
+
+```java
+list.stream()
+.filter(i->i>5)
+.collect(Collectors.toList());
+```
+
+Ab execute hoga.
+
+---
+
+# Interview Question
+
+**Q : Can Stream work without terminal operation?**
+
+Answer
+
+No.
+
+Without terminal operation Stream execute nahi hota.
+
+---
+
+# Lazy Evaluation
+
+Ye Java 8 ka favourite interview topic hai.
+
+Example
+
+```java
+list.stream()
+.filter(i->{
+
+System.out.println(i);
+
+return i>2;
+
+});
+```
+
+Output?
+
+```
+Nothing
+```
+
+Kyuki execute hi nahi hua.
+
+Ab
+
+```java
+list.stream()
+.filter(i->{
+
+System.out.println(i);
+
+return i>2;
+
+})
+.collect(Collectors.toList());
+```
+
+Output
+
+```
+1
+2
+3
+4
+5
+```
+
+Ab execute hua.
+
+---
+
+# Why?
+
+Intermediate operations lazy hote hain.
+
+Execution tab hota hai jab terminal operation aata hai.
+
+---
+
+# Easy Formula
+
+```
+Intermediate
+
+↓
+
+Returns Stream
+
+↓
+
+No Execution
+
+↓
+
+Terminal
+
+↓
+
+Execution Starts
+
+↓
+
+Final Result
+```
+
+Isko ratna nahi, samajhna.
+
+---
+
+# Interview Question
+
+**Q : Why are Streams Lazy?**
+
+Answer
+
+Lazy evaluation improves performance because processing starts only when a terminal operation is invoked.
+
+---
+
+# Internal Iteration
+
+Java 7
+
+```java
+for(Integer i:list){
+
+System.out.println(i);
+
+}
+```
+
+Tum iterate kar rahe ho.
+
+Java 8
+
+```java
+list.stream()
+.forEach(System.out::println);
+```
+
+Stream iterate kar raha hai.
+
+---
+
+# Interview Question
+
+Difference between External and Internal Iteration?
+
+| External Iteration      | Internal Iteration        |
+| ----------------------- | ------------------------- |
+| for loop                | Stream                    |
+| Developer controls loop | Stream controls iteration |
+| More code               | Less code                 |
+| Sequential              | Sequential/Parallel       |
+
+---
+
+# Stream vs Collection
+
+| Collection              | Stream                  |
+| ----------------------- | ----------------------- |
+| Stores Data             | Processes Data          |
+| Mutable                 | Doesn't modify source   |
+| Can iterate many times  | One-time use            |
+| Uses External Iteration | Uses Internal Iteration |
+
+---
+
+# One Time Use Rule
+
+Ye interview me bahut poochte hain.
+
+```java
+Stream<Integer> stream =
+Arrays.asList(1,2,3).stream();
+
+stream.forEach(System.out::println);
+
+stream.forEach(System.out::println);
+```
+
+Output
+
+```
+IllegalStateException
+```
+
+Reason
+
+```
+Stream already consumed.
+```
+
+---
+
+# Interview Question
+
+Can Stream be reused?
+
+Answer
+
+No.
+
+Once terminal operation is executed, Stream is closed and cannot be reused.
+
+---
+
+# Java 8 Stream Process Diagram
+
+```
+Collection
+
+↓
+
+stream()
+
+↓
+
+filter()
+
+↓
+
+map()
+
+↓
+
+sorted()
+
+↓
+
+distinct()
+
+↓
+
+collect()
+
+↓
+
+Result
+```
+
+---
+
+# Module 1 Summary
+
+## Yaad Rakhne Wale Points
+
+### Stream
+
+```
+Processes Data
+```
+
+---
+
+### Collection
+
+```
+Stores Data
+```
+
+---
+
+### Pipeline
+
+```
+Source
+
+↓
+
+Intermediate
+
+↓
+
+Terminal
+```
+
+---
+
+### Intermediate Operations
+
+```
+filter()
+
+map()
+
+sorted()
+
+distinct()
+
+limit()
+
+skip()
+```
+
+Returns **Stream** and is **Lazy**.
+
+---
+
+### Terminal Operations
+
+```
+collect()
+
+count()
+
+reduce()
+
+findFirst()
+
+min()
+
+max()
+
+forEach()
+```
+
+Returns the **Final Result** and triggers execution.
+
+---
+
+### Golden Rules
+
+* ✅ Stream original collection ko modify nahi karta.
+* ✅ Intermediate operations lazy hote hain.
+* ✅ Terminal operation execution start karta hai.
+* ✅ Ek Stream ko sirf ek baar use kar sakte hain.
+* ✅ Stream data store nahi karta, sirf process karta hai.
+* ✅ Stream pipeline = **Source → Intermediate → Terminal**.
+
+---
+
+# Practice Questions (Without Code)
+
+In questions ko pehle khud solve karne ki koshish karo:
+
+1. Stream kya hai?
+2. Collection aur Stream me difference?
+3. Stream pipeline kya hoti hai?
+4. Intermediate operation kya hota hai?
+5. Terminal operation kya hota hai?
+6. Stream lazy kyu hota hai?
+7. Kya Stream original collection modify karta hai?
+8. Kya Stream ko reuse kar sakte hain?
+9. Internal iteration kya hai?
+10. Java 8 me Stream introduce kyu kiya gaya?
+
+## Next Module
+
+**MODULE 2: Stream Creation + `filter()` Pattern (Basic to Advanced)**
+
+Isme hum practical coding ke saath seekhenge:
+
+* `stream()`
+* `Stream.of()`
+* `Arrays.stream()`
+* `IntStream`
+* `filter()`
+* 25+ interview programs (Even, Odd, Prime, Multiples, Positive/Negative, Armstrong, Palindrome, etc.)
+* Har program ka **logic-building pattern**, taaki tum bina ratte khud code likh sako.
+=============================================================================================================
+# MODULE 2 : Filter Pattern (Java 8 Stream API)
+
+Ye Java 8 ka **sabse important pattern** hai.
+
+Agar tum **Filter Pattern** samajh gaye to interview ke lagbhag **30-40% Java 8 questions** solve kar loge.
+
+---
+
+# 1. Filter Kya Hai?
+
+## Definition
+
+`filter()` Stream ka **Intermediate Operation** hai.
+
+Ye **Predicate Functional Interface** use karta hai.
+
+Har element par condition check karta hai.
+
+* Condition True → Element aage jayega.
+* Condition False → Element remove ho jayega.
+
+---
+
+## Syntax
+
+```java
+stream()
+.filter(condition)
+.collect(Collectors.toList());
+```
+
+---
+
+# Visual Flow
+
+Suppose list hai
+
+```text
+1 2 3 4 5 6 7 8
+```
+
+Condition
+
+```java
+i -> i % 2 == 0
+```
+
+Flow
+
+```text
+1 ❌
+
+2 ✅
+
+3 ❌
+
+4 ✅
+
+5 ❌
+
+6 ✅
+
+7 ❌
+
+8 ✅
+```
+
+Output
+
+```text
+2 4 6 8
+```
+
+---
+
+# Logic Building Formula
+
+Har filter program me ye 5 step socho.
+
+```text
+Input
+
+↓
+
+Condition
+
+↓
+
+True
+
+↓
+
+False
+
+↓
+
+Output
+```
+
+Ya
+
+```text
+Collection
+
+↓
+
+filter()
+
+↓
+
+Condition
+
+↓
+
+Result
+```
+
+---
+
+# filter() Kis Functional Interface Ko Use Karta Hai?
+
+Answer
+
+```java
+Predicate<T>
+```
+
+Method
+
+```java
+boolean test(T t);
+```
+
+Interview Question
+
+**Q : filter() kis functional interface ko use karta hai?**
+
+Answer
+
+**Predicate Functional Interface**
+
+---
+
+# Predicate Kya Hai?
+
+Simple Language
+
+```text
+Input leta hai
+
+↓
+
+Condition check karta hai
+
+↓
+
+True / False return karta hai
+```
+
+Example
+
+```java
+Predicate<Integer> p = i -> i % 2 == 0;
+```
+
+---
+
+# Program 1 : Even Numbers
+
+## Question
+
+Print Even Numbers
+
+Input
+
+```java
+List<Integer> list =
+Arrays.asList(1,2,3,4,5,6,7,8,9,10);
+```
+
+Code
+
+```java
+list.stream()
+    .filter(i -> i % 2 == 0)
+    .forEach(System.out::println);
+```
+
+Output
+
+```text
+2
+4
+6
+8
+10
+```
+
+---
+
+## Logic
+
+Har number check karo.
+
+```text
+1
+
+1%2==0
+
+False
+
+Remove
+
+----------------
+
+2
+
+2%2==0
+
+True
+
+Print
+
+----------------
+
+3
+
+False
+
+----------------
+
+4
+
+True
+```
+
+Pattern
+
+```java
+.filter(i -> condition)
+```
+
+---
+
+# Interview Variation
+
+Print numbers divisible by 3
+
+```java
+.filter(i -> i % 3 == 0)
+```
+
+Print numbers divisible by 5
+
+```java
+.filter(i -> i % 5 == 0)
+```
+
+Print numbers divisible by 10
+
+```java
+.filter(i -> i % 10 == 0)
+```
+
+Pattern same.
+
+Sirf condition change.
+
+---
+
+# Program 2 : Odd Numbers
+
+```java
+list.stream()
+    .filter(i -> i % 2 != 0)
+    .forEach(System.out::println);
+```
+
+Output
+
+```text
+1
+3
+5
+7
+9
+```
+
+---
+
+# Program 3 : Positive Numbers
+
+Input
+
+```text
+-5 -4 -3 -2 -1 0 1 2 3 4 5
+```
+
+Code
+
+```java
+list.stream()
+    .filter(i -> i > 0)
+    .forEach(System.out::println);
+```
+
+Output
+
+```text
+1
+2
+3
+4
+5
+```
+
+---
+
+# Program 4 : Negative Numbers
+
+```java
+.filter(i -> i < 0)
+```
+
+---
+
+# Program 5 : Zero
+
+```java
+.filter(i -> i == 0)
+```
+
+---
+
+# Program 6 : Greater Than
+
+Print numbers greater than 50
+
+```java
+.filter(i -> i > 50)
+```
+
+---
+
+# Program 7 : Less Than
+
+```java
+.filter(i -> i < 100)
+```
+
+---
+
+# Program 8 : Between Range
+
+Print numbers between 20 and 50
+
+```java
+.filter(i -> i >=20 && i<=50)
+```
+
+---
+
+# Pattern
+
+Range
+
+```java
+.filter(i -> condition1 && condition2)
+```
+
+---
+
+# Program 9 : Names Starting With A
+
+Input
+
+```java
+List<String> list =
+Arrays.asList(
+"Amit",
+"Rahul",
+"Akash",
+"Vishnu");
+```
+
+Code
+
+```java
+list.stream()
+    .filter(name -> name.startsWith("A"))
+    .forEach(System.out::println);
+```
+
+Output
+
+```text
+Amit
+
+Akash
+```
+
+---
+
+# Logic
+
+```text
+Amit
+
+Starts With A
+
+True
+
+----------------
+
+Rahul
+
+False
+
+----------------
+
+Akash
+
+True
+
+----------------
+
+Vishnu
+
+False
+```
+
+---
+
+# Program 10 : Ends With
+
+```java
+.filter(name -> name.endsWith("a"))
+```
+
+---
+
+# Program 11 : Contains
+
+```java
+.filter(name -> name.contains("sh"))
+```
+
+---
+
+# Program 12 : String Length
+
+Length greater than 5
+
+```java
+.filter(name -> name.length()>5)
+```
+
+---
+
+# Program 13 : Empty String
+
+```java
+.filter(String::isEmpty)
+```
+
+---
+
+# Program 14 : Non Empty
+
+```java
+.filter(s->!s.isEmpty())
+```
+
+---
+
+# Program 15 : Blank String
+
+Java 11
+
+```java
+.filter(String::isBlank)
+```
+
+---
+
+# Program 16 : Non Blank
+
+```java
+.filter(s->!s.isBlank())
+```
+
+---
+
+# Program 17 : Remove Null Values
+
+Input
+
+```text
+Java
+
+null
+
+Python
+
+null
+
+Go
+```
+
+Code
+
+```java
+list.stream()
+.filter(Objects::nonNull)
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+Java
+
+Python
+
+Go
+```
+
+---
+
+# Program 18 : Remove Non Null
+
+```java
+.filter(Objects::isNull)
+```
+
+---
+
+# Program 19 : Multiples of Five
+
+```java
+.filter(i->i%5==0)
+```
+
+---
+
+# Program 20 : Numbers Greater Than Average
+
+Traditional
+
+Average calculate karo
+
+Fir
+
+```java
+.filter(i->i>avg)
+```
+
+---
+
+# Program 21 : Prime Numbers
+
+Prime Check Method
+
+```java
+public static boolean isPrime(int n){
+
+if(n<=1)
+return false;
+
+for(int i=2;i<=Math.sqrt(n);i++){
+
+if(n%i==0)
+return false;
+
+}
+
+return true;
+
+}
+```
+
+Stream
+
+```java
+list.stream()
+.filter(FilterDemo::isPrime)
+.forEach(System.out::println);
+```
+
+---
+
+# Logic
+
+Stream
+
+↓
+
+One Number
+
+↓
+
+Prime Check
+
+↓
+
+True
+
+↓
+
+Print
+
+---
+
+# Program 22 : Palindrome String
+
+Method
+
+```java
+public static boolean isPalindrome(String str){
+
+return str.equals(
+new StringBuilder(str)
+.reverse()
+.toString());
+
+}
+```
+
+```java
+list.stream()
+.filter(FilterDemo::isPalindrome)
+.forEach(System.out::println);
+```
+
+---
+
+# Program 23 : Armstrong Numbers
+
+Method
+
+```java
+isArmstrong()
+```
+
+```java
+.filter(FilterDemo::isArmstrong)
+```
+
+Pattern same.
+
+---
+
+# Program 24 : Employee Salary Greater Than 50000
+
+Employee
+
+```java
+class Employee{
+
+String name;
+
+double salary;
+
+}
+```
+
+Code
+
+```java
+employees.stream()
+.filter(emp->emp.getSalary()>50000)
+.forEach(System.out::println);
+```
+
+---
+
+# Program 25 : Employee Age > 30
+
+```java
+.filter(emp->emp.getAge()>30)
+```
+
+---
+
+# Program 26 : Department Wise
+
+```java
+.filter(emp->emp.getDepartment()
+.equals("IT"))
+```
+
+---
+
+# Program 27 : Active Employees
+
+```java
+.filter(Employee::isActive)
+```
+
+---
+
+# Program 28 : Married Employees
+
+```java
+.filter(Employee::isMarried)
+```
+
+---
+
+# Program 29 : High Rated Products
+
+```java
+.filter(product->product.getRating()>4)
+```
+
+---
+
+# Program 30 : Expensive Products
+
+```java
+.filter(product->product.getPrice()>1000)
+```
+
+---
+
+# Most Important Pattern
+
+## List<Integer>
+
+```text
+Collection
+
+↓
+
+filter()
+
+↓
+
+Condition
+
+↓
+
+Output
+```
+
+Condition
+
+```java
+i%2==0
+
+i%2!=0
+
+i>10
+
+i<100
+
+i>=20 && i<=30
+
+i%5==0
+```
+
+Sirf condition change hoti hai.
+
+---
+
+## List<String>
+
+```text
+Collection
+
+↓
+
+filter()
+
+↓
+
+startsWith()
+
+↓
+
+endsWith()
+
+↓
+
+contains()
+
+↓
+
+length()
+
+↓
+
+Output
+```
+
+Condition
+
+```java
+startsWith()
+
+endsWith()
+
+contains()
+
+isEmpty()
+
+isBlank()
+
+length()
+```
+
+---
+
+## List<Employee>
+
+```text
+Employee
+
+↓
+
+Salary
+
+↓
+
+Age
+
+↓
+
+Department
+
+↓
+
+Status
+
+↓
+
+Output
+```
+
+Condition
+
+```java
+salary>50000
+
+age>30
+
+department=="IT"
+
+isActive()
+```
+
+---
+
+# Golden Rule
+
+Jab bhi koi question aaye, pehle ye identify karo:
+
+| Data Type | Common Filter Conditions                                            |
+| --------- | ------------------------------------------------------------------- |
+| Integer   | `%`, `>`, `<`, `>=`, `<=`, `==`                                     |
+| String    | `startsWith()`, `endsWith()`, `contains()`, `length()`, `isEmpty()` |
+| Employee  | `getSalary()`, `getAge()`, `getDepartment()`, `isActive()`          |
+| Product   | `getPrice()`, `getRating()`, `getCategory()`                        |
+
+---
+
+# Interview Questions
+
+### Q1. filter() kya return karta hai?
+
+**Answer:** `filter()` ek **Stream** return karta hai, final result nahi.
+
+---
+
+### Q2. filter() kis functional interface ko use karta hai?
+
+**Answer:** `Predicate<T>`.
+
+---
+
+### Q3. Predicate ka abstract method kya hai?
+
+```java
+boolean test(T t);
+```
+
+---
+
+### Q4. filter() intermediate hai ya terminal?
+
+**Answer:** Intermediate Operation.
+
+---
+
+### Q5. filter() lazy hai?
+
+**Answer:** Haan. Jab tak terminal operation (`collect()`, `forEach()`, `count()`) nahi aata, filter execute nahi hota.
+
+---
+
+## Practice (Without Looking at Solutions)
+
+In programs ko khud likhne ki koshish karo:
+
+1. Print even numbers.
+2. Print odd numbers.
+3. Print numbers divisible by 7.
+4. Print numbers between 100 and 500.
+5. Print names starting with "S".
+6. Print names ending with "n".
+7. Print strings having length > 8.
+8. Remove null values from a list.
+9. Print employees whose salary is greater than 75,000.
+10. Print active employees from the "IT" department.
+
+**Ye 10 programs agar tum bina dekhe likh loge, to `filter()` pattern tumhare liye permanently clear ho jayega.** Agla module `map()` hoga, jahan hum data ko transform karna seekhenge (uppercase, lowercase, square, reverse, salary increment, etc.).
+
+=============================================================================================================
+# MODULE 3 : Map Pattern (Java 8 Stream API)
+
+> **Ye Java 8 ka second sabse important pattern hai.**
+
+Agar **filter()** data ko **remove/select** karta hai,
+to **map()** data ko **change (transform)** karta hai.
+
+**Interview me bahut poocha jata hai.**
+
+* Uppercase
+* Lowercase
+* Square
+* Cube
+* String Length
+* Employee Name
+* Salary Increment
+* Reverse String
+
+Ye sab **map()** se hote hain.
+
+---
+
+# 1. map() Kya Hai?
+
+## Definition
+
+`map()` ek **Intermediate Operation** hai.
+
+Ye **Function Functional Interface** use karta hai.
+
+Ye har element ko **ek naye element me convert (transform)** karta hai.
+
+---
+
+# Simple Hindi-English
+
+Suppose list hai
+
+```java
+List<String> names =
+Arrays.asList("amit","rahul","vishnu");
+```
+
+Ab mujhe chahiye
+
+```text
+AMIT
+RAHUL
+VISHNU
+```
+
+Yaha
+
+Input
+
+```text
+amit
+```
+
+Output
+
+```text
+AMIT
+```
+
+Yani
+
+**Data change hua.**
+
+Ye kaam **map()** karta hai.
+
+---
+
+# Real Life Example
+
+Socho Passport Office hai.
+
+Original
+
+```text
+Vishnu
+```
+
+Passport me
+
+```text
+VISHNU
+```
+
+Original person wahi hai.
+
+Sirf format change hua.
+
+Ye hi map() hai.
+
+---
+
+# Visual Diagram
+
+```text
+Input
+
+↓
+
+Transform
+
+↓
+
+Output
+```
+
+Aur detail me:
+
+```text
+Collection
+
+↓
+
+map()
+
+↓
+
+Transformation
+
+↓
+
+New Result
+```
+
+---
+
+# Syntax
+
+```java
+stream()
+.map(value -> transformation)
+.collect(Collectors.toList());
+```
+
+---
+
+# Interview Question
+
+### map() kis Functional Interface ko use karta hai?
+
+Answer
+
+```java
+Function<T,R>
+```
+
+---
+
+# Function Interface
+
+Method
+
+```java
+R apply(T t);
+```
+
+Meaning
+
+```text
+Input
+
+↓
+
+Output
+```
+
+Example
+
+```java
+Function<String,String> f =
+name -> name.toUpperCase();
+```
+
+---
+
+# Difference
+
+## filter()
+
+```text
+Input
+
+↓
+
+Condition
+
+↓
+
+True/False
+```
+
+## map()
+
+```text
+Input
+
+↓
+
+Convert
+
+↓
+
+Output
+```
+
+---
+
+# Example
+
+Filter
+
+```java
+.filter(i->i%2==0)
+```
+
+Map
+
+```java
+.map(i->i*2)
+```
+
+---
+
+# Flow Diagram
+
+Suppose
+
+```text
+1 2 3 4
+```
+
+Map
+
+```java
+i->i*2
+```
+
+Flow
+
+```text
+1
+
+↓
+
+2
+
+---------------
+
+2
+
+↓
+
+4
+
+---------------
+
+3
+
+↓
+
+6
+
+---------------
+
+4
+
+↓
+
+8
+```
+
+Output
+
+```text
+2 4 6 8
+```
+
+---
+
+# Logic Building Formula
+
+Har map question me ye socho
+
+```text
+Input
+
+↓
+
+Transformation
+
+↓
+
+Output
+```
+
+Ya
+
+```text
+Collection
+
+↓
+
+map()
+
+↓
+
+Transformation
+
+↓
+
+Result
+```
+
+---
+
+# PROGRAM 1
+
+## Convert into Uppercase
+
+Input
+
+```java
+List<String> list =
+Arrays.asList(
+"amit",
+"rahul",
+"vishnu");
+```
+
+Code
+
+```java
+list.stream()
+.map(String::toUpperCase)
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+AMIT
+
+RAHUL
+
+VISHNU
+```
+
+---
+
+# Step By Step
+
+Element
+
+```text
+amit
+```
+
+Transformation
+
+```java
+toUpperCase()
+```
+
+Result
+
+```text
+AMIT
+```
+
+---
+
+# Program 2
+
+Lowercase
+
+```java
+list.stream()
+.map(String::toLowerCase)
+.forEach(System.out::println);
+```
+
+---
+
+# Program 3
+
+String Length
+
+Input
+
+```text
+Java
+
+Python
+
+Go
+```
+
+Code
+
+```java
+list.stream()
+.map(String::length)
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+4
+
+6
+
+2
+```
+
+---
+
+# Logic
+
+```text
+Java
+
+↓
+
+4
+
+------------
+
+Python
+
+↓
+
+6
+
+------------
+
+Go
+
+↓
+
+2
+```
+
+---
+
+# Program 4
+
+Square Numbers
+
+Input
+
+```text
+1 2 3 4 5
+```
+
+Code
+
+```java
+list.stream()
+.map(i->i*i)
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+1
+
+4
+
+9
+
+16
+
+25
+```
+
+---
+
+# Program 5
+
+Cube
+
+```java
+.map(i->i*i*i)
+```
+
+---
+
+# Program 6
+
+Multiply by 10
+
+```java
+.map(i->i*10)
+```
+
+---
+
+# Program 7
+
+Divide by 2
+
+```java
+.map(i->i/2)
+```
+
+---
+
+# Program 8
+
+Convert Integer into String
+
+Input
+
+```text
+1
+
+2
+
+3
+```
+
+Code
+
+```java
+list.stream()
+.map(String::valueOf)
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+"1"
+
+"2"
+
+"3"
+```
+
+---
+
+# Program 9
+
+Trim String
+
+Input
+
+```text
+" Java "
+
+" Python "
+```
+
+Code
+
+```java
+list.stream()
+.map(String::trim)
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+Java
+
+Python
+```
+
+---
+
+# Program 10
+
+Reverse Every String
+
+Code
+
+```java
+list.stream()
+.map(s->new StringBuilder(s)
+.reverse()
+.toString())
+.forEach(System.out::println);
+```
+
+Input
+
+```text
+Java
+
+Python
+```
+
+Output
+
+```text
+avaJ
+
+nohtyP
+```
+
+---
+
+# Program 11
+
+First Character
+
+```java
+list.stream()
+.map(s->s.charAt(0))
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+J
+
+P
+
+G
+```
+
+---
+
+# Program 12
+
+Last Character
+
+```java
+list.stream()
+.map(s->s.charAt(s.length()-1))
+.forEach(System.out::println);
+```
+
+---
+
+# Program 13
+
+First Letter Capital
+
+Input
+
+```text
+java
+
+python
+```
+
+Code
+
+```java
+list.stream()
+.map(s->Character.toUpperCase(s.charAt(0))
++s.substring(1))
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+Java
+
+Python
+```
+
+---
+
+# Program 14
+
+Employee Names
+
+```java
+employees.stream()
+.map(Employee::getName)
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+Vishnu
+
+Rahul
+
+Amit
+```
+
+---
+
+# Logic
+
+Employee Object
+
+↓
+
+Extract Name
+
+↓
+
+Print
+
+---
+
+# Program 15
+
+Employee Salary
+
+```java
+employees.stream()
+.map(Employee::getSalary)
+.forEach(System.out::println);
+```
+
+---
+
+# Program 16
+
+Employee Department
+
+```java
+.map(Employee::getDepartment)
+```
+
+---
+
+# Program 17
+
+Salary Increment
+
+Input
+
+```text
+50000
+
+60000
+
+70000
+```
+
+Code
+
+```java
+employees.stream()
+.map(emp->emp.getSalary()+5000)
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+55000
+
+65000
+
+75000
+```
+
+---
+
+# Program 18
+
+Employee Email
+
+Suppose
+
+```text
+Vishnu
+```
+
+Output
+
+```text
+vishnu@gmail.com
+```
+
+Code
+
+```java
+employees.stream()
+.map(emp->emp.getName().toLowerCase()
++"@gmail.com")
+.forEach(System.out::println);
+```
+
+---
+
+# Program 19
+
+Convert Number into Binary
+
+```java
+list.stream()
+.map(Integer::toBinaryString)
+.forEach(System.out::println);
+```
+
+---
+
+# Program 20
+
+Convert Number into Hex
+
+```java
+.map(Integer::toHexString)
+```
+
+---
+
+# Program 21
+
+Absolute Value
+
+Input
+
+```text
+-5
+
+-10
+
+20
+```
+
+Code
+
+```java
+list.stream()
+.map(Math::abs)
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+5
+
+10
+
+20
+```
+
+---
+
+# Program 22
+
+Boolean Conversion
+
+```java
+.map(i->i>10)
+```
+
+Input
+
+```text
+5
+
+15
+
+20
+```
+
+Output
+
+```text
+false
+
+true
+
+true
+```
+
+---
+
+# Program 23
+
+Append Suffix
+
+Input
+
+```text
+Java
+
+Python
+```
+
+Output
+
+```text
+Java Course
+
+Python Course
+```
+
+Code
+
+```java
+.map(s->s+" Course")
+```
+
+---
+
+# Program 24
+
+Prefix
+
+```java
+.map(s->"Mr. "+s)
+```
+
+---
+
+# Program 25
+
+Double Salary
+
+```java
+.map(emp->emp.getSalary()*2)
+```
+
+---
+
+# Program 26
+
+Convert List<Employee> to List<String>
+
+Input
+
+Employee
+
+↓
+
+Output
+
+Employee Names
+
+```java
+List<String> names=
+employees.stream()
+.map(Employee::getName)
+.collect(Collectors.toList());
+```
+
+---
+
+# Program 27
+
+Convert List<String> to List<Integer>
+
+```java
+list.stream()
+.map(Integer::parseInt)
+.collect(Collectors.toList());
+```
+
+---
+
+# Program 28
+
+Convert Character
+
+```java
+.map(Character::toUpperCase)
+```
+
+---
+
+# Pattern Summary
+
+## Integer Pattern
+
+```text
+Collection
+
+↓
+
+map()
+
+↓
+
+Math Operation
+
+↓
+
+Output
+```
+
+Examples
+
+```java
+i->i*2
+
+i->i*10
+
+i->i*i
+
+i->i*i*i
+
+Math::abs
+```
+
+---
+
+## String Pattern
+
+```text
+Collection
+
+↓
+
+map()
+
+↓
+
+String Method
+
+↓
+
+Output
+```
+
+Examples
+
+```java
+toUpperCase()
+
+toLowerCase()
+
+trim()
+
+length()
+
+reverse()
+
+substring()
+```
+
+---
+
+## Employee Pattern
+
+```text
+Employee
+
+↓
+
+Extract Field
+
+↓
+
+Output
+```
+
+Examples
+
+```java
+getName()
+
+getSalary()
+
+getDepartment()
+
+getAge()
+```
+
+---
+
+# map() vs filter()
+
+| filter()               | map()                |
+| ---------------------- | -------------------- |
+| Removes data           | Changes data         |
+| Uses Predicate         | Uses Function        |
+| Returns True/False     | Returns New Value    |
+| Same data type usually | Data type can change |
+
+### Example
+
+Filter
+
+```java
+.filter(i -> i % 2 == 0)
+```
+
+Input
+
+```text
+1 2 3 4
+```
+
+Output
+
+```text
+2 4
+```
+
+---
+
+Map
+
+```java
+.map(i -> i * 2)
+```
+
+Input
+
+```text
+1 2 3 4
+```
+
+Output
+
+```text
+2 4 6 8
+```
+
+---
+
+# Golden Rule
+
+### Agar Question me ye words aaye:
+
+* Convert
+* Change
+* Transform
+* Uppercase
+* Lowercase
+* Square
+* Cube
+* Extract
+* Reverse
+* Append
+* Prefix
+* Suffix
+
+👉 **100% map() use hoga.**
+
+### Agar Question me ye words aaye:
+
+* Find
+* Select
+* Remove
+* Keep
+* Greater than
+* Less than
+* Even
+* Odd
+* Active
+* IT Department
+
+👉 **100% filter() use hoga.**
+
+---
+
+# Interview Questions
+
+### Q1. map() kis Functional Interface ko use karta hai?
+
+**Answer:** `Function<T, R>`
+
+---
+
+### Q2. Function Interface ka abstract method kya hai?
+
+```java
+R apply(T t);
+```
+
+---
+
+### Q3. map() intermediate hai ya terminal?
+
+**Answer:** Intermediate Operation.
+
+---
+
+### Q4. Kya map() original collection ko modify karta hai?
+
+**Answer:** Nahi. Ye original collection ko modify nahi karta. Ye transformed values ka naya stream return karta hai.
+
+---
+
+### Q5. filter() aur map() me sabse bada difference?
+
+**Answer (Hindi-English):**
+
+* `filter()` **data ko select/remove** karta hai (condition based).
+* `map()` **data ko transform/change** karta hai (value based).
+
+---
+
+# Logic Building Exercise (Without Looking at Answers)
+
+Khud code likho:
+
+1. Convert names into uppercase.
+2. Convert names into lowercase.
+3. Find square of all numbers.
+4. Find cube of all numbers.
+5. Multiply every number by 100.
+6. Add 10 to every number.
+7. Reverse every string.
+8. Convert `List<String>` into `List<Integer>`.
+9. Extract employee names.
+10. Increase every employee salary by 10%.
+
+## ⭐ Java 8 Master Trick (Filter + Map)
+
+Real interview me aksar dono ek saath use hote hain.
+
+Example:
+
+```java
+employees.stream()
+         .filter(emp -> emp.getSalary() > 50000)   // Select employees
+         .map(Employee::getName)                   // Extract names
+         .forEach(System.out::println);
+```
+
+**Flow:**
+
+```text
+Employee List
+      ↓
+filter()  → Salary > 50000
+      ↓
+map()     → Get Name
+      ↓
+forEach() → Print
+```
+
+Is pattern ko yaad rakhna, kyunki Spring Boot aur Java Backend interviews me ye bahut common hai.
+
+=============================================================================================================
+# MODULE 4 : Sorting Pattern (Java 8 Stream API)
+
+> **Sorting Java 8 interviews ka Top 5 topic hai.**
+
+Agar tum **Sorting Pattern** samajh gaye to tum ye sab solve kar loge:
+
+* Ascending
+* Descending
+* Employee Salary
+* Employee Age
+* Name Wise
+* Length Wise
+* Second Highest
+* Third Highest
+* Comparator
+* Natural Order
+* Reverse Order
+* Multi-level Sorting
+
+---
+
+# 1. Sorting Kya Hai?
+
+Sorting ka matlab
+
+```text
+Random Data
+
+↓
+
+Arrange
+
+↓
+
+Ascending
+or
+Descending
+```
+
+Example
+
+Input
+
+```text
+5 3 8 1 7
+```
+
+Ascending
+
+```text
+1 3 5 7 8
+```
+
+Descending
+
+```text
+8 7 5 3 1
+```
+
+---
+
+# Java 8 Sorting Method
+
+Method
+
+```java
+sorted()
+```
+
+Ye Stream ka **Intermediate Operation** hai.
+
+Return karta hai
+
+```java
+Stream<T>
+```
+
+---
+
+# Syntax
+
+### Ascending
+
+```java
+stream()
+.sorted()
+.collect(Collectors.toList());
+```
+
+### Descending
+
+```java
+stream()
+.sorted(Comparator.reverseOrder())
+.collect(Collectors.toList());
+```
+
+---
+
+# Sorting Pattern
+
+```text
+Collection
+
+↓
+
+sorted()
+
+↓
+
+Comparator
+
+↓
+
+Result
+```
+
+---
+
+# Program 1 : Ascending Order
+
+Input
+
+```java
+List<Integer> list =
+Arrays.asList(5,2,8,1,7);
+```
+
+Code
+
+```java
+list.stream()
+.sorted()
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+1
+2
+5
+7
+8
+```
+
+---
+
+## Logic
+
+Java khud compare karega
+
+```text
+5
+
+↓
+
+2
+
+↓
+
+1
+
+↓
+
+7
+
+↓
+
+8
+```
+
+Final
+
+```text
+1 2 5 7 8
+```
+
+---
+
+# Program 2 : Descending Order
+
+Code
+
+```java
+list.stream()
+.sorted(Comparator.reverseOrder())
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+8
+
+7
+
+5
+
+2
+
+1
+```
+
+---
+
+# Logic
+
+```java
+Comparator.reverseOrder()
+```
+
+Natural order ko ulta kar deta hai.
+
+---
+
+# Interview Question
+
+## reverseOrder() kis class ka method hai?
+
+Answer
+
+```java
+Comparator
+```
+
+---
+
+# Program 3 : String Ascending
+
+Input
+
+```text
+Java
+
+Python
+
+C
+
+Go
+```
+
+Code
+
+```java
+list.stream()
+.sorted()
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+C
+
+Go
+
+Java
+
+Python
+```
+
+Alphabetically sort hota hai.
+
+---
+
+# Program 4 : String Descending
+
+```java
+list.stream()
+.sorted(Comparator.reverseOrder())
+.forEach(System.out::println);
+```
+
+---
+
+# Program 5 : Sort by Length
+
+Input
+
+```text
+Java
+
+C
+
+Python
+
+Go
+```
+
+Code
+
+```java
+list.stream()
+.sorted(Comparator.comparing(String::length))
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+C
+
+Go
+
+Java
+
+Python
+```
+
+---
+
+# Logic
+
+Length
+
+```text
+Java
+
+↓
+
+4
+
+------------
+
+Python
+
+↓
+
+6
+
+------------
+
+Go
+
+↓
+
+2
+```
+
+Sort according to length.
+
+---
+
+# Program 6 : Length Descending
+
+```java
+list.stream()
+.sorted(
+Comparator.comparing(String::length)
+.reversed())
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+Python
+
+Java
+
+Go
+
+C
+```
+
+---
+
+# Program 7 : Employee Salary
+
+Employee
+
+```java
+class Employee{
+
+String name;
+
+double salary;
+
+}
+```
+
+Code
+
+```java
+employees.stream()
+.sorted(
+Comparator.comparing(Employee::getSalary))
+.forEach(System.out::println);
+```
+
+---
+
+# Logic
+
+Employee
+
+↓
+
+Salary
+
+↓
+
+Compare Salary
+
+↓
+
+Sort
+
+---
+
+# Program 8 : Salary Descending
+
+```java
+employees.stream()
+.sorted(
+Comparator.comparing(Employee::getSalary)
+.reversed())
+.forEach(System.out::println);
+```
+
+---
+
+# Program 9 : Sort by Name
+
+```java
+employees.stream()
+.sorted(
+Comparator.comparing(Employee::getName))
+.forEach(System.out::println);
+```
+
+---
+
+# Program 10 : Sort by Age
+
+```java
+employees.stream()
+.sorted(
+Comparator.comparing(Employee::getAge))
+.forEach(System.out::println);
+```
+
+---
+
+# Program 11 : Multiple Sorting
+
+Question
+
+Department
+
+Then Salary
+
+Code
+
+```java
+employees.stream()
+.sorted(
+Comparator
+.comparing(Employee::getDepartment)
+.thenComparing(Employee::getSalary))
+.forEach(System.out::println);
+```
+
+---
+
+# Logic
+
+First
+
+Department
+
+If same
+
+↓
+
+Salary
+
+---
+
+# Example
+
+Input
+
+```text
+IT 50000
+
+HR 30000
+
+IT 40000
+
+HR 70000
+```
+
+Output
+
+```text
+HR 30000
+
+HR 70000
+
+IT 40000
+
+IT 50000
+```
+
+---
+
+# Program 12 : Name then Age
+
+```java
+employees.stream()
+.sorted(
+Comparator
+.comparing(Employee::getName)
+.thenComparing(Employee::getAge))
+.forEach(System.out::println);
+```
+
+---
+
+# Program 13 : Ignore Case
+
+Input
+
+```text
+amit
+
+Rahul
+
+vishnu
+
+Akash
+```
+
+Code
+
+```java
+list.stream()
+.sorted(String.CASE_INSENSITIVE_ORDER)
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+Akash
+
+amit
+
+Rahul
+
+vishnu
+```
+
+---
+
+# Program 14 : Custom Comparator
+
+Ascending
+
+```java
+list.stream()
+.sorted((a,b)->a.compareTo(b))
+.forEach(System.out::println);
+```
+
+Descending
+
+```java
+list.stream()
+.sorted((a,b)->b.compareTo(a))
+.forEach(System.out::println);
+```
+
+---
+
+# Logic
+
+compareTo()
+
+Returns
+
+```text
+Negative
+
+Zero
+
+Positive
+```
+
+---
+
+# Program 15 : Highest Number
+
+```java
+Integer max = list.stream()
+.max(Integer::compare)
+.get();
+```
+
+Output
+
+```text
+10
+```
+
+---
+
+# Program 16 : Lowest Number
+
+```java
+Integer min = list.stream()
+.min(Integer::compare)
+.get();
+```
+
+---
+
+# Program 17 : Second Highest
+
+Input
+
+```text
+5 8 2 10 6
+```
+
+Code
+
+```java
+Integer second = list.stream()
+.sorted(Comparator.reverseOrder())
+.skip(1)
+.findFirst()
+.get();
+```
+
+Output
+
+```text
+8
+```
+
+---
+
+# Logic
+
+```text
+Original
+
+5 8 2 10 6
+
+↓
+
+Descending
+
+10 8 6 5 2
+
+↓
+
+Skip First
+
+8 6 5 2
+
+↓
+
+First
+
+8
+```
+
+---
+
+# Program 18 : Third Highest
+
+```java
+Integer third = list.stream()
+.sorted(Comparator.reverseOrder())
+.skip(2)
+.findFirst()
+.get();
+```
+
+---
+
+# Program 19 : Top 3 Numbers
+
+```java
+list.stream()
+.sorted(Comparator.reverseOrder())
+.limit(3)
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+10
+
+8
+
+6
+```
+
+---
+
+# Program 20 : Lowest 3 Numbers
+
+```java
+list.stream()
+.sorted()
+.limit(3)
+.forEach(System.out::println);
+```
+
+---
+
+# Program 21 : Nth Highest
+
+Formula
+
+```java
+.sorted(Comparator.reverseOrder())
+.skip(n-1)
+.findFirst()
+```
+
+---
+
+# Program 22 : Null First
+
+```java
+list.stream()
+.sorted(
+Comparator.nullsFirst(
+Comparator.naturalOrder()))
+.forEach(System.out::println);
+```
+
+---
+
+# Program 23 : Null Last
+
+```java
+list.stream()
+.sorted(
+Comparator.nullsLast(
+Comparator.naturalOrder()))
+.forEach(System.out::println);
+```
+
+---
+
+# Comparator Methods (Most Important)
+
+| Method          | Purpose            |
+| --------------- | ------------------ |
+| naturalOrder()  | Ascending          |
+| reverseOrder()  | Descending         |
+| comparing()     | Compare by field   |
+| thenComparing() | Multiple sorting   |
+| reversed()      | Reverse comparator |
+| nullsFirst()    | Null first         |
+| nullsLast()     | Null last          |
+
+---
+
+# Sorting Patterns
+
+## Integer Pattern
+
+```text
+Collection
+
+↓
+
+sorted()
+
+↓
+
+Ascending
+```
+
+Descending
+
+```java
+.sorted(Comparator.reverseOrder())
+```
+
+---
+
+## String Pattern
+
+Ascending
+
+```java
+.sorted()
+```
+
+Length
+
+```java
+.sorted(
+Comparator.comparing(String::length))
+```
+
+---
+
+## Employee Pattern
+
+```text
+Employee
+
+↓
+
+Field
+
+↓
+
+Comparator
+
+↓
+
+Sorted
+```
+
+Examples
+
+```java
+Employee::getName
+
+Employee::getAge
+
+Employee::getSalary
+
+Employee::getDepartment
+```
+
+---
+
+# compareTo()
+
+Very Important Interview Topic
+
+```java
+"ABC".compareTo("XYZ")
+```
+
+Returns
+
+```text
+Negative
+```
+
+Because
+
+```text
+ABC < XYZ
+```
+
+---
+
+```java
+"XYZ".compareTo("ABC")
+```
+
+Returns
+
+```text
+Positive
+```
+
+---
+
+```java
+"ABC".compareTo("ABC")
+```
+
+Returns
+
+```text
+0
+```
+
+---
+
+# Comparator vs Comparable
+
+| Comparable               | Comparator                |
+| ------------------------ | ------------------------- |
+| Interface                | Interface                 |
+| Natural sorting          | Custom sorting            |
+| compareTo()              | compare()                 |
+| Class ke andar implement | Bahar define karte hain   |
+| Single sorting           | Multiple sorting possible |
+
+---
+
+# Interview Questions
+
+## Q1. sorted() intermediate hai ya terminal?
+
+**Answer**
+
+Intermediate Operation
+
+---
+
+## Q2. sorted() kis interface ko use karta hai?
+
+Answer
+
+Comparable
+
+ya
+
+Comparator
+
+---
+
+## Q3. Ascending sorting ka method?
+
+```java
+.sorted()
+```
+
+---
+
+## Q4. Descending sorting ka method?
+
+```java
+.sorted(Comparator.reverseOrder())
+```
+
+---
+
+## Q5. Employee salary ke basis pe sorting?
+
+```java
+Comparator.comparing(Employee::getSalary)
+```
+
+---
+
+## Q6. Multiple sorting?
+
+```java
+thenComparing()
+```
+
+---
+
+## Q7. Difference between Comparable and Comparator?
+
+**Hindi-English Answer**
+
+* **Comparable** class ke andar implement hota hai aur natural sorting deta hai.
+* **Comparator** alag se banaya jata hai aur custom sorting ke liye use hota hai. Isme multiple fields par sorting bhi kar sakte hain.
+
+---
+
+# Sorting Logic Trick
+
+Agar interview me question aaye:
+
+```text
+Sort...
+Arrange...
+Highest...
+Lowest...
+Top...
+Bottom...
+Second...
+Third...
+Rank...
+```
+
+👉 Sabse pehle dimaag me ye pattern aana chahiye:
+
+```text
+Collection
+      ↓
+sorted()
+      ↓
+Comparator
+      ↓
+skip()/limit()/findFirst()
+```
+
+---
+
+# Practice Questions
+
+Bina solution dekhe ye khud likho:
+
+1. Sort integer list in ascending order.
+2. Sort integer list in descending order.
+3. Sort strings alphabetically.
+4. Sort strings by length.
+5. Sort employee by salary.
+6. Sort employee by age.
+7. Sort employee by department then salary.
+8. Find highest number.
+9. Find second highest number.
+10. Find top 5 highest numbers.
+11. Find third smallest number.
+12. Sort list containing `null` values.
+13. Sort strings ignoring case.
+14. Sort employees by name in descending order.
+15. Sort products by price and then rating.
+
+---
+
+# ⭐ Logic Building Tip
+
+Har sorting question se pehle sirf ye 3 sawal pucho:
+
+1. **Kis data ko sort karna hai?**
+
+   * Integer?
+   * String?
+   * Employee?
+   * Product?
+
+2. **Ascending ya Descending?**
+
+3. **Kis field ke basis par?**
+
+   * Name?
+   * Salary?
+   * Age?
+   * Length?
+   * Price?
+
+Agar ye 3 questions ka answer mil gaya, to 90% sorting programs tum bina ratte khud likh paoge.
+
+**Next Module:** **MODULE 5 – Distinct Pattern (Remove Duplicates + Find Duplicates + Unique Elements)**. Ye bhi Java 8 interview ka bahut common topic hai.
+
+=============================================================================================================
+# MODULE 5 : Distinct Pattern (Java 8 Stream API)
+
+> **Distinct Pattern ka matlab hai Duplicate Elements ko Remove karna ya Duplicate Elements ko Find karna.**
+
+Ye Java 8 interview me bahut poocha jata hai.
+
+Questions jaise:
+
+* Remove Duplicate Numbers
+* Remove Duplicate Strings
+* Find Duplicate Numbers
+* Find Duplicate Strings
+* Unique Elements
+* Merge Arrays Without Duplicates
+* Distinct Employee Names
+* Count Unique Elements
+
+---
+
+# 1. distinct() Kya Hai?
+
+## Definition
+
+`distinct()` ek **Intermediate Operation** hai.
+
+Ye stream me se duplicate elements ko remove karta hai.
+
+Internally ye `equals()` aur `hashCode()` use karta hai.
+
+---
+
+# Simple Hindi-English
+
+Input
+
+```text
+Java
+Python
+Java
+Go
+Python
+```
+
+distinct()
+
+↓
+
+Output
+
+```text
+Java
+Python
+Go
+```
+
+---
+
+# Visual Flow
+
+```text
+Collection
+
+↓
+
+distinct()
+
+↓
+
+Duplicates Remove
+
+↓
+
+Unique Elements
+```
+
+---
+
+# Syntax
+
+```java
+stream()
+.distinct()
+.collect(Collectors.toList());
+```
+
+---
+
+# Program 1 : Remove Duplicate Numbers
+
+Input
+
+```java
+List<Integer> list =
+Arrays.asList(1,2,3,2,4,5,1,6,3);
+```
+
+Code
+
+```java
+list.stream()
+    .distinct()
+    .forEach(System.out::println);
+```
+
+Output
+
+```text
+1
+2
+3
+4
+5
+6
+```
+
+---
+
+# Step by Step Logic
+
+Input
+
+```text
+1
+```
+
+Already present?
+
+```text
+No
+```
+
+Keep
+
+---
+
+Input
+
+```text
+2
+```
+
+Already present?
+
+```text
+No
+```
+
+Keep
+
+---
+
+Input
+
+```text
+3
+```
+
+Keep
+
+---
+
+Input
+
+```text
+2
+```
+
+Already present?
+
+```text
+Yes
+```
+
+Remove
+
+---
+
+Input
+
+```text
+4
+```
+
+Keep
+
+Final Output
+
+```text
+1 2 3 4 5 6
+```
+
+---
+
+# Logic Formula
+
+```text
+Element
+
+↓
+
+Already Exists?
+
+↓
+
+Yes → Ignore
+
+↓
+
+No → Keep
+```
+
+---
+
+# Program 2 : Remove Duplicate Strings
+
+Input
+
+```java
+List<String> list =
+Arrays.asList(
+"Java",
+"Python",
+"Java",
+"Go",
+"Python");
+```
+
+Code
+
+```java
+list.stream()
+.distinct()
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+Java
+
+Python
+
+Go
+```
+
+---
+
+# Program 3 : Count Unique Elements
+
+Code
+
+```java
+long count = list.stream()
+.distinct()
+.count();
+
+System.out.println(count);
+```
+
+Output
+
+```text
+3
+```
+
+---
+
+# Logic
+
+```text
+Java
+
+Python
+
+Java
+
+Go
+
+↓
+
+Distinct
+
+↓
+
+Java
+
+Python
+
+Go
+
+↓
+
+Count
+
+↓
+
+3
+```
+
+---
+
+# Program 4 : Find Duplicate Numbers
+
+Ye interview ka favourite hai.
+
+Input
+
+```text
+1 2 3 2 4 1 5
+```
+
+Code
+
+```java
+Set<Integer> set = new HashSet<>();
+
+list.stream()
+.filter(i -> !set.add(i))
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+2
+
+1
+```
+
+---
+
+# Logic
+
+HashSet ka rule
+
+```text
+add()
+
+↓
+
+First Time
+
+↓
+
+true
+
+------------
+
+Second Time
+
+↓
+
+false
+```
+
+Flow
+
+```text
+1
+
+add()
+
+true
+
+Not Printed
+
+--------------
+
+2
+
+add()
+
+true
+
+--------------
+
+3
+
+true
+
+--------------
+
+2
+
+false
+
+Printed
+
+--------------
+
+1
+
+false
+
+Printed
+```
+
+---
+
+# Trick
+
+```java
+set.add(element)
+```
+
+Returns
+
+| Condition  | Return |
+| ---------- | ------ |
+| First Time | true   |
+| Duplicate  | false  |
+
+Isliye
+
+```java
+!set.add(element)
+```
+
+Means
+
+```text
+Duplicate
+```
+
+---
+
+# Program 5 : Find Duplicate Strings
+
+```java
+Set<String> set =
+new HashSet<>();
+
+list.stream()
+.filter(name -> !set.add(name))
+.forEach(System.out::println);
+```
+
+---
+
+# Program 6 : Unique Elements Only
+
+Input
+
+```text
+1 2 2 3 3 4
+```
+
+Output
+
+```text
+1
+
+4
+```
+
+Code
+
+```java
+Map<Integer, Long> map =
+list.stream()
+.collect(Collectors.groupingBy(
+Function.identity(),
+Collectors.counting()));
+
+map.entrySet()
+.stream()
+.filter(e -> e.getValue()==1)
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+1=1
+
+4=1
+```
+
+---
+
+# Logic
+
+Count
+
+```text
+1 → 1
+
+2 → 2
+
+3 → 2
+
+4 → 1
+```
+
+Only count==1
+
+↓
+
+1
+
+4
+
+---
+
+# Program 7 : Duplicate Count
+
+Input
+
+```text
+Java
+
+Python
+
+Java
+
+Go
+
+Python
+```
+
+Code
+
+```java
+list.stream()
+.collect(Collectors.groupingBy(
+Function.identity(),
+Collectors.counting()))
+.forEach((k,v)->
+System.out.println(k+" "+v));
+```
+
+Output
+
+```text
+Java 2
+
+Python 2
+
+Go 1
+```
+
+---
+
+# Program 8 : Remove Duplicate Characters
+
+Input
+
+```text
+banana
+```
+
+Code
+
+```java
+String result =
+"banana".chars()
+.mapToObj(c->(char)c)
+.distinct()
+.map(String::valueOf)
+.collect(Collectors.joining());
+
+System.out.println(result);
+```
+
+Output
+
+```text
+ban
+```
+
+---
+
+# Step By Step
+
+Input
+
+```text
+b a n a n a
+```
+
+Distinct
+
+↓
+
+```text
+b a n
+```
+
+Join
+
+↓
+
+```text
+ban
+```
+
+---
+
+# Program 9 : Merge Arrays Without Duplicates
+
+Input
+
+```text
+1 2 3
+
+2 3 4
+```
+
+Code
+
+```java
+Integer[] merged =
+Stream.concat(
+Arrays.stream(a),
+Arrays.stream(b))
+.distinct()
+.toArray(Integer[]::new);
+```
+
+Output
+
+```text
+1
+
+2
+
+3
+
+4
+```
+
+---
+
+# Program 10 : Sorted Unique Elements
+
+```java
+list.stream()
+.distinct()
+.sorted()
+.forEach(System.out::println);
+```
+
+---
+
+# Program 11 : Reverse Sorted Unique
+
+```java
+list.stream()
+.distinct()
+.sorted(Comparator.reverseOrder())
+.forEach(System.out::println);
+```
+
+---
+
+# Program 12 : Employee Unique Departments
+
+```java
+employees.stream()
+.map(Employee::getDepartment)
+.distinct()
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+IT
+
+HR
+
+Sales
+```
+
+---
+
+# Program 13 : Unique Employee Names
+
+```java
+employees.stream()
+.map(Employee::getName)
+.distinct()
+.forEach(System.out::println);
+```
+
+---
+
+# Program 14 : Count Distinct Departments
+
+```java
+long count =
+employees.stream()
+.map(Employee::getDepartment)
+.distinct()
+.count();
+```
+
+---
+
+# Program 15 : Remove Duplicate Objects
+
+Employee
+
+```java
+employees.stream()
+.distinct()
+.forEach(System.out::println);
+```
+
+⚠️ **Important**
+
+Ye tabhi work karega jab `Employee` class me **equals()** aur **hashCode()** properly override kiye hon.
+
+Example:
+
+```java
+class Employee {
+    private int id;
+    private String name;
+
+    @Override
+    public boolean equals(Object o) {
+        // compare id or required fields
+    }
+
+    @Override
+    public int hashCode() {
+        // generate hash using id
+    }
+}
+```
+
+Agar `equals()` aur `hashCode()` override nahi kiye, to `distinct()` objects ko duplicate nahi pehchan payega.
+
+---
+
+# Pattern Summary
+
+## Integer Pattern
+
+```text
+Collection
+
+↓
+
+distinct()
+
+↓
+
+Unique Numbers
+```
+
+---
+
+## String Pattern
+
+```text
+Collection
+
+↓
+
+distinct()
+
+↓
+
+Unique Strings
+```
+
+---
+
+## Employee Pattern
+
+```text
+Employee
+
+↓
+
+map()
+
+↓
+
+Department
+
+↓
+
+distinct()
+```
+
+---
+
+# distinct() vs Set
+
+### distinct()
+
+```java
+list.stream()
+.distinct()
+```
+
+### Set
+
+```java
+new HashSet<>(list)
+```
+
+Difference
+
+| distinct()                | HashSet                      |
+| ------------------------- | ---------------------------- |
+| Stream API                | Collection                   |
+| Preserves encounter order | HashSet order not guaranteed |
+| Functional style          | Traditional style            |
+
+---
+
+# Distinct vs Filter
+
+### distinct()
+
+```text
+Automatically removes duplicates.
+```
+
+### filter()
+
+```text
+Uses your condition.
+```
+
+Example
+
+```java
+.filter(i -> i > 10)
+```
+
+Ye duplicate remove nahi karega.
+
+---
+
+# Golden Rule
+
+Agar question me ye words aaye:
+
+* Duplicate
+* Unique
+* Remove Duplicate
+* Distinct
+* Merge Without Duplicate
+* Unique Departments
+* Unique Names
+
+👉 Pehla method jo dimaag me aana chahiye
+
+```java
+.distinct()
+```
+
+Agar question specifically kahe **"Find duplicate elements"**, to yaad rakho:
+
+```java
+Set<T> set = new HashSet<>();
+
+.filter(e -> !set.add(e))
+```
+
+---
+
+# Interview Questions
+
+## Q1. distinct() intermediate hai ya terminal?
+
+**Answer**
+
+Intermediate Operation.
+
+---
+
+## Q2. distinct() internally kis methods ka use karta hai?
+
+**Answer**
+
+`equals()` aur `hashCode()`.
+
+---
+
+## Q3. Kya distinct() original collection modify karta hai?
+
+**Answer**
+
+Nahi.
+
+Ye naya Stream return karta hai.
+
+---
+
+## Q4. Duplicate find karne ke liye HashSet kyu use karte hain?
+
+**Answer (Hindi-English)**
+
+`HashSet` duplicate values allow nahi karta.
+
+Jab `add()` first time call hota hai to `true` return karta hai.
+
+Agar element already present hai to `false` return karta hai.
+
+Isi property ka use karke hum duplicate detect karte hain.
+
+---
+
+## Q5. Employee objects ke saath distinct() kab sahi kaam karega?
+
+**Answer**
+
+Jab `equals()` aur `hashCode()` methods override hon.
+
+---
+
+# Logic Building Trick
+
+Har duplicate question me sirf ye 3 questions pucho:
+
+1. **Duplicate remove karna hai?**
+
+   * 👉 `distinct()`
+
+2. **Duplicate find karna hai?**
+
+   * 👉 `HashSet + filter(!set.add())`
+
+3. **Frequency ya unique count chahiye?**
+
+   * 👉 `groupingBy() + counting()`
+
+---
+
+# Practice Questions (Without Solutions)
+
+1. Remove duplicate numbers from a list.
+2. Remove duplicate strings.
+3. Count distinct elements.
+4. Find duplicate integers.
+5. Find duplicate strings.
+6. Print only unique elements.
+7. Merge two arrays without duplicates.
+8. Print unique employee departments.
+9. Count unique employee names.
+10. Remove duplicate characters from a string.
+11. Find duplicate employee IDs.
+12. Print unique products by category.
+13. Remove duplicates and sort in ascending order.
+14. Remove duplicates and sort in descending order.
+15. Remove duplicate objects using `equals()` and `hashCode()`.
+
+---
+
+## ⭐ Interview Master Pattern
+
+Most real interview questions combine multiple operations:
+
+```java
+employees.stream()
+         .map(Employee::getDepartment) // Extract department
+         .distinct()                   // Remove duplicates
+         .sorted()                     // Sort alphabetically
+         .forEach(System.out::println);
+```
+
+**Flow:**
+
+```text
+Employee List
+      ↓
+map()       → Department
+      ↓
+distinct()  → Unique Departments
+      ↓
+sorted()    → Alphabetical Order
+      ↓
+forEach()   → Print
+```
+
+Ye combination (`map() + distinct() + sorted()`) Java 8 interviews me bahut common hai aur Spring Boot backend projects me bhi frequently use hota hai.
+
+=============================================================================================================
+# MODULE 6 : Max / Min Pattern (Java 8 Stream API)
+
+> ⭐ **Ye Java 8 interview ka Top 3 Pattern hai.**
+
+Agar tum **Max/Min Pattern** samajh gaye to ye saare questions solve kar loge.
+
+* Maximum Number
+* Minimum Number
+* Highest Salary
+* Lowest Salary
+* Second Highest
+* Third Highest
+* Nth Highest
+* Maximum Length String
+* Minimum Length String
+* Oldest Employee
+* Youngest Employee
+
+---
+
+# 1. Max / Min Kya Hai?
+
+Simple Language
+
+Collection me se
+
+* Sabse bada element
+* Sabse chhota element
+
+find karna.
+
+Example
+
+Input
+
+```text
+5 2 9 1 7
+```
+
+Maximum
+
+```text
+9
+```
+
+Minimum
+
+```text
+1
+```
+
+---
+
+# Java 8 Methods
+
+Maximum
+
+```java
+.max()
+```
+
+Minimum
+
+```java
+.min()
+```
+
+Ye dono **Terminal Operations** hain.
+
+---
+
+# Syntax
+
+Maximum
+
+```java
+stream()
+.max(Comparator)
+```
+
+Minimum
+
+```java
+stream()
+.min(Comparator)
+```
+
+---
+
+# Pattern
+
+```text
+Collection
+
+↓
+
+Comparator
+
+↓
+
+max()/min()
+
+↓
+
+Optional
+
+↓
+
+Result
+```
+
+---
+
+# IMPORTANT
+
+max() aur min() kya return karte hain?
+
+Answer
+
+```java
+Optional<T>
+```
+
+Example
+
+```java
+Optional<Integer> max =
+list.stream()
+.max(Integer::compare);
+```
+
+Isliye hum likhte hain
+
+```java
+max.get();
+```
+
+Ya
+
+```java
+max.orElse(0);
+```
+
+---
+
+# Program 1 : Maximum Number
+
+Input
+
+```java
+List<Integer> list =
+Arrays.asList(5,2,9,1,7);
+```
+
+Code
+
+```java
+Integer max =
+list.stream()
+.max(Integer::compare)
+.get();
+
+System.out.println(max);
+```
+
+Output
+
+```text
+9
+```
+
+---
+
+# Step by Step Logic
+
+Input
+
+```text
+5
+```
+
+Current Max
+
+```text
+5
+```
+
+Next
+
+```text
+2
+```
+
+Compare
+
+```text
+5 > 2
+```
+
+Max
+
+```text
+5
+```
+
+Next
+
+```text
+9
+```
+
+Compare
+
+```text
+9 > 5
+```
+
+Max
+
+```text
+9
+```
+
+Next
+
+```text
+1
+```
+
+Compare
+
+```text
+9 > 1
+```
+
+Max
+
+```text
+9
+```
+
+Final
+
+```text
+9
+```
+
+---
+
+# Traditional Logic
+
+```java
+int max = list.get(0);
+
+for(int i:list){
+
+if(i>max){
+
+max=i;
+
+}
+
+}
+```
+
+Java 8
+
+```java
+list.stream()
+.max(Integer::compare)
+```
+
+---
+
+# Program 2 : Minimum Number
+
+```java
+Integer min =
+list.stream()
+.min(Integer::compare)
+.get();
+
+System.out.println(min);
+```
+
+Output
+
+```text
+1
+```
+
+---
+
+# Program 3 : Maximum Using Lambda
+
+```java
+Integer max =
+list.stream()
+.max((a,b)->a.compareTo(b))
+.get();
+```
+
+---
+
+# Program 4 : Minimum Using Lambda
+
+```java
+Integer min =
+list.stream()
+.min((a,b)->a.compareTo(b))
+.get();
+```
+
+---
+
+# compareTo()
+
+Very Important
+
+```java
+a.compareTo(b)
+```
+
+Returns
+
+```text
+Negative
+
+Zero
+
+Positive
+```
+
+Example
+
+```java
+5.compareTo(2)
+```
+
+Returns
+
+```text
+Positive
+```
+
+Because
+
+```text
+5>2
+```
+
+---
+
+# Program 5 : Maximum String
+
+Input
+
+```text
+Java
+
+Python
+
+Go
+```
+
+Code
+
+```java
+String max =
+list.stream()
+.max(String::compareTo)
+.get();
+```
+
+Output
+
+```text
+Python
+```
+
+Alphabetically maximum.
+
+---
+
+# Program 6 : Minimum String
+
+```java
+String min =
+list.stream()
+.min(String::compareTo)
+.get();
+```
+
+---
+
+# Program 7 : Longest String
+
+Input
+
+```text
+Java
+
+Python
+
+SpringBoot
+```
+
+Code
+
+```java
+String longest =
+list.stream()
+.max(
+Comparator.comparing(String::length))
+.get();
+```
+
+Output
+
+```text
+SpringBoot
+```
+
+---
+
+# Logic
+
+Length
+
+```text
+Java
+
+↓
+
+4
+
+-----------
+
+Python
+
+↓
+
+6
+
+-----------
+
+SpringBoot
+
+↓
+
+10
+```
+
+Maximum Length
+
+↓
+
+SpringBoot
+
+---
+
+# Program 8 : Shortest String
+
+```java
+String shortest =
+list.stream()
+.min(
+Comparator.comparing(String::length))
+.get();
+```
+
+---
+
+# Program 9 : Highest Salary
+
+Employee
+
+```java
+class Employee{
+
+String name;
+
+double salary;
+
+}
+```
+
+Code
+
+```java
+Employee emp =
+employees.stream()
+.max(
+Comparator.comparing(
+Employee::getSalary))
+.get();
+
+System.out.println(emp);
+```
+
+---
+
+# Logic
+
+Employee
+
+↓
+
+Salary
+
+↓
+
+Compare
+
+↓
+
+Highest Salary Employee
+
+---
+
+# Program 10 : Lowest Salary
+
+```java
+Employee emp =
+employees.stream()
+.min(
+Comparator.comparing(
+Employee::getSalary))
+.get();
+```
+
+---
+
+# Program 11 : Oldest Employee
+
+```java
+employees.stream()
+.max(
+Comparator.comparing(
+Employee::getAge))
+.get();
+```
+
+---
+
+# Program 12 : Youngest Employee
+
+```java
+employees.stream()
+.min(
+Comparator.comparing(
+Employee::getAge))
+.get();
+```
+
+---
+
+# Program 13 : Maximum Price Product
+
+```java
+products.stream()
+.max(
+Comparator.comparing(
+Product::getPrice))
+.get();
+```
+
+---
+
+# Program 14 : Minimum Price
+
+```java
+products.stream()
+.min(
+Comparator.comparing(
+Product::getPrice))
+.get();
+```
+
+---
+
+# Program 15 : Highest Salary Amount Only
+
+Question
+
+Sirf salary chahiye.
+
+Code
+
+```java
+Double salary =
+employees.stream()
+.map(Employee::getSalary)
+.max(Double::compare)
+.get();
+```
+
+Output
+
+```text
+95000
+```
+
+---
+
+# Logic
+
+Employee
+
+↓
+
+Salary
+
+↓
+
+Map
+
+↓
+
+Double
+
+↓
+
+Max
+
+---
+
+# Program 16 : Second Highest Number
+
+Input
+
+```text
+5 9 1 3 8
+```
+
+Code
+
+```java
+Integer second =
+list.stream()
+.sorted(Comparator.reverseOrder())
+.skip(1)
+.findFirst()
+.get();
+```
+
+Output
+
+```text
+8
+```
+
+---
+
+# Step by Step
+
+Original
+
+```text
+5 9 1 3 8
+```
+
+Sort
+
+↓
+
+```text
+9 8 5 3 1
+```
+
+Skip
+
+↓
+
+```text
+8 5 3 1
+```
+
+Find First
+
+↓
+
+```text
+8
+```
+
+---
+
+# Program 17 : Third Highest
+
+```java
+Integer third =
+list.stream()
+.sorted(Comparator.reverseOrder())
+.skip(2)
+.findFirst()
+.get();
+```
+
+---
+
+# Program 18 : Nth Highest
+
+Formula
+
+```java
+.sorted(Comparator.reverseOrder())
+.skip(n-1)
+.findFirst()
+```
+
+Example
+
+5th Highest
+
+```java
+.skip(4)
+```
+
+---
+
+# Program 19 : Second Lowest
+
+```java
+Integer second =
+list.stream()
+.sorted()
+.skip(1)
+.findFirst()
+.get();
+```
+
+---
+
+# Program 20 : Top 3 Highest
+
+```java
+list.stream()
+.sorted(Comparator.reverseOrder())
+.limit(3)
+.forEach(System.out::println);
+```
+
+Output
+
+```text
+9
+
+8
+
+5
+```
+
+---
+
+# Program 21 : Bottom 3
+
+```java
+list.stream()
+.sorted()
+.limit(3)
+.forEach(System.out::println);
+```
+
+---
+
+# Program 22 : Max After Filter
+
+Question
+
+Maximum Even Number
+
+Code
+
+```java
+Integer max =
+list.stream()
+.filter(i->i%2==0)
+.max(Integer::compare)
+.get();
+```
+
+---
+
+# Flow
+
+Collection
+
+↓
+
+Filter Even
+
+↓
+
+Max
+
+↓
+
+Result
+
+---
+
+# Program 23 : Longest Employee Name
+
+```java
+employees.stream()
+.max(
+Comparator.comparing(
+e->e.getName().length()))
+.get();
+```
+
+---
+
+# Pattern Summary
+
+## Integer
+
+```text
+Collection
+
+↓
+
+max()
+
+↓
+
+Largest
+```
+
+Minimum
+
+```text
+Collection
+
+↓
+
+min()
+
+↓
+
+Smallest
+```
+
+---
+
+## String
+
+```text
+Collection
+
+↓
+
+Comparator
+
+↓
+
+Length
+
+↓
+
+Max
+```
+
+---
+
+## Employee
+
+```text
+Employee
+
+↓
+
+Salary
+
+↓
+
+Age
+
+↓
+
+Comparator
+
+↓
+
+Max
+```
+
+---
+
+# Max vs Sorted
+
+Question
+
+Highest Number
+
+Method 1
+
+```java
+.max(Integer::compare)
+```
+
+Method 2
+
+```java
+.sorted(Comparator.reverseOrder())
+.findFirst()
+```
+
+Better?
+
+Answer
+
+```text
+max()
+```
+
+Reason
+
+No need to sort complete list.
+
+---
+
+# Time Complexity
+
+### max()
+
+```text
+O(n)
+```
+
+### sorted()
+
+```text
+O(n log n)
+```
+
+Interview me ye answer bahut important hai.
+
+---
+
+# Optional Problem
+
+Ye code
+
+```java
+list.stream()
+.max(Integer::compare)
+.get();
+```
+
+Agar list empty ho?
+
+Exception
+
+```text
+NoSuchElementException
+```
+
+Better
+
+```java
+.orElse(0)
+```
+
+Example
+
+```java
+Integer max =
+list.stream()
+.max(Integer::compare)
+.orElse(0);
+```
+
+---
+
+# Golden Rule
+
+Question me agar ye words aaye
+
+```text
+Highest
+
+Lowest
+
+Maximum
+
+Minimum
+
+Largest
+
+Smallest
+
+Oldest
+
+Youngest
+
+Longest
+
+Shortest
+```
+
+Dimaag me turant aana chahiye
+
+```java
+.max()
+
+or
+
+.min()
+```
+
+---
+
+# Interview Questions
+
+## Q1
+
+max() return kya karta hai?
+
+Answer
+
+```java
+Optional<T>
+```
+
+---
+
+## Q2
+
+max() intermediate hai ya terminal?
+
+Answer
+
+Terminal Operation
+
+---
+
+## Q3
+
+Highest Salary Employee?
+
+```java
+.max(
+Comparator.comparing(
+Employee::getSalary))
+```
+
+---
+
+## Q4
+
+Longest String?
+
+```java
+.max(
+Comparator.comparing(
+String::length))
+```
+
+---
+
+## Q5
+
+Second Highest?
+
+```java
+.sorted(
+Comparator.reverseOrder())
+.skip(1)
+.findFirst()
+```
+
+---
+
+## Q6
+
+Maximum Even Number?
+
+```java
+.filter(i->i%2==0)
+
+.max(Integer::compare)
+```
+
+---
+
+## Q7
+
+Why use max() instead of sorting?
+
+**Hindi-English Answer**
+
+`max()` sirf ek pass me maximum value nikal deta hai (**O(n)**), jabki `sorted()` puri list ko sort karta hai (**O(n log n)**). Agar sirf maximum value chahiye to `max()` zyada efficient hai.
+
+---
+
+# Logic Building Trick
+
+Har Max/Min question me sirf ye 3 questions pucho:
+
+### Step 1
+
+Kya chahiye?
+
+```text
+Highest?
+
+Lowest?
+
+Second?
+
+Third?
+```
+
+---
+
+### Step 2
+
+Kis field ka?
+
+```text
+Salary?
+
+Age?
+
+Price?
+
+Length?
+
+Marks?
+```
+
+---
+
+### Step 3
+
+Kaunsa method?
+
+| Requirement    | Method              |
+| -------------- | ------------------- |
+| Highest        | `max()`             |
+| Lowest         | `min()`             |
+| Second Highest | `sorted().skip(1)`  |
+| Third Highest  | `sorted().skip(2)`  |
+| Top N          | `sorted().limit(n)` |
+
+---
+
+# Practice Questions
+
+Khud solve karo:
+
+1. Find maximum number.
+2. Find minimum number.
+3. Find longest string.
+4. Find shortest string.
+5. Find highest salary employee.
+6. Find youngest employee.
+7. Find second highest number.
+8. Find third smallest number.
+9. Find top 5 highest salaries.
+10. Find maximum odd number.
+11. Find minimum even number.
+12. Find product with maximum price.
+13. Find employee with longest name.
+14. Find highest salary after filtering only IT employees.
+15. Find second highest salary without duplicates.
+
+---
+
+# ⭐ Interview Master Tip
+
+Real interviews me **`filter()` + `map()` + `max()`** ka combination bahut common hai.
+
+Example:
+
+```java
+Employee highestPaidITEmployee = employees.stream()
+        .filter(emp -> "IT".equals(emp.getDepartment())) // Only IT employees
+        .max(Comparator.comparing(Employee::getSalary))  // Highest salary
+        .orElse(null);
+
+System.out.println(highestPaidITEmployee);
+```
+
+**Flow:**
+
+```text
+Employee List
+      ↓
+filter() → IT Department
+      ↓
+max()    → Highest Salary
+      ↓
+Optional
+      ↓
+orElse()/get()
+      ↓
+Result
+```
+
+Ye pattern Spring Boot aur Java Backend interviews me bahut frequently poocha jata hai.
+
+=============================================================================================================
+
