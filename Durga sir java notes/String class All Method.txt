@@ -1,0 +1,2219 @@
+Java interview me **String class** bahut important topic hai. 4–6 YOE interview me aksar String ke methods aur unke use cases puchte hain.
+
+Neeche maine **basic se advanced** tak important methods diye hain.
+
+---
+
+# 1. Length
+
+```java
+String s = "Hello";
+
+System.out.println(s.length());
+```
+
+Output
+
+```text
+5
+```
+
+👉 String ki length return karta hai.
+
+---
+
+# 2. charAt()
+
+```java
+String s = "Hello";
+
+System.out.println(s.charAt(1));
+```
+
+Output
+
+```text
+e
+```
+
+👉 Given index ka character return karta hai.
+
+---
+
+# 3. substring()
+
+```java
+String s = "HelloWorld";
+
+System.out.println(s.substring(5));
+```
+
+Output
+
+```text
+World
+```
+
+```java
+System.out.println(s.substring(2,7));
+```
+
+Output
+
+```text
+lloWo
+```
+
+👉 String ka part return karta hai.
+
+---
+
+# 4. equals()
+
+```java
+String s1 = "Java";
+String s2 = "Java";
+
+System.out.println(s1.equals(s2));
+```
+
+Output
+
+```text
+true
+```
+
+👉 Content compare karta hai.
+
+---
+
+# 5. equalsIgnoreCase()
+
+```java
+String s1 = "JAVA";
+String s2 = "java";
+
+System.out.println(s1.equalsIgnoreCase(s2));
+```
+
+Output
+
+```text
+true
+```
+
+👉 Case ignore karke compare karta hai.
+
+---
+
+# 6. compareTo()
+
+```java
+System.out.println("Apple".compareTo("Banana"));
+```
+
+Output
+
+```text
+Negative Value
+```
+
+👉 Lexicographical comparison karta hai.
+
+---
+
+# 7. contains()
+
+```java
+String s="Java Spring";
+
+System.out.println(s.contains("Spring"));
+```
+
+Output
+
+```text
+true
+```
+
+👉 Check karta hai substring present hai ya nahi.
+
+---
+
+# 8. startsWith()
+
+```java
+System.out.println("Java".startsWith("Ja"));
+```
+
+Output
+
+```text
+true
+```
+
+---
+
+# 9. endsWith()
+
+```java
+System.out.println("Java".endsWith("va"));
+```
+
+Output
+
+```text
+true
+```
+
+---
+
+# 10. indexOf()
+
+```java
+String s="Java";
+
+System.out.println(s.indexOf('a'));
+```
+
+Output
+
+```text
+1
+```
+
+👉 First occurrence return karta hai.
+
+---
+
+# 11. lastIndexOf()
+
+```java
+String s="banana";
+
+System.out.println(s.lastIndexOf('a'));
+```
+
+Output
+
+```text
+5
+```
+
+👉 Last occurrence return karta hai.
+
+---
+
+# 12. replace()
+
+```java
+String s="Java";
+
+System.out.println(s.replace("Java","Spring"));
+```
+
+Output
+
+```text
+Spring
+```
+
+---
+
+# 13. replaceAll()
+
+```java
+String s="a1b2c3";
+
+System.out.println(s.replaceAll("[0-9]",""));
+```
+
+Output
+
+```text
+abc
+```
+
+👉 Regular Expression (Regex) use karta hai.
+
+---
+
+# 14. replaceFirst()
+
+```java
+String s="banana";
+
+System.out.println(s.replaceFirst("a","X"));
+```
+
+Output
+
+```text
+bXnana
+```
+
+---
+
+# 15. split()
+
+```java
+String s="Java,Spring,Hibernate";
+
+String arr[]=s.split(",");
+```
+
+Output
+
+```text
+Java
+Spring
+Hibernate
+```
+
+---
+
+# 16. toUpperCase()
+
+```java
+System.out.println("java".toUpperCase());
+```
+
+Output
+
+```text
+JAVA
+```
+
+---
+
+# 17. toLowerCase()
+
+```java
+System.out.println("JAVA".toLowerCase());
+```
+
+Output
+
+```text
+java
+```
+
+---
+
+# 18. trim()
+
+```java
+String s=" Java ";
+
+System.out.println(s.trim());
+```
+
+Output
+
+```text
+Java
+```
+
+👉 Leading aur trailing spaces remove karta hai.
+
+---
+
+# 19. isEmpty()
+
+```java
+String s="";
+
+System.out.println(s.isEmpty());
+```
+
+Output
+
+```text
+true
+```
+
+---
+
+# 20. isBlank() (Java 11)
+
+```java
+String s="   ";
+
+System.out.println(s.isBlank());
+```
+
+Output
+
+```text
+true
+```
+
+👉 Sirf spaces bhi blank consider karta hai.
+
+---
+
+# 21. concat()
+
+```java
+String s1="Java";
+
+System.out.println(s1.concat(" Spring"));
+```
+
+Output
+
+```text
+Java Spring
+```
+
+---
+
+# 22. join()
+
+```java
+String s=String.join("-","Java","Spring","Boot");
+```
+
+Output
+
+```text
+Java-Spring-Boot
+```
+
+---
+
+# 23. valueOf()
+
+```java
+int a=10;
+
+String s=String.valueOf(a);
+```
+
+Output
+
+```text
+"10"
+```
+
+👉 Primitive ko String me convert karta hai.
+
+---
+
+# 24. toCharArray()
+
+```java
+char ch[]="Java".toCharArray();
+```
+
+Output
+
+```text
+J
+a
+v
+a
+```
+
+---
+
+# 25. getBytes()
+
+```java
+byte b[]="Java".getBytes();
+```
+
+👉 String ko byte array me convert karta hai.
+
+---
+
+# 26. matches()
+
+```java
+System.out.println("12345".matches("\\d+"));
+```
+
+Output
+
+```text
+true
+```
+
+👉 Regex match karta hai.
+
+---
+
+# 27. intern()
+
+```java
+String s=new String("Java");
+
+System.out.println(s.intern());
+```
+
+👉 String Pool ka reference return karta hai.
+
+---
+
+# Java 11 Important Methods
+
+## repeat()
+
+```java
+System.out.println("Hi".repeat(3));
+```
+
+Output
+
+```text
+HiHiHi
+```
+
+---
+
+## lines()
+
+```java
+String s="A\nB\nC";
+
+s.lines().forEach(System.out::println);
+```
+
+Output
+
+```text
+A
+B
+C
+```
+
+---
+
+## strip()
+
+```java
+String s=" Java ";
+
+System.out.println(s.strip());
+```
+
+Output
+
+```text
+Java
+```
+
+Unicode spaces bhi remove karta hai.
+
+---
+
+## stripLeading()
+
+```java
+System.out.println("   Java".stripLeading());
+```
+
+Output
+
+```text
+Java
+```
+
+---
+
+## stripTrailing()
+
+```java
+System.out.println("Java   ".stripTrailing());
+```
+
+Output
+
+```text
+Java
+```
+
+---
+
+# ⭐ Top 15 Interview Methods (Must Remember)
+
+| Method                      | Use                        |
+| --------------------------- | -------------------------- |
+| length()                    | Length                     |
+| charAt()                    | Character by index         |
+| substring()                 | Extract part of string     |
+| equals()                    | Compare content            |
+| equalsIgnoreCase()          | Ignore case comparison     |
+| compareTo()                 | Lexicographical comparison |
+| contains()                  | Check substring            |
+| startsWith()                | Prefix check               |
+| endsWith()                  | Suffix check               |
+| indexOf()                   | First occurrence           |
+| replace()                   | Replace text               |
+| split()                     | Split string               |
+| trim()/strip()              | Remove spaces              |
+| toUpperCase()/toLowerCase() | Change case                |
+| isEmpty()/isBlank()         | Empty/Blank check          |
+
+## Java 4–6 YOE Interview Tip
+
+In methods ke alawa interview me in concepts par bhi questions aate hain:
+
+* `String` immutable kyu hai?
+* String Pool kya hota hai?
+* `==` vs `equals()`
+* `String` vs `StringBuilder` vs `StringBuffer`
+* `intern()` method kya karta hai?
+* `replace()` vs `replaceAll()`
+* `trim()` vs `strip()`
+* `isEmpty()` vs `isBlank()`
+
+Ye sab String topic ke sabse frequently puche jane wale interview questions hain.
+=======================================================================================
+`Object` class Java ki **root class** hai.
+
+> **Java me har class directly ya indirectly `Object` class ko inherit karti hai.**
+
+```java id="sdnkeb"
+class Employee {
+
+}
+```
+
+Compiler internally isko aise banata hai:
+
+```java id="gnwjf7"
+class Employee extends Object {
+
+}
+```
+
+Isliye Object class ke methods har class me available hote hain.
+
+---
+
+# Object Class Important Methods
+
+| Method         | Return Type | Use                                      |
+| -------------- | ----------- | ---------------------------------------- |
+| toString()     | String      | Object ko String me convert karta hai    |
+| equals()       | boolean     | Do objects compare karta hai             |
+| hashCode()     | int         | Hash value return karta hai              |
+| getClass()     | Class<?>    | Runtime class return karta hai           |
+| clone()        | Object      | Object ki copy banata hai                |
+| finalize()     | void        | GC ke pehle call hota tha (Deprecated)   |
+| wait()         | void        | Thread wait state me jata hai            |
+| wait(long)     | void        | Specific time tak wait                   |
+| wait(long,int) | void        | Nano seconds ke sath wait                |
+| notify()       | void        | Ek waiting thread ko wake-up karta hai   |
+| notifyAll()    | void        | Sab waiting threads ko wake-up karta hai |
+
+---
+
+# 1. toString()
+
+## Signature
+
+```java id="ekahqs"
+public String toString()
+```
+
+### Input
+
+None
+
+### Return
+
+```java id="gfwnys"
+String
+```
+
+### Default Implementation
+
+```java id="h8i1rv"
+ClassName@HashCode
+```
+
+Example
+
+```java id="gxog0x"
+class Employee {}
+
+Employee e = new Employee();
+
+System.out.println(e);
+```
+
+Output
+
+```text id="lzdfkl"
+Employee@15db9742
+```
+
+Override
+
+```java id="u0ur93"
+@Override
+public String toString() {
+    return "Employee";
+}
+```
+
+Output
+
+```text id="zqj3cs"
+Employee
+```
+
+---
+
+# 2. equals()
+
+## Signature
+
+```java id="lqyd8x"
+public boolean equals(Object obj)
+```
+
+Input
+
+```java id="cqzoh5"
+Object
+```
+
+Return
+
+```java id="p22hmd"
+boolean
+```
+
+Default
+
+Reference compare karta hai.
+
+```java id="vrn1zw"
+String s1 = new String("Java");
+String s2 = new String("Java");
+
+System.out.println(s1.equals(s2));
+```
+
+Output
+
+```text id="a5q95q"
+true
+```
+
+---
+
+# 3. hashCode()
+
+## Signature
+
+```java id="l8msav"
+public native int hashCode()
+```
+
+Return
+
+```java id="o5g15y"
+int
+```
+
+Example
+
+```java id="wucmt0"
+System.out.println("Java".hashCode());
+```
+
+Output
+
+```text id="jlwmnl"
+2301506
+```
+
+Mostly used in
+
+* HashMap
+* HashSet
+* Hashtable
+
+---
+
+# 4. getClass()
+
+## Signature
+
+```java id="zzbggk"
+public final Class<?> getClass()
+```
+
+Return
+
+```java id="spcqew"
+Class
+```
+
+Example
+
+```java id="zivqoz"
+Employee e = new Employee();
+
+System.out.println(e.getClass());
+```
+
+Output
+
+```text id="5ovd9g"
+class Employee
+```
+
+---
+
+# 5. clone()
+
+## Signature
+
+```java id="cdyldk"
+protected Object clone()
+```
+
+Return
+
+```java id="fg8f2t"
+Object
+```
+
+Input
+
+None
+
+Example
+
+```java id="2zv5bx"
+Employee e2 =
+(Employee)e1.clone();
+```
+
+Purpose
+
+Object copy banana.
+
+---
+
+# 6. finalize()
+
+## Signature
+
+```java id="s2p5e9"
+protected void finalize()
+```
+
+Return
+
+```java id="vfcrqk"
+void
+```
+
+Purpose
+
+Garbage Collector ke pehle call hota tha.
+
+⚠️ Java 9 se deprecated hai. New code me use nahi karna chahiye.
+
+---
+
+# 7. wait()
+
+## Signature
+
+```java id="x5x3c9"
+public final void wait()
+```
+
+Return
+
+```java id="t6kqjv"
+void
+```
+
+Purpose
+
+Current thread wait state me chali jati hai.
+
+Example
+
+```java id="vjjqwt"
+synchronized(obj){
+
+    obj.wait();
+
+}
+```
+
+---
+
+# 8. wait(long)
+
+## Signature
+
+```java id="tca4jd"
+public final void wait(long timeout)
+```
+
+Input
+
+```java id="e4nv8j"
+milliseconds
+```
+
+Example
+
+```java id="udicng"
+obj.wait(5000);
+```
+
+5 second wait karega.
+
+---
+
+# 9. wait(long,int)
+
+## Signature
+
+```java id="mp8d7i"
+public final void wait(long timeout,
+                       int nanos)
+```
+
+Input
+
+Milliseconds
+
+Nanoseconds
+
+---
+
+# 10. notify()
+
+## Signature
+
+```java id="0d4lgv"
+public final void notify()
+```
+
+Return
+
+Void
+
+Purpose
+
+Ek waiting thread ko wake-up karta hai.
+
+Example
+
+```java id="6u4exn"
+synchronized(obj){
+
+    obj.notify();
+
+}
+```
+
+---
+
+# 11. notifyAll()
+
+## Signature
+
+```java id="8c9k4z"
+public final void notifyAll()
+```
+
+Purpose
+
+Sab waiting threads ko wake-up karta hai.
+
+---
+
+# Complete Hierarchy
+
+```text id="3f7hz6"
+Object
+
+│
+
+├── toString()
+
+├── equals()
+
+├── hashCode()
+
+├── clone()
+
+├── getClass()
+
+├── finalize()
+
+├── wait()
+
+├── wait(long)
+
+├── wait(long,int)
+
+├── notify()
+
+└── notifyAll()
+```
+
+---
+
+# Methods Frequently Asked in Interviews
+
+## Q1. Object class me kitne important methods hote hain?
+
+**Answer:**
+
+* toString()
+* equals()
+* hashCode()
+* getClass()
+* clone()
+* wait()
+* notify()
+* notifyAll()
+* finalize() (deprecated)
+
+---
+
+## Q2. Sabse jyada kaunse methods use hote hain?
+
+✅ `toString()`
+
+✅ `equals()`
+
+✅ `hashCode()`
+
+✅ `getClass()`
+
+Ye 4 methods lagbhag har Java project me use hote hain.
+
+---
+
+# Easy Memory Trick
+
+**Collections / HashMap**
+
+* `equals()`
+* `hashCode()`
+
+**Logging / Printing**
+
+* `toString()`
+
+**Reflection**
+
+* `getClass()`
+
+**Object Copy**
+
+* `clone()`
+
+**Multithreading**
+
+* `wait()`
+* `notify()`
+* `notifyAll()`
+
+**GC (Old Feature)**
+
+* `finalize()`
+
+---
+
+## ⭐ 4–6 YOE Interview Tip
+
+Interviewer sirf methods ke naam nahi puchta. Ye bhi puch sakta hai:
+
+* `equals()` aur `hashCode()` ko saath me override kyu karte hain?
+* `toString()` override kyu karte hain?
+* `wait()` aur `sleep()` me difference kya hai?
+* `notify()` vs `notifyAll()`
+* `clone()` shallow copy banata hai ya deep copy?
+
+Ye Object class ke sabse common interview questions hain.
+===================================================================================
+Ye bahut important topic hai. Interview me log **`Object` class** aur **`java.util.Objects` class** ko confuse kar dete hain.
+
+## Difference
+
+| Object Class                | Objects Class         |
+| --------------------------- | --------------------- |
+| `java.lang.Object`          | `java.util.Objects`   |
+| Parent class of all classes | Utility class         |
+| Non-static methods          | Mostly static methods |
+| Inherited by every class    | Helper methods        |
+
+---
+
+# java.util.Objects
+
+```java
+import java.util.Objects;
+```
+
+Ye ek **Utility Class** hai jisme sab methods **static** hote hain.
+
+---
+
+# Complete Methods of java.util.Objects
+
+## 1. equals()
+
+### Signature
+
+```java
+public static boolean equals(Object a, Object b)
+```
+
+### Input
+
+```text
+Object a
+Object b
+```
+
+### Return
+
+```text
+boolean
+```
+
+### Example
+
+```java
+System.out.println(
+    Objects.equals("Java","Java")
+);
+```
+
+Output
+
+```
+true
+```
+
+### Internal Logic
+
+```java
+if(a==b)
+   return true;
+
+if(a==null || b==null)
+   return false;
+
+return a.equals(b);
+```
+
+---
+
+# 2. deepEquals()
+
+### Signature
+
+```java
+public static boolean deepEquals(Object a,
+                                 Object b)
+```
+
+### Return
+
+```text
+boolean
+```
+
+### Example
+
+```java
+String a[]={"A","B"};
+String b[]={"A","B"};
+
+System.out.println(
+Objects.deepEquals(a,b));
+```
+
+Output
+
+```
+true
+```
+
+Used for nested arrays.
+
+---
+
+# 3. hashCode()
+
+### Signature
+
+```java
+public static int hashCode(Object o)
+```
+
+### Return
+
+```
+int
+```
+
+Example
+
+```java
+Objects.hashCode("Java");
+```
+
+---
+
+# 4. hash()
+
+### Signature
+
+```java
+public static int hash(Object... values)
+```
+
+### Input
+
+Varargs
+
+### Return
+
+```
+int
+```
+
+Example
+
+```java
+Objects.hash(id,name,salary);
+```
+
+Mostly used inside
+
+```java
+hashCode()
+```
+
+implementation.
+
+---
+
+# 5. toString()
+
+### Signature
+
+```java
+public static String toString(Object o)
+```
+
+Example
+
+```java
+Objects.toString(100);
+```
+
+Output
+
+```
+100
+```
+
+If null
+
+```java
+Objects.toString(null)
+```
+
+Output
+
+```
+null
+```
+
+---
+
+# 6. toString()
+
+Overloaded
+
+```java
+public static String
+toString(Object o,
+         String nullDefault)
+```
+
+Example
+
+```java
+Objects.toString(null,"N/A");
+```
+
+Output
+
+```
+N/A
+```
+
+---
+
+# 7. compare()
+
+### Signature
+
+```java
+public static <T> int compare(
+T a,
+T b,
+Comparator<? super T> c)
+```
+
+### Input
+
+```
+Object1
+
+Object2
+
+Comparator
+```
+
+### Return
+
+```
+int
+```
+
+Example
+
+```java
+Objects.compare(
+10,
+20,
+Integer::compare);
+```
+
+Output
+
+```
+-1
+```
+
+---
+
+# 8. requireNonNull()
+
+### Signature
+
+```java
+public static <T> T
+requireNonNull(T obj)
+```
+
+### Return
+
+Same Object
+
+### Example
+
+```java
+Objects.requireNonNull(name);
+```
+
+If null
+
+↓
+
+Throws
+
+```
+NullPointerException
+```
+
+---
+
+# 9. requireNonNull()
+
+Overloaded
+
+```java
+requireNonNull(
+T obj,
+String message)
+```
+
+Example
+
+```java
+Objects.requireNonNull(
+name,
+"Name Required");
+```
+
+Output
+
+```
+Exception
+
+Name Required
+```
+
+---
+
+# 10. requireNonNull()
+
+Java 8
+
+```java
+requireNonNull(
+T obj,
+Supplier<String>)
+```
+
+Example
+
+```java
+Objects.requireNonNull(
+name,
+()->"Invalid");
+```
+
+---
+
+# 11. isNull()
+
+### Signature
+
+```java
+public static boolean isNull(Object obj)
+```
+
+Return
+
+```
+boolean
+```
+
+Example
+
+```java
+Objects.isNull(name);
+```
+
+Output
+
+```
+true
+```
+
+Mostly Stream API me use hota hai.
+
+```java
+.filter(Objects::isNull)
+```
+
+---
+
+# 12. nonNull()
+
+### Signature
+
+```java
+public static boolean nonNull(Object obj)
+```
+
+Return
+
+```
+boolean
+```
+
+Example
+
+```java
+Objects.nonNull(name);
+```
+
+Stream Example
+
+```java
+list.stream()
+.filter(Objects::nonNull)
+```
+
+---
+
+# 13. requireNonNullElse()
+
+Java 9
+
+### Signature
+
+```java
+requireNonNullElse(
+T obj,
+T defaultObj)
+```
+
+Example
+
+```java
+String name =
+Objects.requireNonNullElse(
+null,
+"Unknown");
+```
+
+Output
+
+```
+Unknown
+```
+
+---
+
+# 14. requireNonNullElseGet()
+
+Java 9
+
+### Signature
+
+```java
+requireNonNullElseGet(
+T obj,
+Supplier<? extends T>)
+```
+
+Example
+
+```java
+String name=
+Objects.requireNonNullElseGet(
+null,
+()->"Guest");
+```
+
+Output
+
+```
+Guest
+```
+
+---
+
+# 15. checkIndex()
+
+Java 9
+
+### Signature
+
+```java
+checkIndex(
+int index,
+int length)
+```
+
+Return
+
+```
+int
+```
+
+Example
+
+```java
+Objects.checkIndex(2,5);
+```
+
+Output
+
+```
+2
+```
+
+If invalid
+
+↓
+
+```
+IndexOutOfBoundsException
+```
+
+---
+
+# 16. checkFromToIndex()
+
+Java 9
+
+### Signature
+
+```java
+checkFromToIndex(
+from,
+to,
+length)
+```
+
+Example
+
+```java
+Objects.checkFromToIndex(
+2,
+5,
+10);
+```
+
+---
+
+# 17. checkFromIndexSize()
+
+Java 9
+
+### Signature
+
+```java
+checkFromIndexSize(
+from,
+size,
+length)
+```
+
+Used
+
+```
+Sub Arrays
+
+Sub Lists
+```
+
+---
+
+# Complete Summary
+
+| Method                          | Input                    | Return  | Java |
+| ------------------------------- | ------------------------ | ------- | ---- |
+| equals()                        | Object,Object            | boolean | 7    |
+| deepEquals()                    | Object,Object            | boolean | 7    |
+| hashCode()                      | Object                   | int     | 7    |
+| hash()                          | Object...                | int     | 7    |
+| toString()                      | Object                   | String  | 7    |
+| toString()                      | Object,String            | String  | 7    |
+| compare()                       | Object,Object,Comparator | int     | 7    |
+| requireNonNull()                | Object                   | Object  | 7    |
+| requireNonNull(Object,String)   | Object,String            | Object  | 7    |
+| requireNonNull(Object,Supplier) | Object,Supplier          | Object  | 8    |
+| isNull()                        | Object                   | boolean | 8    |
+| nonNull()                       | Object                   | boolean | 8    |
+| requireNonNullElse()            | Object,Object            | Object  | 9    |
+| requireNonNullElseGet()         | Object,Supplier          | Object  | 9    |
+| checkIndex()                    | int,int                  | int     | 9    |
+| checkFromToIndex()              | int,int,int              | int     | 9    |
+| checkFromIndexSize()            | int,int,int              | int     | 9    |
+
+---
+
+# ⭐ Most Important Interview Methods (4–6 YOE)
+
+Agar interviewer `java.util.Objects` ke baare me pooche, to ye methods sabse zyada use hote hain:
+
+1. ✅ `Objects.equals()`
+2. ✅ `Objects.hash()`
+3. ✅ `Objects.hashCode()`
+4. ✅ `Objects.requireNonNull()`
+5. ✅ `Objects.nonNull()`
+6. ✅ `Objects.isNull()`
+7. ✅ `Objects.compare()`
+
+Ye methods Spring Boot, Java 8 Streams, DTOs, Entity classes, aur production code me sabse commonly dikhte hain.
+=========================================================================================================================
+`Character` class Java me **wrapper class** hai jo `char` primitive ke liye methods provide karti hai.
+
+```java
+char ch = 'A';
+```
+
+↓
+
+Wrapper Class
+
+```java
+Character c = 'A';
+```
+
+Package:
+
+```java
+java.lang.Character
+```
+
+---
+
+# Most Important Character Class Methods (Interview)
+
+| Method                  | Input     | Return    | Use                      |
+| ----------------------- | --------- | --------- | ------------------------ |
+| isLetter()              | char      | boolean   | Letter check             |
+| isDigit()               | char      | boolean   | Digit check              |
+| isLetterOrDigit()       | char      | boolean   | Letter ya Digit          |
+| isAlphabetic()          | int       | boolean   | Alphabet check           |
+| isWhitespace()          | char      | boolean   | Space check              |
+| isUpperCase()           | char      | boolean   | Uppercase check          |
+| isLowerCase()           | char      | boolean   | Lowercase check          |
+| toUpperCase()           | char      | char      | Uppercase convert        |
+| toLowerCase()           | char      | char      | Lowercase convert        |
+| toString()              | char      | String    | String convert           |
+| valueOf()               | char      | Character | Wrapper object           |
+| compare()               | char,char | int       | Compare                  |
+| compareTo()             | Character | int       | Compare                  |
+| charValue()             | -         | char      | Primitive return         |
+| getNumericValue()       | char      | int       | Numeric value            |
+| isJavaIdentifierStart() | char      | boolean   | Variable first char      |
+| isJavaIdentifierPart()  | char      | boolean   | Variable remaining chars |
+
+---
+
+# 1. isLetter()
+
+### Signature
+
+```java
+public static boolean isLetter(char ch)
+```
+
+### Input
+
+```java
+char
+```
+
+### Return
+
+```java
+boolean
+```
+
+### Example
+
+```java
+System.out.println(Character.isLetter('A'));
+```
+
+Output
+
+```text
+true
+```
+
+---
+
+# 2. isDigit()
+
+### Signature
+
+```java
+public static boolean isDigit(char ch)
+```
+
+Example
+
+```java
+System.out.println(Character.isDigit('5'));
+```
+
+Output
+
+```text
+true
+```
+
+---
+
+# 3. isLetterOrDigit()
+
+### Signature
+
+```java
+public static boolean isLetterOrDigit(char ch)
+```
+
+Example
+
+```java
+System.out.println(Character.isLetterOrDigit('A'));
+System.out.println(Character.isLetterOrDigit('5'));
+```
+
+Output
+
+```text
+true
+true
+```
+
+---
+
+# 4. isAlphabetic()
+
+### Signature
+
+```java
+public static boolean isAlphabetic(int codePoint)
+```
+
+Example
+
+```java
+System.out.println(Character.isAlphabetic('A'));
+```
+
+Output
+
+```text
+true
+```
+
+---
+
+# 5. isWhitespace()
+
+### Signature
+
+```java
+public static boolean isWhitespace(char ch)
+```
+
+Example
+
+```java
+System.out.println(Character.isWhitespace(' '));
+```
+
+Output
+
+```text
+true
+```
+
+---
+
+# 6. isUpperCase()
+
+### Signature
+
+```java
+public static boolean isUpperCase(char ch)
+```
+
+Example
+
+```java
+System.out.println(Character.isUpperCase('A'));
+```
+
+Output
+
+```text
+true
+```
+
+---
+
+# 7. isLowerCase()
+
+### Signature
+
+```java
+public static boolean isLowerCase(char ch)
+```
+
+Example
+
+```java
+System.out.println(Character.isLowerCase('a'));
+```
+
+Output
+
+```text
+true
+```
+
+---
+
+# 8. toUpperCase()
+
+### Signature
+
+```java
+public static char toUpperCase(char ch)
+```
+
+Example
+
+```java
+System.out.println(Character.toUpperCase('a'));
+```
+
+Output
+
+```text
+A
+```
+
+---
+
+# 9. toLowerCase()
+
+### Signature
+
+```java
+public static char toLowerCase(char ch)
+```
+
+Example
+
+```java
+System.out.println(Character.toLowerCase('A'));
+```
+
+Output
+
+```text
+a
+```
+
+---
+
+# 10. toString()
+
+### Signature
+
+```java
+public static String toString(char ch)
+```
+
+Example
+
+```java
+System.out.println(Character.toString('A'));
+```
+
+Output
+
+```text
+A
+```
+
+---
+
+# 11. valueOf()
+
+### Signature
+
+```java
+public static Character valueOf(char ch)
+```
+
+Example
+
+```java
+Character c = Character.valueOf('A');
+```
+
+Output
+
+```text
+Character Object
+```
+
+---
+
+# 12. compare()
+
+### Signature
+
+```java
+public static int compare(char x, char y)
+```
+
+Example
+
+```java
+System.out.println(Character.compare('A', 'B'));
+```
+
+Output
+
+```text
+-1
+```
+
+---
+
+# 13. compareTo()
+
+### Signature
+
+```java
+public int compareTo(Character anotherChar)
+```
+
+Example
+
+```java
+Character c1='A';
+Character c2='B';
+
+System.out.println(c1.compareTo(c2));
+```
+
+Output
+
+```text
+-1
+```
+
+---
+
+# 14. charValue()
+
+### Signature
+
+```java
+public char charValue()
+```
+
+Example
+
+```java
+Character c='A';
+
+System.out.println(c.charValue());
+```
+
+Output
+
+```text
+A
+```
+
+---
+
+# 15. getNumericValue()
+
+### Signature
+
+```java
+public static int getNumericValue(char ch)
+```
+
+Example
+
+```java
+System.out.println(Character.getNumericValue('7'));
+```
+
+Output
+
+```text
+7
+```
+
+---
+
+# 16. isJavaIdentifierStart()
+
+### Signature
+
+```java
+public static boolean isJavaIdentifierStart(char ch)
+```
+
+Example
+
+```java
+System.out.println(
+Character.isJavaIdentifierStart('_')
+);
+```
+
+Output
+
+```text
+true
+```
+
+Useful for checking if a character can be the **first character** of a Java variable name.
+
+---
+
+# 17. isJavaIdentifierPart()
+
+### Signature
+
+```java
+public static boolean isJavaIdentifierPart(char ch)
+```
+
+Example
+
+```java
+System.out.println(
+Character.isJavaIdentifierPart('1')
+);
+```
+
+Output
+
+```text
+true
+```
+
+Useful for checking if a character can appear **after the first character** in a Java variable name.
+
+---
+
+# Java 8 Stream Examples
+
+### Count Digits
+
+```java
+String str = "abc123";
+
+long count = str.chars()
+                .filter(ch -> Character.isDigit(ch))
+                .count();
+
+System.out.println(count);
+```
+
+Output
+
+```text
+3
+```
+
+---
+
+### Count Alphabets
+
+```java
+String str = "abc123";
+
+long count = str.chars()
+                .filter(ch -> Character.isLetter(ch))
+                .count();
+
+System.out.println(count);
+```
+
+Output
+
+```text
+3
+```
+
+---
+
+### Convert Lowercase to Uppercase
+
+```java
+String result = "java"
+        .chars()
+        .map(Character::toUpperCase)
+        .mapToObj(ch -> String.valueOf((char) ch))
+        .collect(Collectors.joining());
+
+System.out.println(result);
+```
+
+Output
+
+```text
+JAVA
+```
+
+---
+
+# ⭐ Top 10 Interview Methods (Must Remember)
+
+| Method              | Interview Use                      |
+| ------------------- | ---------------------------------- |
+| `isLetter()`        | Alphabet check                     |
+| `isDigit()`         | Number check                       |
+| `isLetterOrDigit()` | Alphanumeric validation            |
+| `isWhitespace()`    | Remove/count spaces                |
+| `isUpperCase()`     | Uppercase validation               |
+| `isLowerCase()`     | Lowercase validation               |
+| `toUpperCase()`     | Convert to uppercase               |
+| `toLowerCase()`     | Convert to lowercase               |
+| `compare()`         | Character comparison               |
+| `getNumericValue()` | Convert character digit to integer |
+
+---
+
+## Interview Questions
+
+### Q1. `Character.isDigit()` aur `Character.getNumericValue()` me difference?
+
+```java
+Character.isDigit('5')
+```
+
+Returns:
+
+```text
+true
+```
+
+```java
+Character.getNumericValue('5')
+```
+
+Returns:
+
+```text
+5
+```
+
+---
+
+### Q2. `Character.toUpperCase()` ka return type kya hai?
+
+```java
+char
+```
+
+---
+
+### Q3. Java 8 Streams me `Character.nonNull()` hota hai?
+
+❌ **Nahi.**
+
+`nonNull()` method **`java.util.Objects`** class ka hai, `Character` class ka nahi.
+
+---
+
+## 4–6 YOE Interview Tip
+
+Character class ke ye methods sabse zyada use hote hain:
+
+* ✅ `isLetter()`
+* ✅ `isDigit()`
+* ✅ `isLetterOrDigit()`
+* ✅ `isWhitespace()`
+* ✅ `toUpperCase()`
+* ✅ `toLowerCase()`
+* ✅ `compare()`
+
+Inka use validation, String processing, regex alternatives, aur Java 8 Stream programs me bahut common hai.
+====================================================================================================================
