@@ -1,0 +1,3764 @@
+Perfect 👍 Vishnu.
+
+Ye format **5+ Years Java Backend Developer Interview** ke hisab se hoga.
+
+* ❌ Theory jaisa answer nahi
+* ✅ Interview me bolne layak answer
+* ✅ Hindi Wali English
+* ✅ Follow-up Questions
+* ✅ Memory Trick
+* ✅ Real Project Example
+* ✅ Repeat questions nahi honge
+* ✅ Jo transcript me nahi hai aur important hai wo bhi add karunga. 
+
+---
+
+# JUnit Interview Questions & Answers (Part 1)
+
+# Topic 1 : JUnit Basics
+
+---
+
+# Q1. What is JUnit?
+
+### 👨‍💼 Interviewer
+
+What is JUnit?
+
+### 👨‍💻 You
+
+JUnit ek **Java Testing Framework** hai jo **Unit Testing** ke liye use hota hai.
+
+Iska main purpose individual methods ya units ko test karna hota hai.
+
+Isse hum verify karte hain ki hamara business logic expected result de raha hai ya nahi.
+
+Normally Spring Boot projects me JUnit 5 use hota hai.
+
+### ⭐ One Line Answer
+
+> **JUnit is a Java Testing Framework used to perform Unit Testing.**
+
+### 💡 Real Project
+
+Main Service Layer ke methods jaise `save()`, `update()`, `delete()` aur `getById()` ko JUnit se test karta hoon.
+
+---
+
+# Q2. What is Unit Testing?
+
+### 👨‍💼 Interviewer
+
+What is Unit Testing?
+
+### 👨‍💻 You
+
+Unit Testing ka matlab application ki **smallest testable unit** ko independently test karna.
+
+Generally ek method ya function ko test kiya jata hai.
+
+Isme hum sirf business logic test karte hain.
+
+Database, API ya Kafka ko include nahi karte.
+
+### ⭐ One Line Answer
+
+> Unit Testing means testing one method or one unit independently.
+
+### ⭐ Memory Trick
+
+```text
+One Method
+
+↓
+
+One Test
+
+↓
+
+Unit Testing
+```
+
+---
+
+# Q3. Why do we use JUnit?
+
+### 👨‍💼 Interviewer
+
+Why do we use JUnit?
+
+### 👨‍💻 You
+
+JUnit use karte hain
+
+* Business Logic verify karne ke liye
+* Bugs jaldi detect karne ke liye
+* Code Quality improve karne ke liye
+* Refactoring ke baad ensure karne ke liye ki existing functionality break na ho.
+
+### ⭐ One Line Answer
+
+> JUnit is used to verify business logic automatically.
+
+---
+
+# Q4. What is the difference between Testing and Unit Testing?
+
+### 👨‍💼 Interviewer
+
+Difference between Testing and Unit Testing?
+
+### 👨‍💻 You
+
+Testing ka matlab complete application ko verify karna.
+
+Unit Testing ka matlab sirf ek method ya unit ko independently verify karna.
+
+### Table
+
+| Testing              | Unit Testing      |
+| -------------------- | ----------------- |
+| Complete Application | Single Method     |
+| Manual ya Automation | Mostly Automation |
+| Multiple Modules     | Single Unit       |
+
+---
+
+# Q5. Why is Unit Testing important?
+
+### 👨‍💼 Interviewer
+
+Why should developers write Unit Test Cases?
+
+### 👨‍💻 You
+
+Kyuki
+
+* Bugs early mil jate hain.
+* Production issues kam hote hain.
+* Refactoring easy ho jati hai.
+* Code reliable ban jata hai.
+* Deployment se pehle confidence milta hai.
+
+### ⭐ Interview Tip
+
+Production bug fix karna expensive hota hai.
+
+Unit Test us bug ko development time par hi pakad leta hai.
+
+---
+
+# Q6. What are the advantages of JUnit?
+
+### 👨‍💻 You
+
+Advantages
+
+* Fast Execution
+* Automated Testing
+* Easy Debugging
+* Regression Testing
+* Code Quality Improve
+* Early Bug Detection
+* Free & Open Source
+
+---
+
+# Q7. What is a Test Case?
+
+### 👨‍💼 Interviewer
+
+What is Test Case?
+
+### 👨‍💻 You
+
+Test Case ek method hota hai jo verify karta hai ki specific functionality expected output de rahi hai ya nahi.
+
+JUnit me har Test Case
+
+```java
+@Test
+```
+
+annotation se identify hota hai.
+
+---
+
+# Q8. What is a Test Suite?
+
+### 👨‍💼 Interviewer
+
+What is Test Suite?
+
+### 👨‍💻 You
+
+Test Suite multiple Test Cases ka collection hota hai.
+
+Ek hi run me multiple Test Classes execute kar sakte hain.
+
+### Example
+
+```text
+UserServiceTest
+
+OrderServiceTest
+
+PaymentServiceTest
+```
+
+Sab ek saath run ho sakte hain.
+
+---
+
+# Q9. What is Regression Testing?
+
+### 👨‍💼 Interviewer
+
+Regression Testing kya hoti hai?
+
+### 👨‍💻 You
+
+Jab hum existing code me changes karte hain,
+
+to check karte hain ki purani functionality break to nahi hui.
+
+Isi process ko Regression Testing bolte hain.
+
+JUnit isme bahut help karta hai.
+
+---
+
+# Q10. Can JUnit perform Integration Testing?
+
+### 👨‍💻 You
+
+Technically Yes.
+
+Lekin JUnit mainly Unit Testing ke liye bana hai.
+
+Integration Testing ke liye generally
+
+* SpringBootTest
+* MockMvc
+* TestContainers
+
+jaise tools bhi use hote hain.
+
+### ⭐ Interview Tip
+
+Ye answer interviewer ko pasand aata hai.
+
+---
+
+# Q11. What is JUnit Test Coverage?
+
+### 👨‍💼 Interviewer
+
+What is Test Coverage?
+
+### 👨‍💻 You
+
+Test Coverage batata hai
+
+hamare code ka kitna percentage Unit Test se cover hua hai.
+
+Example
+
+Agar project me
+
+100 methods hain
+
+aur
+
+80 methods ke Test Cases likhe hain
+
+to
+
+Coverage = 80%
+
+---
+
+# Q12. Which tools are used to measure Test Coverage?
+
+### 👨‍💻 You
+
+Mostly companies use
+
+* JaCoCo ⭐ (Most Popular)
+* SonarQube
+* IntelliJ Coverage
+
+### ⭐ Interview Tip
+
+Agar interviewer pooche
+
+Project me Coverage kaise dekhte ho?
+
+Bolna
+
+> **We use JaCoCo with SonarQube.**
+
+---
+
+# Q13. What is the ideal Test Coverage?
+
+### 👨‍💻 You
+
+100% coverage hona zaruri nahi.
+
+Quality zyada important hai.
+
+Industry me
+
+70%–90%
+
+coverage generally acceptable hota hai.
+
+Critical modules me
+
+90%+
+
+target rakhte hain.
+
+---
+
+# Q14. Can we achieve 100% Test Coverage?
+
+### 👨‍💻 You
+
+Yes.
+
+Lekin practical projects me
+
+100% coverage possible ya required nahi hota.
+
+Kuch code
+
+logging
+
+configuration
+
+generated code
+
+cover nahi kiya jata.
+
+---
+
+# Q15. Is higher Test Coverage always better?
+
+### 👨‍💼 Interviewer
+
+Agar 100% coverage hai,
+
+kya project bug-free hai?
+
+### 👨‍💻 You
+
+No Sir.
+
+Coverage sirf batata hai
+
+code execute hua.
+
+Ye guarantee nahi karta
+
+ki saare scenarios correctly test hue hain.
+
+Strong Assertions aur proper test scenarios bhi equally important hain.
+
+### ⭐ Interview Tip
+
+Ye ek tricky interview question hai.
+
+---
+
+# Q16. What is the difference between Manual Testing and JUnit?
+
+| Manual Testing           | JUnit                |
+| ------------------------ | -------------------- |
+| Human performs testing   | Automated            |
+| Slow                     | Fast                 |
+| Repeat manually          | Repeat automatically |
+| More chances of mistakes | Reliable             |
+
+---
+
+# Q17. Can we test private methods using JUnit?
+
+### 👨‍💼 Interviewer
+
+Can we directly test private methods?
+
+### 👨‍💻 You
+
+Recommended approach hai
+
+Private methods ko directly test nahi karna.
+
+Public method ko test karo.
+
+Private method indirectly cover ho jayega.
+
+### ⭐ Interview Tip
+
+Agar private method bahut complex hai,
+
+to us logic ko separate class me move karna better design hai.
+
+---
+
+# Q18. Can JUnit test Database?
+
+### 👨‍💻 You
+
+Unit Test me
+
+Generally
+
+No.
+
+Repository ko Mockito se Mock karte hain.
+
+Database ko hit nahi karte.
+
+Database testing Integration Test ka part hota hai.
+
+---
+
+# Q19. Which layers are generally Unit Tested?
+
+### 👨‍💻 You
+
+Mostly
+
+* Service Layer ⭐
+* Utility Classes
+* Helper Classes
+* Validation Classes
+* Business Logic
+
+Controller aur Repository ko usually alag strategy se test kiya jata hai.
+
+---
+
+# Q20. Which layer is most important for Unit Testing?
+
+### 👨‍💼 Interviewer
+
+Project me sabse zyada kis layer ka Unit Test likhte ho?
+
+### 👨‍💻 You
+
+**Service Layer.**
+
+Kyuki actual business logic wahi hota hai.
+
+Repository ko Mock kar dete hain.
+
+Controller ko MockMvc se test karte hain.
+
+---
+
+# 🎯 Rapid Fire (1 Line Revision)
+
+| Question               | One-Line Answer                   |
+| ---------------------- | --------------------------------- |
+| What is JUnit?         | Java Unit Testing Framework       |
+| What is Unit Testing?  | Testing one method independently  |
+| Why JUnit?             | To automate unit testing          |
+| Main Benefit?          | Early bug detection               |
+| Test Coverage?         | Percentage of code tested         |
+| Coverage Tool?         | JaCoCo                            |
+| Ideal Coverage?        | 70–90%                            |
+| Private Method Test?   | Indirectly through public methods |
+| Database in Unit Test? | No, use Mockito                   |
+| Most Tested Layer?     | Service Layer                     |
+
+---
+
+# ⭐ Interview Bonus Questions (Not in the YouTube Video)
+
+These are commonly asked in **4–6 years Java/Spring Boot interviews** but are not covered in the transcript. 
+
+### Q21. Does JUnit improve application performance?
+
+**Answer:**
+
+No.
+
+JUnit sirf testing ke liye hai.
+
+Ye production application ki performance improve nahi karta.
+
+Ye sirf code quality aur reliability improve karta hai.
+
+---
+
+### Q22. Do JUnit test cases run in production?
+
+**Answer:**
+
+No.
+
+JUnit dependency generally `test` scope me hoti hai.
+
+Production build me ye include nahi hoti.
+
+---
+
+### Q23. When do you write Unit Test cases?
+
+**Answer:**
+
+Generally development ke baad ya TDD approach me development se pehle.
+
+Company ke process par depend karta hai.
+
+---
+
+## 📌 Part 1 Complete
+
+Is Part me humne **JUnit Basics + 23 Interview Questions** cover kiye.
+
+**Part 2** me hum cover karenge:
+
+* JUnit Annotations (`@Test`, `@BeforeEach`, `@AfterEach`, `@BeforeAll`, `@AfterAll`)
+* Assertions
+* `assertThrows()`
+* `@DisplayName`
+* `@Disabled`
+* `@RepeatedTest`
+* `@Nested`
+* Saare annotation-based interview questions with follow-up answers.
+=====================================================================================================================
+# JUnit Interview Questions & Answers (Part 2)
+
+# 📚 Topic: JUnit Annotations & Assertions (Most Asked Interview Questions)
+
+> **Language:** Hindi Wali English
+>
+> **Level:** 3–6 Years Java/Spring Boot
+>
+> **Interview Importance:** ⭐⭐⭐⭐⭐
+
+---
+
+# Q1. What is @Test Annotation?
+
+### 👨‍💼 Interviewer
+
+What is @Test annotation?
+
+### 👨‍💻 You
+
+`@Test` JUnit ko batata hai ki ye method ek **Test Case** hai.
+
+JUnit sirf unhi methods ko execute karta hai jinke upar `@Test` laga hota hai.
+
+### ⭐ One Line Answer
+
+> **@Test is used to mark a method as a test case.**
+
+---
+
+# Q2. What happens if we don't use @Test?
+
+### 👨‍💼 Interviewer
+
+Agar @Test remove kar dein to kya hoga?
+
+### 👨‍💻 You
+
+Method normal Java method ban jayega.
+
+JUnit us method ko execute nahi karega.
+
+### ⭐ Interview Tip
+
+Ye bahut common follow-up question hai.
+
+---
+
+# Q3. What is @BeforeEach?
+
+### 👨‍💼 Interviewer
+
+What is @BeforeEach?
+
+### 👨‍💻 You
+
+`@BeforeEach` har Test Case execute hone se pehle run hota hai.
+
+Generally object creation, mock initialization aur common setup ke liye use hota hai.
+
+### Example
+
+```java
+@BeforeEach
+void setup(){
+
+    service=new UserService();
+
+}
+```
+
+---
+
+# Q4. Why do we use @BeforeEach?
+
+### 👨‍💻 You
+
+Code duplicate na ho.
+
+Agar 20 Test Cases hain aur har baar object banana hai,
+
+to ek hi jagah `@BeforeEach` me likh dete hain.
+
+### ⭐ One Line
+
+> Common setup before every test.
+
+---
+
+# Q5. What is @AfterEach?
+
+### 👨‍💼 Interviewer
+
+What is @AfterEach?
+
+### 👨‍💻 You
+
+Har Test Case complete hone ke baad execute hota hai.
+
+Cleanup ke liye use hota hai.
+
+Example
+
+* Clear Cache
+* Close Streams
+* Reset Variables
+
+---
+
+# Q6. What is @BeforeAll?
+
+### 👨‍💼 Interviewer
+
+What is @BeforeAll?
+
+### 👨‍💻 You
+
+`@BeforeAll` sabhi Test Cases se pehle sirf **ek baar** execute hota hai.
+
+Heavy initialization ke liye use karte hain.
+
+Example
+
+* Database Connection
+* Configuration Loading
+* Expensive Resource Creation
+
+---
+
+# Q7. Why must @BeforeAll method be static?
+
+### 👨‍💼 Interviewer
+
+Why static?
+
+### 👨‍💻 You
+
+Kyuki ye object create hone se pehle execute hota hai.
+
+Isliye JUnit object create kiye bina method call karta hai.
+
+### ⭐ One Line
+
+> It runs at class level before object creation.
+
+---
+
+# Q8. What is @AfterAll?
+
+### 👨‍💼 Interviewer
+
+What is @AfterAll?
+
+### 👨‍💻 You
+
+Sabhi Test Cases complete hone ke baad sirf ek baar execute hota hai.
+
+Cleanup ke liye use hota hai.
+
+Example
+
+* Close Database Connection
+* Release Resources
+
+---
+
+# Q9. What is the execution order of JUnit 5 annotations?
+
+### 👨‍💼 Interviewer
+
+Execution order batao.
+
+### 👨‍💻 You
+
+```text
+@BeforeAll
+
+↓
+
+@BeforeEach
+
+↓
+
+@Test
+
+↓
+
+@AfterEach
+
+↓
+
+@BeforeEach
+
+↓
+
+@Test
+
+↓
+
+@AfterEach
+
+↓
+
+@AfterAll
+```
+
+### ⭐ Memory Trick
+
+> **All → Each → Test → Each → All**
+
+---
+
+# Q10. Difference between @BeforeAll and @BeforeEach?
+
+| @BeforeAll    | @BeforeEach                |
+| ------------- | -------------------------- |
+| Executes once | Executes before every test |
+| Heavy setup   | Per-test setup             |
+| Static        | Non-static                 |
+
+---
+
+# Q11. Difference between @AfterAll and @AfterEach?
+
+| @AfterAll     | @AfterEach            |
+| ------------- | --------------------- |
+| Runs once     | Runs after every test |
+| Final Cleanup | Per Test Cleanup      |
+
+---
+
+# Q12. What is @Disabled?
+
+### 👨‍💼 Interviewer
+
+What is @Disabled?
+
+### 👨‍💻 You
+
+Temporary kisi Test Case ko execute nahi karna ho
+
+to `@Disabled` use karte hain.
+
+Mostly jab bug fix pending ho ya feature incomplete ho.
+
+### One Line
+
+> Temporarily skips a test case.
+
+---
+
+# Q13. Difference between @Ignore and @Disabled?
+
+### 👨‍💻 You
+
+| JUnit 4 | JUnit 5   |
+| ------- | --------- |
+| @Ignore | @Disabled |
+
+Baaki purpose same hai.
+
+---
+
+# Q14. What is @DisplayName?
+
+### 👨‍💼 Interviewer
+
+Why use @DisplayName?
+
+### 👨‍💻 You
+
+Readable Test Name dene ke liye.
+
+Reports aur IDE me achha naam dikhta hai.
+
+Example
+
+Instead of
+
+```text
+saveUserTest()
+```
+
+Display karega
+
+```text
+Save User Successfully
+```
+
+---
+
+# Q15. What is @RepeatedTest?
+
+### 👨‍💼 Interviewer
+
+What is @RepeatedTest?
+
+### 👨‍💻 You
+
+Same Test ko multiple baar execute karna ho
+
+to use karte hain.
+
+Example
+
+```java
+@RepeatedTest(5)
+```
+
+Test
+
+5 baar chalega.
+
+---
+
+# Q16. What is @Nested?
+
+### 👨‍💼 Interviewer
+
+Why use @Nested?
+
+### 👨‍💻 You
+
+Related Test Cases ko group karne ke liye.
+
+Large Test Classes ko organize karna easy ho jata hai.
+
+Example
+
+```text
+LoginTests
+
+RegistrationTests
+
+PaymentTests
+```
+
+---
+
+# Q17. What are Assertions?
+
+### 👨‍💼 Interviewer
+
+What are Assertions?
+
+### 👨‍💻 You
+
+Assertions Expected Result aur Actual Result compare karti hain.
+
+Agar dono same hain
+
+↓
+
+PASS
+
+Different hain
+
+↓
+
+FAIL
+
+### One Line
+
+> Assertions verify expected and actual results.
+
+---
+
+# Q18. Which Assertion is used most?
+
+### 👨‍💻 You
+
+Sabse zyada use hota hai
+
+```java
+assertEquals()
+```
+
+Kyuki mostly value compare karni hoti hai.
+
+---
+
+# Q19. Difference between assertEquals() and assertSame()?
+
+### 👨‍💻 You
+
+`assertEquals()`
+
+↓
+
+Value compare karta hai.
+
+`assertSame()`
+
+↓
+
+Object Reference compare karta hai.
+
+### Example
+
+```java
+String a=new String("Java");
+
+String b=new String("Java");
+```
+
+```java
+assertEquals(a,b)
+```
+
+PASS
+
+```java
+assertSame(a,b)
+```
+
+FAIL
+
+---
+
+# Q20. Difference between assertNull() and assertNotNull()?
+
+| assertNull               | assertNotNull                 |
+| ------------------------ | ----------------------------- |
+| Object null hona chahiye | Object available hona chahiye |
+
+---
+
+# Q21. What is assertThrows()?
+
+### 👨‍💼 Interviewer
+
+How do you test Exception?
+
+### 👨‍💻 You
+
+`assertThrows()` use karte hain.
+
+Example
+
+```java
+assertThrows(
+ArithmeticException.class,
+
+()->{
+
+service.divide(10,0);
+
+});
+```
+
+Ye verify karta hai
+
+Expected Exception throw hua ya nahi.
+
+---
+
+# Q22. Difference between assertTrue() and assertFalse()?
+
+| assertTrue                  | assertFalse                  |
+| --------------------------- | ---------------------------- |
+| Condition true honi chahiye | Condition false honi chahiye |
+
+Example
+
+```java
+assertTrue(age>18);
+
+assertFalse(list.isEmpty());
+```
+
+---
+
+# Q23. Can we have multiple assertions in one test?
+
+### 👨‍💼 Interviewer
+
+Ek Test me multiple Assertions likh sakte hain?
+
+### 👨‍💻 You
+
+Yes.
+
+Lekin agar ek Assertion fail ho gaya,
+
+to Test wahi stop ho jayega.
+
+---
+
+# Q24. What happens if one Assertion fails?
+
+### 👨‍💼 Interviewer
+
+Ek Assertion fail ho gaya.
+
+Baaki Assertions execute honge?
+
+### 👨‍💻 You
+
+No.
+
+Usi point par Test fail ho jayega.
+
+Remaining statements execute nahi honge.
+
+---
+
+# Q25. What is the difference between Expected and Actual?
+
+### 👨‍💻 You
+
+Expected
+
+↓
+
+Jo result hum expect karte hain.
+
+Actual
+
+↓
+
+Jo method return karta hai.
+
+Assertions in dono ko compare karti hain.
+
+---
+
+# Q26. Which assertion is used for arrays?
+
+### 👨‍💻 You
+
+```java
+assertArrayEquals()
+```
+
+Array compare karne ke liye.
+
+---
+
+# Q27. Which assertion checks object reference?
+
+### 👨‍💻 You
+
+```java
+assertSame()
+```
+
+Reference compare karta hai.
+
+---
+
+# Q28. Which assertion checks different references?
+
+### 👨‍💻 You
+
+```java
+assertNotSame()
+```
+
+---
+
+# Q29. Can we write multiple @BeforeEach methods?
+
+### 👨‍💼 Interviewer
+
+Can we have multiple @BeforeEach methods?
+
+### 👨‍💻 You
+
+Yes.
+
+Lekin generally avoid karte hain.
+
+Readability kam ho jati hai.
+
+Ek ya do hi rakhna better hai.
+
+---
+
+# Q30. What is the most common use of @BeforeEach in Spring Boot?
+
+### 👨‍💻 You
+
+Mostly
+
+* Mock Object initialization
+* Service Object creation
+* Common Test Data setup
+
+---
+
+# ⭐ Rapid Fire (30 Seconds Revision)
+
+| Question          | Answer                |
+| ----------------- | --------------------- |
+| @Test             | Marks test method     |
+| @BeforeEach       | Before every test     |
+| @AfterEach        | After every test      |
+| @BeforeAll        | Once before all tests |
+| @AfterAll         | Once after all tests  |
+| @Disabled         | Skip test             |
+| @DisplayName      | Custom test name      |
+| @RepeatedTest     | Run multiple times    |
+| @Nested           | Group test cases      |
+| assertEquals      | Compare values        |
+| assertSame        | Compare references    |
+| assertThrows      | Test exceptions       |
+| assertNull        | Check null            |
+| assertNotNull     | Check not null        |
+| assertArrayEquals | Compare arrays        |
+
+---
+
+# 🎯 Interview Bonus Questions (Not in the YouTube Video)
+
+These are frequently asked in real Spring Boot interviews but are not covered in the transcript. 
+
+### Q31. Can a test class have zero test methods?
+
+**Answer:**
+
+Yes, technically compile ho jayegi.
+
+Lekin JUnit execute karega to **"No tests found"** ya similar result aayega.
+
+---
+
+### Q32. Which annotation is executed first?
+
+**Answer:**
+
+`@BeforeAll`
+
+---
+
+### Q33. Which annotation is executed last?
+
+**Answer:**
+
+`@AfterAll`
+
+---
+
+## 📌 Part 2 Complete
+
+Is Part me humne **33 important annotation aur assertion-based interview questions** cover kiye.
+
+➡️ **Part 3** me hum cover karenge **JUnit 4 vs JUnit 5**, `@SpringBootTest`, Test Coverage, JaCoCo, SonarQube, TDD, BDD, Test Suite, parameterized tests, aur scenario-based interview questions jo 5+ years experience me bahut pooche jaate hain.
+
+=====================================================================================================================
+Perfect Vishnu. 👍
+
+Ab hum **Part 3** me wo questions cover karenge jo **5+ Years Java Backend Developer** interviews me bahut frequently pooche jaate hain aur jo previous parts me cover nahi hue.
+
+Ye questions YouTube transcript me bhi properly cover nahi the, isliye ye tumhare interview ke liye bahut useful honge. 
+
+---
+
+# JUnit Interview Questions & Answers (Part 3)
+
+# 📚 Topic: JUnit 4 vs JUnit 5, Spring Boot Testing & Advanced Concepts
+
+> **Language:** Hindi Wali English
+>
+> **Experience Level:** 4–7 Years
+>
+> **Interview Importance:** ⭐⭐⭐⭐⭐
+
+---
+
+# Q1. Which JUnit version are you using in your project?
+
+### 👨‍💼 Interviewer
+
+Which JUnit version are you using?
+
+### 👨‍💻 You
+
+Current project me hum **JUnit 5** use kar rahe hain.
+
+Agar project Spring Boot 3 hai to by default bhi JUnit 5 hi use hota hai.
+
+Legacy projects me JUnit 4 mil sakta hai.
+
+### ⭐ One Line
+
+> Modern Spring Boot projects mostly use JUnit 5.
+
+---
+
+# Q2. Why do companies prefer JUnit 5 over JUnit 4?
+
+### 👨‍💼 Interviewer
+
+Why JUnit 5?
+
+### 👨‍💻 You
+
+JUnit 5 me
+
+* Better Architecture
+* Better Extension Model
+* Better Java 8+ Support
+* Parameterized Tests
+* Nested Tests
+* Dynamic Tests
+
+available hain.
+
+Isliye companies JUnit 5 prefer karti hain.
+
+---
+
+# Q3. Difference between JUnit 4 and JUnit 5?
+
+| JUnit 4       | JUnit 5          |
+| ------------- | ---------------- |
+| Old Framework | Modern Framework |
+| @Before       | @BeforeEach      |
+| @After        | @AfterEach       |
+| @BeforeClass  | @BeforeAll       |
+| @AfterClass   | @AfterAll        |
+| @Ignore       | @Disabled        |
+| Less Features | More Features    |
+
+### ⭐ Interview Tip
+
+Agar sirf 3 differences bata diye to enough hai.
+
+---
+
+# Q4. What is JUnit Platform?
+
+### 👨‍💼 Interviewer
+
+What is JUnit Platform?
+
+### 👨‍💻 You
+
+JUnit Platform JUnit 5 ka base module hai.
+
+Ye Test Cases discover aur execute karta hai.
+
+Simple language me
+
+Ye Test Runner ka kaam karta hai.
+
+### ⭐ One Line
+
+> Platform executes tests.
+
+---
+
+# Q5. What is JUnit Jupiter?
+
+### 👨‍💻 You
+
+Jupiter JUnit 5 ka programming model hai.
+
+Saare annotations
+
+```text id="e3ik4t"
+@Test
+
+@BeforeEach
+
+@AfterEach
+
+Assertions
+```
+
+ye sab Jupiter provide karta hai.
+
+### ⭐ Memory Trick
+
+Platform
+
+↓
+
+Run Test
+
+Jupiter
+
+↓
+
+Write Test
+
+---
+
+# Q6. What is JUnit Vintage?
+
+### 👨‍💻 You
+
+Vintage old JUnit 3 aur JUnit 4 Test Cases ko JUnit 5 me chalane ke liye use hota hai.
+
+### One Line
+
+> Vintage provides backward compatibility.
+
+---
+
+# Q7. What is @SpringBootTest?
+
+### 👨‍💼 Interviewer
+
+What is @SpringBootTest?
+
+### 👨‍💻 You
+
+`@SpringBootTest` pura Spring Application Context start karta hai.
+
+Real Beans load hoti hain.
+
+Iska use Integration Testing ke liye hota hai.
+
+### ⭐ Interview Tip
+
+Ye Unit Testing ke liye normally use nahi karte.
+
+---
+
+# Q8. Difference between @SpringBootTest and JUnit Test?
+
+| JUnit           | SpringBootTest        |
+| --------------- | --------------------- |
+| Only Test Class | Starts Spring Context |
+| Fast            | Slow                  |
+| Unit Test       | Integration Test      |
+
+---
+
+# Q9. When do you use @SpringBootTest?
+
+### 👨‍💻 You
+
+Jab multiple Spring Beans ek saath test karni ho.
+
+Ya complete application flow verify karna ho.
+
+Example
+
+```text id="v55l4x"
+Controller
+
+↓
+
+Service
+
+↓
+
+Repository
+```
+
+---
+
+# Q10. Why is @SpringBootTest slower?
+
+### 👨‍💻 You
+
+Kyuki
+
+Complete Spring Context load hota hai.
+
+Beans create hoti hain.
+
+Configurations load hoti hain.
+
+Isliye execution slow hota hai.
+
+---
+
+# Q11. Which is faster?
+
+Mockito Test
+
+or
+
+@SpringBootTest?
+
+### 👨‍💻 You
+
+Mockito Test
+
+Fast
+
+Kyuki Spring Context start nahi hota.
+
+---
+
+# Q12. What is Test Coverage?
+
+### 👨‍💻 You
+
+Test Coverage batata hai
+
+Kitna code Test Cases se execute hua.
+
+Ye code quality ka ek metric hai.
+
+---
+
+# Q13. Which tool do you use for Test Coverage?
+
+### 👨‍💻 You
+
+Project me hum
+
+* JaCoCo
+* SonarQube
+
+use karte hain.
+
+---
+
+# Q14. What is JaCoCo?
+
+### 👨‍💼 Interviewer
+
+What is JaCoCo?
+
+### 👨‍💻 You
+
+JaCoCo ek Code Coverage Tool hai.
+
+Ye batata hai
+
+Kitni lines
+
+Kitne methods
+
+Kitni branches
+
+Test hui hain.
+
+---
+
+# Q15. Does 100% Test Coverage mean bug-free code?
+
+### 👨‍💻 You
+
+No.
+
+100% coverage sirf execution batata hai.
+
+Ye guarantee nahi karta
+
+ki logic bhi sahi hai.
+
+---
+
+# Q16. What is SonarQube?
+
+### 👨‍💻 You
+
+SonarQube ek Code Quality Tool hai.
+
+Ye
+
+* Bugs
+* Vulnerabilities
+* Code Smells
+* Test Coverage
+
+sab analyze karta hai.
+
+---
+
+# Q17. What is TDD?
+
+### 👨‍💼 Interviewer
+
+What is Test Driven Development?
+
+### 👨‍💻 You
+
+TDD me pehle Test Case likhte hain.
+
+Uske baad code likhte hain.
+
+Flow
+
+```text id="s9y88m"
+Write Test
+
+↓
+
+Fail
+
+↓
+
+Write Code
+
+↓
+
+Pass
+
+↓
+
+Refactor
+```
+
+---
+
+# Q18. What is BDD?
+
+### 👨‍💼 Interviewer
+
+BDD?
+
+### 👨‍💻 You
+
+BDD ka matlab
+
+Behavior Driven Development.
+
+Isme application ke behavior par focus hota hai.
+
+Mockito me
+
+```java id="kkfj7r"
+given()
+
+willReturn()
+```
+
+BDD style hai.
+
+---
+
+# Q19. Difference between TDD and BDD?
+
+| TDD             | BDD            |
+| --------------- | -------------- |
+| Test First      | Behavior First |
+| Developer Focus | Business Focus |
+| Technical       | Readable       |
+
+---
+
+# Q20. What is Parameterized Test?
+
+### 👨‍💼 Interviewer
+
+Parameterized Test kya hota hai?
+
+### 👨‍💻 You
+
+Same Test ko multiple inputs ke saath run karna.
+
+Example
+
+```text id="72d5sq"
+2+3
+
+5+6
+
+8+10
+```
+
+Same Test
+
+Different Inputs
+
+---
+
+# Q21. Why use Parameterized Tests?
+
+### 👨‍💻 You
+
+Code duplication kam hota hai.
+
+Readable hota hai.
+
+Maintenance easy hoti hai.
+
+---
+
+# Q22. What is Dynamic Test?
+
+### 👨‍💻 You
+
+Runtime par generate hone wale Test Cases ko Dynamic Tests bolte hain.
+
+Ye JUnit 5 feature hai.
+
+---
+
+# Q23. Can we execute Test Cases in parallel?
+
+### 👨‍💼 Interviewer
+
+Can JUnit run tests in parallel?
+
+### 👨‍💻 You
+
+Yes.
+
+JUnit 5 parallel execution support karta hai.
+
+Large projects me execution time reduce karne ke liye use hota hai.
+
+---
+
+# Q24. What is Test Runner?
+
+### 👨‍💻 You
+
+Test Runner Test Cases discover aur execute karta hai.
+
+JUnit 5 me Platform ye kaam karta hai.
+
+---
+
+# Q25. What is Test Fixture?
+
+### 👨‍💼 Interviewer
+
+What is Test Fixture?
+
+### 👨‍💻 You
+
+Test execute karne ke liye jo common setup chahiye
+
+Usko Test Fixture bolte hain.
+
+Example
+
+* Test Data
+* Mock Objects
+* Configuration
+
+Mostly
+
+```text id="quk07z"
+@BeforeEach
+```
+
+me create karte hain.
+
+---
+
+# Q26. How do you name Test Methods?
+
+### 👨‍💻 You
+
+Meaningful naam rakhte hain.
+
+Example
+
+```text id="m7mtfw"
+saveUserTest()
+
+deleteUserTest()
+
+loginSuccessTest()
+```
+
+Readable hona chahiye.
+
+---
+
+# Q27. What are the best practices while writing JUnit Tests?
+
+### 👨‍💻 You
+
+Main ye practices follow karta hoon:
+
+* One Test → One Scenario
+* Meaningful Method Name
+* AAA Pattern
+* Mock External Dependencies
+* Independent Test Cases
+* Proper Assertions
+
+---
+
+# Q28. What is AAA Pattern?
+
+### 👨‍💼 Interviewer
+
+AAA Pattern?
+
+### 👨‍💻 You
+
+AAA ka matlab
+
+```text id="0gafny"
+Arrange
+
+↓
+
+Act
+
+↓
+
+Assert
+```
+
+Arrange
+
+↓
+
+Test Data
+
+Act
+
+↓
+
+Call Method
+
+Assert
+
+↓
+
+Verify Result
+
+---
+
+# Q29. What is the difference between Unit Test and Integration Test?
+
+| Unit Test         | Integration Test      |
+| ----------------- | --------------------- |
+| One Class         | Multiple Classes      |
+| Mock Dependencies | Real Dependencies     |
+| Fast              | Slow                  |
+| No Database       | Database ho sakta hai |
+
+---
+
+# Q30. Which one do you write more in your project?
+
+### 👨‍💻 You
+
+Mostly
+
+Service Layer ke Unit Tests.
+
+Critical APIs ke Integration Tests.
+
+---
+
+# ⭐ Scenario Based Questions
+
+---
+
+# Q31. How do you write Unit Tests in your project?
+
+### 👨‍💻 You
+
+Main generally
+
+* Service Layer choose karta hoon.
+* Repository ko Mockito se Mock karta hoon.
+* `when().thenReturn()` se behavior define karta hoon.
+* Service method call karta hoon.
+* Assertions aur `verify()` use karke output aur interaction check karta hoon.
+
+---
+
+# Q32. How many Test Cases do you write for one method?
+
+### 👨‍💻 You
+
+Method ke happy path ke saath-saath
+
+* Invalid Input
+* Null Input
+* Exception Scenario
+* Boundary Cases
+
+sab cover karne ki koshish karta hoon.
+
+---
+
+# Q33. Which methods should never be skipped while testing?
+
+### 👨‍💻 You
+
+Critical Business Logic
+
+* Payment
+* Authentication
+* Order Processing
+* Loan Approval
+* Insurance Premium Calculation
+
+Inke Unit Tests zarur hone chahiye.
+
+---
+
+# ⭐ Rapid Fire Revision
+
+| Question       | Answer              |
+| -------------- | ------------------- |
+| Latest Version | JUnit 5             |
+| Platform       | Executes Tests      |
+| Jupiter        | Write Tests         |
+| Vintage        | Supports JUnit 4    |
+| SpringBootTest | Integration Testing |
+| Coverage Tool  | JaCoCo              |
+| Quality Tool   | SonarQube           |
+| TDD            | Test First          |
+| BDD            | Behavior First      |
+| AAA            | Arrange Act Assert  |
+
+---
+
+# 🎯 Top 10 Interview Questions (Must Prepare)
+
+1. What is JUnit?
+2. Difference between JUnit 4 and JUnit 5?
+3. What is `@SpringBootTest`?
+4. Difference between Unit Test and Integration Test?
+5. What is Test Coverage?
+6. What is JaCoCo?
+7. What is SonarQube?
+8. What is TDD?
+9. What is AAA Pattern?
+10. How do you write Unit Tests in your project?
+
+---
+
+# 📌 Part 3 Complete
+
+Is Part me humne **33 advanced JUnit interview questions** cover kiye jo **5+ years Java Backend interviews** me frequently pooche jaate hain.
+
+➡️ **Next**, hum **Mockito Interview Questions** start karenge (3 parts me), jisme cover hoga:
+
+* Mockito Basics
+* `@Mock`
+* `@InjectMocks`
+* `@Spy`
+* `@MockBean`
+* `when()`, `thenReturn()`
+* `verify()`
+* `ArgumentMatchers`
+* `doReturn()`, `doThrow()`
+* `InOrder`
+* `ArgumentCaptor`
+* Scenario-based 5+ years interview questions
+* Real Spring Boot examples
+
+Ye section Spring Boot backend interviews me sabse zyada poocha jata hai.
+
+=====================================================================================================================
+Excellent Vishnu. 👍
+
+Mockito interview me **sirf definitions yaad karna enough nahi hota**. Interviewer mostly **scenario-based** questions poochta hai.
+
+Hum isi format me chalenge:
+
+* ✅ Hindi Wali English
+* ✅ 5+ Years Experience Level
+* ✅ Real Project Answers
+* ✅ Follow-up Questions
+* ✅ Memory Tricks
+* ✅ No repeated questions from JUnit
+
+---
+
+# Mockito Interview Questions & Answers (Part 1)
+
+# 📚 Topic: Mockito Basics
+
+> **Experience:** 4–7 Years Java/Spring Boot
+>
+> **Interview Importance:** ⭐⭐⭐⭐⭐
+
+---
+
+# Q1. What is Mockito?
+
+### 👨‍💼 Interviewer
+
+What is Mockito?
+
+### 👨‍💻 You
+
+Mockito ek **Java Mocking Framework** hai jo Unit Testing me use hota hai.
+
+Ye fake objects (Mock Objects) create karta hai taaki hum real Database, API ya External Services ko call kiye bina business logic test kar sake.
+
+Mockito generally JUnit ke saath use hota hai.
+
+### ⭐ One Line Answer
+
+> **Mockito is a Java Mocking Framework used to create fake objects for Unit Testing.**
+
+---
+
+# Q2. Why do we need Mockito?
+
+### 👨‍💼 Interviewer
+
+JUnit to hai hi, fir Mockito ki kya zarurat hai?
+
+### 👨‍💻 You
+
+JUnit sirf Test Cases run karta hai.
+
+Lekin agar Service ke andar Repository ya External API call ho rahi ho,
+
+to JUnit us dependency ko fake nahi bana sakta.
+
+Mockito fake dependencies create karta hai.
+
+### ⭐ Memory Trick
+
+```text
+JUnit
+
+↓
+
+Test Run
+
+Mockito
+
+↓
+
+Fake Dependency
+```
+
+---
+
+# Q3. What is Mocking?
+
+### 👨‍💼 Interviewer
+
+What is Mocking?
+
+### 👨‍💻 You
+
+Mocking ka matlab hai
+
+Real object ki jagah fake object use karna.
+
+Ye fake object predefined response return karta hai.
+
+Isse Unit Test fast aur independent ban jata hai.
+
+---
+
+# Q4. What is a Mock Object?
+
+### 👨‍💼 Interviewer
+
+What is Mock Object?
+
+### 👨‍💻 You
+
+Mock Object ek fake implementation hota hai.
+
+Ye real Database ya API ko call nahi karta.
+
+Sirf wahi response return karta hai jo hum Mockito me define karte hain.
+
+---
+
+# Q5. Why don't we call Database in Unit Testing?
+
+### 👨‍💼 Interviewer
+
+Database ko mock kyun karte ho?
+
+### 👨‍💻 You
+
+Kyuki Unit Testing ka purpose sirf business logic test karna hota hai.
+
+Agar Database use karenge
+
+* Test slow ho jayega
+* Database dependency aa jayegi
+* Test independent nahi rahega
+
+Isliye Repository ko Mock karte hain.
+
+---
+
+# Q6. Which layer do you usually mock?
+
+### 👨‍💼 Interviewer
+
+Project me kis layer ko Mock karte ho?
+
+### 👨‍💻 You
+
+Mostly
+
+* Repository Layer
+* External REST API Clients
+* Kafka Producer
+* Redis Client
+* Email Service
+* Third-party Services
+
+Business Logic wali Service ko mock nahi karte.
+
+---
+
+# Q7. What is @Mock?
+
+### 👨‍💼 Interviewer
+
+What is @Mock?
+
+### 👨‍💻 You
+
+`@Mock` Mockito annotation hai.
+
+Ye fake object create karta hai.
+
+Example
+
+```java
+@Mock
+private UserRepository repository;
+```
+
+Ab ye Repository Database ko hit nahi karegi.
+
+### ⭐ One Line
+
+> **@Mock creates a fake dependency.**
+
+---
+
+# Q8. What is @InjectMocks?
+
+### 👨‍💼 Interviewer
+
+What is @InjectMocks?
+
+### 👨‍💻 You
+
+`@InjectMocks` class under test ka object create karta hai aur uske andar saare Mock Objects automatically inject kar deta hai.
+
+Example
+
+```java
+@InjectMocks
+private UserService service;
+```
+
+---
+
+# Q9. Difference between @Mock and @InjectMocks?
+
+| @Mock                            | @InjectMocks                       |
+| -------------------------------- | ---------------------------------- |
+| Fake dependency create karta hai | Fake dependencies inject karta hai |
+| Repository                       | Service                            |
+| Dependency                       | Class Under Test                   |
+
+### ⭐ Memory Trick
+
+```text
+@Mock
+
+↓
+
+Create Fake
+
+@InjectMocks
+
+↓
+
+Inject Fake
+```
+
+---
+
+# Q10. Why do we use @ExtendWith(MockitoExtension.class)?
+
+### 👨‍💼 Interviewer
+
+MockitoExtension kyun use karte ho?
+
+### 👨‍💻 You
+
+JUnit 5 me Mockito ko initialize karne ke liye.
+
+Ye automatically saare `@Mock` aur `@InjectMocks` annotations ko process karta hai.
+
+---
+
+# Q11. What happens if we don't use MockitoExtension?
+
+### 👨‍💼 Interviewer
+
+Agar annotation hata dein to?
+
+### 👨‍💻 You
+
+Mocks initialize nahi honge.
+
+Aur Runtime me
+
+```text
+NullPointerException
+```
+
+aa sakta hai.
+
+---
+
+# Q12. Difference between Mockito and JUnit?
+
+| JUnit               | Mockito                        |
+| ------------------- | ------------------------------ |
+| Testing Framework   | Mocking Framework              |
+| Test Run karta hai  | Fake Objects create karta hai  |
+| Assertions deta hai | Mock Behavior define karta hai |
+
+---
+
+# Q13. Can Mockito work without JUnit?
+
+### 👨‍💼 Interviewer
+
+Mockito bina JUnit ke use kar sakte hain?
+
+### 👨‍💻 You
+
+Yes.
+
+Mockito independently bhi use ho sakta hai.
+
+Lekin practically mostly JUnit ke saath hi use hota hai.
+
+---
+
+# Q14. Can JUnit work without Mockito?
+
+### 👨‍💻 You
+
+Yes.
+
+Agar method kisi external dependency par depend nahi karta,
+
+to sirf JUnit se hi Test likh sakte hain.
+
+Example
+
+Calculator
+
+```java
+add()
+
+subtract()
+```
+
+Inme Mockito ki zarurat nahi.
+
+---
+
+# Q15. What is Stubbing?
+
+### 👨‍💼 Interviewer
+
+What is Stubbing?
+
+### 👨‍💻 You
+
+Stubbing ka matlab
+
+Mock Object ka behavior define karna.
+
+Example
+
+```java
+when(repository.findById(1L))
+      .thenReturn(user);
+```
+
+Yani jab `findById()` call ho,
+
+to ye User return karo.
+
+---
+
+# Q16. Why is Stubbing required?
+
+### 👨‍💼 Interviewer
+
+Stub kyun banate hain?
+
+### 👨‍💻 You
+
+Kyuki Mock Object ko pata nahi hota ki kya return karna hai.
+
+Hum `when().thenReturn()` se uska response define karte hain.
+
+---
+
+# Q17. What is the difference between Mocking and Stubbing?
+
+| Mocking            | Stubbing                             |
+| ------------------ | ------------------------------------ |
+| Fake object banana | Fake object ka behavior define karna |
+
+Example
+
+```java
+@Mock
+UserRepository repository;
+```
+
+↓
+
+Mocking
+
+```java
+when(repository.findById(1L))
+.thenReturn(user);
+```
+
+↓
+
+Stubbing
+
+---
+
+# Q18. Which dependencies should be mocked?
+
+### 👨‍💼 Interviewer
+
+Project me kin objects ko Mock karte ho?
+
+### 👨‍💻 You
+
+Jo external dependencies hain.
+
+Example
+
+* Repository
+* REST Clients
+* Kafka
+* Redis
+* SMTP
+* Payment Gateway
+
+Business Logic wali Service ko generally Mock nahi karte.
+
+---
+
+# Q19. Which dependencies should NOT be mocked?
+
+### 👨‍💼 Interviewer
+
+Kisko Mock nahi karna chahiye?
+
+### 👨‍💻 You
+
+Class Under Test ko.
+
+Uski real business logic execute honi chahiye.
+
+Mock sirf dependencies ki banate hain.
+
+---
+
+# Q20. Explain Mockito flow in your project.
+
+### 👨‍💼 Interviewer
+
+Mockito ka flow batao.
+
+### 👨‍💻 You
+
+Mera flow generally ye hota hai:
+
+```text
+Create Mock
+
+↓
+
+Inject Mock
+
+↓
+
+Stub Behaviour
+
+↓
+
+Call Service
+
+↓
+
+Assert Result
+
+↓
+
+Verify Method Call
+```
+
+Ye almost har Service Layer Unit Test me follow hota hai.
+
+---
+
+# ⭐ Rapid Fire (30 Seconds Revision)
+
+| Question         | Answer                |
+| ---------------- | --------------------- |
+| Mockito          | Mocking Framework     |
+| Mocking          | Fake Object           |
+| Stub             | Fake Response         |
+| @Mock            | Create Fake Object    |
+| @InjectMocks     | Inject Fake Object    |
+| MockitoExtension | Initialize Mockito    |
+| Mock Repository? | Yes                   |
+| Mock Service?    | No (Class Under Test) |
+| JUnit            | Testing Framework     |
+| Mockito          | Mocking Framework     |
+
+---
+
+# 🎯 Scenario-Based Questions
+
+### Q21. Why do we mock Repository but not Service?
+
+**Answer:**
+
+Kyuki Service me business logic hota hai.
+
+Hum us business logic ko test karna chahte hain.
+
+Repository sirf dependency hai, isliye usko Mock karte hain.
+
+---
+
+### Q22. If Repository is not mocked, what problems can occur?
+
+**Answer:**
+
+* Database hit hoga.
+* Test slow ho jayega.
+* Database available hona chahiye.
+* Unit Test independent nahi rahega.
+
+---
+
+### Q23. Is Mockito used in Integration Testing?
+
+**Answer:**
+
+Generally No.
+
+Integration Testing me real components ke saath test karte hain.
+
+Mockito mainly Unit Testing ke liye use hota hai.
+
+---
+
+# 🎯 Interview Memory Trick
+
+Yaad rakhna:
+
+```text
+JUnit
+
+↓
+
+Runs Test
+
+Mockito
+
+↓
+
+Creates Fake Objects
+
+↓
+
+Defines Behaviour
+
+↓
+
+Verifies Calls
+```
+
+---
+
+# 📌 Mockito Part 1 Complete
+
+Is Part me humne **23 important Mockito Basics interview questions** cover kiye.
+
+## 🔜 Part 2 me cover karenge (Most Asked)
+
+* `when()`
+* `thenReturn()`
+* `thenThrow()`
+* `verify()`
+* `times()`
+* `never()`
+* `atLeast()`
+* `atMost()`
+* `doReturn()`
+* `doThrow()`
+* `doNothing()`
+* `ArgumentMatchers (any(), eq())`
+* Real Spring Boot examples
+* 5+ years scenario-based interview questions
+
+=====================================================================================================================
+Perfect Vishnu. 👍
+
+Ab hum Mockito ka **sabse important Part** start karte hain.
+
+Ye questions **5+ Years Java Backend interviews** me bahut pooche jaate hain.
+
+Is Part me hum Mockito ke core methods cover karenge jo almost har Spring Boot project me use hote hain.
+
+---
+
+# Mockito Interview Questions & Answers (Part 2)
+
+# 📚 Topic: `when()`, `thenReturn()`, `verify()`, `ArgumentMatchers`, `doReturn()` etc.
+
+> **Experience:** 4–7 Years
+>
+> **Interview Importance:** ⭐⭐⭐⭐⭐
+
+---
+
+# Q1. What is when() in Mockito?
+
+### 👨‍💼 Interviewer
+
+What is `when()`?
+
+### 👨‍💻 You
+
+`when()` ka use Mock Object ka behavior define karne ke liye hota hai.
+
+Ye batata hai ki jab koi particular method call hoga to Mock Object kya return karega.
+
+### Example
+
+```java
+when(repository.findById(1L))
+      .thenReturn(user);
+```
+
+### ⭐ One Line Answer
+
+> **when() is used to define the behavior of a mocked method.**
+
+---
+
+# Q2. What is thenReturn()?
+
+### 👨‍💼 Interviewer
+
+What is `thenReturn()`?
+
+### 👨‍💻 You
+
+`thenReturn()` Mock Object se return hone wali value define karta hai.
+
+Agar Repository call hogi to Database me jane ke bajay predefined object return karega.
+
+### Example
+
+```java
+when(repository.save(user))
+      .thenReturn(user);
+```
+
+---
+
+# Q3. Explain when().thenReturn() with an example.
+
+### 👨‍💼 Interviewer
+
+Explain `when().thenReturn()`.
+
+### 👨‍💻 You
+
+Suppose Service me
+
+```java
+repository.findById(id);
+```
+
+call ho raha hai.
+
+Mockito me hum likhenge
+
+```java
+when(repository.findById(1L))
+        .thenReturn(Optional.of(user));
+```
+
+Ab Repository Database me nahi jayegi.
+
+Seedha predefined User object return karegi.
+
+---
+
+# Q4. What is thenThrow()?
+
+### 👨‍💼 Interviewer
+
+What is `thenThrow()`?
+
+### 👨‍💻 You
+
+`thenThrow()` ka use Exception scenario test karne ke liye hota hai.
+
+Jab specific method call ho to Exception throw karni ho.
+
+### Example
+
+```java
+when(repository.findById(1L))
+      .thenThrow(new RuntimeException("User Not Found"));
+```
+
+---
+
+# Q5. When do you use thenThrow()?
+
+### 👨‍💻 You
+
+Exception Handling test karne ke liye.
+
+Jaise
+
+* User Not Found
+* Payment Failed
+* Invalid Request
+* Database Error
+
+---
+
+# Q6. What is verify()?
+
+### 👨‍💼 Interviewer
+
+What is `verify()`?
+
+### 👨‍💻 You
+
+`verify()` check karta hai ki Mock Object ka method call hua ya nahi.
+
+Ye output verify nahi karta,
+
+interaction verify karta hai.
+
+### Example
+
+```java
+verify(repository).save(user);
+```
+
+### ⭐ One Line
+
+> **verify() checks interaction with mocked objects.**
+
+---
+
+# Q7. Difference between assertEquals() and verify()?
+
+| assertEquals()          | verify()                     |
+| ----------------------- | ---------------------------- |
+| Result verify karta hai | Method Call verify karta hai |
+| JUnit                   | Mockito                      |
+
+### ⭐ Interview Tip
+
+Ye bahut common question hai.
+
+---
+
+# Q8. What is times()?
+
+### 👨‍💼 Interviewer
+
+What is `times()`?
+
+### 👨‍💻 You
+
+Method kitni baar call hua,
+
+ye verify karne ke liye use hota hai.
+
+### Example
+
+```java
+verify(repository, times(1))
+        .save(user);
+```
+
+---
+
+# Q9. What happens if times() doesn't match?
+
+### 👨‍💻 You
+
+Agar expected 2 baar hai aur actual 1 baar call hua,
+
+to Test fail ho jayega.
+
+---
+
+# Q10. What is never()?
+
+### 👨‍💼 Interviewer
+
+What is `never()`?
+
+### 👨‍💻 You
+
+Ye verify karta hai ki method kabhi call nahi hua.
+
+### Example
+
+```java
+verify(repository, never())
+        .deleteById(1L);
+```
+
+---
+
+# Q11. Difference between times() and never()?
+
+| times(1)          | never()                |
+| ----------------- | ---------------------- |
+| Call hona chahiye | Call nahi hona chahiye |
+
+---
+
+# Q12. What is atLeast()?
+
+### 👨‍💼 Interviewer
+
+What is `atLeast()`?
+
+### 👨‍💻 You
+
+Method minimum kitni baar call hua,
+
+ye verify karta hai.
+
+### Example
+
+```java
+verify(repository,
+       atLeast(1))
+       .save(user);
+```
+
+---
+
+# Q13. What is atMost()?
+
+### 👨‍💼 Interviewer
+
+What is `atMost()`?
+
+### 👨‍💻 You
+
+Method maximum kitni baar call hua,
+
+ye verify karta hai.
+
+### Example
+
+```java
+verify(repository,
+       atMost(2))
+       .save(user);
+```
+
+---
+
+# Q14. What is any()?
+
+### 👨‍💼 Interviewer
+
+What is `any()`?
+
+### 👨‍💻 You
+
+`any()` Argument Matcher hai.
+
+Ye kisi bhi object ko accept karta hai.
+
+### Example
+
+```java
+when(repository.save(any()))
+      .thenReturn(user);
+```
+
+---
+
+# Q15. Why do we use any()?
+
+### 👨‍💻 You
+
+Har baar exact object create karna zaruri nahi.
+
+Agar koi bhi User object aaye,
+
+to same response return karna hai,
+
+tab `any()` use karte hain.
+
+---
+
+# Q16. What is eq()?
+
+### 👨‍💼 Interviewer
+
+What is `eq()`?
+
+### 👨‍💻 You
+
+`eq()` exact value match karta hai.
+
+### Example
+
+```java
+when(repository.findById(eq(1L)))
+      .thenReturn(Optional.of(user));
+```
+
+---
+
+# Q17. Difference between any() and eq()?
+
+| any()     | eq()        |
+| --------- | ----------- |
+| Any Value | Exact Value |
+
+---
+
+# Q18. What is doReturn()?
+
+### 👨‍💼 Interviewer
+
+What is `doReturn()`?
+
+### 👨‍💻 You
+
+`doReturn()` bhi value return karta hai.
+
+Ye `when().thenReturn()` ka alternative hai.
+
+### Example
+
+```java
+doReturn(user)
+.when(repository)
+.save(any());
+```
+
+---
+
+# Q19. Difference between when().thenReturn() and doReturn()?
+
+### 👨‍💻 You
+
+Normal cases me
+
+```java
+when().thenReturn()
+```
+
+use karte hain.
+
+Spy ya special scenarios me
+
+```java
+doReturn()
+```
+
+prefer karte hain.
+
+---
+
+# Q20. What is doNothing()?
+
+### 👨‍💼 Interviewer
+
+What is `doNothing()`?
+
+### 👨‍💻 You
+
+Void methods ke liye use hota hai.
+
+### Example
+
+```java
+doNothing()
+.when(repository)
+.deleteById(1L);
+```
+
+---
+
+# Q21. What is doThrow()?
+
+### 👨‍💼 Interviewer
+
+What is `doThrow()`?
+
+### 👨‍💻 You
+
+Void method se Exception throw karni ho,
+
+to `doThrow()` use karte hain.
+
+### Example
+
+```java
+doThrow(new RuntimeException())
+.when(repository)
+.deleteById(1L);
+```
+
+---
+
+# Q22. Difference between thenThrow() and doThrow()?
+
+| thenThrow()      | doThrow()    |
+| ---------------- | ------------ |
+| Non-void methods | Void methods |
+
+### ⭐ Interview Tip
+
+Ye bahut important difference hai.
+
+---
+
+# Q23. What is verifyNoInteractions()?
+
+### 👨‍💼 Interviewer
+
+What is `verifyNoInteractions()`?
+
+### 👨‍💻 You
+
+Ye verify karta hai ki Mock Object ke kisi bhi method ko call nahi kiya gaya.
+
+### Example
+
+```java
+verifyNoInteractions(repository);
+```
+
+---
+
+# Q24. What is verifyNoMoreInteractions()?
+
+### 👨‍💼 Interviewer
+
+Difference between verifyNoInteractions() and verifyNoMoreInteractions()?
+
+### 👨‍💻 You
+
+`verifyNoInteractions()`
+
+↓
+
+Koi bhi interaction nahi hua.
+
+`verifyNoMoreInteractions()`
+
+↓
+
+Jo interactions verify kar diye unke alawa aur koi interaction nahi hona chahiye.
+
+---
+
+# Q25. Explain complete Mockito flow.
+
+### 👨‍💼 Interviewer
+
+Mockito ka complete flow batao.
+
+### 👨‍💻 You
+
+Main generally ye flow follow karta hoon.
+
+```text
+@Mock
+
+↓
+
+@InjectMocks
+
+↓
+
+when()
+
+↓
+
+thenReturn()
+
+↓
+
+Call Service Method
+
+↓
+
+assertEquals()
+
+↓
+
+verify()
+```
+
+Ye almost har Service Layer Unit Test me use hota hai.
+
+---
+
+# ⭐ Scenario-Based Questions
+
+---
+
+# Q26. Why do we verify Repository call?
+
+### 👨‍💻 You
+
+Sirf output check karna enough nahi hota.
+
+Ye bhi verify karna hota hai ki expected Repository method actually call hua.
+
+---
+
+# Q27. If verify() is removed, will the test pass?
+
+### 👨‍💻 You
+
+Ho sakta hai pass ho jaye.
+
+Kyuki `assertEquals()` output verify kar raha hai.
+
+Lekin interaction verify nahi hoga.
+
+---
+
+# Q28. Can we use verify() without when()?
+
+### 👨‍💻 You
+
+Yes.
+
+Agar sirf ye check karna ho ki method call hua ya nahi,
+
+to `verify()` use kar sakte hain.
+
+Stubbing (`when()`) zaruri nahi hai.
+
+---
+
+# ⭐ Rapid Fire Revision
+
+| Question     | Answer                      |
+| ------------ | --------------------------- |
+| when()       | Define behavior             |
+| thenReturn() | Return fake value           |
+| thenThrow()  | Throw exception             |
+| verify()     | Verify method call          |
+| times()      | Number of calls             |
+| never()      | Method should not execute   |
+| atLeast()    | Minimum calls               |
+| atMost()     | Maximum calls               |
+| any()        | Accept any argument         |
+| eq()         | Match exact value           |
+| doReturn()   | Alternative to thenReturn() |
+| doNothing()  | Void methods                |
+| doThrow()    | Exception for void methods  |
+
+---
+
+# 🎯 Interview Memory Trick
+
+Yaad rakhna:
+
+```text
+when()
+
+↓
+
+Behavior
+
+↓
+
+thenReturn()
+
+↓
+
+Fake Result
+
+↓
+
+verify()
+
+↓
+
+Method Called?
+
+↓
+
+times()
+
+↓
+
+How Many Times?
+```
+
+---
+
+# 📌 Mockito Part 2 Complete
+
+Is Part me humne **28 advanced Mockito interview questions** cover kiye.
+
+## 🔜 Mockito Part 3 (Final & Most Important)
+
+Isme hum cover karenge:
+
+* `@Spy`
+* Mock vs Spy ⭐⭐⭐⭐⭐
+* `@MockBean`
+* `ArgumentCaptor`
+* `InOrder`
+* `BDDMockito (given/willReturn)`
+* `doAnswer()`
+* `reset()`
+* `clearInvocations()`
+* Deep Stubs
+* Common Mockito Exceptions
+* Real Spring Boot scenario-based questions (5+ years)
+* 30+ advanced interview questions
+
+Ye part senior Java Backend interviews ke liye bahut important hai.
+
+=====================================================================================================================
+Perfect Vishnu. 👍
+
+Ye **Mockito Part 3** sabse important part hai.
+
+Ye questions **5–8 Years Java Spring Boot interviews** me bahut frequently pooche jaate hain.
+
+Isme hum senior-level Mockito concepts cover karenge jo previous parts me cover nahi hue.
+
+---
+
+# Mockito Interview Questions & Answers (Part 3)
+
+# 📚 Topic: Advanced Mockito (Spy, MockBean, ArgumentCaptor, InOrder, BDDMockito & Scenario-Based)
+
+> **Experience:** 5–8 Years
+>
+> **Interview Importance:** ⭐⭐⭐⭐⭐
+
+---
+
+# Q1. What is @Spy?
+
+### 👨‍💼 Interviewer
+
+What is @Spy?
+
+### 👨‍💻 You
+
+`@Spy` real object create karta hai, lekin agar zarurat ho to uske kuch methods ko mock bhi kar sakte hain.
+
+Matlab object ka actual behavior bhi use kar sakte hain aur specific methods ka mocked behavior bhi define kar sakte hain.
+
+### Example
+
+```java
+@Spy
+private ArrayList<String> list = new ArrayList<>();
+```
+
+### ⭐ One Line Answer
+
+> **@Spy creates a real object with partial mocking capability.**
+
+---
+
+# Q2. Difference between @Mock and @Spy?
+
+### 👨‍💼 Interviewer
+
+Difference between Mock and Spy?
+
+### 👨‍💻 You
+
+| @Mock              | @Spy                            |
+| ------------------ | ------------------------------- |
+| Fake Object        | Real Object                     |
+| All methods mocked | Real methods execute by default |
+| No real logic      | Partial real logic              |
+
+### ⭐ Memory Trick
+
+```text
+@Mock
+
+↓
+
+Fake Object
+
+@No Real Logic
+
+----------------
+
+@Spy
+
+↓
+
+Real Object
+
+↓
+
+Partial Mock
+```
+
+---
+
+# Q3. When do you use @Spy?
+
+### 👨‍💻 You
+
+Jab object ka mostly real behavior chahiye ho,
+
+lekin ek ya do methods ko override karna ho.
+
+Example
+
+Utility Classes
+
+Legacy Code
+
+Complex Business Classes
+
+---
+
+# Q4. What is @MockBean?
+
+### 👨‍💼 Interviewer
+
+What is @MockBean?
+
+### 👨‍💻 You
+
+`@MockBean` Spring Boot annotation hai.
+
+Ye Spring Application Context ke andar real bean ko mock bean se replace kar deta hai.
+
+Mostly Integration Testing me use hota hai.
+
+### Example
+
+```java
+@MockBean
+private UserRepository repository;
+```
+
+---
+
+# Q5. Difference between @Mock and @MockBean?
+
+| @Mock                          | @MockBean                     |
+| ------------------------------ | ----------------------------- |
+| Mockito                        | Spring Boot                   |
+| Unit Test                      | Integration Test              |
+| Spring Context start nahi hota | Spring Context start hota hai |
+
+### ⭐ Interview Tip
+
+Ye question almost har interview me poocha jata hai.
+
+---
+
+# Q6. When should we use @MockBean?
+
+### 👨‍💻 You
+
+Jab
+
+```text
+@SpringBootTest
+```
+
+ya
+
+```text
+@WebMvcTest
+```
+
+use kar rahe ho
+
+aur kisi bean ko replace karna ho.
+
+---
+
+# Q7. What is ArgumentCaptor?
+
+### 👨‍💼 Interviewer
+
+What is ArgumentCaptor?
+
+### 👨‍💻 You
+
+ArgumentCaptor method ko pass hone wale arguments ko capture karta hai.
+
+Jab verify karna ho ki actual me kaunsa object pass hua,
+
+tab use karte hain.
+
+---
+
+### Example
+
+```java
+ArgumentCaptor<User> captor =
+ArgumentCaptor.forClass(User.class);
+
+verify(repository).save(captor.capture());
+
+assertEquals("Vishnu",
+captor.getValue().getName());
+```
+
+---
+
+# Q8. Why do we use ArgumentCaptor?
+
+### 👨‍💻 You
+
+Kabhi-kabhi object directly compare nahi kar sakte.
+
+Us case me argument capture karke uski values verify karte hain.
+
+---
+
+# Q9. What is InOrder?
+
+### 👨‍💼 Interviewer
+
+What is InOrder?
+
+### 👨‍💻 You
+
+`InOrder` verify karta hai ki methods kis sequence me call hue.
+
+---
+
+### Example
+
+```java
+InOrder order = inOrder(repository);
+
+order.verify(repository).save(user);
+
+order.verify(repository).deleteById(1L);
+```
+
+---
+
+# Q10. Why use InOrder?
+
+### 👨‍💻 You
+
+Jab execution sequence important ho.
+
+Example
+
+```text
+Save
+
+↓
+
+Update
+
+↓
+
+Delete
+```
+
+---
+
+# Q11. What is BDDMockito?
+
+### 👨‍💼 Interviewer
+
+What is BDDMockito?
+
+### 👨‍💻 You
+
+BDDMockito Mockito ka Behavior Driven version hai.
+
+Ye code ko zyada readable banata hai.
+
+---
+
+### Example
+
+Instead of
+
+```java
+when(service.save(user))
+.thenReturn(user);
+```
+
+Use
+
+```java
+given(service.save(user))
+.willReturn(user);
+```
+
+---
+
+# Q12. Difference between Mockito and BDDMockito?
+
+| Mockito      | BDDMockito   |
+| ------------ | ------------ |
+| when()       | given()      |
+| thenReturn() | willReturn() |
+
+---
+
+# Q13. What is doAnswer()?
+
+### 👨‍💼 Interviewer
+
+What is doAnswer()?
+
+### 👨‍💻 You
+
+Dynamic response return karna ho,
+
+ya method ke arguments ke basis par logic execute karna ho,
+
+to `doAnswer()` use karte hain.
+
+---
+
+### Example
+
+```java
+doAnswer(invocation -> {
+
+    User user = invocation.getArgument(0);
+
+    return user;
+
+}).when(repository).save(any());
+```
+
+---
+
+# Q14. Difference between doAnswer() and thenReturn()?
+
+| thenReturn()   | doAnswer()       |
+| -------------- | ---------------- |
+| Fixed Response | Dynamic Response |
+
+---
+
+# Q15. What is reset()?
+
+### 👨‍💼 Interviewer
+
+What is reset()?
+
+### 👨‍💻 You
+
+`reset()` Mock Object ka pura behavior aur interaction clear kar deta hai.
+
+Example
+
+```java
+reset(repository);
+```
+
+---
+
+# Q16. Do you use reset() in projects?
+
+### 👨‍💻 You
+
+Normally No.
+
+Best Practice ye hai ki har Test ke liye naya Mock use karein.
+
+`reset()` rarely use hota hai.
+
+---
+
+# Q17. What is clearInvocations()?
+
+### 👨‍💼 Interviewer
+
+Difference between reset() and clearInvocations()?
+
+### 👨‍💻 You
+
+`clearInvocations()`
+
+sirf interaction history clear karta hai.
+
+Stubbed behavior remove nahi karta.
+
+---
+
+# Comparison
+
+| reset()                 | clearInvocations() |
+| ----------------------- | ------------------ |
+| Behavior + Calls remove | Only Calls remove  |
+
+---
+
+# Q18. What are Deep Stubs?
+
+### 👨‍💼 Interviewer
+
+What are Deep Stubs?
+
+### 👨‍💻 You
+
+Nested method calls ko mock karne ke liye Deep Stubs use hote hain.
+
+Example
+
+```java
+user.getAddress().getCity()
+```
+
+---
+
+# Q19. Should we use Deep Stubs?
+
+### 👨‍💻 You
+
+Generally avoid karte hain.
+
+Ye design issue indicate karta hai.
+
+Better hai code refactor karein.
+
+---
+
+# Q20. What is Mockito.verifyNoMoreInteractions()?
+
+### 👨‍💻 You
+
+Ye verify karta hai
+
+jo expected interactions verify kiye hain,
+
+unke alawa aur koi method call nahi hua.
+
+---
+
+# ⭐ Scenario-Based Questions
+
+---
+
+# Q21. Suppose your Repository returns null. How will you test it?
+
+### 👨‍💻 You
+
+```java
+when(repository.findById(1L))
+.thenReturn(Optional.empty());
+
+assertThrows(
+RuntimeException.class,
+()->service.getUser(1L));
+```
+
+---
+
+# Q22. How do you test Exception Scenarios?
+
+### 👨‍💻 You
+
+Mockito se Exception stub karta hoon
+
+aur JUnit ke
+
+```java
+assertThrows()
+```
+
+se verify karta hoon.
+
+---
+
+# Q23. If verify() fails, what does it mean?
+
+### 👨‍💻 You
+
+Matlab expected method call hi nahi hua
+
+ya expected number of times call nahi hua.
+
+---
+
+# Q24. Can we mock static methods?
+
+### 👨‍💼 Interviewer
+
+Can Mockito mock static methods?
+
+### 👨‍💻 You
+
+Yes.
+
+Latest Mockito versions me
+
+```java
+MockedStatic
+```
+
+ka support hai.
+
+Example
+
+```java
+try(MockedStatic<Math> math =
+mockStatic(Math.class)){
+
+}
+```
+
+---
+
+# Q25. Can Mockito mock final classes?
+
+### 👨‍💻 You
+
+Yes.
+
+Latest Mockito versions me
+
+Final Classes aur Final Methods bhi mock ho sakte hain.
+
+---
+
+# Q26. Can Mockito mock private methods?
+
+### 👨‍💻 You
+
+No.
+
+Mockito directly private methods ko mock nahi karta.
+
+Private logic ko public method ke through indirectly test karte hain.
+
+---
+
+# Q27. Can Mockito mock constructors?
+
+### 👨‍💻 You
+
+Latest Mockito versions me constructor mocking possible hai,
+
+lekin generally avoid karte hain.
+
+Better design use karna preferred hai.
+
+---
+
+# Q28. Which objects do you mock in your project?
+
+### 👨‍💻 You
+
+Main generally mock karta hoon
+
+* Repository
+* RestTemplate / WebClient
+* Kafka Producer
+* Redis Client
+* External APIs
+* Notification Service
+
+Business logic wali Service ko mock nahi karta.
+
+---
+
+# Q29. Which objects do you never mock?
+
+### 👨‍💻 You
+
+Class Under Test.
+
+Uski actual business logic execute honi chahiye.
+
+---
+
+# Q30. Explain your Mockito testing flow.
+
+### 👨‍💼 Interviewer
+
+Project me Mockito kaise use karte ho?
+
+### 👨‍💻 You
+
+Mera standard flow hota hai:
+
+```text
+@Mock
+
+↓
+
+@InjectMocks
+
+↓
+
+Prepare Test Data
+
+↓
+
+when()
+
+↓
+
+thenReturn()
+
+↓
+
+Call Service Method
+
+↓
+
+assertEquals()
+
+↓
+
+verify()
+```
+
+Agar Exception scenario ho,
+
+to
+
+```text
+when()
+
+↓
+
+thenThrow()
+
+↓
+
+assertThrows()
+```
+
+---
+
+# ⭐ Rapid Fire Revision
+
+| Question            | Answer                 |
+| ------------------- | ---------------------- |
+| @Spy                | Partial Mock           |
+| @MockBean           | Spring Bean Mock       |
+| ArgumentCaptor      | Capture Arguments      |
+| InOrder             | Verify Order           |
+| BDDMockito          | given()/willReturn()   |
+| doAnswer()          | Dynamic Response       |
+| reset()             | Clear Behavior + Calls |
+| clearInvocations()  | Clear Calls Only       |
+| Static Mock         | Supported              |
+| Final Class Mock    | Supported              |
+| Private Method Mock | No                     |
+
+---
+
+# 🎯 Most Important Interview Questions (Must Prepare)
+
+1. Difference between **@Mock** and **@MockBean**
+2. Difference between **@Mock** and **@Spy**
+3. What is **ArgumentCaptor**?
+4. What is **InOrder**?
+5. Difference between **thenReturn()** and **doAnswer()**
+6. Difference between **reset()** and **clearInvocations()**
+7. Can Mockito mock **Static Methods**?
+8. Can Mockito mock **Final Classes**?
+9. Can Mockito mock **Private Methods**?
+10. Explain Mockito flow in your project.
+
+---
+
+# 🎯 5+ Years Real Project Answer (Very Important)
+
+### 👨‍💼 Interviewer
+
+**How do you write Unit Tests in your Spring Boot project?**
+
+### 👨‍💻 You
+
+Main Service Layer ko test karta hoon.
+
+Repository aur external dependencies ko `@Mock` karta hoon.
+
+`@InjectMocks` se Service create karta hoon.
+
+`when().thenReturn()` se mock behavior define karta hoon.
+
+Service method call karta hoon.
+
+JUnit Assertions se result verify karta hoon aur `verify()` se confirm karta hoon ki expected repository method call hua hai.
+
+---
+
+# 📌 Mockito Complete
+
+Ab tumhare paas Mockito ke **3 Parts** me lagbhag **80+ interview questions** hain, jo 4–7 years Java/Spring Boot interviews ke liye kaafi strong coverage dete hain.
+
+### 🚀 Agla logical topic
+
+Agar tum Spring Boot Backend interviews ki preparation kar rahe ho, to next interview series ke liye mera recommendation hoga:
+
+1. **Spring Boot Testing** (`@WebMvcTest`, `MockMvc`, `@DataJpaTest`, `TestRestTemplate`)
+2. **JUnit + Mockito + MockMvc Scenario-Based Questions**
+3. **Spring Boot Real Project Testing Interview Questions**
+
+Ye topics Mockito ke baad sabse zyada pooche jaate hain aur real project interviews me bahut value rakhte hain.
+
+=====================================================================================================================
+=====================================================================================================================
+

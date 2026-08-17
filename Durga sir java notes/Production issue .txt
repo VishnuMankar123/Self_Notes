@@ -1,0 +1,5080 @@
+Bilkul. Ye **real-world production issues** interview ke liye bahut important hain. Tumhari uploaded PDF mein exactly **20 Java production issues** diye gaye hain, jaise OOM, 100% CPU, deadlock, slow API/N+1, connection pool exhaustion, Kafka lag, Redis issues, API timeout, DB deadlock, logging/monitoring etc. 
+
+Main tumhe inhe **sirf definition ki tarah nahi**, balki har issue ko is format mein samjhaunga:
+
+> **Problem → Real production scenario → Kaise identify kare → Root cause → Fix → Prevention → Interview answer**
+
+Aur language **simple Hindi + English** rakhenge, taaki notes bhi ban sake aur interview mein explain bhi kar sako.
+
+---
+
+# Java Production Issues – Learning Roadmap
+
+PDF ke 20 issues ko hum step-by-step cover kar sakte hain:
+
+| Part | Production Issue                           |
+| ---- | ------------------------------------------ |
+| 1    | OutOfMemoryError / Heap Space              |
+| 2    | CPU 100%                                   |
+| 3    | Deadlock                                   |
+| 4    | Slow API + N+1 Query                       |
+| 5    | StackOverflowError + Memory Leak           |
+| 6    | HikariCP Connection Pool Exhausted         |
+| 7    | `@Transactional` Not Working               |
+| 8    | ConcurrentModificationException            |
+| 9    | Deployment ke baad 500 Error               |
+| 10   | GC Overhead + Too Many Open Files          |
+| 11   | CORS + 401/403                             |
+| 12   | Thread Leak / ExecutorService              |
+| 13   | Kafka Consumer Lag + Message Loss          |
+| 14   | Redis Cache Problems                       |
+| 15   | Metaspace OOM / ClassLoader Leak           |
+| 16   | API Timeout + Rate Limit + Circuit Breaker |
+| 17   | Database Deadlock + Slow Query             |
+| 18   | Production Logging + Monitoring            |
+| 19   | Production Debugging Commands              |
+| 20   | Incident Report + Interview Answer         |
+
+Ye structure directly tumhari PDF ke 20 pages ke according hai. 
+
+---
+
+# Part 1 – API Timeout
+
+Sabse pehle tumhare current question wale topic se start karte hain.
+
+## 1. Timeout kya hota hai?
+
+Simple:
+
+**Timeout = system ne response ke liye wait kiya, lekin configured time ke andar response nahi mila.**
+
+Example:
+
+```text
+Order Service → Payment Service
+```
+
+Payment Service ko response dene mein normally:
+
+```text
+200 ms
+```
+
+lagta hai.
+
+Lekin production mein kisi reason se:
+
+```text
+20 seconds
+```
+
+lag rahe hain.
+
+Aur Order Service ka timeout:
+
+```text
+5 seconds
+```
+
+hai.
+
+To:
+
+```text
+0 sec   → Request sent
+1 sec   → waiting
+2 sec   → waiting
+3 sec   → waiting
+4 sec   → waiting
+5 sec   → TIMEOUT ❌
+```
+
+---
+
+# 2. Real Production Example
+
+Suppose hamare paas:
+
+```text
+User
+ ↓
+API Gateway
+ ↓
+Order Service
+ ↓
+Payment Service
+ ↓
+Database
+```
+
+User:
+
+```http
+POST /order
+```
+
+Order Service payment service ko call karti hai:
+
+```text
+Order Service
+      ↓
+Payment Service
+```
+
+Ab Payment Service slow ho gayi.
+
+For example:
+
+```text
+Payment Service response = 30 sec
+Order Service timeout     = 5 sec
+```
+
+To Order Service 5 seconds ke baad request ko timeout kar degi.
+
+Result:
+
+```text
+User
+ ↓
+API Gateway
+ ↓
+Order Service
+ ↓
+Payment Service
+       ⏳
+       ⏳
+       ❌ timeout
+```
+
+User ko generally `5xx` type error mil sakta hai; exact status code architecture par depend karta hai.
+
+---
+
+# 3. Production mein problem dangerous kyun hai?
+
+Yahi **real-world point** interview mein important hai.
+
+Suppose 100 requests aa rahi hain:
+
+```text
+100 requests
+     ↓
+Payment Service slow
+     ↓
+100 threads waiting
+```
+
+Agar threads continuously downstream response ka wait karte rahe:
+
+```text
+Thread Pool
+----------------
+Thread 1 → waiting
+Thread 2 → waiting
+Thread 3 → waiting
+...
+Thread 100 → waiting
+```
+
+Ab naye requests ke liye threads nahi bachenge.
+
+Result:
+
+```text
+Service slow
+    ↓
+Threads blocked
+    ↓
+More requests wait
+    ↓
+Thread pool exhausted
+    ↓
+Service unavailable
+```
+
+PDF ke page 16 mein isi concept ko **cascade failure** ke through dikhaya gaya hai: Service A slow Service B ko call karti hai, threads block hote hain aur eventually Service A bhi unavailable ho sakti hai. 
+
+---
+
+# 4. Timeout ke common causes
+
+Production mein timeout aaya to blindly timeout value increase nahi karni.
+
+Pehle root cause find karna hai.
+
+### Cause 1 – Downstream API slow
+
+```text
+Service A
+   ↓
+Service B
+   ↓
+slow response
+```
+
+### Cause 2 – Database slow
+
+```text
+API
+ ↓
+DB
+ ↓
+Slow Query
+```
+
+### Cause 3 – Network problem
+
+```text
+Service A
+   ↓
+Network
+   ↓
+Service B
+```
+
+Network latency/connection problem ho sakti hai.
+
+### Cause 4 – Thread pool exhausted
+
+```text
+Too many requests
+       ↓
+Threads busy
+       ↓
+New requests waiting
+```
+
+### Cause 5 – External API slow
+
+Example:
+
+```text
+Your Application
+      ↓
+Payment Provider
+      ↓
+Third-party API
+```
+
+Third-party API slow hai to tumhari API bhi wait kar sakti hai.
+
+### Cause 6 – Database connection pool exhausted
+
+```text
+API
+ ↓
+HikariCP
+ ↓
+All connections busy
+ ↓
+Request waiting
+ ↓
+Timeout
+```
+
+Tumhari PDF ke page 6 mein HikariCP connection pool exhaustion ka example diya hai, jahan connections busy rehne ya close na hone se requests queue mein wait karti hain. 
+
+---
+
+# 5. Production mein kaise debug karoge?
+
+Interviewer agar bole:
+
+> **"Production API timeout ho rahi hai. How will you debug?"**
+
+Tum ye approach batao:
+
+### Step 1 – Logs check karunga
+
+```text
+Application logs
+API Gateway logs
+Nginx logs
+```
+
+Dekhenge timeout kis layer par ho raha hai.
+
+---
+
+### Step 2 – API response time check karunga
+
+Example:
+
+```text
+Normal response = 200 ms
+Current response = 8 sec
+```
+
+Problem definitely investigate karni hai.
+
+---
+
+### Step 3 – Downstream API check karunga
+
+```text
+Service A
+   ↓
+Service B
+```
+
+Service B slow hai kya?
+
+---
+
+### Step 4 – Database check karunga
+
+Slow query hai kya?
+
+PDF ke page 17 mein slow-query debugging ke liye **slow query log + `EXPLAIN`** use karne ka approach diya gaya hai. 
+
+Example:
+
+```sql
+EXPLAIN SELECT * FROM users WHERE email = 'abc@gmail.com';
+```
+
+Agar full table scan ho raha hai:
+
+```text
+ALL
+```
+
+to index missing ho sakta hai.
+
+---
+
+### Step 5 – Thread pool check
+
+Dekhenge:
+
+```text
+Active threads
+Waiting threads
+Pool size
+Queue size
+```
+
+Agar bahut saare threads downstream response ka wait kar rahe hain, cascade failure ka risk hai.
+
+---
+
+### Step 6 – Connection pool check
+
+HikariCP:
+
+```text
+Active connections
+Idle connections
+Pending requests
+```
+
+check karunga.
+
+---
+
+# 6. Fix kya karenge?
+
+PDF ke page 16 ke according important fixes hain: **timeouts set karna, retries carefully use karna, aur Circuit Breaker lagana**. 
+
+### Fix 1 – Proper timeout
+
+Example concept:
+
+```text
+Connection Timeout = 2 sec
+Read Timeout       = 5 sec
+```
+
+Iska benefit:
+
+> Thread indefinitely wait nahi karega.
+
+---
+
+# 7. Retry
+
+Suppose temporary network problem hai:
+
+```text
+Request
+ ↓
+Failed
+ ↓
+Retry
+ ↓
+Success
+```
+
+Lekin **har failure par unlimited retry nahi karna**.
+
+Wrong:
+
+```text
+Retry forever ❌
+```
+
+Better:
+
+```text
+Retry 2-3 times
+      ↓
+Still failed
+      ↓
+Fallback / Circuit Breaker
+```
+
+PDF bhi retry ko carefully use karne aur bounded retries ka concept batati hai. 
+
+---
+
+# 8. Circuit Breaker
+
+Ye bahut important interview topic hai.
+
+Suppose:
+
+```text
+Service A → Service B
+```
+
+Service B continuously down hai.
+
+Without Circuit Breaker:
+
+```text
+A → B ❌
+A → B ❌
+A → B ❌
+A → B ❌
+A → B ❌
+```
+
+Service A ke threads waste honge.
+
+Circuit Breaker:
+
+```text
+          failures
+Service B ─────────→ OPEN
+                     ↓
+              Don't call B
+                     ↓
+                  Fallback
+```
+
+States:
+
+```text
+CLOSED
+   ↓
+Failures increase
+   ↓
+OPEN
+   ↓
+Wait
+   ↓
+HALF-OPEN
+   ↓
+Test request
+   ↓
+Success → CLOSED
+Failure → OPEN
+```
+
+PDF ke page 16 mein exactly **Closed → Open → Half-Open** flow diya gaya hai. 
+
+---
+
+# 9. Timeout vs Circuit Breaker
+
+Interview mein ye difference yaad rakho:
+
+| Timeout                                 | Circuit Breaker                                  |
+| --------------------------------------- | ------------------------------------------------ |
+| Kitna wait karna hai                    | Kab downstream ko call karna hi band karna hai   |
+| Individual request ko protect karta hai | System ko cascading failure se protect karta hai |
+| Example: 5 sec                          | Example: 50% failures → OPEN                     |
+| Waiting stop karta hai                  | Calls stop karta hai                             |
+
+Simple line:
+
+> **Timeout says "I won't wait longer." Circuit Breaker says "I won't call this failing service for some time."**
+
+---
+
+# 10. Interview Answer – Ready Format
+
+**Interviewer:**
+
+> Production mein API timeout aaye to kaise debug karoge?
+
+**Answer:**
+
+> "First, I will identify where the timeout is happening by checking application, gateway and infrastructure logs. Then I will check API response time and downstream service latency. I will also check database slow queries, connection pool and thread pool metrics. If a downstream service is slow, I will configure proper connection and read timeouts. For temporary failures I can use limited retries, and for continuous downstream failures I would use a circuit breaker and fallback to prevent cascade failure. Finally, I would add proper monitoring and alerts so that we can detect the issue early."
+
+---
+
+# 11. Ek line mein yaad rakho
+
+```text
+TIMEOUT
+   ↓
+Don't wait forever
+   ↓
+Find slow dependency
+   ↓
+DB / API / Network / Pool / Threads
+   ↓
+Fix root cause
+   ↓
+Timeout + Limited Retry
+   ↓
+Circuit Breaker
+   ↓
+Fallback + Monitoring
+```
+
+---
+
+## Production issue solve karne ka universal formula
+
+Tumhari **poori 20-slide PDF** ke liye ek formula yaad rakho:
+
+> **Observe → Identify → Debug → Root Cause → Fix → Prevent**
+
+Example:
+
+```text
+Production Problem
+       ↓
+Logs + Metrics
+       ↓
+Find affected component
+       ↓
+Root Cause
+       ↓
+Fix
+       ↓
+Monitoring + Alert
+       ↓
+Prevention
+```
+
+Page 20 ka incident-report section bhi isi mindset ko reinforce karta hai: **timeline, impact, root cause/5 Whys, fix, prevention, action items aur lessons learned** ko capture karna chahiye. 
+
+**Next hum Part 2 mein "OutOfMemoryError / Java Heap Space" ko isi style mein karenge**, kyunki production interviews mein ye bahut common hai.
+=============================================================================================================
+# Part 2 – OutOfMemoryError / Java Heap Space
+
+Ye tumhari PDF ka **Page 1/20** wala production issue hai. 
+
+Isko hum bilkul real production scenario ki tarah samjhte hain.
+
+---
+
+## 1. OutOfMemoryError kya hai?
+
+Simple language mein:
+
+> **JVM ke paas object create/store karne ke liye enough heap memory nahi bachi, isliye Java `OutOfMemoryError` throw karta hai.**
+
+Example:
+
+```text
+Java Application
+      ↓
+JVM Heap
+      ↓
+Objects create ho rahe hain
+      ↓
+Memory continuously increase
+      ↓
+Heap full ❌
+      ↓
+OutOfMemoryError
+```
+
+Typical error:
+
+```text
+java.lang.OutOfMemoryError: Java heap space
+```
+
+PDF mein bhi production log ka example `java.lang.OutOfMemoryError: Java heap space` diya hai. 
+
+---
+
+# 2. Real Production Scenario
+
+Suppose tumhari application mein ek API hai:
+
+```http
+GET /orders
+```
+
+Aur database mein:
+
+```text
+10 lakh orders
+```
+
+Developer ne accidentally:
+
+```java
+List<Order> orders = orderRepository.findAll();
+```
+
+kar diya.
+
+Ab kya hoga?
+
+```text
+Database
+   ↓
+10 lakh records
+   ↓
+Java List
+   ↓
+Heap memory mein objects
+   ↓
+Heap continuously increase
+   ↓
+💥 OutOfMemoryError
+```
+
+Production mein API crash ya service instability aa sakti hai.
+
+---
+
+# 3. Heap kya hota hai?
+
+Simple:
+
+**Heap = JVM ka memory area jahan Java objects store hote hain.**
+
+Example:
+
+```java
+Customer customer = new Customer();
+Order order = new Order();
+Payment payment = new Payment();
+```
+
+Ye objects heap mein memory consume karte hain.
+
+Conceptually:
+
+```text
+JVM Heap
+┌─────────────────────────┐
+│ Customer Object         │
+│ Order Object            │
+│ Payment Object          │
+│ List Objects            │
+│ Cache Objects           │
+│ String Objects          │
+└─────────────────────────┘
+```
+
+---
+
+# 4. Production mein Heap full kyun hota hai?
+
+PDF ke according important root causes:
+
+* **Static collection** objects ko permanently hold kar sakti hai.
+* **Memory leak** ki wajah se objects release nahi hote.
+* **Large in-memory load**, jaise bahut bada file/data memory mein load karna.
+* Objects ka memory se properly release na hona. 
+
+### Example – Static Collection
+
+```java
+public class Cache {
+
+    public static Map<String, Object> data = new HashMap<>();
+
+}
+```
+
+Agar continuously:
+
+```java
+data.put(key, object);
+```
+
+hota rahe aur old objects remove na hon:
+
+```text
+Object 1
+Object 2
+Object 3
+...
+Object 1,000,000
+```
+
+Memory grow hoti rahegi.
+
+---
+
+# 5. Memory Leak kya hota hai?
+
+Ye interview mein bahut important hai.
+
+Simple definition:
+
+> **Memory leak means application mein objects ki zarurat khatam ho gayi hai, lekin koi reference unhe hold kar raha hai, isliye Garbage Collector unhe remove nahi kar pa raha.**
+
+Example:
+
+```java
+static Map<String, User> cache = new HashMap<>();
+```
+
+Requests aati rahi:
+
+```text
+User 1 → cache
+User 2 → cache
+User 3 → cache
+...
+User 1 lakh → cache
+```
+
+Agar cache mein eviction/removal mechanism nahi hai:
+
+```text
+Heap
+ ↓
+Cache
+ ↓
+Millions of objects
+ ↓
+GC cannot remove them
+ ↓
+Heap grows
+ ↓
+OOM
+```
+
+PDF ke page 5 mein **static collection ko memory leak ka common cause** dikhaya gaya hai. 
+
+---
+
+# 6. Garbage Collector object ko kab remove karta hai?
+
+Important interview concept:
+
+GC simply ye nahi dekhta ki:
+
+> "Object use nahi ho raha."
+
+GC mainly reachability/reference relationship dekhta hai.
+
+Example:
+
+```java
+User user = new User();
+```
+
+Agar baad mein:
+
+```java
+user = null;
+```
+
+aur object ka koi aur reachable reference nahi hai:
+
+```text
+User Object
+    ↑
+ no reference
+    ↓
+GC can collect
+```
+
+Lekin:
+
+```java
+static List<User> users = new ArrayList<>();
+users.add(user);
+```
+
+To static list reference hold kar rahi hai.
+
+```text
+Static List
+    ↓
+User Object
+```
+
+GC us object ko collect nahi kar sakta.
+
+---
+
+# 7. Production mein kaise pata chalega ki OOM hai?
+
+Suppose production alert aaya:
+
+```text
+Application Down
+```
+
+Logs check kiye:
+
+```text
+java.lang.OutOfMemoryError:
+Java heap space
+```
+
+Ab immediately application restart karna **root-cause analysis nahi hai**.
+
+PDF ke page 1 mein bhi first step ke roop mein immediately restart na karke **heap dump capture** karne ka approach diya gaya hai. 
+
+---
+
+# 8. Heap Dump kya hota hai?
+
+Simple:
+
+> **Heap dump = ek snapshot jisme JVM heap ke andar kaunse objects memory consume kar rahe hain, uski information hoti hai.**
+
+Imagine:
+
+```text
+Production JVM
+      ↓
+Heap
+      ↓
+Heap Dump
+      ↓
+Analyze
+      ↓
+Which object consuming memory?
+```
+
+PDF mein heap dump ke liye `jmap` ka example diya gaya hai:
+
+```bash
+jmap -dump:format=b,file=heap.hprof <pid>
+```
+
+
+
+---
+
+# 9. MAT kya hai?
+
+**MAT = Eclipse Memory Analyzer Tool**
+
+Heap dump ko MAT mein open karke dekh sakte hain:
+
+```text
+Which object is consuming most memory?
+```
+
+PDF ke example mein MAT ke **Dominator Tree** se ek `HashMap` ko large heap consumer ke roop mein identify kiya gaya hai. 
+
+Simple flow:
+
+```text
+Production JVM
+      ↓
+heap.hprof
+      ↓
+MAT
+      ↓
+Dominator Tree
+      ↓
+Large object / collection
+      ↓
+Root Cause
+```
+
+---
+
+# 10. Dominator Tree simple language mein
+
+Interview mein deep theory ki zarurat nahi.
+
+Simple bolo:
+
+> **Dominator Tree helps us identify which objects are retaining a large amount of memory.**
+
+Example:
+
+```text
+HashMap
+   ↓
+User Objects
+   ↓
+Order Objects
+   ↓
+Payment Objects
+```
+
+Agar HashMap bahut saare objects ko retain kar rahi hai, to MAT mein wo major memory consumer dikhegi.
+
+---
+
+# 11. Production Debugging Flow
+
+Ye flow **interview mein yaad karna hai**:
+
+```text
+OOM Alert
+   ↓
+Check application logs
+   ↓
+Confirm OutOfMemoryError
+   ↓
+Capture Heap Dump
+   ↓
+Open Heap Dump in MAT
+   ↓
+Check Dominator Tree
+   ↓
+Find memory-consuming object
+   ↓
+Find why object is retained
+   ↓
+Fix code
+   ↓
+Deploy
+   ↓
+Monitor Heap / GC
+```
+
+---
+
+# 12. Root Cause Example
+
+Suppose MAT mein mila:
+
+```text
+HashMap → 2 GB
+```
+
+Ab question:
+
+**HashMap itni badi kyun hai?**
+
+Code search kiya:
+
+```java
+private static Map<String, User> cache =
+        new HashMap<>();
+```
+
+Aur kahin bhi eviction nahi.
+
+Root cause:
+
+```text
+Static HashMap
+      ↓
+Objects continuously added
+      ↓
+Objects retained
+      ↓
+Heap grows
+      ↓
+OOM
+```
+
+---
+
+# 13. Fix kya karoge?
+
+### Fix 1 – Unlimited collection mat rakho
+
+Wrong:
+
+```java
+static Map<String, User> cache = new HashMap<>();
+```
+
+Agar unlimited growth possible hai.
+
+Better approach:
+
+```text
+Bounded Cache
++
+Eviction
++
+Expiration
+```
+
+---
+
+### Fix 2 – Large data ko ek saath memory mein mat lao
+
+Wrong:
+
+```java
+findAll()
+```
+
+for millions of records.
+
+Better:
+
+```text
+Pagination
+```
+
+Example:
+
+```text
+Page 1 → 100 records
+Page 2 → 100 records
+Page 3 → 100 records
+```
+
+Instead of:
+
+```text
+10 lakh records → JVM Heap ❌
+```
+
+---
+
+### Fix 3 – Large file ko memory mein mat load karo
+
+Instead of:
+
+```text
+10 GB file
+   ↓
+Entire file → memory ❌
+```
+
+Use:
+
+```text
+File
+ ↓
+Stream / chunks
+ ↓
+Process small portion
+```
+
+---
+
+# 14. `-Xmx` increase karna solution hai?
+
+Ye **interview trap question** ho sakta hai.
+
+Suppose:
+
+```text
+-Xmx512m
+```
+
+se OOM aa raha hai.
+
+Tum:
+
+```text
+-Xmx2g
+```
+
+kar dete ho.
+
+Kya problem solve ho gayi?
+
+**Not necessarily.**
+
+Agar memory leak hai:
+
+```text
+512 MB → OOM
+2 GB   → later OOM
+4 GB   → later OOM
+```
+
+Root cause still exists.
+
+PDF ke page 1 mein temporary mitigation ke roop mein heap increase karne ke saath **leak fix karna aur large resources/data ko properly manage karna** emphasize kiya gaya hai. 
+
+### Interview mein bolo:
+
+> "Increasing `-Xmx` can be a temporary mitigation, but I would not consider it the root-cause fix. I would analyze the heap dump and identify the objects retaining memory."
+
+---
+
+# 15. OOM vs Memory Leak
+
+Bahut important difference:
+
+| OOM                            | Memory Leak                                       |
+| ------------------------------ | ------------------------------------------------- |
+| Heap memory available nahi hai | Objects unnecessarily retained hain               |
+| Error/result                   | Root cause ho sakta hai                           |
+| `Java heap space` aa sakta hai | Eventually OOM cause kar sakta hai                |
+| Large load se bhi ho sakta hai | Static collection/cache/reference se ho sakta hai |
+
+Simple:
+
+> **Memory leak OOM ka ek possible cause hai.**
+
+---
+
+# 16. Interview Scenario
+
+### Interviewer:
+
+> Production mein `java.lang.OutOfMemoryError: Java heap space` aa raha hai. What will you do?
+
+### Tum:
+
+> "First, I will check the application logs and confirm whether it is a heap space issue. I would avoid blindly restarting the application and, if possible, capture a heap dump. Then I would analyze the heap dump using tools like MAT and check the Dominator Tree to identify which objects are consuming or retaining most of the heap. I would investigate common causes such as static collections, unbounded caches, large in-memory data or objects that are unnecessarily retained. After identifying the root cause, I would fix the code, for example by adding cache eviction, pagination or streaming. Increasing `-Xmx` can be a temporary mitigation, but it should not replace root-cause analysis."
+
+---
+
+# 17. 30-Second Interview Version
+
+Agar interviewer short answer chahta hai:
+
+> **"For a Java heap-space OOM in production, I first confirm it from logs, capture a heap dump, analyze it using MAT and check the Dominator Tree to find the objects retaining most memory. Then I identify whether the cause is an unbounded cache, static collection, large in-memory data or another retention issue. I fix the root cause and monitor heap and GC. Increasing `-Xmx` can be temporary mitigation but is not the actual fix."**
+
+---
+
+# 18. Notes mein ye likho ⭐
+
+```text
+PART 2 – OUTOFMEMORYERROR / JAVA HEAP SPACE
+
+Problem:
+JVM heap memory is exhausted.
+
+Common Causes:
+1. Static collection
+2. Unbounded cache
+3. Large data loaded into memory
+4. Objects unnecessarily retained
+5. Memory leak
+
+Debug:
+Logs
+ ↓
+Confirm OOM
+ ↓
+Heap Dump
+ ↓
+MAT
+ ↓
+Dominator Tree
+ ↓
+Find memory-consuming object
+ ↓
+Find retention/root cause
+
+Fix:
+- Fix memory leak
+- Bounded cache + eviction
+- Pagination
+- Streaming/chunk processing
+- Proper resource management
+- Increase -Xmx only as temporary mitigation
+
+Interview Formula:
+Observe → Heap Dump → MAT → Dominator Tree
+→ Root Cause → Fix → Monitor
+```
+
+**Next Part 3:** **CPU 100% in Production** — production server ka CPU 100% ho gaya, kaunsi process/thread responsible hai, `top -H`, thread dump, `jstack`, aur actual root cause kaise find karte hain. PDF ka Page 2 isi issue par hai. 
+
+=============================================================================================================
+# Part 3 – CPU 100% in Production
+
+Ye tumhari PDF ka **Page 2/20 – High CPU 100% Production Debugging** issue hai. 
+
+Ye bhi **real-world production issue** hai aur Java interviews mein kaafi poocha jaata hai.
+
+---
+
+## 1. Problem kya hai?
+
+Production server par suddenly:
+
+```text
+CPU = 100%
+```
+
+Aur application:
+
+```text
+Slow ❌
+API response slow ❌
+Requests timeout ❌
+```
+
+Example:
+
+```text
+User
+ ↓
+API
+ ↓
+Java Application
+ ↓
+CPU 100%
+ ↓
+Application slow
+```
+
+Interviewer pooch sakta hai:
+
+> **"Production server CPU is 100%. How will you debug it?"**
+
+Tumhe immediately code change nahi karna.
+
+Pehle **kaunsa process/thread CPU consume kar raha hai**, ye find karna hai.
+
+---
+
+# 2. Real Production Scenario
+
+Suppose tumhari Java application normal chal rahi hai:
+
+```text
+CPU = 30%
+```
+
+Suddenly production mein:
+
+```text
+CPU = 100%
+```
+
+Users complain:
+
+```text
+"Application very slow hai."
+"API response nahi aa raha."
+"Request timeout ho rahi hai."
+```
+
+Monitoring se:
+
+```text
+CPU: 100%
+```
+
+Ab tumhara debugging flow:
+
+```text
+CPU 100%
+   ↓
+Find Java process
+   ↓
+Find high-CPU thread
+   ↓
+Convert thread ID
+   ↓
+Take thread dump
+   ↓
+Find stack trace
+   ↓
+Identify code
+   ↓
+Fix root cause
+```
+
+PDF ke Page 2 mein isi approach ke liye `top`, `top -H -p`, thread dump aur `jstack` use karne ka flow diya gaya hai. 
+
+---
+
+# 3. Step 1 – Kaunsa process CPU kha raha hai?
+
+Linux server par:
+
+```bash
+top
+```
+
+Example:
+
+```text
+PID     USER    %CPU    COMMAND
+12345   java    98.5    java
+23456   root     2.0    nginx
+```
+
+Yahan:
+
+```text
+PID = 12345
+CPU = 98.5%
+```
+
+Matlab Java process high CPU consume kar raha hai.
+
+---
+
+# 4. Step 2 – Java process ke andar kaunsa Thread CPU kha raha hai?
+
+Ab sirf Java process pata chala.
+
+Hume actual **thread** find karna hai.
+
+Use:
+
+```bash
+top -H -p 12345
+```
+
+Meaning:
+
+```text
+-H
+↓
+Threads show karo
+
+-p 12345
+↓
+Sirf PID 12345 ko monitor karo
+```
+
+Example:
+
+```text
+PID      %CPU
+12346    80%
+12347     5%
+12348     3%
+12349     2%
+```
+
+Ab pata chala:
+
+```text
+Thread 12346
+     ↓
+CPU = 80%
+```
+
+PDF ke Page 2 mein `top -H -p <pid>` ko high-CPU Java thread identify karne ke liye use kiya gaya hai. 
+
+---
+
+# 5. Thread ID ko convert kyun karte hain?
+
+Ab Linux se thread ID mila:
+
+```text
+12346
+```
+
+Java thread dump mein thread ID usually hexadecimal form mein useful hoti hai.
+
+So:
+
+```text
+12346 decimal
+      ↓
+hexadecimal
+      ↓
+303A
+```
+
+Linux command:
+
+```bash
+printf '%x\n' 12346
+```
+
+Output:
+
+```text
+303a
+```
+
+Ab hum thread dump mein:
+
+```text
+nid=0x303a
+```
+
+search kar sakte hain.
+
+---
+
+# 6. Step 3 – Thread Dump lo
+
+Command:
+
+```bash
+jstack 12345 > thread_dump.txt
+```
+
+Yahan:
+
+```text
+12345 = Java process PID
+```
+
+Thread dump mein multiple threads milenge.
+
+Example:
+
+```text
+"worker-1" RUNNABLE
+    nid=0x303a
+    at com.myapp.service.OrderService.process(OrderService.java:187)
+```
+
+Ab important part:
+
+```text
+RUNNABLE
+nid=0x303a
+OrderService.java:187
+```
+
+Hume pata chal gaya:
+
+> High CPU thread `OrderService.java` ki line 187 ke around running hai.
+
+---
+
+# 7. High CPU ke common Root Causes
+
+Ab actual question:
+
+**CPU 100% kyun hua?**
+
+### Cause 1 – Infinite loop
+
+Sabse common example:
+
+```java
+while (true) {
+    // something
+}
+```
+
+Agar exit condition nahi hai:
+
+```text
+while(true)
+   ↓
+CPU continuously
+   ↓
+100% CPU ❌
+```
+
+---
+
+### Cause 2 – Bad loop condition
+
+Example:
+
+```java
+for (int i = 0; i < 1000000000; i++) {
+    // heavy processing
+}
+```
+
+Bahut large computation CPU consume kar sakta hai.
+
+---
+
+### Cause 3 – Heavy computation
+
+Example:
+
+```text
+Million records
+      ↓
+Complex calculation
+      ↓
+CPU high
+```
+
+---
+
+### Cause 4 – Regex / Pattern issue
+
+PDF specifically **regex catastrophic backtracking** ko possible cause ke roop mein mention karti hai. 
+
+Simple idea:
+
+```text
+Complex Regex
+      ↓
+Large Input
+      ↓
+Huge number of matching attempts
+      ↓
+CPU high
+```
+
+---
+
+### Cause 5 – Excessive GC
+
+Kabhi CPU high ka reason actual business logic nahi, **Garbage Collection** bhi ho sakta hai.
+
+Flow:
+
+```text
+Too many objects
+      ↓
+Heap pressure
+      ↓
+GC runs frequently
+      ↓
+CPU usage increases
+```
+
+PDF ke Page 2 mein specifically **GC-heavy situation** ko bhi high CPU investigation ke part ke roop mein mention kiya gaya hai. 
+
+---
+
+# 8. Important: CPU 100% ka matlab hamesha infinite loop nahi
+
+Interview mein ye point bolna.
+
+CPU 100% ke possible reasons:
+
+```text
+CPU 100%
+  ├── Infinite loop
+  ├── Heavy computation
+  ├── Bad algorithm
+  ├── Regex issue
+  ├── GC overhead
+  └── Multiple CPU-intensive threads
+```
+
+Isliye:
+
+> **"I won't assume the root cause immediately. I will first identify the high-CPU thread and inspect its stack trace."**
+
+Ye strong production-debugging answer hai.
+
+---
+
+# 9. Ek complete real-world example
+
+Suppose alert:
+
+```text
+🔥 Production CPU = 100%
+```
+
+### Step 1
+
+```bash
+top
+```
+
+Found:
+
+```text
+java PID = 12345
+CPU = 99%
+```
+
+### Step 2
+
+```bash
+top -H -p 12345
+```
+
+Found:
+
+```text
+Thread = 12346
+CPU = 85%
+```
+
+### Step 3
+
+Convert:
+
+```bash
+printf '%x\n' 12346
+```
+
+Output:
+
+```text
+303a
+```
+
+### Step 4
+
+Thread dump:
+
+```bash
+jstack 12345 > thread_dump.txt
+```
+
+Search:
+
+```text
+nid=0x303a
+```
+
+Found:
+
+```text
+"worker-1" RUNNABLE
+    nid=0x303a
+    at com.myapp.service.OrderService.process(OrderService.java:187)
+```
+
+### Step 5
+
+Code check:
+
+```java
+while (condition) {
+    process();
+}
+```
+
+Condition incorrectly update nahi ho rahi.
+
+### Root Cause:
+
+```text
+Incorrect loop condition
+```
+
+### Fix:
+
+```text
+Correct loop condition
++
+Test
++
+Deploy
++
+Monitor CPU
+```
+
+---
+
+# 10. Debugging Flow – Notes ke liye ⭐
+
+```text
+CPU 100%
+    ↓
+top
+    ↓
+Find Java PID
+    ↓
+top -H -p <PID>
+    ↓
+Find high CPU Thread ID
+    ↓
+Convert Thread ID to Hex
+    ↓
+jstack <PID>
+    ↓
+Find nid=0x<hex>
+    ↓
+Check Stack Trace
+    ↓
+Find source code
+    ↓
+Root Cause
+    ↓
+Fix
+    ↓
+Monitor CPU
+```
+
+---
+
+# 11. Important Commands
+
+| Command               | Purpose                                     |
+| --------------------- | ------------------------------------------- |
+| `top`                 | High CPU process find karna                 |
+| `top -H -p <pid>`     | Process ke andar high CPU thread find karna |
+| `printf '%x\n' <tid>` | Thread ID decimal → hexadecimal             |
+| `jstack <pid>`        | Java thread dump lena                       |
+| `jps`                 | Running Java processes dekhna               |
+
+PDF ke Page 19 mein bhi `jps`, `jstack`, `jmap`, `jstat` jaise production debugging commands ko quick-reference ke roop mein diya gaya hai. 
+
+---
+
+# 12. Interview Question
+
+### Q: Production CPU 100% hai. What will you do?
+
+### Answer:
+
+> "First, I will identify which process is consuming high CPU using `top`. If Java is consuming the CPU, I will identify the high-CPU thread using `top -H -p <pid>`. I will convert the thread ID to hexadecimal and take a thread dump using `jstack`. Then I will match the thread ID with the `nid` in the thread dump and inspect the stack trace to identify the problematic code. Common causes can be infinite loops, heavy computation, inefficient code, regex issues or excessive GC. After finding the root cause, I will fix the code and monitor CPU after deployment."
+
+---
+
+# 13. Short Interview Answer
+
+Agar interviewer bole **"short mein batao"**:
+
+> **"CPU 100% mein I first identify the high-CPU process using `top`, then the high-CPU Java thread using `top -H -p`. I convert the thread ID to hex, take a `jstack`, find the corresponding `nid`, and inspect the stack trace. This helps me identify whether the issue is an infinite loop, heavy computation, regex, GC or some other CPU-intensive operation."**
+
+---
+
+# 14. Timeout aur CPU Issue ka connection
+
+Ab previous Part 2 se connect karo:
+
+```text
+CPU 100%
+   ↓
+Application slow
+   ↓
+API response slow
+   ↓
+Client waits
+   ↓
+Timeout
+```
+
+Matlab production mein **ek issue doosra issue create kar sakta hai**.
+
+Example:
+
+```text
+Bad loop
+   ↓
+CPU 100%
+   ↓
+Threads slow
+   ↓
+API response delayed
+   ↓
+API timeout
+   ↓
+Users get 5xx
+```
+
+Isi liye production debugging mein sirf error message dekhna enough nahi hai; **logs + metrics + thread dump + system metrics** ko correlate karna padta hai.
+
+---
+
+## ⭐ Final Notes
+
+```text
+PART 3 – HIGH CPU / CPU 100%
+
+Problem:
+Production server/application CPU reaches 100%.
+
+First Debug:
+top
+  ↓
+Find Java PID
+  ↓
+top -H -p <PID>
+  ↓
+Find high CPU Thread
+  ↓
+Decimal → Hex
+  ↓
+jstack <PID>
+  ↓
+Find nid
+  ↓
+Check Stack Trace
+
+Common Root Causes:
+- Infinite loop
+- Heavy computation
+- Inefficient algorithm/code
+- Regex problem
+- Excessive GC
+
+Fix:
+- Correct loop/algorithm
+- Optimize CPU-heavy code
+- Reduce unnecessary computation
+- Investigate GC if required
+
+Interview Formula:
+top → PID → Thread → Hex → jstack → Stack Trace → Root Cause → Fix
+```
+
+**Next Part 4 – Deadlock in Production:** do threads ek-dusre ke lock ka wait kar rahe hain, application hang ho rahi hai; `jstack` se deadlock kaise detect karna hai aur **deadlock ko prevent kaise karna hai**. PDF ka Page 3 isi issue par hai. 
+
+=============================================================================================================
+# Part 4 – Deadlock in Production
+
+Ye tumhari PDF ka **Page 3/20 – Deadlock** wala production issue hai. 
+
+Isko simple real-world example se samajhte hain, phir **production mein detect kaise karna hai**, `jstack` se kaise identify karna hai, aur interview mein kya answer dena hai.
+
+---
+
+## 1. Deadlock kya hota hai?
+
+Simple language mein:
+
+> **Deadlock tab hota hai jab do ya more threads ek-dusre ke lock ko release hone ka wait karte rehte hain, aur koi bhi thread aage nahi badh pata.**
+
+Example:
+
+```text id="c9r5v8"
+Thread-1 → Lock A le liya
+           ↓
+           Lock B ka wait
+
+Thread-2 → Lock B le liya
+           ↓
+           Lock A ka wait
+```
+
+Ab:
+
+```text id="0f1xq8"
+Thread-1 → A ✔ → B ❌
+                  ↑
+                  │
+Thread-2 → B ✔ → A ❌
+```
+
+Dono ek-dusre ka wait kar rahe hain.
+
+**Result: application ka kuch part hang ho sakta hai.**
+
+---
+
+# 2. Real Production Example
+
+Suppose hamare banking application mein:
+
+```text id="t0t7a4"
+Account A
+Account B
+```
+
+Transfer karna hai:
+
+```text id="b5x1g2"
+Account A → Account B
+```
+
+Aur simultaneously doosra transfer:
+
+```text id="q0a2s4"
+Account B → Account A
+```
+
+Agar code locks ko different order mein acquire karta hai:
+
+### Thread 1
+
+```text id="a2x6c8"
+Lock Account A
+       ↓
+Lock Account B
+```
+
+### Thread 2
+
+```text id="k4t7b1"
+Lock Account B
+       ↓
+Lock Account A
+```
+
+Production mein:
+
+```text id="9k8gq1"
+Thread-1
+   ↓
+A locked
+   ↓
+Waiting for B
+
+Thread-2
+   ↓
+B locked
+   ↓
+Waiting for A
+```
+
+💥 **Deadlock**
+
+---
+
+# 3. Simple Java Example
+
+Ye code intentionally deadlock create karega:
+
+```java id="m3g4pk"
+public class DeadlockDemo {
+
+    private static final Object lockA = new Object();
+    private static final Object lockB = new Object();
+
+    public static void main(String[] args) {
+
+        Thread thread1 = new Thread(() -> {
+
+            synchronized (lockA) {
+                System.out.println("Thread 1 locked A");
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+
+                synchronized (lockB) {
+                    System.out.println("Thread 1 locked B");
+                }
+            }
+
+        }, "Thread-1");
+
+
+        Thread thread2 = new Thread(() -> {
+
+            synchronized (lockB) {
+                System.out.println("Thread 2 locked B");
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+
+                synchronized (lockA) {
+                    System.out.println("Thread 2 locked A");
+                }
+            }
+
+        }, "Thread-2");
+
+
+        thread1.start();
+        thread2.start();
+    }
+}
+```
+
+---
+
+# 4. Is code mein exactly kya hua?
+
+### Thread 1:
+
+```text id="t1z5r6"
+Thread-1
+   ↓
+lockA
+   ↓
+wait
+   ↓
+lockB
+```
+
+### Thread 2:
+
+```text id="a9g7t3"
+Thread-2
+   ↓
+lockB
+   ↓
+wait
+   ↓
+lockA
+```
+
+Ab:
+
+```text id="m3x9c1"
+Thread-1 owns A
+Thread-2 owns B
+
+Thread-1 wants B
+Thread-2 wants A
+```
+
+Nobody can proceed.
+
+---
+
+# 5. Application mein kya dikhega?
+
+Production mein necessarily application completely crash nahi karegi.
+
+Instead:
+
+```text id="0p3r8n"
+Some APIs
+   ↓
+Hanging / very slow
+
+Some requests
+   ↓
+Waiting
+
+Threads
+   ↓
+BLOCKED
+```
+
+Eventually:
+
+```text id="f7h1m2"
+Requests waiting
+      ↓
+Thread pool exhaustion
+      ↓
+API timeout
+      ↓
+5xx errors
+```
+
+Isliye deadlock indirectly **API timeout** bhi cause kar sakta hai.
+
+---
+
+# 6. Production mein Deadlock kaise identify karoge?
+
+Sabse important tool:
+
+```cmd id="b3q5xk"
+jstack <PID>
+```
+
+Example:
+
+```cmd id="z8x4j1"
+jstack 12345 > thread_dump.txt
+```
+
+Phir:
+
+```text id="c8m2q7"
+thread_dump.txt
+```
+
+open karo.
+
+Java `jstack` thread dump mein deadlock detection information de sakta hai.
+
+PDF ke Page 3 mein bhi `jstack` ke through deadlock identify karne ka approach diya gaya hai. 
+
+---
+
+# 7. Thread Dump mein kya milega?
+
+Deadlock situation mein tumhe kuch aisa information mil sakta hai:
+
+```text id="x1c7v9"
+Found one Java-level deadlock:
+
+"Thread-1":
+  waiting to lock monitor
+  which is held by "Thread-2"
+
+"Thread-2":
+  waiting to lock monitor
+  which is held by "Thread-1"
+```
+
+🎯 Ye bahut strong evidence hai ki deadlock hai.
+
+Simple meaning:
+
+```text id="b5w2n0"
+Thread-1 → waiting for Thread-2's lock
+
+Thread-2 → waiting for Thread-1's lock
+```
+
+---
+
+# 8. Deadlock aur Normal Waiting mein Difference
+
+Ye interview mein important hai.
+
+### Normal waiting
+
+```text id="1b2x9z"
+Thread-1 → waiting
+       ↓
+Thread-2 completes
+       ↓
+Lock released
+       ↓
+Thread-1 continues
+```
+
+Ye normal ho sakta hai.
+
+### Deadlock
+
+```text id="8k4v1q"
+Thread-1 → waiting for Thread-2
+       ↑                ↓
+       │                │
+       └────────────────┘
+       Thread-2 → waiting for Thread-1
+```
+
+**Forever waiting.**
+
+---
+
+# 9. Deadlock ke 4 conditions
+
+Interview ke liye ye important hain.
+
+Deadlock generally tab possible hota hai jab ye conditions exist karein:
+
+### 1. Mutual Exclusion
+
+Ek lock ko ek time par ek thread hold kar raha hai.
+
+```text
+Lock A → Thread-1
+```
+
+### 2. Hold and Wait
+
+Thread ek lock hold karke doosre lock ka wait kar raha hai.
+
+```text
+Thread-1
+   ↓
+A locked
+   ↓
+B waiting
+```
+
+### 3. No Preemption
+
+Lock ko forcefully doosre thread se nahi cheena ja sakta.
+
+### 4. Circular Wait
+
+Sabse important:
+
+```text
+T1 → waits for T2
+T2 → waits for T1
+```
+
+Circular dependency ban gayi.
+
+---
+
+# 10. Deadlock ko prevent kaise karoge?
+
+Sabse simple aur important technique:
+
+## Same Lock Ordering
+
+Problem:
+
+```text id="9a6v3s"
+Thread-1:
+A → B
+
+Thread-2:
+B → A
+```
+
+Fix:
+
+```text id="c4v7m1"
+Thread-1:
+A → B
+
+Thread-2:
+A → B
+```
+
+Ab circular wait nahi banega.
+
+---
+
+# 11. Example – Fixed Code
+
+Instead of:
+
+```java id="x5q3n8"
+Thread 1:
+synchronized (lockA) {
+    synchronized (lockB) {
+    }
+}
+
+Thread 2:
+synchronized (lockB) {
+    synchronized (lockA) {
+    }
+}
+```
+
+Dono threads mein same order rakho:
+
+```java id="f2m7k9"
+synchronized (lockA) {
+
+    synchronized (lockB) {
+
+        // business logic
+
+    }
+}
+```
+
+Now:
+
+```text id="6z3r2v"
+Thread-1 → A → B
+Thread-2 → A → B
+```
+
+Thread-2 ko A available hone tak wait karna padega, but circular deadlock nahi banega.
+
+---
+
+# 12. `ReentrantLock` + `tryLock()`
+
+Another useful approach:
+
+```java id="8v4q1p"
+if (lockA.tryLock()) {
+
+    try {
+
+        if (lockB.tryLock()) {
+
+            try {
+                // business logic
+            } finally {
+                lockB.unlock();
+            }
+
+        }
+
+    } finally {
+        lockA.unlock();
+    }
+}
+```
+
+Concept:
+
+```text id="v7x2k9"
+Try to acquire lock
+       ↓
+Lock available?
+   ↙        ↘
+ Yes        No
+  ↓          ↓
+Continue   Don't wait forever
+```
+
+Iska benefit hai ki thread indefinitely lock ka wait nahi karta.
+
+---
+
+# 13. Production Debugging Flow ⭐
+
+Ye notes mein zaroor likho:
+
+```text id="g8v1n5"
+Application Hanging / Requests Stuck
+              ↓
+        Check CPU / Metrics
+              ↓
+        Check Thread Dump
+              ↓
+          jstack <PID>
+              ↓
+      Check BLOCKED Threads
+              ↓
+     Check Lock Ownership
+              ↓
+    Check Circular Dependency
+              ↓
+       Confirm Deadlock
+              ↓
+        Fix Lock Ordering
+              ↓
+     Deploy + Monitor
+```
+
+---
+
+# 14. Windows par Practical
+
+Tumne specifically poocha tha ki Windows par practice kar sakte ho.
+
+**Haan, isi Deadlock ko Windows par bhi practice kar sakte ho.**
+
+### File banao:
+
+```text id="d9q3k7"
+DeadlockDemo.java
+```
+
+Upar wala code paste karo.
+
+Compile:
+
+```cmd id="r7n4m2"
+javac DeadlockDemo.java
+```
+
+Run:
+
+```cmd id="x8k2p1"
+java DeadlockDemo
+```
+
+Output kuch aisa aayega:
+
+```text id="v5j9c2"
+Thread 1 locked A
+Thread 2 locked B
+```
+
+Program terminate nahi hoga.
+
+Kyun?
+
+```text id="n6t3w8"
+Thread 1 → waiting for B
+Thread 2 → waiting for A
+```
+
+---
+
+# 15. PID Find Karo
+
+New CMD open karo:
+
+```cmd id="k2m8v4"
+jps -l
+```
+
+Example:
+
+```text id="z7q3n1"
+15240 DeadlockDemo
+```
+
+PID:
+
+```text id="w4x8p2"
+15240
+```
+
+---
+
+# 16. Thread Dump Lo
+
+Run:
+
+```cmd id="r2c6v9"
+jstack 15240 > deadlock.txt
+```
+
+Then:
+
+```cmd id="m8p4x1"
+notepad deadlock.txt
+```
+
+Search:
+
+```text id="q5v7n2"
+deadlock
+```
+
+or:
+
+```text id="y3k8c6"
+Found one Java-level deadlock
+```
+
+Agar Java ne deadlock detect kiya hai, tumhe dono threads ke locks aur waiting relationship dikh sakti hai.
+
+---
+
+# 17. Real Production Example
+
+Suppose production mein:
+
+```text id="z4c7p2"
+Payment Service
+     ↓
+Account Service
+```
+
+Aur do requests simultaneously:
+
+```text id="n8m3q5"
+Request 1:
+Account A → Account B
+
+Request 2:
+Account B → Account A
+```
+
+Agar locking inconsistent hai:
+
+```text id="j2x6v8"
+Request 1 → Lock A → wait B
+Request 2 → Lock B → wait A
+```
+
+Then:
+
+```text id="f9q4w7"
+Deadlock
+   ↓
+Threads BLOCKED
+   ↓
+Requests wait
+   ↓
+API timeout
+   ↓
+Production incident
+```
+
+---
+
+# 18. Interview Question
+
+### Q: What is deadlock?
+
+**Answer:**
+
+> "Deadlock is a situation where two or more threads are waiting indefinitely for locks held by each other, so none of them can proceed."
+
+---
+
+### Q: How do you detect deadlock in production?
+
+**Answer:**
+
+> "I would take a Java thread dump using `jstack` and inspect the BLOCKED threads and lock ownership. The thread dump can indicate a Java-level deadlock and show which thread is waiting for a lock held by another thread."
+
+---
+
+### Q: How do you prevent deadlock?
+
+**Answer:**
+
+> "The main approach is to maintain a consistent lock acquisition order across threads. We can also minimize nested locks and use mechanisms such as `tryLock()` with timeout where appropriate."
+
+---
+
+# ⭐ Final Notes
+
+```text id="h4v7k1"
+PART 4 – DEADLOCK
+
+Definition:
+Two or more threads wait indefinitely
+for locks held by each other.
+
+Example:
+
+Thread-1:
+Lock A → Wait for B
+
+Thread-2:
+Lock B → Wait for A
+
+Result:
+Circular Wait → Deadlock
+
+Production Symptoms:
+- Requests hanging
+- Threads BLOCKED
+- API becomes slow
+- Timeouts
+- Thread pool exhaustion
+
+Debug:
+jstack <PID>
+        ↓
+Thread Dump
+        ↓
+BLOCKED Threads
+        ↓
+Lock Ownership
+        ↓
+Circular Dependency
+        ↓
+Deadlock
+
+Prevention:
+1. Same lock ordering
+2. Avoid unnecessary nested locks
+3. Keep synchronized sections small
+4. Use tryLock() where appropriate
+
+Interview Formula:
+
+Deadlock
+→ Thread Dump
+→ BLOCKED Threads
+→ Lock Ownership
+→ Circular Wait
+→ Root Cause
+→ Consistent Lock Ordering
+→ Monitor
+```
+
+### 🔥 Ek line mein yaad rakho
+
+> **Deadlock = "Tum mera lock chhodo, main tumhara lock chhodunga" — aur dono kabhi lock nahi chhodte.** 😄
+
+**Next Part 5 – Slow API + N+1 Query:** production mein API 5–10 seconds kyun slow hoti hai, N+1 query kya hoti hai, Hibernate/JPA mein kaise identify karte hain, SQL logs/metrics se kaise debug karte hain, aur fix kaise karte hain. PDF ka Page 4 isi issue par hai. 
+
+=============================================================================================================
+# Part 5 – Slow API + N+1 Query
+
+Ye tumhari PDF ka **Page 4/20 – Slow API / N+1 Query** issue hai. 
+
+Ye **Java + Spring Boot + Hibernate/JPA** projects mein bahut common production problem hai.
+
+---
+
+# 1. Problem kya hai?
+
+Suppose production mein API hai:
+
+```http
+GET /orders
+```
+
+Normally response:
+
+```text
+200 ms
+```
+
+Lekin production mein:
+
+```text
+5 seconds
+10 seconds
+20 seconds
+```
+
+ho raha hai.
+
+User ko lagta hai:
+
+> "API slow hai."
+
+Lekin actual problem API method khud nahi bhi ho sakti.
+
+Ho sakta hai:
+
+```text
+API
+ ↓
+Service
+ ↓
+Repository
+ ↓
+Database
+ ↓
+Too many SQL queries
+```
+
+---
+
+# 2. N+1 Query kya hoti hai?
+
+Simple language:
+
+> **Ek query parent records ke liye chalti hai, aur har parent ke liye ek additional query chalti hai.**
+
+Isliye:
+
+```text
+1 query + N queries = N+1 queries
+```
+
+Example:
+
+Database mein:
+
+```text
+100 Orders
+```
+
+Application pehle:
+
+```sql
+SELECT * FROM orders;
+```
+
+**1 query**
+
+Phir har order ke customer ko fetch karne ke liye:
+
+```text
+Order 1 → Customer query
+Order 2 → Customer query
+Order 3 → Customer query
+...
+Order 100 → Customer query
+```
+
+Total:
+
+```text
+1 + 100 = 101 queries
+```
+
+💥 **N+1 problem**
+
+PDF ke Page 4 mein exactly **1 + N SQL queries** ka concept aur uske performance impact ko explain kiya gaya hai. 
+
+---
+
+# 3. Real-world Example
+
+Suppose entities:
+
+```text
+Customer
+   ↓
+Orders
+```
+
+Ek customer ke multiple orders hain.
+
+Database:
+
+```text
+customers
+----------------
+id
+name
+
+orders
+----------------
+id
+customer_id
+amount
+```
+
+API:
+
+```http
+GET /customers
+```
+
+Suppose:
+
+```text
+100 customers
+```
+
+Hibernate pehle:
+
+```sql
+SELECT * FROM customers;
+```
+
+Then each customer ke orders:
+
+```sql
+SELECT * FROM orders WHERE customer_id = 1;
+SELECT * FROM orders WHERE customer_id = 2;
+SELECT * FROM orders WHERE customer_id = 3;
+...
+SELECT * FROM orders WHERE customer_id = 100;
+```
+
+Total:
+
+```text
+1 + 100 = 101 queries
+```
+
+---
+
+# 4. Problem production mein kyun hoti hai?
+
+Development mein:
+
+```text
+10 customers
+```
+
+hai.
+
+To:
+
+```text
+1 + 10 = 11 queries
+```
+
+Maybe response fast hai.
+
+Production mein:
+
+```text
+10,000 customers
+```
+
+hain.
+
+To:
+
+```text
+1 + 10,000
+= 10,001 queries
+```
+
+😱
+
+Ab:
+
+```text
+Database CPU ↑
+Database connections ↑
+API response time ↑
+Network calls ↑
+```
+
+Eventually:
+
+```text
+Slow API
+   ↓
+Timeout
+```
+
+Isliye N+1 problem indirectly **API timeout** bhi create kar sakti hai.
+
+---
+
+# 5. Hibernate/JPA mein N+1 kaise hoti hai?
+
+Typical mapping:
+
+```java
+@OneToMany(mappedBy = "customer")
+private List<Order> orders;
+```
+
+Aur code:
+
+```java
+List<Customer> customers =
+        customerRepository.findAll();
+
+for (Customer customer : customers) {
+    System.out.println(customer.getOrders());
+}
+```
+
+Problem yahan ho sakti hai:
+
+```text
+findAll()
+   ↓
+1 query
+   ↓
+customers loaded
+
+customer.getOrders()
+   ↓
+additional query
+```
+
+Har customer ke liye additional query.
+
+---
+
+# 6. LAZY Loading ka role
+
+Hibernate mein relationships often `LAZY` loading use karti hain.
+
+Simple meaning:
+
+> **Related data ko immediately fetch mat karo; jab actually access hoga tab fetch karo.**
+
+Example:
+
+```java
+@OneToMany(fetch = FetchType.LAZY)
+private List<Order> orders;
+```
+
+Initially:
+
+```text
+Customer loaded
+Orders ❌
+```
+
+Jab:
+
+```java
+customer.getOrders();
+```
+
+call hota hai:
+
+```text
+Orders → DB query
+```
+
+Agar loop ke andar repeatedly ho:
+
+```text
+Customer 1 → Query
+Customer 2 → Query
+Customer 3 → Query
+...
+```
+
+to N+1 create ho sakta hai.
+
+---
+
+# 7. Production mein kaise identify karoge?
+
+Ye sabse important part hai.
+
+User complaint:
+
+> "Customer API slow hai."
+
+Tum directly code change nahi karoge.
+
+### Step 1 – API response time check
+
+Example:
+
+```text
+Normal:
+200 ms
+
+Production:
+8 seconds
+```
+
+---
+
+### Step 2 – SQL logs check
+
+Hibernate SQL logging enable/check karo.
+
+Tumhe suddenly:
+
+```sql
+SELECT ... FROM customer;
+
+SELECT ... FROM orders WHERE customer_id=?;
+SELECT ... FROM orders WHERE customer_id=?;
+SELECT ... FROM orders WHERE customer_id=?;
+SELECT ... FROM orders WHERE customer_id=?;
+```
+
+dikhne lagega.
+
+Agar:
+
+```text
+1 parent query
++
+many similar child queries
+```
+
+dikh rahi hain, N+1 ka strong indication hai.
+
+---
+
+# 8. Ek simple identification trick
+
+Logs mein dekho:
+
+```text
+SELECT customer...
+SELECT order WHERE customer_id=1
+SELECT order WHERE customer_id=2
+SELECT order WHERE customer_id=3
+SELECT order WHERE customer_id=4
+...
+```
+
+Tum turant soch sakte ho:
+
+> **"Why are we firing the same type of query again and again?"**
+
+Ye N+1 ka signal hai.
+
+---
+
+# 9. Fix #1 – JOIN FETCH
+
+Hibernate/JPA mein ek common solution:
+
+```java
+@Query("""
+    SELECT c
+    FROM Customer c
+    JOIN FETCH c.orders
+""")
+List<Customer> findCustomersWithOrders();
+```
+
+Concept:
+
+Before:
+
+```text
+Customer query
+      +
+Order query
+      +
+Order query
+      +
+Order query
+```
+
+After:
+
+```text
+Customer + Orders
+       ↓
+Single optimized query
+```
+
+Conceptually SQL:
+
+```sql
+SELECT c.*, o.*
+FROM customer c
+JOIN orders o
+ON c.id = o.customer_id;
+```
+
+---
+
+# 10. Fix #2 – EntityGraph
+
+Spring Data JPA mein another approach:
+
+```java
+@EntityGraph(attributePaths = "orders")
+List<Customer> findAll();
+```
+
+Concept:
+
+```text
+Customer
+   +
+Orders
+   ↓
+Fetch together
+```
+
+Ye N+1 avoid karne ka useful approach hai.
+
+---
+
+# 11. Fix #3 – Batch Fetching
+
+Kabhi JOIN FETCH har situation mein best nahi hota.
+
+Large relationships mein result set bahut bada ho sakta hai.
+
+Tab batch fetching use kar sakte ho.
+
+Concept:
+
+Before:
+
+```text
+Order 1 → query
+Order 2 → query
+Order 3 → query
+Order 4 → query
+```
+
+Batch:
+
+```text
+Orders 1-20
+    ↓
+one batch query
+```
+
+So:
+
+```text
+100 queries
+    ↓
+5 batch queries
+```
+
+Conceptually much better.
+
+---
+
+# 12. Important: `EAGER` kar dena solution nahi hai
+
+Ye interview mein trap hai.
+
+Koi bol sakta hai:
+
+> "N+1 aa rahi hai, `FetchType.EAGER` kar do."
+
+**Blindly nahi karna chahiye.**
+
+EAGER ka matlab:
+
+```text
+Customer
+   ↓
+Immediately related data load
+```
+
+Agar bahut saara related data hai:
+
+```text
+Customer
+ ↓
+Orders
+ ↓
+Payments
+ ↓
+Products
+ ↓
+Addresses
+```
+
+to unnecessary data load ho sakta hai.
+
+Result:
+
+```text
+Memory ↑
+Query complexity ↑
+Response time ↑
+```
+
+So:
+
+> **Fetch strategy requirement ke according choose karni hai.**
+
+---
+
+# 13. N+1 vs Slow Query
+
+Ye dono same nahi hain.
+
+### Slow Query
+
+Ek query hi slow hai:
+
+```text
+1 SQL
+ ↓
+10 seconds
+```
+
+Example:
+
+```sql
+SELECT *
+FROM orders
+WHERE customer_id = 123;
+```
+
+Index missing ho sakta hai.
+
+---
+
+### N+1
+
+Bahut saari queries execute ho rahi hain:
+
+```text
+1 query
++
+1000 similar queries
+```
+
+Each query individually maybe fast ho:
+
+```text
+10 ms
+```
+
+But:
+
+```text
+1000 × 10 ms
+```
+
+overall expensive ho sakta hai.
+
+---
+
+# 14. Production Debugging Flow ⭐
+
+Isko notes mein likho:
+
+```text
+Slow API
+   ↓
+Check API response time
+   ↓
+Check application logs
+   ↓
+Check SQL logs
+   ↓
+Count SQL queries
+   ↓
+1 + N pattern?
+   ↓
+Yes → N+1 problem
+   ↓
+Check JPA/Hibernate mapping
+   ↓
+JOIN FETCH / EntityGraph /
+Batch Fetching
+   ↓
+Test query count
+   ↓
+Load test
+   ↓
+Deploy + Monitor
+```
+
+---
+
+# 15. Real Production Scenario
+
+Suppose API:
+
+```http
+GET /customers
+```
+
+Production data:
+
+```text
+50,000 customers
+```
+
+Code:
+
+```java
+List<Customer> customers =
+        customerRepository.findAll();
+
+for (Customer customer : customers) {
+    customer.getOrders().size();
+}
+```
+
+Hibernate:
+
+```text
+Query 1:
+SELECT customers
+
+Query 2:
+SELECT orders WHERE customer_id=1
+
+Query 3:
+SELECT orders WHERE customer_id=2
+
+...
+
+Query 50,001:
+SELECT orders WHERE customer_id=50000
+```
+
+Result:
+
+```text
+50,001 SQL queries 😱
+```
+
+Production impact:
+
+```text
+DB Load ↑
+Connection Pool Usage ↑
+API Response Time ↑
+CPU ↑
+Timeout Risk ↑
+```
+
+---
+
+# 16. Ek Important Connection – HikariCP
+
+Tumne Part 2 mein connection pool issue bhi dekha tha.
+
+N+1:
+
+```text
+API
+ ↓
+1000 SQL queries
+ ↓
+DB connections needed
+ ↓
+Connection pool busy
+ ↓
+Requests waiting
+ ↓
+Timeout
+```
+
+So production problems isolated nahi hote.
+
+Ek problem doosri problem create kar sakti hai.
+
+```text
+N+1
+ ↓
+DB load
+ ↓
+Connection pool pressure
+ ↓
+Slow API
+ ↓
+Timeout
+```
+
+---
+
+# 17. Interview Question
+
+### Q: What is N+1 query problem?
+
+**Answer:**
+
+> "N+1 is a performance issue where the application executes one query to fetch the parent records and then executes additional queries for each parent record to fetch its related data. For example, fetching 100 customers with one query and then executing one order query for each customer results in 101 queries."
+
+---
+
+### Q: How do you identify N+1 in production?
+
+**Answer:**
+
+> "I would check the API response time and SQL logs. If I see one parent query followed by many repeated child queries with different IDs, that indicates an N+1 problem. I would also check Hibernate query metrics or tracing if available."
+
+---
+
+### Q: How do you fix N+1?
+
+**Answer:**
+
+> "Depending on the use case, I can use JOIN FETCH, EntityGraph or batch fetching. I would choose the appropriate fetch strategy rather than blindly changing everything to EAGER."
+
+---
+
+# 18. Short Interview Answer ⭐
+
+> **"N+1 occurs when we execute one query for parent data and then one additional query for each parent to fetch related data. For example, one customer query plus 100 order queries means 101 queries. In production I identify it by checking SQL logs and query count. I can fix it using JOIN FETCH, EntityGraph or batch fetching depending on the use case."**
+
+---
+
+# ⭐ Final Notes
+
+```text
+PART 5 – SLOW API + N+1 QUERY
+
+Problem:
+API response is very slow.
+
+N+1:
+1 parent query + N child queries.
+
+Example:
+100 customers
+
+1 query:
+SELECT customers
+
+100 queries:
+SELECT orders WHERE customer_id=?
+
+Total:
+101 queries
+
+Symptoms:
+- Slow API
+- High DB load
+- High connection pool usage
+- Increased response time
+- Timeout risk
+
+Debug:
+API metrics
+ ↓
+Logs
+ ↓
+SQL logs
+ ↓
+Check repeated queries
+ ↓
+Identify N+1
+
+Fix:
+1. JOIN FETCH
+2. EntityGraph
+3. Batch Fetching
+4. Correct fetch strategy
+
+Don't blindly:
+FetchType.EAGER
+
+Interview Formula:
+Slow API
+→ SQL Logs
+→ Query Count
+→ 1 + N Pattern
+→ N+1
+→ JOIN FETCH / EntityGraph / Batch
+→ Load Test
+→ Monitor
+```
+
+**Next Part 6 – StackOverflowError + Memory Leak:** recursive method se stack overflow kaise hota hai, static collection se memory leak kaise hota hai, aur production mein heap dump/MAT se leak kaise identify karte hain. PDF ka Page 5 isi issue par hai. 
+
+=============================================================================================================
+# Part 6 – StackOverflowError + Memory Leak
+
+Ye tumhari PDF ka **Page 5/20 – StackOverflowError + Memory Leak** wala production issue hai. 
+
+Is part mein **2 alag problems** hain:
+
+1. `StackOverflowError`
+2. Memory Leak
+
+Dono ko simple real-world example ke saath samjho.
+
+---
+
+# 1. StackOverflowError kya hai?
+
+Simple language mein:
+
+> **Jab ek thread ka stack memory recursive method calls ki wajah se bhar jata hai, JVM `StackOverflowError` throw karti hai.**
+
+Example:
+
+```java
+public void test() {
+    test();
+}
+```
+
+Yahan:
+
+```text id="5o8f1w"
+test()
+ ↓
+test()
+ ↓
+test()
+ ↓
+test()
+ ↓
+...
+ ↓
+Stack Full
+ ↓
+StackOverflowError ❌
+```
+
+---
+
+# 2. Ye kaise hota hai?
+
+Har method call ke liye thread stack mein information store hoti hai.
+
+Example:
+
+```java
+public void methodA() {
+    methodB();
+}
+
+public void methodB() {
+    methodC();
+}
+
+public void methodC() {
+    methodA();
+}
+```
+
+Flow:
+
+```text id="h1k3a8"
+methodA()
+   ↓
+methodB()
+   ↓
+methodC()
+   ↓
+methodA()
+   ↓
+methodB()
+   ↓
+methodC()
+   ↓
+...
+```
+
+Koi termination condition nahi hai.
+
+Eventually:
+
+```text id="v3x7p2"
+Stack Memory Full
+       ↓
+StackOverflowError
+```
+
+---
+
+# 3. Real Production Example
+
+Suppose tumhare application mein category tree hai:
+
+```text id="a6m4z1"
+Electronics
+   ↓
+Mobile
+      ↓
+Samsung
+```
+
+Developer recursive method use karta hai:
+
+```java
+void process(Category category) {
+
+    for (Category child : category.getChildren()) {
+        process(child);
+    }
+}
+```
+
+Normally tree properly terminate ho raha hai to problem nahi.
+
+Lekin production data mein accidentally circular relationship hai:
+
+```text id="n8x4c2"
+A
+ ↓
+B
+ ↓
+C
+ ↓
+A
+```
+
+Ab:
+
+```text id="y2p7q5"
+A → B → C → A → B → C → A...
+```
+
+Recursion kabhi stop nahi hogi.
+
+Result:
+
+```text id="6m9v1r"
+StackOverflowError
+```
+
+---
+
+# 4. StackOverflowError ka common cause
+
+### Infinite recursion
+
+```java
+void method() {
+    method();
+}
+```
+
+### Circular data structure
+
+```text id="w3k6p8"
+A → B → C → A
+```
+
+### Missing termination condition
+
+Recursive method mein proper base condition nahi hai.
+
+---
+
+# 5. Recursion mein Base Condition
+
+Correct recursion:
+
+```java
+void print(int n) {
+
+    if (n == 0) {
+        return;
+    }
+
+    System.out.println(n);
+
+    print(n - 1);
+}
+```
+
+Flow:
+
+```text id="r8c4m2"
+5
+ ↓
+4
+ ↓
+3
+ ↓
+2
+ ↓
+1
+ ↓
+0
+ ↓
+return
+```
+
+Yahan recursion stop ho jaati hai.
+
+### Important interview line:
+
+> **Every recursive algorithm should have a valid termination/base condition.**
+
+---
+
+# 6. StackOverflowError ka Production Debugging
+
+Suppose production logs mein:
+
+```text id="h7q2v5"
+java.lang.StackOverflowError
+```
+
+Tum kya karoge?
+
+### Step 1 – Logs check
+
+Search:
+
+```text id="l1m8c3"
+StackOverflowError
+```
+
+### Step 2 – Stack trace dekho
+
+Example:
+
+```text id="x4p9n7"
+at com.myapp.CategoryService.process(CategoryService.java:45)
+at com.myapp.CategoryService.process(CategoryService.java:45)
+at com.myapp.CategoryService.process(CategoryService.java:45)
+at com.myapp.CategoryService.process(CategoryService.java:45)
+...
+```
+
+Same method repeatedly dikh raha hai.
+
+🎯 Strong indication:
+
+```text id="q6w2e9"
+Infinite / excessive recursion
+```
+
+### Step 3 – Code + data check
+
+Check:
+
+```text id="z5k1r8"
+Base condition?
+Circular data?
+Incorrect recursion?
+```
+
+---
+
+# 7. Ab Second Problem – Memory Leak
+
+Memory leak ko hum Part 2 mein briefly dekh chuke hain.
+
+Ab production perspective se samjho.
+
+Simple definition:
+
+> **Memory leak mein application ke objects ki zarurat khatam ho chuki hoti hai, lekin references un objects ko hold karte rehte hain, isliye Garbage Collector unhe remove nahi kar pata.**
+
+Result:
+
+```text id="v8p3s6"
+Objects retained
+      ↓
+Heap grows
+      ↓
+GC pressure
+      ↓
+Eventually OOM
+```
+
+---
+
+# 8. Real Example – Static Collection
+
+Suppose:
+
+```java
+public class UserCache {
+
+    private static final List<User> users =
+            new ArrayList<>();
+
+    public static void add(User user) {
+        users.add(user);
+    }
+}
+```
+
+Har request:
+
+```text id="f2n7m4"
+User 1 → List
+User 2 → List
+User 3 → List
+...
+User 1,000,000 → List
+```
+
+Lekin list kabhi clear nahi hoti.
+
+```text id="c8q4x1"
+static List
+   ↓
+Millions of User objects
+   ↓
+Heap grows
+```
+
+PDF ke Page 5 mein **static collection ko memory leak ka common example** dikhaya gaya hai. 
+
+---
+
+# 9. GC Object ko kyun remove nahi karta?
+
+Ye interview mein important hai.
+
+Suppose:
+
+```java
+User user = new User();
+```
+
+Baad mein:
+
+```java
+user = null;
+```
+
+Aur koi reference nahi:
+
+```text id="r2k6p9"
+User Object
+     ↓
+No reachable reference
+     ↓
+GC can collect
+```
+
+But:
+
+```text id="e7m3v5"
+static List
+     ↓
+User Object
+```
+
+Reference abhi bhi reachable hai.
+
+So GC bolta hai:
+
+> "Object reachable hai, main ise remove nahi karunga."
+
+---
+
+# 10. Memory Leak ka Production Impact
+
+Initially:
+
+```text id="b5q8w2"
+Heap = 30%
+```
+
+After some hours:
+
+```text id="p7c2m9"
+Heap = 50%
+```
+
+Later:
+
+```text id="n4v6x1"
+Heap = 70%
+```
+
+Later:
+
+```text id="s8k3q5"
+Heap = 90%
+```
+
+GC frequently run:
+
+```text id="j6r2m8"
+GC ↑
+CPU ↑
+Application slow
+```
+
+Eventually:
+
+```text id="e9w4p1"
+OutOfMemoryError
+```
+
+So:
+
+> **Memory leak can eventually cause OOM.**
+
+---
+
+# 11. StackOverflowError vs OutOfMemoryError
+
+Bahut important interview comparison:
+
+| StackOverflowError                    | OutOfMemoryError                                |
+| ------------------------------------- | ----------------------------------------------- |
+| Usually thread stack exhausted        | Heap memory exhausted                           |
+| Common cause: infinite recursion      | Common cause: memory retention/large allocation |
+| Stack trace often repeats same method | Heap analysis useful                            |
+| Example: recursive method             | Example: unbounded cache                        |
+| Debug with stack trace                | Debug with heap dump/MAT                        |
+
+Simple:
+
+```text id="y2q7m5"
+StackOverflowError
+       ↓
+STACK problem
+
+OutOfMemoryError
+       ↓
+HEAP problem
+```
+
+---
+
+# 12. Production mein Memory Leak kaise identify karoge?
+
+Suppose alert:
+
+```text id="k3p8v1"
+Heap usage continuously increasing
+```
+
+First:
+
+```text id="d6m2x9"
+Logs + JVM metrics
+```
+
+Check:
+
+```text id="a9r4w7"
+Heap Used
+GC activity
+Old Gen usage
+```
+
+Agar heap continuously grow kar raha hai aur GC ke baad bhi memory release nahi ho rahi:
+
+```text id="x5q1n8"
+Possible memory retention/leak
+```
+
+---
+
+# 13. Heap Dump
+
+Heap dump lo:
+
+```bash
+jmap -dump:format=b,file=heap.hprof <PID>
+```
+
+PDF mein bhi heap dump capture karne ke liye `jmap` aur analysis ke liye MAT/Dominator Tree approach diya gaya hai. 
+
+Then:
+
+```text id="h4v8p2"
+heap.hprof
+    ↓
+MAT
+    ↓
+Dominator Tree
+    ↓
+Large retained objects
+```
+
+---
+
+# 14. MAT mein kya dekhenge?
+
+Suppose MAT mein:
+
+```text id="c9x5k7"
+HashMap
+Retained Heap = 1.5 GB
+```
+
+Ab investigate:
+
+```text id="u2m6q4"
+Who is holding this HashMap?
+```
+
+Suppose:
+
+```text id="v7p3n9"
+static UserCache.users
+```
+
+Mil gaya.
+
+Root cause:
+
+```text id="w5k8r2"
+Static collection
+     ↓
+Objects never removed
+     ↓
+Memory retained
+     ↓
+Heap growth
+```
+
+---
+
+# 15. Memory Leak Fix kaise karoge?
+
+### Fix 1 – Unlimited collection avoid karo
+
+Wrong:
+
+```java
+static List<User> users = new ArrayList<>();
+```
+
+without cleanup.
+
+---
+
+### Fix 2 – Cache mein eviction rakho
+
+Concept:
+
+```text id="q3m7v1"
+Cache
+ ↓
+Maximum size
+ ↓
+Expiration
+ ↓
+Old entries removed
+```
+
+---
+
+### Fix 3 – Unnecessary references remove karo
+
+Agar object ki zarurat nahi:
+
+```text id="j8p4c6"
+Remove reference
+```
+
+---
+
+### Fix 4 – Large data ko stream/paginate karo
+
+Instead of:
+
+```text id="s1v5m8"
+1 million records
+ ↓
+Memory
+```
+
+Use:
+
+```text id="n4q7x2"
+100 records
+ ↓
+process
+ ↓
+next 100
+```
+
+---
+
+# 16. StackOverflowError + Memory Leak ek saath kaise related ho sakte hain?
+
+Suppose application mein:
+
+```text id="b7m2x9"
+Memory leak
+ ↓
+Heap pressure
+ ↓
+GC pressure
+ ↓
+Application slow
+```
+
+Separately:
+
+```text id="r5k8c1"
+Bad recursion
+ ↓
+StackOverflowError
+```
+
+Dono **different memory areas/problems** hain.
+
+Remember:
+
+```text id="w3q6n8"
+Thread Stack
+   ↓
+StackOverflowError
+
+JVM Heap
+   ↓
+OutOfMemoryError / Memory Leak
+```
+
+---
+
+# 17. Production Debugging Formula ⭐
+
+### StackOverflowError
+
+```text id="z8m4p1"
+StackOverflowError
+       ↓
+Check Stack Trace
+       ↓
+Repeated method?
+       ↓
+Check recursion
+       ↓
+Check base condition
+       ↓
+Check circular data
+       ↓
+Fix
+```
+
+### Memory Leak
+
+```text id="k2v7q5"
+Heap continuously increasing
+       ↓
+Check JVM metrics
+       ↓
+Heap Dump
+       ↓
+MAT
+       ↓
+Dominator Tree
+       ↓
+Find retained object
+       ↓
+Find reference
+       ↓
+Root Cause
+       ↓
+Fix
+```
+
+---
+
+# 18. Interview Questions
+
+### Q1. What is StackOverflowError?
+
+> **"StackOverflowError occurs when a thread's stack memory is exhausted, commonly because of infinite or excessive recursion."**
+
+---
+
+### Q2. How do you debug StackOverflowError?
+
+> **"I check the stack trace for repeated method calls and investigate recursive methods, missing termination conditions or circular data structures."**
+
+---
+
+### Q3. What is a memory leak in Java?
+
+> **"A memory leak occurs when objects that are no longer needed are still strongly referenced, preventing the Garbage Collector from reclaiming them."**
+
+---
+
+### Q4. How do you debug a memory leak in production?
+
+> **"I check heap and GC metrics first, then capture a heap dump and analyze it using a tool like Eclipse MAT. I check the Dominator Tree and retained heap to identify which objects are consuming memory and why they are still referenced."**
+
+---
+
+### Q5. Can memory leak cause OutOfMemoryError?
+
+**Yes.**
+
+```text id="p4x8m2"
+Memory Leak
+   ↓
+Objects retained
+   ↓
+Heap grows
+   ↓
+GC cannot reclaim enough
+   ↓
+OutOfMemoryError
+```
+
+---
+
+# 19. Real Interview Scenario
+
+### Interviewer:
+
+> Production mein `StackOverflowError` aa gaya. What will you do?
+
+### Answer:
+
+> "First, I will check the stack trace. If I see the same method repeated many times, I will investigate recursion. I will check whether the recursive method has a proper termination condition and whether the production data contains a circular relationship. After identifying the root cause, I will fix the recursion or data issue and monitor the application."
+
+---
+
+### Interviewer:
+
+> Production mein memory continuously increase ho rahi hai. What will you do?
+
+### Answer:
+
+> "I will first check heap usage and GC metrics. If the heap keeps growing even after GC, I will suspect memory retention or a leak. I would capture a heap dump and analyze it using MAT, especially the Dominator Tree and retained heap, to identify the objects consuming memory and their references. Then I would fix the root cause, such as an unbounded cache or static collection."
+
+---
+
+# ⭐ Final Notes
+
+```text id="q8m2v6"
+PART 6 – STACKOVERFLOWERROR + MEMORY LEAK
+
+STACKOVERFLOWERROR
+------------------
+
+Meaning:
+Thread stack memory exhausted.
+
+Common Causes:
+- Infinite recursion
+- Missing base condition
+- Circular data structure
+
+Example:
+
+methodA()
+   ↓
+methodA()
+   ↓
+methodA()
+   ↓
+...
+   ↓
+StackOverflowError
+
+
+MEMORY LEAK
+-----------
+
+Meaning:
+Unused objects are still referenced,
+so GC cannot reclaim them.
+
+Common Cause:
+- Static collections
+- Unbounded cache
+- Unnecessary references
+- Large objects retained
+
+Flow:
+
+Objects retained
+      ↓
+Heap grows
+      ↓
+GC pressure
+      ↓
+OutOfMemoryError
+
+
+DEBUGGING:
+
+StackOverflowError:
+Stack Trace
+ ↓
+Repeated Method
+ ↓
+Recursion
+ ↓
+Base Condition / Circular Data
+ ↓
+Fix
+
+Memory Leak:
+Heap Metrics
+ ↓
+Heap Dump
+ ↓
+MAT
+ ↓
+Dominator Tree
+ ↓
+Retained Object
+ ↓
+Reference
+ ↓
+Root Cause
+ ↓
+Fix
+```
+
+### ⭐ One-line memory trick
+
+> **StackOverflow = Stack bhar gaya.**
+> **Memory Leak = Heap mein unwanted objects phase hue hain.**
+> **Memory Leak → eventually OOM ho sakta hai.**
+
+**Next Part 7 – HikariCP Connection Pool Exhausted:** production mein `Connection is not available, request timed out after ...ms` kyun aata hai, connection pool actually kya karta hai, leak/slow query se pool kaise exhaust hota hai, aur kaise debug/fix karte hain. PDF ka Page 6 isi issue par hai. 
+
+=============================================================================================================
+# Part 7 – HikariCP Connection Pool Exhausted
+
+Ye tumhari PDF ka **Page 6/20 – HikariCP Connection Pool Exhausted** production issue hai. 
+
+Ye **Spring Boot + JPA/Hibernate + MySQL/PostgreSQL** applications mein bahut common production problem hai.
+
+---
+
+# 1. Sabse pehle – Connection Pool kya hota hai?
+
+Simple language mein:
+
+> **Database connection pool = application ke paas already-created DB connections ka ek pool, jise requests reuse karti hain.**
+
+Spring Boot applications mein commonly **HikariCP** use hota hai.
+
+Imagine:
+
+```text id="x4j8p2"
+Java Application
+       ↓
+    HikariCP
+       ↓
+ ┌───────────────┐
+ │ Connection 1  │
+ │ Connection 2  │
+ │ Connection 3  │
+ │ Connection 4  │
+ │ Connection 5  │
+ └───────────────┘
+       ↓
+    Database
+```
+
+Suppose pool size:
+
+```text id="q7m3v9"
+maximumPoolSize = 10
+```
+
+Matlab approximately **10 connections simultaneously available** ho sakti hain.
+
+---
+
+# 2. Request ko DB connection kaise milta hai?
+
+Suppose API request aayi:
+
+```text id="a8c4m1"
+GET /customers
+```
+
+Flow:
+
+```text id="w2n7k5"
+Request
+   ↓
+Service
+   ↓
+HikariCP
+   ↓
+Get DB Connection
+   ↓
+Execute SQL
+   ↓
+Return Connection
+   ↓
+Next Request can use it
+```
+
+Important:
+
+> Connection use karne ke baad properly release/return hona chahiye.
+
+---
+
+# 3. Connection Pool Exhaustion kya hai?
+
+Simple:
+
+> **Jab pool ke saare DB connections busy ho jaate hain aur new request ko connection nahi milta, to connection pool exhaustion hota hai.**
+
+Example:
+
+```text id="r3v9k2"
+Pool Size = 10
+
+Connection 1 → Busy
+Connection 2 → Busy
+Connection 3 → Busy
+Connection 4 → Busy
+Connection 5 → Busy
+Connection 6 → Busy
+Connection 7 → Busy
+Connection 8 → Busy
+Connection 9 → Busy
+Connection 10 → Busy
+```
+
+Ab new request:
+
+```text id="m6p2x8"
+Request 11
+    ↓
+HikariCP
+    ↓
+No connection available
+    ↓
+WAIT
+    ↓
+Timeout
+```
+
+PDF ke Page 6 mein isi situation ko **all connections busy → requests queue → timeout** ke flow se explain kiya gaya hai. 
+
+---
+
+# 4. Production mein error kaisa dikhega?
+
+Typical error kuch is type ka ho sakta hai:
+
+```text id="c5k8n1"
+Connection is not available,
+request timed out after 30000ms
+```
+
+Matlab:
+
+> HikariCP ne connection dene ke liye wait kiya, lekin configured timeout ke andar connection available nahi hua.
+
+---
+
+# 5. Real Production Scenario
+
+Suppose:
+
+```text id="j2m7v4"
+Hikari Pool Size = 10
+```
+
+Production mein 10 requests simultaneously aayi:
+
+```text id="p8x3c6"
+Request 1 → Connection 1
+Request 2 → Connection 2
+Request 3 → Connection 3
+...
+Request 10 → Connection 10
+```
+
+Ab:
+
+```text id="q4n9w2"
+Request 11
+```
+
+aayi.
+
+Lekin:
+
+```text id="v6k1m8"
+All 10 connections busy
+```
+
+Request 11:
+
+```text id="f3r7c5"
+WAIT
+```
+
+Agar connection release nahi hota:
+
+```text id="z8m2q4"
+WAIT
+ ↓
+Timeout
+ ↓
+Exception
+```
+
+---
+
+# 6. Connection Pool Exhaustion kyun hota hai?
+
+Ye sabse important part hai.
+
+## Cause 1 – Connection Leak
+
+Application connection acquire karti hai:
+
+```text id="h5q9v2"
+Get Connection
+     ↓
+Use Connection
+     ↓
+❌ Connection properly released nahi hua
+```
+
+Aisa repeatedly hua:
+
+```text id="b3m7x1"
+Connection 1 → leaked
+Connection 2 → leaked
+Connection 3 → leaked
+...
+Connection 10 → leaked
+```
+
+Ab pool empty.
+
+PDF ke Page 6 mein **connection leaks** ko major cause ke roop mein mention kiya gaya hai. 
+
+---
+
+# 7. Cause 2 – Slow SQL Query
+
+Suppose query normally:
+
+```text id="y2p8k4"
+50 ms
+```
+
+leti hai.
+
+Lekin production mein:
+
+```text id="c7m3n9"
+10 seconds
+```
+
+lag rahi hai.
+
+Connection:
+
+```text id="v4x8q1"
+Connection
+   ↓
+Query executing
+   ↓
+10 seconds
+   ↓
+Connection busy
+```
+
+Agar simultaneously bahut requests hain:
+
+```text id="a6k2p5"
+10 connections
+ ↓
+All running slow queries
+ ↓
+Pool exhausted
+```
+
+PDF ke Page 6 mein **long-running queries** ko bhi pool exhaustion ka cause bataya gaya hai. 
+
+---
+
+# 8. Cause 3 – Transaction bahut long hai
+
+Example:
+
+```java id="n8v3r6"
+@Transactional
+public void processOrder() {
+
+    // DB operation
+
+    // Long processing
+    // External API call
+    // More processing
+
+}
+```
+
+Agar transaction unnecessarily long time tak open rahe:
+
+```text id="w6q2m9"
+Connection acquired
+      ↓
+Long transaction
+      ↓
+Connection remains busy
+      ↓
+Other requests wait
+```
+
+Production mein ye pool pressure create kar sakta hai.
+
+---
+
+# 9. Cause 4 – Too many concurrent requests
+
+Suppose:
+
+```text id="x3m8q5"
+Pool Size = 10
+```
+
+Lekin:
+
+```text id="r7k2v4"
+100 requests
+```
+
+simultaneously DB access kar rahi hain.
+
+10 connections available:
+
+```text id="z9p4c1"
+10 → executing
+90 → waiting
+```
+
+Waiting requests necessarily problem nahi hain, but agar DB operations slow hain to queue grow ho sakti hai aur timeout aa sakta hai.
+
+---
+
+# 10. Connection Pool ko restaurant example se samjho 🍽️
+
+Suppose restaurant mein:
+
+```text id="m4q8v2"
+10 tables
+```
+
+hain.
+
+10 customers:
+
+```text id="c7x2n5"
+10 tables occupied
+```
+
+11th customer:
+
+```text id="f9k3m7"
+Table available?
+      ↓
+No
+      ↓
+Wait
+```
+
+Agar customers table chhod hi nahi rahe:
+
+```text id="j5p8w1"
+No new customer can sit
+```
+
+Exactly:
+
+```text id="b2n6q4"
+Tables = DB Connections
+Customers = Requests
+Restaurant = Connection Pool
+```
+
+---
+
+# 11. Production mein kaise identify karoge?
+
+Suppose alert:
+
+```text id="q8m3v6"
+API requests timing out
+```
+
+Logs:
+
+```text id="p4x7k2"
+Connection is not available,
+request timed out after 30000ms
+```
+
+Ab HikariCP metrics check karoge.
+
+Important metrics:
+
+```text id="d9v2m5"
+Active Connections
+Idle Connections
+Pending Threads
+Maximum Pool Size
+```
+
+---
+
+# 12. Metrics ko kaise samjho?
+
+Suppose:
+
+```text id="h6k1q8"
+Maximum Pool Size = 10
+Active = 10
+Idle = 0
+Pending = 25
+```
+
+Meaning:
+
+```text id="t3m7x2"
+10 connections → busy
+0 connections → free
+25 requests → waiting
+```
+
+🚨 **Strong indication of pool pressure/exhaustion.**
+
+---
+
+# 13. Root Cause find karna important hai
+
+Ye bahut important production lesson hai:
+
+> **Pool size badha dena automatically root-cause fix nahi hai.**
+
+Suppose:
+
+```text id="x8p3n6"
+Pool = 10
+```
+
+Problem aa rahi hai.
+
+Tum:
+
+```text id="m2q7v4"
+Pool = 50
+```
+
+kar dete ho.
+
+But slow query still:
+
+```text id="a5k9c1"
+10 seconds
+```
+
+hai.
+
+To:
+
+```text id="r4v8m2"
+50 connections
+ ↓
+50 slow queries
+ ↓
+Database overloaded
+```
+
+Ab DB itself bottleneck ban sakta hai.
+
+---
+
+# 14. Debugging Flow ⭐
+
+Production mein:
+
+```text id="z3m7q9"
+Connection Timeout
+       ↓
+Check HikariCP Metrics
+       ↓
+Active Connections?
+Idle Connections?
+Pending Threads?
+       ↓
+All connections busy?
+       ↓
+Check why
+       ↓
+Slow Query?
+Connection Leak?
+Long Transaction?
+Too Many Requests?
+       ↓
+Root Cause
+       ↓
+Fix
+       ↓
+Monitor
+```
+
+---
+
+# 15. Connection Leak kaise identify karoge?
+
+Agar connections continuously busy hain:
+
+```text id="n7c2v5"
+Active Connections ↑
+Idle Connections ↓
+```
+
+aur expected time par release nahi ho rahe:
+
+```text id="y4m8q1"
+Possible Connection Leak
+```
+
+HikariCP mein leak detection configuration bhi available hoti hai.
+
+Example:
+
+```properties id="b6x3p9"
+spring.datasource.hikari.leak-detection-threshold=2000
+```
+
+Meaning conceptually:
+
+> Agar connection unusually long time tak borrowed raha, Hikari warning generate kar sakta hai.
+
+**Important:** Is setting ko blindly low value par production mein nahi rakhna chahiye, warna normal long-running operations bhi false warnings de sakti hain.
+
+---
+
+# 16. JDBC Connection properly close karna
+
+Agar manually JDBC use kar rahe ho:
+
+Wrong approach:
+
+```java id="v8q2m5"
+Connection connection = dataSource.getConnection();
+
+// use connection
+
+// forgot to close ❌
+```
+
+Better:
+
+```java id="p4m7x9"
+try (Connection connection = dataSource.getConnection()) {
+
+    // use connection
+
+}
+```
+
+`try-with-resources` automatically resource close karne mein help karta hai.
+
+---
+
+# 17. JPA/Hibernate mein kya check karoge?
+
+Agar Spring Data JPA use ho raha hai:
+
+```text id="k3x8n1"
+Repository
+   ↓
+Hibernate
+   ↓
+HikariCP
+   ↓
+Database
+```
+
+Check:
+
+* Long-running queries
+* Transaction boundaries
+* Slow DB calls
+* Excessive queries
+* Connection pool configuration
+* DB itself overloaded hai kya
+
+N+1 problem bhi pool pressure create kar sakti hai.
+
+Remember Part 5:
+
+```text id="s6m2q8"
+N+1 Queries
+    ↓
+Many DB operations
+    ↓
+Connection usage ↑
+    ↓
+Slow API
+    ↓
+Pool pressure
+```
+
+---
+
+# 18. HikariCP Important Configuration
+
+Common properties:
+
+```properties id="v7q3m9"
+spring.datasource.hikari.maximum-pool-size=10
+
+spring.datasource.hikari.minimum-idle=5
+
+spring.datasource.hikari.connection-timeout=30000
+
+spring.datasource.hikari.idle-timeout=600000
+
+spring.datasource.hikari.max-lifetime=1800000
+```
+
+Simple meaning:
+
+### `maximum-pool-size`
+
+Maximum number of connections pool maintain kar sakta hai.
+
+```text id="n2x8k5"
+maximum-pool-size=10
+```
+
+---
+
+### `connection-timeout`
+
+Connection available nahi hai to request kitna wait kare.
+
+```text id="c4m7p1"
+30 seconds
+   ↓
+No connection
+   ↓
+Timeout
+```
+
+---
+
+### `idle-timeout`
+
+Idle connection kitne time baad retire ho sakta hai, subject to pool/configuration behavior.
+
+---
+
+### `max-lifetime`
+
+Connection ko pool mein maximum lifetime dene ke liye use hota hai.
+
+---
+
+# 19. Connection Timeout vs API Timeout
+
+Ye confuse mat karna.
+
+### Connection Timeout
+
+```text id="k5r2v8"
+API
+ ↓
+HikariCP
+ ↓
+DB Connection nahi mila
+ ↓
+Connection Timeout
+```
+
+### API/Read Timeout
+
+```text id="z8m3q6"
+API
+ ↓
+Other Service
+ ↓
+Response nahi aaya
+ ↓
+Read/API Timeout
+```
+
+Dono different layers par ho sakte hain.
+
+---
+
+# 20. Real Production Scenario
+
+Suppose:
+
+```text id="w3q7m1"
+maximumPoolSize = 20
+```
+
+Production mein:
+
+```text id="p9c4x6"
+Active = 20
+Idle = 0
+Pending = 50
+```
+
+Logs:
+
+```text id="f2n8v5"
+Connection is not available,
+request timed out after 30000ms
+```
+
+Tum immediately:
+
+```text id="d6m1q9"
+maximumPoolSize = 100
+```
+
+nahi karoge.
+
+First check:
+
+```text id="s8x3k7"
+Why are all 20 connections busy?
+```
+
+Then:
+
+```text id="a4m9v2"
+Slow query?
+Long transaction?
+Connection leak?
+Traffic spike?
+DB overloaded?
+```
+
+Suppose slow query found:
+
+```sql id="j7p2x5"
+SELECT *
+FROM orders
+WHERE customer_id = ?
+```
+
+No proper index.
+
+Query:
+
+```text id="q5n8c3"
+5 seconds
+```
+
+Index add/optimization ke baad:
+
+```text id="v1m6k4"
+5 sec → 50 ms
+```
+
+Now connection jaldi release hoga:
+
+```text id="e3r7p2"
+Connection busy 5 sec
+       ↓
+Connection busy 50 ms
+```
+
+Pool pressure reduce ho jayega.
+
+**Ye actual root-cause fix hai.**
+
+---
+
+# 21. Interview Question – What is HikariCP?
+
+> **"HikariCP is a JDBC connection pool used by Spring Boot applications to efficiently manage and reuse database connections instead of creating a new database connection for every request."**
+
+---
+
+# 22. Interview Question – What is Connection Pool Exhaustion?
+
+> **"Connection pool exhaustion occurs when all available database connections are busy and new requests cannot obtain a connection within the configured connection timeout. Common causes include connection leaks, slow queries, long transactions and high concurrent database usage."**
+
+---
+
+# 23. Interview Question – How will you debug it?
+
+Ye answer yaad karo:
+
+> **"First, I will check the HikariCP metrics such as active, idle and pending connections. If all connections are busy, I will investigate why they are not being released quickly. I will check for connection leaks, slow SQL queries, long-running transactions and high database traffic. I will also check database health and query performance. I would fix the root cause instead of blindly increasing the pool size."**
+
+---
+
+# 24. Short Interview Answer ⭐
+
+Agar interviewer bole:
+
+**"Production mein HikariCP connection timeout aa raha hai, what will you do?"**
+
+Bolo:
+
+> **"I will first check HikariCP metrics. If active connections are equal to maximum pool size, idle connections are zero and pending requests are increasing, the pool is under pressure. I will then check for connection leaks, slow queries, long transactions and traffic spikes. After finding the root cause, I will fix it and only then tune the pool size if required."**
+
+---
+
+# ⭐ Final Notes
+
+```text
+PART 7 – HIKARICP CONNECTION POOL EXHAUSTION
+
+Connection Pool:
+Reusable DB connections managed by HikariCP.
+
+Example:
+Pool Size = 10
+
+Connection 1 → Busy
+Connection 2 → Busy
+...
+Connection 10 → Busy
+
+New Request
+     ↓
+No connection
+     ↓
+Wait
+     ↓
+Connection Timeout
+
+
+Common Causes:
+1. Connection leak
+2. Slow SQL query
+3. Long transaction
+4. High concurrent DB requests
+5. DB overloaded
+
+Important Metrics:
+- Active Connections
+- Idle Connections
+- Pending Threads
+- Maximum Pool Size
+
+Debug:
+Connection Timeout
+      ↓
+Hikari Metrics
+      ↓
+Active / Idle / Pending
+      ↓
+All Connections Busy?
+      ↓
+Find Root Cause
+      ↓
+Slow Query / Leak / Transaction / Traffic
+      ↓
+Fix
+      ↓
+Monitor
+
+Fix:
+- Fix connection leaks
+- Optimize SQL
+- Reduce transaction duration
+- Control unnecessary DB calls
+- Tune pool size based on DB capacity
+- Add monitoring
+
+Don't blindly:
+Increase maximumPoolSize
+
+Interview Formula:
+Hikari Timeout
+→ Metrics
+→ All Connections Busy
+→ Find Why
+→ Root Cause
+→ Fix
+→ Tune
+→ Monitor
+```
+
+### ⭐ One-line memory trick
+
+> **HikariCP problem = "DB connection chahiye, lekin pool mein koi connection free nahi hai."**
+
+**Next Part 8 – `@Transactional` Not Working:** production mein transaction rollback kyun nahi hota, self-invocation kya hai, checked exception ka behavior kya hai, aur Spring proxy ka role kya hai. PDF ka Page 7 isi issue par hai. 
+
+
+
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================
+=============================================================================================================

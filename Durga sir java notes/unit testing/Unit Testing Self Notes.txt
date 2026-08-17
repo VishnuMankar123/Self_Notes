@@ -1,0 +1,9451 @@
+unit testing Tutorial : https://www.youtube.com/watch?v=sq_pYMepfP0
+
+channel Name : learn code with durgesh 
+=================================================================================================
+# JUnit Crash Course Notes (Part 1)
+
+## 📚 Topic 1 - Introduction to Testing, Unit Testing & JUnit
+
+> **Language:** Hindi Wali English (Easy to Remember)
+>
+> **Teaching Style:** Teacher 👨‍🏫 & Student 👨‍🎓 Conversation
+>
+> **Based on:** JUnit Crash Course (Part 1)
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Coding karna important hai.
+
+Lekin ek aur cheez usse bhi important hai.
+
+## Tum jo code likh rahe ho...
+
+### Wo sahi chal bhi raha hai ya nahi?
+
+Isi problem ko solve karne ke liye Testing hoti hai.
+
+Aaj hum ye samjhenge
+
+* Testing kya hoti hai?
+* Unit Testing kya hoti hai?
+* Integration Testing kya hoti hai?
+* JUnit kya hai?
+* Mockito kya hai?
+* JUnit 4 aur JUnit 5 kya hote hain?
+
+Ye sab interview me almost fix questions hote hain.
+
+---
+
+# 1. What is Testing?
+
+## 👨‍🏫 Teacher
+
+Suppose tumne ek Calculator banaya.
+
+```java
+public int add(int a,int b){
+    return a+b;
+}
+```
+
+Ab tumne code likh diya.
+
+Question ye hai...
+
+Ye method har input ke liye sahi answer de raha hai ya nahi?
+
+Kaise pata chalega?
+
+---
+
+## 👨‍🎓 Student
+
+Sir manually check karenge.
+
+```
+2+3 =5
+5+7 =12
+```
+
+---
+
+## 👨‍🏫 Teacher
+
+Bilkul.
+
+Lekin real project me
+
+* 500 classes
+* 3000 methods
+* Lakhs of users
+
+Manual checking impossible hai.
+
+Isliye hum **Testing** karte hain.
+
+---
+
+# Definition
+
+**Testing** means
+
+> Apne code ko verify karna ki wo expected result de raha hai ya nahi.
+
+Simple language me
+
+> "Jo code likha hai wo sahi kaam kar raha hai ya nahi."
+
+---
+
+# Example
+
+Suppose
+
+```java
+public int multiply(int a,int b){
+   return a*b;
+}
+```
+
+Input
+
+```
+5
+4
+```
+
+Expected Output
+
+```
+20
+```
+
+Agar
+
+Output
+
+```
+20
+```
+
+to
+
+✅ Test Passed
+
+Agar
+
+```
+25
+```
+
+to
+
+❌ Test Failed
+
+---
+
+# Real Life Example
+
+Teacher:
+
+Tumne Maggi banayi.
+
+Ab kaise pata chalegi achhi bani hai?
+
+Student:
+
+Taste karenge.
+
+Teacher:
+
+Exactly.
+
+Coding me
+
+Taste = Testing
+
+---
+
+# Important Point
+
+Testing ka purpose
+
+* Bugs detect karna
+
+* Logic verify karna
+
+* Software reliable banana
+
+---
+
+# 2. What is Unit Testing?
+
+## 👨‍🏫 Teacher
+
+Ab maan lo tumhare paas ek service hai.
+
+```java
+CalculatorService
+```
+
+Uske andar methods hain.
+
+```java
+add()
+
+subtract()
+
+multiply()
+
+divide()
+
+average()
+```
+
+Question
+
+Kya hum poori class test karenge?
+
+Ya sirf ek method?
+
+---
+
+## 👨‍🎓 Student
+
+Sir ek method.
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+Isi ko bolte hain
+
+# Unit Testing
+
+---
+
+# Definition
+
+**Unit Testing**
+
+Means
+
+Application ki sabse choti unit ko independently test karna.
+
+Usually
+
+> One Method
+
+or
+
+> One Function
+
+---
+
+# Example
+
+```java
+public class CalculatorService{
+
+    public int add(int a,int b){
+        return a+b;
+    }
+
+    public int multiply(int a,int b){
+        return a*b;
+    }
+
+}
+```
+
+Agar hum sirf
+
+```
+add()
+```
+
+ko test kar rahe hain
+
+to ye
+
+## Unit Testing
+
+hai.
+
+---
+
+# Important Point
+
+Unit Testing me
+
+Hum
+
+```
+add()
+```
+
+ko test karenge.
+
+Hume
+
+```
+multiply()
+```
+
+se koi matlab nahi.
+
+Wo chale ya na chale.
+
+---
+
+# Real Project Example
+
+Suppose
+
+```
+UserService
+```
+
+me methods hain
+
+```
+registerUser()
+
+login()
+
+forgotPassword()
+
+changePassword()
+
+```
+
+Agar hum sirf
+
+```
+login()
+```
+
+test karte hain
+
+to
+
+Ye Unit Testing hai.
+
+---
+
+# Visual Representation
+
+```
+CalculatorService
+
+--------------------
+
+add()
+
+multiply()
+
+divide()
+
+subtract()
+
+```
+
+Testing
+
+```
+Only add()
+
+```
+
+↓
+
+Unit Testing
+
+---
+
+# Another Example
+
+```
+PaymentService
+
+```
+
+Methods
+
+```
+validateCard()
+
+calculateTax()
+
+processPayment()
+
+sendReceipt()
+
+```
+
+Agar sirf
+
+```
+processPayment()
+
+```
+
+ko test karte hain
+
+↓
+
+Unit Testing
+
+---
+
+# Interview Question
+
+### What is Unit Testing?
+
+Answer
+
+Unit Testing is the process of testing an individual unit (generally one method or function) independently to verify that it works correctly.
+
+---
+
+# 3. Why "Independent Testing"?
+
+## 👨‍🏫 Teacher
+
+Ye word bahut important hai.
+
+Independent.
+
+Iska matlab kya?
+
+---
+
+Suppose
+
+```
+add()
+
+```
+
+ke andar koi database nahi hai.
+
+Koi API nahi hai.
+
+Koi network nahi hai.
+
+Sirf logic hai.
+
+To hum sirf us logic ko test karenge.
+
+---
+
+Isko bolte hain
+
+Independent Testing
+
+---
+
+# Example
+
+```
+add(10,20)
+
+```
+
+Expected
+
+```
+30
+
+```
+
+Bas.
+
+Database ka koi role nahi.
+
+Network ka koi role nahi.
+
+---
+
+# Interview Tip
+
+Unit Test should not depend upon
+
+* Database
+
+* API
+
+* Internet
+
+* Server
+
+* External Services
+
+Ye sab Mock kiye jaate hain.
+
+(Mockito se)
+
+---
+
+# 4. Unit Testing vs Integration Testing
+
+## 👨‍🏫 Teacher
+
+Ab maan lo
+
+Ye Service hai
+
+```
+CalculatorService
+
+```
+
+Methods
+
+```
+add()
+
+subtract()
+
+multiply()
+
+divide()
+
+```
+
+---
+
+Case 1
+
+Sirf
+
+```
+add()
+
+```
+
+ko test kiya.
+
+↓
+
+Unit Testing
+
+---
+
+Case 2
+
+Puri class ko test kiya.
+
+↓
+
+Integration Testing
+
+---
+
+# Difference Table
+
+| Unit Testing | Integration Testing   |
+| ------------ | --------------------- |
+| One Method   | Multiple Methods      |
+| Independent  | Combined              |
+| Fast         | Slow                  |
+| Easy         | Complex               |
+| No Database  | Database ho sakta hai |
+| No API       | API ho sakti hai      |
+
+---
+
+# Real Example
+
+### Unit Testing
+
+```
+Login Method
+
+```
+
+↓
+
+Sirf Login Logic
+
+---
+
+### Integration Testing
+
+```
+Login
+
+↓
+
+Database
+
+↓
+
+Email
+
+↓
+
+JWT
+
+↓
+
+Response
+
+```
+
+Sab milkar test hoga.
+
+---
+
+# Building Example
+
+Teacher
+
+Maan lo ek building hai.
+
+Usme
+
+```
+Flat 1
+
+Flat 2
+
+Flat 3
+
+Flat 4
+
+```
+
+Agar
+
+Sirf
+
+Flat 1
+
+check kiya
+
+↓
+
+Unit Testing
+
+---
+
+Agar
+
+Entire Building
+
+check ki
+
+↓
+
+Integration Testing
+
+---
+
+# Restaurant Example
+
+Unit Testing
+
+Sirf
+
+```
+Paneer
+
+```
+
+taste kiya.
+
+Integration Testing
+
+Entire Thali taste ki.
+
+---
+
+# Interview Question
+
+Difference between Unit Testing and Integration Testing?
+
+Answer
+
+Unit Testing checks one unit independently.
+
+Integration Testing checks multiple units together.
+
+---
+
+# 5. Advantages of Unit Testing
+
+## 👨‍🏫 Teacher
+
+Ab sawal
+
+Company paise kharch karke Unit Testing kyun karwati hai?
+
+---
+
+## Advantage 1
+
+### Early Bug Detection
+
+Development ke time hi bug mil jata hai.
+
+Production me nahi.
+
+---
+
+Example
+
+Galti
+
+```
+return a-b;
+
+```
+
+honi chahiye thi
+
+```
+return a+b;
+
+```
+
+Unit Test turant fail.
+
+Bug pakad gaya.
+
+---
+
+## Advantage 2
+
+Easy Bug Fix
+
+Ek hi method me problem hai.
+
+Isliye easily solve ho jayegi.
+
+---
+
+## Advantage 3
+
+Save Time
+
+Production bug
+
+↓
+
+Fix
+
+↓
+
+Deploy
+
+↓
+
+Testing
+
+↓
+
+Customer Issue
+
+Bahut costly.
+
+---
+
+Unit Testing
+
+↓
+
+Bug
+
+↓
+
+Immediately Fix
+
+---
+
+Time bach gaya.
+
+---
+
+## Advantage 4
+
+Reduce Cost
+
+Production bug
+
+Suppose
+
+1000 users use kar rahe hain.
+
+Bug aa gaya.
+
+Company ko huge loss.
+
+Unit Testing se
+
+Bug pehle hi mil gaya.
+
+---
+
+## Advantage 5
+
+Confidence Increase
+
+Developer confidently code change kar sakta hai.
+
+Kyunki
+
+Tests already available hain.
+
+---
+
+## Advantage 6
+
+Code Quality Improves
+
+Agar Test likhna mushkil lag raha hai
+
+To
+
+Code design bhi weak ho sakta hai.
+
+Unit Testing indirectly clean code promote karti hai.
+
+---
+
+# Interview Question
+
+Why Unit Testing?
+
+Answer
+
+* Finds bugs early
+* Saves cost
+* Saves time
+* Improves quality
+* Makes code reliable
+* Gives confidence during refactoring
+
+---
+
+# 6. How Can We Perform Unit Testing?
+
+## 👨‍🏫 Teacher
+
+Question
+
+Har baar manually test karenge?
+
+---
+
+## 👨‍🎓 Student
+
+Nahi Sir.
+
+---
+
+## 👨‍🏫 Teacher
+
+Hum framework use karte hain.
+
+Java me
+
+Sabse popular framework hai
+
+# JUnit
+
+---
+
+# 7. What is JUnit?
+
+## Definition
+
+JUnit is a Java Testing Framework used to perform Unit Testing.
+
+Simple language
+
+> JUnit ek framework hai jo Java me Unit Test likhne aur execute karne ke liye use hota hai.
+
+---
+
+# Why JUnit?
+
+Without JUnit
+
+Hume
+
+```
+if()
+
+else()
+
+System.out.println()
+
+```
+
+likhkar khud verify karna padega.
+
+---
+
+JUnit automatically
+
+✔ Test Run karta hai
+
+✔ Pass/Fail batata hai
+
+✔ Report generate karta hai
+
+✔ Assertions provide karta hai
+
+---
+
+# Real Example
+
+Without JUnit
+
+```java
+if(add(10,20)==30)
+{
+   System.out.println("Correct");
+}
+else
+{
+   System.out.println("Wrong");
+}
+```
+
+---
+
+With JUnit
+
+```java
+assertEquals(30, add(10,20));
+```
+
+Kitna simple.
+
+---
+
+# Industry Usage
+
+Almost every Java Project uses
+
+✔ JUnit
+
+Especially
+
+* Spring Boot
+
+* Microservices
+
+* Banking
+
+* E-Commerce
+
+* Healthcare
+
+---
+
+# 8. JUnit Versions
+
+## 👨‍🏫 Teacher
+
+JUnit ke bahut versions aaye hain.
+
+Lekin interview ke liye
+
+Sabse important
+
+```
+JUnit 4
+
+JUnit 5
+```
+
+---
+
+# JUnit 4
+
+Mostly
+
+Legacy Projects
+
+Old Companies
+
+Maintenance Projects
+
+---
+
+# JUnit 5
+
+New Projects
+
+Spring Boot
+
+Latest Development
+
+---
+
+# Interview Question
+
+Should we learn JUnit 4?
+
+Answer
+
+Yes.
+
+Bahut saare legacy projects me abhi bhi JUnit 4 use hota hai.
+
+---
+
+# 9. What is Mockito?
+
+## 👨‍🏫 Teacher
+
+Mockito aur JUnit same nahi hain.
+
+Ye bahut important interview question hai.
+
+---
+
+Suppose
+
+```
+UserService
+
+↓
+
+UserRepository
+
+↓
+
+Database
+
+```
+
+Hum sirf
+
+```
+UserService
+
+```
+
+ko test karna chahte hain.
+
+Database use nahi karna.
+
+To kya karenge?
+
+---
+
+Mockito
+
+Database ki fake copy bana dega.
+
+Us fake object ko bolte hain
+
+**Mock Object**
+
+---
+
+# Example
+
+Real Repository
+
+```
+UserRepository
+
+```
+
+↓
+
+Mockito
+
+↓
+
+Fake Repository
+
+---
+
+Service ko lagega
+
+Original Repository hai.
+
+Actually
+
+Fake hai.
+
+---
+
+# Definition
+
+Mockito is a Mocking Framework used to create fake objects during Unit Testing.
+
+---
+
+# JUnit vs Mockito
+
+| JUnit                 | Mockito                               |
+| --------------------- | ------------------------------------- |
+| Testing Framework     | Mocking Framework                     |
+| Test Run karta hai    | Fake Object banata hai                |
+| Assertions deta hai   | Dependency Mock karta hai             |
+| Unit Test likhte hain | External Dependency remove karte hain |
+
+---
+
+# Real Project Flow
+
+```
+Controller
+
+↓
+
+Service
+
+↓
+
+Repository
+
+↓
+
+Database
+```
+
+Testing
+
+```
+Controller
+
+↓
+
+Service
+
+↓
+
+Mockito Repository
+
+↓
+
+(No Database)
+```
+
+---
+
+# ⭐ Interview Quick Revision
+
+### Q1. What is Testing?
+
+Testing means verifying whether the written code behaves as expected.
+
+---
+
+### Q2. What is Unit Testing?
+
+Testing one method/function independently.
+
+---
+
+### Q3. What is Integration Testing?
+
+Testing multiple modules/components together.
+
+---
+
+### Q4. Why do we use JUnit?
+
+To write, execute, and verify Unit Test cases automatically.
+
+---
+
+### Q5. Why do companies perform Unit Testing?
+
+* Early bug detection
+* Reduce cost
+* Reduce development time
+* Improve software quality
+* Safe refactoring
+
+---
+
+### Q6. Which JUnit versions are important?
+
+* **JUnit 4** (Legacy Projects)
+* **JUnit 5** (Modern Projects)
+
+---
+
+### Q7. What is Mockito?
+
+Mockito is a mocking framework that creates fake objects to test classes without using real dependencies like databases or external APIs.
+
+---
+
+# 📝 Part 1 Summary
+
+* ✅ Testing ka purpose samjha.
+* ✅ Unit Testing vs Integration Testing difference samjha.
+* ✅ Unit Testing ke advantages dekhe.
+* ✅ JUnit framework ka introduction hua.
+* ✅ JUnit 4 vs JUnit 5 ka overview dekha.
+* ✅ Mockito ka basic concept samjha.
+
+➡️ **Part 2** me hum practical implementation start karenge:
+
+* Maven project setup
+* JUnit dependency
+* `src/main` vs `src/test`
+* First `CalculatorService`
+* Pehla JUnit test case likhna aur execute karna.
+
+=================================================================================================
+# JUnit Crash Course Notes (Part 2)
+
+## 📚 Topic 2 - Maven Setup, Project Structure & Writing Your First JUnit Test
+
+> **Language:** Hindi Wali English (Easy to Remember)
+>
+> **Teaching Style:** Teacher 👨‍🏫 & Student 👨‍🎓 Conversation
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Abhi tak humne samjha tha
+
+* Testing kya hoti hai
+* Unit Testing kya hoti hai
+* JUnit kya hai
+
+Ab actual coding start karte hain.
+
+Is Part me hum seekhenge
+
+* Maven Project kaise banate hain
+* JUnit Dependency kaise add karte hain
+* src/main aur src/test kya hote hain
+* Service Class kaise banate hain
+* Test Class kaise banate hain
+* Pehla Test Case kaise likhte hain
+
+Ye pura interview aur project dono ke liye important hai.
+
+---
+
+# 1. Why Create a Separate Project?
+
+## 👨‍🏫 Teacher
+
+Question...
+
+Hum direct company project me JUnit seekhen?
+
+---
+
+## 👨‍🎓 Student
+
+Sir seekh sakte hain.
+
+---
+
+## 👨‍🏫 Teacher
+
+Seekh sakte ho...
+
+Lekin beginners ke liye best practice hai
+
+Pehle alag project me practice karo.
+
+Uske baad real Spring Boot project me implement karo.
+
+---
+
+## Real Life Example
+
+Driving seekhne se pehle
+
+Highway pe gaadi chalate ho?
+
+❌ Nahi
+
+Pehle ground me practice karte ho.
+
+Waise hi
+
+Pehle
+
+```
+JUnit Practice Project
+```
+
+Uske baad
+
+```
+Spring Boot Project
+```
+
+---
+
+# 2. Which Project Type Should We Use?
+
+## 👨‍🏫 Teacher
+
+Question
+
+Java project kaunsa banayenge?
+
+---
+
+## 👨‍🎓 Student
+
+Simple Java Project?
+
+---
+
+## 👨‍🏫 Teacher
+
+Better option hai
+
+## Maven Project
+
+---
+
+### Why Maven?
+
+Because Maven automatically
+
+* Download dependencies
+* Manage versions
+* Build project
+* Run tests
+
+---
+
+Without Maven
+
+Tumhe manually
+
+```
+JUnit.jar
+
+Hamcrest.jar
+
+```
+
+download karna padega.
+
+Bahut headache hai.
+
+---
+
+# Interview Question
+
+Why Maven?
+
+Answer
+
+Because Maven automatically manages project dependencies and build lifecycle.
+
+---
+
+# 3. Creating Maven Project
+
+IntelliJ
+
+```
+File
+
+↓
+
+New
+
+↓
+
+Project
+
+↓
+
+Maven
+
+↓
+
+QuickStart Archetype
+
+↓
+
+Java 17
+
+↓
+
+Create
+```
+
+---
+
+Project Name
+
+```
+UnitTestExample
+```
+
+---
+
+Package Name
+
+```
+com.demo.test
+```
+
+---
+
+Project Structure
+
+```
+UnitTestExample
+
+│
+
+├── src
+
+├── pom.xml
+
+└── External Libraries
+```
+
+---
+
+# 4. Understanding Project Structure
+
+## 👨‍🏫 Teacher
+
+Sabse important question.
+
+Ye folder kisliye hai?
+
+```
+src
+```
+
+---
+
+Open karo
+
+```
+src
+
+│
+
+├── main
+
+└── test
+```
+
+---
+
+Question
+
+Difference kya hai?
+
+---
+
+# src/main
+
+Yaha
+
+Production Code
+
+likha jata hai.
+
+Example
+
+```
+CalculatorService
+
+UserService
+
+ProductService
+
+OrderService
+```
+
+Ye application ka original code hai.
+
+---
+
+# src/test
+
+Yaha
+
+Sirf Test Cases
+
+likhe jate hain.
+
+Example
+
+```
+CalculatorServiceTest
+
+UserServiceTest
+
+OrderServiceTest
+```
+
+---
+
+# Visual Representation
+
+```
+src
+
+│
+
+├── main
+
+│      │
+
+│      └── CalculatorService.java
+
+│
+
+└── test
+
+       │
+
+       └── CalculatorServiceTest.java
+```
+
+---
+
+# Easy Trick
+
+Main Folder
+
+↓
+
+Application banata hai.
+
+Test Folder
+
+↓
+
+Application ko test karta hai.
+
+---
+
+# Interview Question
+
+Difference between src/main and src/test?
+
+Answer
+
+src/main contains production code.
+
+src/test contains JUnit test cases.
+
+---
+
+# 5. Understanding pom.xml
+
+## 👨‍🏫 Teacher
+
+Question
+
+Maven Dependency kaha likhte hain?
+
+---
+
+## 👨‍🎓 Student
+
+pom.xml
+
+---
+
+Correct.
+
+---
+
+# pom.xml
+
+Ye Maven ka heart hai.
+
+Saari dependency isi file me hoti hai.
+
+Example
+
+```xml
+<dependencies>
+
+</dependencies>
+```
+
+Iske andar
+
+```
+JUnit
+
+Mockito
+
+Spring Boot
+
+Hibernate
+
+MySQL
+
+```
+
+sab add hote hain.
+
+---
+
+# Interview Question
+
+What is pom.xml?
+
+Answer
+
+pom.xml is Maven's configuration file that manages dependencies, plugins and project information.
+
+---
+
+# 6. JUnit Dependency
+
+## 👨‍🏫 Teacher
+
+Jab Maven project create karte ho
+
+Kabhi kabhi
+
+JUnit dependency already aa jati hai.
+
+Example
+
+```xml
+<dependency>
+
+<groupId>junit</groupId>
+
+<artifactId>junit</artifactId>
+
+<version>3.8.1</version>
+
+</dependency>
+```
+
+---
+
+Problem?
+
+Ye
+
+JUnit 3
+
+hai.
+
+Video me sir ne ise update kiya.
+
+---
+
+Update
+
+```xml
+<dependency>
+
+<groupId>junit</groupId>
+
+<artifactId>junit</artifactId>
+
+<version>4.12</version>
+
+<scope>test</scope>
+
+</dependency>
+```
+
+---
+
+# Important
+
+```
+scope=test
+```
+
+Matlab
+
+Ye dependency sirf testing ke liye use hogi.
+
+Production code me nahi.
+
+---
+
+# Interview Question
+
+Why use scope="test"?
+
+Answer
+
+Because JUnit is required only during testing and not in production.
+
+---
+
+# 7. Calculator Service Example
+
+Ab hum service banate hain.
+
+Package
+
+```
+services
+```
+
+Class
+
+```
+CalculatorService
+```
+
+---
+
+Code
+
+```java
+public class CalculatorService {
+
+    public static int addTwoNumbers(int a,int b){
+
+        return a+b;
+
+    }
+
+}
+```
+
+Simple hai.
+
+---
+
+Ab ek aur method.
+
+```java
+public static int multiplyTwoNumbers(int a,int b){
+
+      return a*b;
+
+}
+```
+
+---
+
+Aur ek
+
+```java
+public static double divideTwoNumbers(int a,int b){
+
+     return (double)a/b;
+
+}
+```
+
+---
+
+Aur ek
+
+```java
+public static int sumAnyNumbers(int... numbers){
+
+     int sum=0;
+
+     for(int num:numbers){
+
+          sum=sum+num;
+
+     }
+
+     return sum;
+
+}
+```
+
+---
+
+# Visual
+
+```
+CalculatorService
+
+│
+
+├── add()
+
+├── multiply()
+
+├── divide()
+
+└── sum()
+```
+
+---
+
+# Interview Question
+
+Why multiple methods?
+
+Answer
+
+Because each method will be tested independently.
+
+---
+
+# 8. Where Should We Write Test Cases?
+
+## 👨‍🏫 Teacher
+
+Question
+
+Service
+
+```
+CalculatorService
+```
+
+hai.
+
+Test kaha likhenge?
+
+---
+
+Answer
+
+```
+src/test
+```
+
+Same package structure.
+
+---
+
+Example
+
+```
+src
+
+│
+
+├── main
+
+│      │
+
+│      └── services
+
+│              │
+
+│              └── CalculatorService
+
+│
+
+└── test
+
+       │
+
+       └── services
+
+               │
+
+               └── CalculatorServiceTest
+```
+
+---
+
+# Best Practice
+
+Service Name
+
+↓
+
+CalculatorService
+
+Test Name
+
+↓
+
+CalculatorServiceTest
+
+---
+
+Interview me ye naming convention bahut important hai.
+
+---
+
+# 9. Why "Test" Suffix?
+
+Question
+
+```
+CalculatorServiceTest
+```
+
+aisa naam kyun?
+
+---
+
+Because immediately pata chal jata hai
+
+Ye
+
+Main Class
+
+nahi
+
+Test Class
+
+hai.
+
+---
+
+# Wrong
+
+```
+Calculator
+```
+
+---
+
+# Right
+
+```
+CalculatorTest
+```
+
+---
+
+# 10. Writing First Test Method
+
+Class
+
+```java
+public class CalculatorServiceTest{
+
+}
+```
+
+---
+
+Method
+
+```java
+public void addTwoNumbersTest(){
+
+}
+```
+
+---
+
+Naming Convention
+
+```
+MethodName
+
++
+
+Test
+```
+
+---
+
+Example
+
+```
+login()
+
+↓
+
+loginTest()
+```
+
+---
+
+```
+register()
+
+↓
+
+registerTest()
+```
+
+---
+
+```
+calculateTax()
+
+↓
+
+calculateTaxTest()
+```
+
+---
+
+Interview me ye naming standard bahut use hota hai.
+
+---
+
+# 11. Calling Service Method
+
+Inside Test
+
+```java
+int result=
+
+CalculatorService.addTwoNumbers(12,45);
+```
+
+Suppose
+
+Result
+
+```
+57
+```
+
+---
+
+Question
+
+Ab kaise check karenge?
+
+Ye correct hai ya nahi?
+
+---
+
+Answer
+
+Assertion
+
+---
+
+# 12. What is Expected Result?
+
+Suppose
+
+Input
+
+```
+12
+
+45
+```
+
+Tum kya expect kar rahe ho?
+
+```
+57
+```
+
+Ye hai
+
+Expected Result
+
+---
+
+Jo method return karega
+
+Wo hai
+
+Actual Result
+
+---
+
+Visual
+
+```
+Expected
+
+57
+
+↓
+
+Compare
+
+↓
+
+Actual
+
+57
+```
+
+---
+
+Agar
+
+Match
+
+↓
+
+PASS
+
+---
+
+Agar
+
+Match nahi hua
+
+↓
+
+FAIL
+
+---
+
+# Real Life Example
+
+Teacher
+
+Tumne Pizza order kiya.
+
+Expected
+
+```
+1 Pizza
+```
+
+Delivery
+
+```
+1 Pizza
+```
+
+↓
+
+PASS
+
+---
+
+Delivery
+
+```
+Burger
+```
+
+↓
+
+FAIL
+
+---
+
+Exactly wahi JUnit karta hai.
+
+---
+
+# 13. What is Assertion?
+
+Assertion
+
+Ek verification hoti hai.
+
+Ye compare karti hai
+
+Expected
+
+vs
+
+Actual
+
+---
+
+JUnit me
+
+Sabse famous method
+
+```
+assertEquals()
+```
+
+---
+
+Example
+
+```java
+Assert.assertEquals(57,result);
+```
+
+Yaha
+
+```
+57
+```
+
+Expected
+
+---
+
+```
+result
+```
+
+Actual
+
+---
+
+# Interview Question
+
+What is Assertion?
+
+Answer
+
+Assertion compares expected result with actual result.
+
+---
+
+# 14. Complete First Test
+
+```java
+@Test
+
+public void addTwoNumbersTest(){
+
+      int result=
+
+CalculatorService.addTwoNumbers(12,45);
+
+      Assert.assertEquals(57,result);
+
+}
+```
+
+Ye ek complete Unit Test hai.
+
+---
+
+# 15. Why @Test Annotation?
+
+Question
+
+JUnit ko kaise pata chalega
+
+Kaunsa method test hai?
+
+---
+
+Answer
+
+```
+@Test
+```
+
+---
+
+Without
+
+```
+@Test
+```
+
+JUnit method ko execute hi nahi karega.
+
+---
+
+Example
+
+```java
+@Test
+
+public void loginTest(){
+
+}
+```
+
+---
+
+# Interview Question
+
+What is @Test?
+
+Answer
+
+@Test tells JUnit that the method is a test case and should be executed by the test runner.
+
+---
+
+# 16. Running Test Case
+
+IntelliJ
+
+```
+Right Click
+
+↓
+
+Run
+
+```
+
+Ya
+
+```
+Green Play Button
+```
+
+---
+
+Output
+
+```
+PASS
+```
+
+Green
+
+↓
+
+Correct
+
+---
+
+Red
+
+↓
+
+Failed
+
+---
+
+# 17. Failed Test Example
+
+Expected
+
+```
+50
+```
+
+Actual
+
+```
+57
+```
+
+Assertion
+
+```java
+Assert.assertEquals(50,result);
+```
+
+Output
+
+```
+FAILED
+```
+
+Reason
+
+Expected
+
+≠
+
+Actual
+
+---
+
+# Error
+
+```
+Expected :50
+
+Actual :57
+```
+
+Ye JUnit clearly bata deta hai.
+
+---
+
+# 18. Passing Test Example
+
+```java
+Assert.assertEquals(57,result);
+```
+
+Output
+
+```
+PASSED
+```
+
+Green Tick
+
+---
+
+# 19. Writing Another Test
+
+Example
+
+```java
+@Test
+
+public void sumAnyNumbersTest(){
+
+      int result=
+
+CalculatorService.sumAnyNumbers(2,7,9,8);
+
+      Assert.assertEquals(26,result);
+
+}
+```
+
+---
+
+Run
+
+```
+PASS
+```
+
+---
+
+# 20. Running Complete Test Class
+
+Question
+
+Agar class me
+
+10 Test Cases hain
+
+To kya ek-ek run karenge?
+
+---
+
+Nahi.
+
+Simply
+
+Class
+
+Run
+
+↓
+
+All Test Cases execute.
+
+---
+
+Visual
+
+```
+CalculatorServiceTest
+
+│
+
+├── addTest()
+
+├── multiplyTest()
+
+├── divideTest()
+
+└── sumTest()
+```
+
+↓
+
+Run Class
+
+↓
+
+Sab execute.
+
+---
+
+# Real Project Example
+
+```
+UserServiceTest
+
+│
+
+├── loginTest()
+
+├── registerTest()
+
+├── updateTest()
+
+├── deleteTest()
+
+├── searchTest()
+
+```
+
+↓
+
+One Click
+
+↓
+
+All Run.
+
+---
+
+# ⭐ Interview Quick Revision
+
+### Q1. Why Maven?
+
+To manage dependencies and build the project automatically.
+
+---
+
+### Q2. Where do we write production code?
+
+`src/main/java`
+
+---
+
+### Q3. Where do we write test cases?
+
+`src/test/java`
+
+---
+
+### Q4. Where is JUnit dependency added?
+
+In `pom.xml`.
+
+---
+
+### Q5. Why `scope=test`?
+
+It makes the dependency available only during testing.
+
+---
+
+### Q6. Why do we create a separate `CalculatorServiceTest` class?
+
+To keep test code separate from production code and follow standard naming conventions.
+
+---
+
+### Q7. What does `@Test` do?
+
+It marks a method as a JUnit test case.
+
+---
+
+### Q8. What is `assertEquals()`?
+
+It compares the expected result with the actual result.
+
+---
+
+### Q9. What happens if Expected ≠ Actual?
+
+The test case fails and JUnit shows the expected and actual values.
+
+---
+
+### Q10. Can we run all test cases together?
+
+Yes. Running the test class executes all methods annotated with `@Test`.
+
+---
+
+# 📝 Part 2 Summary
+
+* ✅ Maven project creation
+* ✅ `pom.xml` and JUnit dependency
+* ✅ `src/main` vs `src/test`
+* ✅ `CalculatorService` creation
+* ✅ Test class naming convention
+* ✅ First JUnit test case
+* ✅ `@Test` annotation
+* ✅ `assertEquals()` basics
+* ✅ Running individual and all test cases
+* ✅ Understanding test pass and fail
+
+➡️ **Part 3** will cover **Assertions in Detail**, including:
+
+* `assertEquals()`
+* `assertNotEquals()`
+* `assertTrue()`
+* `assertFalse()`
+* `assertNull()`
+* `assertNotNull()`
+* `assertArrayEquals()`
+* `assertSame()` vs `assertNotSame()`
+* Practical examples and interview questions.
+
+=================================================================================================
+# JUnit Crash Course Notes (Part 3)
+
+## 📚 Topic 3 – Assertions in JUnit 4 (Most Important Topic)
+
+> **Language:** Hindi Wali English (Easy to Remember)
+>
+> **Teaching Style:** Teacher 👨‍🏫 & Student 👨‍🎓 Conversation
+>
+> **Interview Importance:** ⭐⭐⭐⭐⭐
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak humne
+
+* Maven Setup
+* JUnit Dependency
+* First Test Case
+
+sab seekh liya.
+
+Ab sabse important topic start karte hain.
+
+## Assertions
+
+Agar Assertions nahi aate...
+
+To JUnit ka 60% concept incomplete hai.
+
+Har interview me Assertion se questions aate hain.
+
+---
+
+# 1. What is Assertion?
+
+## 👨‍🏫 Teacher
+
+Question...
+
+JUnit ko kaise pata chalega
+
+Code sahi hai ya galat?
+
+---
+
+## 👨‍🎓 Student
+
+Sir...
+
+Result compare karega.
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+Ye comparison hi
+
+## Assertion
+
+kehlata hai.
+
+---
+
+# Definition
+
+**Assertion** ek verification process hai jo
+
+**Expected Result**
+
+aur
+
+**Actual Result**
+
+ko compare karta hai.
+
+---
+
+# Visual
+
+```
+Input
+
+↓
+
+Method Execute
+
+↓
+
+Actual Result
+
+↓
+
+Compare
+
+↓
+
+Expected Result
+
+↓
+
+PASS / FAIL
+```
+
+---
+
+# Example
+
+```java
+public static int add(int a,int b){
+
+      return a+b;
+
+}
+```
+
+Test
+
+```java
+int result=CalculatorService.add(10,20);
+
+Assert.assertEquals(30,result);
+```
+
+Expected
+
+```
+30
+```
+
+Actual
+
+```
+30
+```
+
+↓
+
+PASS
+
+---
+
+Agar
+
+```java
+Assert.assertEquals(40,result);
+```
+
+Expected
+
+```
+40
+```
+
+Actual
+
+```
+30
+```
+
+↓
+
+FAIL
+
+---
+
+# Real Life Example
+
+Teacher
+
+Tum restaurant gaye.
+
+Order diya
+
+```
+1 Pizza
+```
+
+Waiter laya
+
+```
+1 Pizza
+```
+
+↓
+
+PASS
+
+---
+
+Waiter laya
+
+```
+Burger
+```
+
+↓
+
+FAIL
+
+---
+
+Exactly wahi Assertion karta hai.
+
+---
+
+# Interview Question
+
+### What is Assertion?
+
+Answer
+
+Assertion is a mechanism used to compare the expected result with the actual result.
+
+---
+
+# 2. Assert Class
+
+JUnit 4 me Assertions
+
+kis class me hote hain?
+
+Answer
+
+```
+Assert
+```
+
+Class
+
+```java
+import org.junit.Assert;
+```
+
+Isi class ke andar
+
+bahut saare methods hote hain.
+
+---
+
+# Common Assertions
+
+```
+assertEquals()
+
+assertNotEquals()
+
+assertTrue()
+
+assertFalse()
+
+assertNull()
+
+assertNotNull()
+
+assertSame()
+
+assertNotSame()
+
+assertArrayEquals()
+
+fail()
+```
+
+Ye sab interview ke favourite hain.
+
+---
+
+# 3. assertEquals()
+
+Sabse famous assertion.
+
+---
+
+## Syntax
+
+```java
+Assert.assertEquals(expected,actual);
+```
+
+Dhyan rahe
+
+Pehle
+
+Expected
+
+Phir
+
+Actual
+
+---
+
+# Example
+
+```java
+@Test
+public void addTest(){
+
+      int result=CalculatorService.add(20,30);
+
+      Assert.assertEquals(50,result);
+
+}
+```
+
+PASS
+
+---
+
+# Wrong Example
+
+```java
+Assert.assertEquals(40,result);
+```
+
+Output
+
+```
+Expected :40
+
+Actual :50
+```
+
+FAIL
+
+---
+
+# Interview Tip
+
+Expected pehle
+
+Actual baad me.
+
+Ye bahut log galti karte hain.
+
+---
+
+# 4. assertNotEquals()
+
+Ye check karta hai
+
+Dono values same nahi honi chahiye.
+
+---
+
+Example
+
+```java
+Assert.assertNotEquals(40,result);
+```
+
+Result
+
+```
+50
+```
+
+PASS
+
+---
+
+Example
+
+```java
+Assert.assertNotEquals(50,result);
+```
+
+FAIL
+
+---
+
+Visual
+
+```
+Expected
+
+40
+
+↓
+
+Actual
+
+50
+
+↓
+
+PASS
+```
+
+---
+
+# Interview Question
+
+Difference
+
+assertEquals()
+
+vs
+
+assertNotEquals()
+
+Answer
+
+assertEquals checks equality.
+
+assertNotEquals checks inequality.
+
+---
+
+# 5. assertTrue()
+
+Ye boolean value ko check karta hai.
+
+Condition
+
+True honi chahiye.
+
+---
+
+Example
+
+```java
+Assert.assertTrue(10>5);
+```
+
+PASS
+
+---
+
+Example
+
+```java
+Assert.assertTrue(5>10);
+```
+
+FAIL
+
+---
+
+Real Example
+
+```java
+boolean loggedIn=true;
+
+Assert.assertTrue(loggedIn);
+```
+
+PASS
+
+---
+
+Another Example
+
+```java
+String role="ADMIN";
+
+Assert.assertTrue(role.equals("ADMIN"));
+```
+
+PASS
+
+---
+
+# Interview Question
+
+Kab use karte hain?
+
+Jab method boolean return kare.
+
+---
+
+# 6. assertFalse()
+
+Condition
+
+False honi chahiye.
+
+---
+
+Example
+
+```java
+Assert.assertFalse(10<5);
+```
+
+PASS
+
+---
+
+Example
+
+```java
+Assert.assertFalse(10>5);
+```
+
+FAIL
+
+---
+
+Real Example
+
+```java
+boolean blocked=false;
+
+Assert.assertFalse(blocked);
+```
+
+PASS
+
+---
+
+# 7. assertNull()
+
+Ye check karta hai
+
+Object null hona chahiye.
+
+---
+
+Example
+
+```java
+String name=null;
+
+Assert.assertNull(name);
+```
+
+PASS
+
+---
+
+Example
+
+```java
+String name="Vishnu";
+
+Assert.assertNull(name);
+```
+
+FAIL
+
+---
+
+Real Project Example
+
+Database me user nahi mila.
+
+```java
+User user=null;
+
+Assert.assertNull(user);
+```
+
+PASS
+
+---
+
+# 8. assertNotNull()
+
+Object null nahi hona chahiye.
+
+---
+
+Example
+
+```java
+String city="Pune";
+
+Assert.assertNotNull(city);
+```
+
+PASS
+
+---
+
+Example
+
+```java
+String city=null;
+
+Assert.assertNotNull(city);
+```
+
+FAIL
+
+---
+
+Real Project Example
+
+Repository
+
+```java
+User user=userRepository.findById(1);
+```
+
+Check
+
+```java
+Assert.assertNotNull(user);
+```
+
+---
+
+# Interview Question
+
+Difference
+
+assertNull()
+
+vs
+
+assertNotNull()
+
+---
+
+Answer
+
+assertNull expects null.
+
+assertNotNull expects object.
+
+---
+
+# 9. assertArrayEquals()
+
+Array compare karta hai.
+
+---
+
+Example
+
+```java
+int expected[]={1,2,3};
+
+int actual[]={1,2,3};
+
+Assert.assertArrayEquals(expected,actual);
+```
+
+PASS
+
+---
+
+Wrong Example
+
+```java
+int actual[]={1,2,5};
+```
+
+FAIL
+
+---
+
+Real Example
+
+Marks
+
+```
+Expected
+
+90
+
+80
+
+70
+
+↓
+
+Actual
+
+90
+
+80
+
+70
+```
+
+PASS
+
+---
+
+# 10. assertSame()
+
+Reference compare karta hai.
+
+Object
+
+Same memory me hona chahiye.
+
+---
+
+Example
+
+```java
+String s1="Java";
+
+String s2=s1;
+
+Assert.assertSame(s1,s2);
+```
+
+PASS
+
+---
+
+Visual
+
+```
+s1
+
+↓
+
+Memory A
+
+↑
+
+s2
+```
+
+Same Object
+
+PASS
+
+---
+
+# 11. assertNotSame()
+
+Object reference different hona chahiye.
+
+---
+
+Example
+
+```java
+String s1=new String("Java");
+
+String s2=new String("Java");
+
+Assert.assertNotSame(s1,s2);
+```
+
+PASS
+
+---
+
+Dhyan do
+
+Value same hai
+
+Memory different hai.
+
+---
+
+# Interview Question
+
+Difference
+
+assertEquals
+
+vs
+
+assertSame
+
+Answer
+
+assertEquals compares values.
+
+assertSame compares object references.
+
+---
+
+Example
+
+```java
+String a=new String("ABC");
+
+String b=new String("ABC");
+```
+
+```
+assertEquals(a,b)
+
+↓
+
+PASS
+
+```
+
+```
+assertSame(a,b)
+
+↓
+
+FAIL
+```
+
+---
+
+# 12. fail()
+
+Kabhi kabhi manually test fail karna hota hai.
+
+---
+
+Example
+
+```java
+if(age<18){
+
+     Assert.fail();
+
+}
+```
+
+Ya
+
+```java
+Assert.fail("Age must be greater than 18");
+```
+
+---
+
+Output
+
+FAIL
+
+---
+
+Real Example
+
+```java
+if(user==null){
+
+      Assert.fail("User Not Found");
+
+}
+```
+
+---
+
+# 13. Complete Example
+
+```java
+@Test
+
+public void employeeTest(){
+
+      String name="Vishnu";
+
+      Assert.assertNotNull(name);
+
+      Assert.assertEquals("Vishnu",name);
+
+      Assert.assertTrue(name.startsWith("V"));
+
+}
+```
+
+PASS
+
+---
+
+# 14. Multiple Assertions
+
+```java
+@Test
+
+public void loginTest(){
+
+      String role="ADMIN";
+
+      boolean active=true;
+
+      Assert.assertEquals("ADMIN",role);
+
+      Assert.assertTrue(active);
+
+      Assert.assertNotNull(role);
+
+}
+```
+
+Sab pass
+
+↓
+
+Test Pass
+
+---
+
+Agar
+
+Ek bhi fail
+
+↓
+
+Complete Test Fail
+
+---
+
+# 15. Practical Spring Boot Example
+
+Service
+
+```java
+public User getUser(){
+
+      return new User(1,"Vishnu");
+
+}
+```
+
+Test
+
+```java
+@Test
+
+public void getUserTest(){
+
+      User user=userService.getUser();
+
+      Assert.assertNotNull(user);
+
+      Assert.assertEquals("Vishnu",user.getName());
+
+      Assert.assertEquals(1,user.getId());
+
+}
+```
+
+PASS
+
+---
+
+# 16. Common Mistakes
+
+## Mistake 1
+
+Expected aur Actual ulta likhna.
+
+❌ Wrong
+
+```java
+Assert.assertEquals(result,30);
+```
+
+✅ Correct
+
+```java
+Assert.assertEquals(30,result);
+```
+
+---
+
+## Mistake 2
+
+assertSame ko value compare karne ke liye use karna.
+
+Galat.
+
+Ye reference compare karta hai.
+
+---
+
+## Mistake 3
+
+assertTrue()
+
+ke andar boolean nahi dena.
+
+---
+
+Wrong
+
+```java
+Assert.assertTrue("Java");
+```
+
+---
+
+Correct
+
+```java
+Assert.assertTrue(name.equals("Java"));
+```
+
+---
+
+# 17. Which Assertion Should I Use?
+
+| Situation           | Assertion           |
+| ------------------- | ------------------- |
+| Value Compare       | assertEquals()      |
+| Different Value     | assertNotEquals()   |
+| Boolean True        | assertTrue()        |
+| Boolean False       | assertFalse()       |
+| Object Null         | assertNull()        |
+| Object Not Null     | assertNotNull()     |
+| Array Compare       | assertArrayEquals() |
+| Same Reference      | assertSame()        |
+| Different Reference | assertNotSame()     |
+| Force Fail          | fail()              |
+
+---
+
+# 18. Real Project Usage
+
+Suppose
+
+```
+OrderService
+
+↓
+
+createOrder()
+
+↓
+
+returns Order
+```
+
+Test
+
+```java
+Order order=orderService.createOrder();
+
+Assert.assertNotNull(order);
+
+Assert.assertEquals("CREATED",order.getStatus());
+
+Assert.assertTrue(order.getAmount()>0);
+```
+
+---
+
+# ⭐ Interview Quick Revision
+
+### Q1. What is Assertion?
+
+Assertion compares expected and actual results.
+
+---
+
+### Q2. Which class contains assertions?
+
+`org.junit.Assert`
+
+---
+
+### Q3. Which assertion is used most frequently?
+
+`assertEquals()`
+
+---
+
+### Q4. Difference between `assertEquals()` and `assertSame()`?
+
+* `assertEquals()` → compares values.
+* `assertSame()` → compares object references.
+
+---
+
+### Q5. Which assertion checks a boolean condition?
+
+* `assertTrue()`
+* `assertFalse()`
+
+---
+
+### Q6. Which assertion checks for null?
+
+* `assertNull()`
+* `assertNotNull()`
+
+---
+
+### Q7. Which assertion compares arrays?
+
+`assertArrayEquals()`
+
+---
+
+### Q8. What does `fail()` do?
+
+It immediately marks the test case as failed.
+
+---
+
+# 📝 Part 3 Summary
+
+* ✅ What is an Assertion?
+* ✅ Expected vs Actual
+* ✅ `Assert` class
+* ✅ `assertEquals()`
+* ✅ `assertNotEquals()`
+* ✅ `assertTrue()`
+* ✅ `assertFalse()`
+* ✅ `assertNull()`
+* ✅ `assertNotNull()`
+* ✅ `assertArrayEquals()`
+* ✅ `assertSame()` vs `assertNotSame()`
+* ✅ `fail()`
+* ✅ Real Spring Boot examples
+* ✅ Common mistakes
+* ✅ Interview questions
+
+➡️ **Part 4** will cover the **JUnit 4 Lifecycle Annotations** shown in the video:
+
+* `@Test`
+* `@Before`
+* `@After`
+* `@BeforeClass`
+* `@AfterClass`
+* Execution order
+* `timeout`
+* Practical examples
+* Real project scenarios
+* Interview questions.
+
+=================================================================================================
+# JUnit Crash Course Notes (Part 4)
+
+## 📚 Topic 4 – JUnit 4 Lifecycle Annotations (`@Test`, `@Before`, `@After`, `@BeforeClass`, `@AfterClass`, `timeout`)
+
+> **Language:** Hindi Wali English (Easy to Remember)
+>
+> **Teaching Style:** Teacher 👨‍🏫 & Student 👨‍🎓 Conversation
+>
+> **Interview Importance:** ⭐⭐⭐⭐⭐
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak humne seekha
+
+* Unit Testing
+* Assertions
+* Test Case likhna
+
+Ab ek important question...
+
+## Agar Test Case chalne se pehle kuch setup karna ho to?
+
+Ya
+
+## Test Case complete hone ke baad cleanup karna ho to?
+
+Iske liye JUnit hume **Lifecycle Annotations** provide karta hai.
+
+Ye interview ka bahut important topic hai.
+
+---
+
+# What is Lifecycle?
+
+## 👨‍🏫 Teacher
+
+Suppose tum office jaate ho.
+
+Har din kya karte ho?
+
+```
+Office Enter
+
+↓
+
+Laptop Start
+
+↓
+
+Coding
+
+↓
+
+Laptop Shutdown
+
+↓
+
+Office Leave
+```
+
+Coding sirf beech me hoti hai.
+
+Waise hi JUnit me bhi
+
+```
+Setup
+
+↓
+
+Run Test
+
+↓
+
+Cleanup
+```
+
+Ye pura process **Lifecycle** kehlata hai.
+
+---
+
+# JUnit 4 Lifecycle Annotations
+
+| Annotation   | Kab Execute Hota Hai                   |
+| ------------ | -------------------------------------- |
+| @BeforeClass | Sabhi Test Cases se pehle sirf ek baar |
+| @Before      | Har Test Case se pehle                 |
+| @Test        | Actual Test Case                       |
+| @After       | Har Test Case ke baad                  |
+| @AfterClass  | Sabhi Test Cases ke baad sirf ek baar  |
+
+---
+
+# Execution Order
+
+Ye order yaad rakhna.
+
+```
+@BeforeClass
+
+↓
+
+@Before
+
+↓
+
+@Test
+
+↓
+
+@After
+
+↓
+
+@Before
+
+↓
+
+@Test
+
+↓
+
+@After
+
+↓
+
+@Before
+
+↓
+
+@Test
+
+↓
+
+@After
+
+↓
+
+@AfterClass
+```
+
+**Interview me bahut baar poochte hain.**
+
+---
+
+# 1. @Test
+
+## 👨‍🏫 Teacher
+
+Sabse important annotation.
+
+Ye JUnit ko batata hai
+
+"Ye method ek Test Case hai."
+
+---
+
+## Example
+
+```java
+@Test
+public void addTest(){
+
+    int result = CalculatorService.add(10,20);
+
+    Assert.assertEquals(30,result);
+
+}
+```
+
+---
+
+## Without @Test
+
+```java
+public void addTest(){
+
+}
+```
+
+JUnit is method ko execute hi nahi karega.
+
+---
+
+## Interview Question
+
+### What is @Test?
+
+**Answer**
+
+`@Test` is used to mark a method as a JUnit test case.
+
+---
+
+# 2. @BeforeClass
+
+## 👨‍🏫 Teacher
+
+Question...
+
+Suppose tumhare paas
+
+100 Test Cases hain.
+
+Aur sabke start hone se pehle
+
+Database Connection open karna hai.
+
+Har Test Case me likhoge?
+
+---
+
+## 👨‍🎓 Student
+
+Nahi Sir.
+
+Ek hi baar likhenge.
+
+---
+
+Exactly.
+
+Isi ke liye
+
+# @BeforeClass
+
+---
+
+## Definition
+
+Sabhi Test Cases start hone se pehle
+
+Sirf ek baar execute hota hai.
+
+---
+
+## Example
+
+```java
+@BeforeClass
+public static void init(){
+
+    System.out.println("Before All Test Cases");
+
+}
+```
+
+---
+
+## Output
+
+```
+Before All Test Cases
+
+Test1
+
+Test2
+
+Test3
+```
+
+Notice
+
+Sirf ek baar print hua.
+
+---
+
+# Why Static?
+
+Ye bahut important interview question hai.
+
+`@BeforeClass`
+
+**Static Method hona chahiye.**
+
+Kyuki
+
+Ye class level pe execute hota hai.
+
+Object banne ka wait nahi karta.
+
+---
+
+## Wrong
+
+```java
+@BeforeClass
+public void init(){
+
+}
+```
+
+Error
+
+```
+Method should be static
+```
+
+---
+
+## Correct
+
+```java
+@BeforeClass
+public static void init(){
+
+}
+```
+
+---
+
+# Real Project Example
+
+Spring Boot
+
+```
+@BeforeClass
+
+↓
+
+Load Configuration
+
+↓
+
+Open Connection
+
+↓
+
+Initialize Resources
+```
+
+---
+
+# Interview Question
+
+Why must `@BeforeClass` method be static?
+
+**Answer**
+
+Because it executes once before all test cases at the class level, without creating an object.
+
+---
+
+# 3. @AfterClass
+
+## 👨‍🏫 Teacher
+
+Setup ke baad
+
+Cleanup bhi hona chahiye.
+
+Suppose
+
+Connection open kiya.
+
+Close bhi karna padega.
+
+Isi ke liye
+
+# @AfterClass
+
+---
+
+## Definition
+
+Sabhi Test Cases complete hone ke baad
+
+Sirf ek baar execute hota hai.
+
+---
+
+## Example
+
+```java
+@AfterClass
+public static void cleanup(){
+
+     System.out.println("Cleanup");
+
+}
+```
+
+---
+
+Output
+
+```
+Test1
+
+Test2
+
+Test3
+
+Cleanup
+```
+
+---
+
+# Real Project Example
+
+```
+Close Database Connection
+
+↓
+
+Close File
+
+↓
+
+Release Memory
+
+↓
+
+Cleanup Resources
+```
+
+---
+
+# Static Rule
+
+`@AfterClass`
+
+Method bhi
+
+Static hona chahiye.
+
+---
+
+# Interview Question
+
+Difference
+
+`@BeforeClass`
+
+vs
+
+`@AfterClass`
+
+Answer
+
+| @BeforeClass     | @AfterClass     |
+| ---------------- | --------------- |
+| Before all tests | After all tests |
+| Setup            | Cleanup         |
+| Executes once    | Executes once   |
+
+---
+
+# 4. @Before
+
+## 👨‍🏫 Teacher
+
+Ab maan lo
+
+Har Test Case se pehle
+
+Counter reset karna hai.
+
+Ya
+
+Dummy Data banana hai.
+
+Tab?
+
+---
+
+Use
+
+# @Before
+
+---
+
+## Definition
+
+Har Test Case execute hone se pehle
+
+Run hota hai.
+
+---
+
+## Example
+
+```java
+@Before
+public void before(){
+
+     System.out.println("Before Each Test");
+
+}
+```
+
+---
+
+Output
+
+```
+Before Each Test
+
+Test1
+
+Before Each Test
+
+Test2
+
+Before Each Test
+
+Test3
+```
+
+Notice
+
+Har Test se pehle.
+
+---
+
+# Real Project Example
+
+Har Test Case se pehle
+
+```
+Create Object
+
+↓
+
+Insert Dummy Data
+
+↓
+
+Reset Counter
+```
+
+---
+
+# Interview Question
+
+When do we use `@Before`?
+
+Answer
+
+When some initialization is required before every test case.
+
+---
+
+# 5. @After
+
+## 👨‍🏫 Teacher
+
+Har Test ke baad
+
+Temporary data delete karna hai.
+
+To?
+
+Use
+
+# @After
+
+---
+
+## Example
+
+```java
+@After
+public void after(){
+
+     System.out.println("After Each Test");
+
+}
+```
+
+---
+
+Output
+
+```
+Before
+
+↓
+
+Test1
+
+↓
+
+After
+
+↓
+
+Before
+
+↓
+
+Test2
+
+↓
+
+After
+```
+
+---
+
+# Real Project Example
+
+```
+Delete Temporary Files
+
+↓
+
+Reset Variables
+
+↓
+
+Close Streams
+```
+
+---
+
+# Interview Question
+
+Difference
+
+`@Before`
+
+vs
+
+`@After`
+
+Answer
+
+| @Before           | @After           |
+| ----------------- | ---------------- |
+| Before every test | After every test |
+| Setup             | Cleanup          |
+
+---
+
+# 6. Complete Lifecycle Example
+
+```java
+public class CalculatorTest {
+
+    @BeforeClass
+    public static void beforeAll(){
+
+        System.out.println("Before All");
+
+    }
+
+    @Before
+    public void beforeEach(){
+
+        System.out.println("Before Each");
+
+    }
+
+    @Test
+    public void addTest(){
+
+        System.out.println("Add Test");
+
+    }
+
+    @Test
+    public void multiplyTest(){
+
+        System.out.println("Multiply Test");
+
+    }
+
+    @After
+    public void afterEach(){
+
+        System.out.println("After Each");
+
+    }
+
+    @AfterClass
+    public static void afterAll(){
+
+        System.out.println("After All");
+
+    }
+
+}
+```
+
+---
+
+## Output
+
+```
+Before All
+
+↓
+
+Before Each
+
+↓
+
+Add Test
+
+↓
+
+After Each
+
+↓
+
+Before Each
+
+↓
+
+Multiply Test
+
+↓
+
+After Each
+
+↓
+
+After All
+```
+
+---
+
+# Easy Memory Trick
+
+```
+BeforeClass
+
+↓
+
+Before
+
+↓
+
+Test
+
+↓
+
+After
+
+↓
+
+AfterClass
+```
+
+Yaad rakhne ka trick
+
+**"Class → Each → Test → Each → Class"**
+
+---
+
+# 7. Practical Example – Counter Reset
+
+Suppose
+
+```java
+int counter=0;
+```
+
+---
+
+Har Test se pehle
+
+Reset
+
+```java
+@Before
+public void reset(){
+
+      counter=0;
+
+}
+```
+
+---
+
+Test
+
+```java
+@Test
+public void test1(){
+
+      counter++;
+
+}
+```
+
+---
+
+Dusra Test
+
+```java
+@Test
+public void test2(){
+
+      counter++;
+
+}
+```
+
+---
+
+Har Test me
+
+Counter
+
+0 se start hoga.
+
+Yehi video me practical dikhaya gaya tha.
+
+---
+
+# Real Spring Boot Example
+
+Suppose
+
+```
+UserService
+
+↓
+
+Repository
+
+↓
+
+Mock Object
+```
+
+Har Test se pehle
+
+```
+Create Mock
+
+↓
+
+Reset Mock
+
+↓
+
+Load Dummy User
+```
+
+Ye kaam
+
+`@Before`
+
+me hota hai.
+
+---
+
+# 8. timeout Property
+
+## 👨‍🏫 Teacher
+
+Suppose
+
+Ek Test
+
+2 seconds me complete hona chahiye.
+
+Lekin
+
+5 second le raha hai.
+
+Kya kare?
+
+---
+
+JUnit
+
+`timeout`
+
+provide karta hai.
+
+---
+
+## Example
+
+```java
+@Test(timeout=2000)
+public void addTest(){
+
+}
+```
+
+2000
+
+Means
+
+2000 milliseconds
+
+Means
+
+2 seconds
+
+---
+
+# Example
+
+```java
+@Test(timeout=2000)
+public void addTest() throws Exception{
+
+      Thread.sleep(3000);
+
+}
+```
+
+---
+
+Output
+
+```
+Test Failed
+
+Time Out Exception
+```
+
+Kyuki
+
+Test
+
+3 second le raha tha.
+
+Allowed
+
+2 second tha.
+
+---
+
+# Real Project Example
+
+Suppose
+
+Payment API
+
+Expected
+
+```
+<2 seconds
+```
+
+Agar
+
+10 second le rahi hai.
+
+Test
+
+Fail.
+
+Performance issue detect ho jayega.
+
+---
+
+# Interview Question
+
+What is timeout?
+
+Answer
+
+It fails the test automatically if execution exceeds the specified time.
+
+---
+
+# 9. Complete Lifecycle Flow
+
+```
+@BeforeClass
+
+↓
+
+Open Database
+
+↓
+
+@Before
+
+↓
+
+Reset Counter
+
+↓
+
+@Test
+
+↓
+
+Run Business Logic
+
+↓
+
+@After
+
+↓
+
+Clear Data
+
+↓
+
+@Before
+
+↓
+
+Next Test
+
+↓
+
+...
+
+↓
+
+@AfterClass
+
+↓
+
+Close Database
+```
+
+---
+
+# 10. Common Mistakes
+
+## Mistake 1
+
+`@BeforeClass`
+
+Static nahi banana.
+
+❌ Wrong
+
+```java
+@BeforeClass
+public void setup(){
+
+}
+```
+
+---
+
+✅ Correct
+
+```java
+@BeforeClass
+public static void setup(){
+
+}
+```
+
+---
+
+## Mistake 2
+
+Heavy initialization
+
+`@Before`
+
+me likhna.
+
+Agar
+
+100 Tests hain
+
+To
+
+100 baar chalega.
+
+Heavy setup ho to
+
+`@BeforeClass`
+
+use karo.
+
+---
+
+## Mistake 3
+
+Cleanup bhool jana.
+
+Resource leak ho sakta hai.
+
+Always use
+
+```
+@After
+
+or
+
+@AfterClass
+```
+
+---
+
+# JUnit 4 Lifecycle Summary Table
+
+| Annotation     | Runs                  | Static? | Purpose          |
+| -------------- | --------------------- | ------- | ---------------- |
+| `@BeforeClass` | Once before all tests | ✅ Yes   | Initial setup    |
+| `@Before`      | Before every test     | ❌ No    | Per-test setup   |
+| `@Test`        | Test method           | ❌ No    | Execute test     |
+| `@After`       | After every test      | ❌ No    | Per-test cleanup |
+| `@AfterClass`  | Once after all tests  | ✅ Yes   | Final cleanup    |
+
+---
+
+# ⭐ Interview Quick Revision
+
+### Q1. Which annotation marks a test case?
+
+`@Test`
+
+---
+
+### Q2. Which annotation executes before all test cases?
+
+`@BeforeClass`
+
+---
+
+### Q3. Which annotation executes after all test cases?
+
+`@AfterClass`
+
+---
+
+### Q4. Which annotation runs before every test?
+
+`@Before`
+
+---
+
+### Q5. Which annotation runs after every test?
+
+`@After`
+
+---
+
+### Q6. Why are `@BeforeClass` and `@AfterClass` methods static?
+
+Because they execute once at the class level before object creation.
+
+---
+
+### Q7. What is the execution order?
+
+```
+@BeforeClass
+
+↓
+
+@Before
+
+↓
+
+@Test
+
+↓
+
+@After
+
+↓
+
+@Before
+
+↓
+
+@Test
+
+↓
+
+@After
+
+↓
+
+@AfterClass
+```
+
+---
+
+### Q8. What is `timeout`?
+
+It specifies the maximum execution time for a test. If the test exceeds that time, JUnit marks it as failed.
+
+---
+
+# 📝 Part 4 Summary
+
+* ✅ JUnit Lifecycle concept
+* ✅ `@Test`
+* ✅ `@BeforeClass`
+* ✅ `@AfterClass`
+* ✅ `@Before`
+* ✅ `@After`
+* ✅ Execution order
+* ✅ Static requirement for class-level annotations
+* ✅ `timeout` property
+* ✅ Practical examples
+* ✅ Common mistakes
+* ✅ Spring Boot real-world usage
+* ✅ Interview questions
+
+➡️ **Part 5** will cover the beginning of **JUnit 5**, including:
+
+* Why JUnit 5 was introduced
+* JUnit 5 architecture
+* **JUnit Platform**
+* **JUnit Jupiter**
+* **JUnit Vintage**
+* JUnit 4 vs JUnit 5 differences
+* JUnit 5 Maven dependencies
+* Migration from JUnit 4 to JUnit 5.
+
+=================================================================================================
+# JUnit Crash Course Notes (Part 5)
+
+# 📚 Topic 5 – Introduction to JUnit 5 (Architecture, Platform, Jupiter & Vintage)
+
+> **Language:** Hindi Wali English (Easy to Remember)
+>
+> **Teaching Style:** Teacher 👨‍🏫 & Student 👨‍🎓 Conversation
+>
+> **Interview Importance:** ⭐⭐⭐⭐⭐
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Abhi tak humne JUnit 4 seekha.
+
+Question hai...
+
+Agar JUnit 4 itna achha tha,
+
+to company ne **JUnit 5** kyun banaya?
+
+Ye interview me bahut poocha jata hai.
+
+Aaj hum seekhenge
+
+* Why JUnit 5?
+* JUnit 5 Architecture
+* JUnit Platform
+* JUnit Jupiter
+* JUnit Vintage
+* JUnit 4 vs JUnit 5
+* Migration Overview
+
+---
+
+# 1. Why JUnit 5?
+
+## 👨‍🏫 Teacher
+
+Question...
+
+Jab JUnit 4 already available tha,
+
+to JUnit 5 ki zarurat kyun padi?
+
+---
+
+## 👨‍🎓 Student
+
+Sir...
+
+Naye Features ke liye?
+
+---
+
+## 👨‍🏫 Teacher
+
+Bilkul.
+
+Technology change hoti rehti hai.
+
+Frameworks bhi update hote rehte hain.
+
+---
+
+## Problems in JUnit 4
+
+JUnit 4 me kuch limitations thi.
+
+* Limited Extension Support
+* Limited Customization
+* Less Modular
+* New Java Features ka proper support nahi
+* Legacy Architecture
+
+Isliye JUnit 5 introduce hua.
+
+---
+
+## Benefits of JUnit 5
+
+✅ Better Architecture
+
+✅ Better Performance
+
+✅ Modular Design
+
+✅ Better IDE Support
+
+✅ Better Extension Model
+
+✅ Java 8+ Features Support
+
+✅ More Flexible
+
+---
+
+# Interview Question
+
+### Why was JUnit 5 introduced?
+
+### Answer
+
+JUnit 5 was introduced to provide a modular architecture, better extension support, improved flexibility, and compatibility with modern Java features.
+
+---
+
+# 2. JUnit 5 Architecture
+
+## 👨‍🏫 Teacher
+
+JUnit 4 ek single framework tha.
+
+Lekin
+
+JUnit 5 ko
+
+3 major modules me divide kiya gaya.
+
+---
+
+## Architecture
+
+```text
+                 JUnit 5
+
+        ┌────────┼────────┐
+
+        │        │        │
+
+ Platform  Jupiter  Vintage
+```
+
+Ye teen modules milkar
+
+JUnit 5 banate hain.
+
+---
+
+# Easy Memory Trick
+
+Teacher
+
+Ek School imagine karo.
+
+School chalane ke liye
+
+Principal
+
+↓
+
+Teachers
+
+↓
+
+Old Records
+
+Sab chahiye.
+
+Waise hi
+
+```text
+Platform
+
+↓
+
+Jupiter
+
+↓
+
+Vintage
+```
+
+---
+
+# 3. JUnit Platform
+
+## 👨‍🏫 Teacher
+
+Sabse pehla module
+
+### JUnit Platform
+
+Ye sabse important hai.
+
+---
+
+## Definition
+
+JUnit Platform
+
+Execution Engine provide karta hai.
+
+Simple language me
+
+Ye decide karta hai
+
+Kaunsa Test
+
+Kaise
+
+Kab
+
+Run hoga.
+
+---
+
+## Example
+
+Suppose
+
+Tumhare paas
+
+```text
+100 Test Cases
+```
+
+Platform
+
+sabko execute karega.
+
+---
+
+## Visual
+
+```text
+JUnit Platform
+
+↓
+
+Find Test Cases
+
+↓
+
+Execute
+
+↓
+
+Generate Result
+```
+
+---
+
+## Real Life Example
+
+Platform
+
+Railway Station ki tarah hai.
+
+Train khud Platform nahi hoti.
+
+Platform sirf manage karta hai.
+
+Waise hi
+
+JUnit Platform
+
+Tests ko manage karta hai.
+
+---
+
+# Responsibilities of Platform
+
+* Test Discovery
+* Test Execution
+* IDE Integration
+* Build Tool Support
+* Reporting
+
+---
+
+# Interview Question
+
+### What is JUnit Platform?
+
+Answer
+
+JUnit Platform is the foundation of JUnit 5 responsible for discovering and executing test cases.
+
+---
+
+# 4. JUnit Jupiter
+
+## 👨‍🏫 Teacher
+
+Ab aata hai
+
+Sabse important module.
+
+### JUnit Jupiter
+
+Ye wahi module hai
+
+Jo hum daily use karte hain.
+
+---
+
+## Definition
+
+JUnit Jupiter
+
+Provides
+
+* New API
+* New Annotations
+* Assertions
+* Test Writing Features
+
+---
+
+Simple language
+
+Ye actual coding wala module hai.
+
+---
+
+## Visual
+
+```text
+JUnit Jupiter
+
+↓
+
+@Test
+
+@BeforeEach
+
+@AfterEach
+
+Assertions
+
+Parameterized Tests
+
+Extensions
+```
+
+---
+
+## Real Life Example
+
+Teacher
+
+Platform
+
+Principal hai.
+
+Jupiter
+
+Teacher hai.
+
+Teacher hi padhaata hai.
+
+Principal sirf manage karta hai.
+
+---
+
+# Jupiter Responsibilities
+
+* Test Methods
+* Assertions
+* Lifecycle
+* Parameterized Tests
+* Extensions
+
+---
+
+# Interview Question
+
+### What is Jupiter?
+
+Answer
+
+JUnit Jupiter provides the programming model and API for writing JUnit 5 test cases.
+
+---
+
+# 5. JUnit Vintage
+
+## 👨‍🏫 Teacher
+
+Ab maan lo
+
+Tumhari company me
+
+1000 JUnit 4 Test Cases already likhe hue hain.
+
+Ab company JUnit 5 use karna chahti hai.
+
+Question
+
+Kya saare Test dubara likhne padenge?
+
+---
+
+## 👨‍🎓 Student
+
+Sir...
+
+Bahut time lagega.
+
+---
+
+Exactly.
+
+Isi problem ko solve karta hai
+
+## JUnit Vintage
+
+---
+
+## Definition
+
+JUnit Vintage
+
+Allows JUnit 3 and JUnit 4 tests
+
+to run on JUnit 5 Platform.
+
+---
+
+## Visual
+
+```text
+JUnit 4 Test
+
+↓
+
+Vintage
+
+↓
+
+JUnit Platform
+
+↓
+
+Execute
+```
+
+---
+
+## Real Project Example
+
+Banking Project
+
+```text
+5000 JUnit 4 Tests
+```
+
+Company
+
+Upgrade
+
+↓
+
+JUnit 5
+
+Vintage
+
+↓
+
+Old Tests bhi chalenge.
+
+---
+
+# Easy Memory Trick
+
+Vintage
+
+Old Movies
+
+Old Cars
+
+Old Songs
+
+Old Tests
+
+Sab Vintage.
+
+---
+
+# Interview Question
+
+### What is JUnit Vintage?
+
+Answer
+
+JUnit Vintage provides backward compatibility to execute JUnit 3 and JUnit 4 test cases on the JUnit 5 platform.
+
+---
+
+# 6. Complete Architecture
+
+```text
+                     JUnit 5
+
+                          │
+
+       ┌──────────────────┼──────────────────┐
+
+       │                  │                  │
+
+ Platform           Jupiter           Vintage
+
+       │                  │                  │
+
+ Executes Tests     Write Tests      Supports JUnit 3/4
+```
+
+---
+
+# 7. JUnit 4 vs JUnit 5
+
+| Feature             | JUnit 4    | JUnit 5       |
+| ------------------- | ---------- | ------------- |
+| Architecture        | Monolithic | Modular       |
+| Java Version        | Java 5+    | Java 8+       |
+| Extension Model     | Runner     | Extension API |
+| Lifecycle           | Old        | Improved      |
+| Parameterized Tests | Limited    | Better        |
+| Nested Tests        | No         | Yes           |
+| Dynamic Tests       | No         | Yes           |
+
+---
+
+# Easy Trick
+
+JUnit 4
+
+↓
+
+Old House
+
+Everything inside one room.
+
+JUnit 5
+
+↓
+
+Modern Apartment
+
+Different rooms
+
+Different responsibilities.
+
+---
+
+# 8. Dependency Difference
+
+## JUnit 4 Dependency
+
+```xml
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.13.2</version>
+    <scope>test</scope>
+</dependency>
+```
+
+---
+
+## JUnit 5 Dependency
+
+```xml
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <version>5.10.2</version>
+    <scope>test</scope>
+</dependency>
+```
+
+---
+
+# Interview Question
+
+### Why did the groupId change?
+
+Answer
+
+Because JUnit 5 is based on the Jupiter module and has a new modular architecture.
+
+---
+
+# 9. Migration from JUnit 4 to JUnit 5
+
+## 👨‍🏫 Teacher
+
+Suppose
+
+Company bolti hai
+
+"Project ko JUnit 5 me migrate karo."
+
+Steps kya honge?
+
+---
+
+## Step 1
+
+Replace Dependency
+
+JUnit 4
+
+↓
+
+JUnit Jupiter
+
+---
+
+## Step 2
+
+Replace Annotations
+
+Old
+
+```java
+@Before
+```
+
+↓
+
+New
+
+```java
+@BeforeEach
+```
+
+---
+
+Old
+
+```java
+@After
+```
+
+↓
+
+New
+
+```java
+@AfterEach
+```
+
+---
+
+Old
+
+```java
+@BeforeClass
+```
+
+↓
+
+New
+
+```java
+@BeforeAll
+```
+
+---
+
+Old
+
+```java
+@AfterClass
+```
+
+↓
+
+New
+
+```java
+@AfterAll
+```
+
+---
+
+## Step 3
+
+Replace Imports
+
+JUnit 4
+
+```java
+import org.junit.Test;
+```
+
+↓
+
+JUnit 5
+
+```java
+import org.junit.jupiter.api.Test;
+```
+
+---
+
+## Step 4
+
+Run Tests
+
+Fix Compilation Errors
+
+Done.
+
+---
+
+# 10. JUnit 4 vs JUnit 5 Annotation Mapping
+
+| JUnit 4      | JUnit 5                 |
+| ------------ | ----------------------- |
+| @Before      | @BeforeEach             |
+| @After       | @AfterEach              |
+| @BeforeClass | @BeforeAll              |
+| @AfterClass  | @AfterAll               |
+| @Ignore      | @Disabled               |
+| @Test        | @Test (package changes) |
+
+---
+
+# Easy Memory Trick
+
+Old
+
+```text
+Before
+
+After
+```
+
+New
+
+```text
+BeforeEach
+
+AfterEach
+```
+
+More meaningful names.
+
+---
+
+# 11. Why Companies Prefer JUnit 5?
+
+* Better Performance
+* Better Readability
+* Modern Java Support
+* Extension API
+* Better IDE Integration
+* Parameterized Testing
+* Nested Testing
+* Cleaner Lifecycle
+
+---
+
+# Real Project Example
+
+Suppose
+
+Spring Boot 3 Project
+
+Company mostly uses
+
+```text
+Java 17
+
+↓
+
+Spring Boot 3
+
+↓
+
+JUnit 5
+```
+
+Because Spring Boot 3 has JUnit 5 support by default.
+
+---
+
+# 12. Common Interview Questions
+
+### Q1. What are the three modules of JUnit 5?
+
+Answer
+
+* JUnit Platform
+* JUnit Jupiter
+* JUnit Vintage
+
+---
+
+### Q2. Which module executes test cases?
+
+Answer
+
+JUnit Platform.
+
+---
+
+### Q3. Which module is used to write test cases?
+
+Answer
+
+JUnit Jupiter.
+
+---
+
+### Q4. Which module supports JUnit 3 and JUnit 4?
+
+Answer
+
+JUnit Vintage.
+
+---
+
+### Q5. Why do we need Vintage?
+
+Answer
+
+To run old JUnit 3/4 test cases on the JUnit 5 platform.
+
+---
+
+### Q6. Is JUnit 5 backward compatible?
+
+Answer
+
+Yes, through the **JUnit Vintage** module.
+
+---
+
+### Q7. Which JUnit version is used in modern Spring Boot projects?
+
+Answer
+
+JUnit 5 (Jupiter).
+
+---
+
+# 🎯 Interview Memory Trick
+
+```text
+JUnit 5
+
+↓
+
+Platform
+(Execute)
+
+↓
+
+Jupiter
+(Write Tests)
+
+↓
+
+Vintage
+(Run Old Tests)
+```
+
+Remember this sentence:
+
+> **Platform executes, Jupiter develops, Vintage supports old tests.**
+
+---
+
+# 📝 Part 5 Summary
+
+✅ Why JUnit 5 was introduced
+
+✅ Problems with JUnit 4
+
+✅ JUnit 5 modular architecture
+
+✅ JUnit Platform
+
+✅ JUnit Jupiter
+
+✅ JUnit Vintage
+
+✅ JUnit 4 vs JUnit 5 comparison
+
+✅ Maven dependency changes
+
+✅ Migration overview
+
+✅ Annotation mapping
+
+✅ Real Spring Boot usage
+
+✅ Interview questions
+
+---
+
+## 🔜 Part 6 Preview
+
+In **Part 6**, we'll start the **practical JUnit 5 coding**:
+
+* JUnit 5 project setup
+* JUnit 5 dependencies
+* `@BeforeEach`
+* `@AfterEach`
+* `@BeforeAll`
+* `@AfterAll`
+* `@Disabled`
+* `@DisplayName`
+* `@RepeatedTest`
+* `@Nested`
+* JUnit 5 Assertions
+* Practical examples and interview questions.
+
+=================================================================================================
+# JUnit Crash Course Notes (Part 6)
+
+# 📚 Topic 6 – Practical JUnit 5 (Annotations, Lifecycle & First Test Case)
+
+> **Language:** Hindi Wali English (Easy to Remember)
+>
+> **Teaching Style:** Teacher 👨‍🏫 & Student 👨‍🎓 Conversation
+>
+> **Interview Importance:** ⭐⭐⭐⭐⭐
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab hum actual **JUnit 5 coding** start karte hain.
+
+Pichle Part me humne architecture dekha tha.
+
+Aaj hum seekhenge
+
+* JUnit 5 Setup
+* JUnit 5 Dependency
+* First Test Case
+* JUnit 5 Lifecycle
+* New Annotations
+* Practical Examples
+* Real Spring Boot Usage
+
+---
+
+# 1. JUnit 5 Dependency
+
+## 👨‍🏫 Teacher
+
+Sabse pehle project me JUnit 5 add karna padega.
+
+### Maven Dependency
+
+```xml
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <version>5.10.2</version>
+    <scope>test</scope>
+</dependency>
+```
+
+---
+
+## Interview Question
+
+### Why org.junit.jupiter?
+
+**Answer**
+
+Kyuki JUnit 5 ka programming model **Jupiter** module provide karta hai.
+
+---
+
+# 2. Import Package
+
+JUnit 4
+
+```java
+import org.junit.Test;
+```
+
+JUnit 5
+
+```java
+import org.junit.jupiter.api.Test;
+```
+
+### Difference
+
+| JUnit 4   | JUnit 5               |
+| --------- | --------------------- |
+| org.junit | org.junit.jupiter.api |
+
+---
+
+# 3. First JUnit 5 Test
+
+## Service
+
+```java
+public class CalculatorService {
+
+    public int add(int a,int b){
+
+        return a+b;
+
+    }
+
+}
+```
+
+---
+
+## Test Class
+
+```java
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CalculatorServiceTest {
+
+    @Test
+    void addTest(){
+
+        CalculatorService service=new CalculatorService();
+
+        int result=service.add(20,30);
+
+        assertEquals(50,result);
+
+    }
+
+}
+```
+
+---
+
+## Output
+
+```
+PASS
+```
+
+---
+
+# Interview Question
+
+### Is @Test changed?
+
+**Answer**
+
+Annotation ka naam same hai.
+
+Sirf package change hua hai.
+
+---
+
+# 4. JUnit 4 vs JUnit 5 Lifecycle
+
+| JUnit 4      | JUnit 5     |
+| ------------ | ----------- |
+| @Before      | @BeforeEach |
+| @After       | @AfterEach  |
+| @BeforeClass | @BeforeAll  |
+| @AfterClass  | @AfterAll   |
+
+---
+
+# Easy Trick
+
+JUnit 4
+
+```
+Before
+
+After
+```
+
+JUnit 5
+
+```
+BeforeEach
+
+AfterEach
+```
+
+Naam aur meaningful ho gaya.
+
+---
+
+# 5. @BeforeEach
+
+## 👨‍🏫 Teacher
+
+Question...
+
+Har Test Case se pehle object banana hai.
+
+Kahan likhenge?
+
+---
+
+Answer
+
+```
+@BeforeEach
+```
+
+---
+
+Example
+
+```java
+@BeforeEach
+void init(){
+
+    System.out.println("Before Each Test");
+
+}
+```
+
+---
+
+Output
+
+```
+Before Each Test
+
+Test1
+
+Before Each Test
+
+Test2
+```
+
+---
+
+# Real Project Example
+
+Har Test se pehle
+
+```
+Create Mock Object
+
+↓
+
+Reset Variables
+
+↓
+
+Load Dummy Data
+```
+
+---
+
+# Interview Question
+
+When is @BeforeEach executed?
+
+**Answer**
+
+Before every test method.
+
+---
+
+# 6. @AfterEach
+
+Har Test ke baad execute hota hai.
+
+Example
+
+```java
+@AfterEach
+void cleanup(){
+
+    System.out.println("Cleanup");
+
+}
+```
+
+---
+
+Output
+
+```
+Test1
+
+Cleanup
+
+Test2
+
+Cleanup
+```
+
+---
+
+Real Project
+
+```
+Close File
+
+↓
+
+Clear Cache
+
+↓
+
+Reset Variables
+```
+
+---
+
+# 7. @BeforeAll
+
+## 👨‍🏫 Teacher
+
+Question...
+
+100 Test Cases hain.
+
+Database Connection ek hi baar open karna hai.
+
+Har Test me karenge?
+
+---
+
+No.
+
+Use
+
+```
+@BeforeAll
+```
+
+---
+
+Example
+
+```java
+@BeforeAll
+static void setup(){
+
+    System.out.println("Before All");
+
+}
+```
+
+---
+
+Output
+
+```
+Before All
+
+Test1
+
+Test2
+
+Test3
+```
+
+---
+
+# Important
+
+Method
+
+Must be
+
+```
+static
+```
+
+---
+
+Interview Question
+
+Why static?
+
+Because it executes once before all test cases.
+
+---
+
+# 8. @AfterAll
+
+Sab Test complete hone ke baad execute hota hai.
+
+Example
+
+```java
+@AfterAll
+static void destroy(){
+
+     System.out.println("After All");
+
+}
+```
+
+---
+
+Output
+
+```
+Test1
+
+Test2
+
+After All
+```
+
+---
+
+Real Example
+
+```
+Close Database
+
+↓
+
+Release Resources
+
+↓
+
+Close File
+```
+
+---
+
+# 9. Complete Lifecycle
+
+```java
+class CalculatorTest {
+
+    @BeforeAll
+    static void beforeAll(){
+
+        System.out.println("Before All");
+
+    }
+
+    @BeforeEach
+    void beforeEach(){
+
+        System.out.println("Before Each");
+
+    }
+
+    @Test
+    void addTest(){
+
+        System.out.println("Add");
+
+    }
+
+    @Test
+    void multiplyTest(){
+
+        System.out.println("Multiply");
+
+    }
+
+    @AfterEach
+    void afterEach(){
+
+        System.out.println("After Each");
+
+    }
+
+    @AfterAll
+    static void afterAll(){
+
+        System.out.println("After All");
+
+    }
+
+}
+```
+
+---
+
+Output
+
+```
+Before All
+
+↓
+
+Before Each
+
+↓
+
+Add
+
+↓
+
+After Each
+
+↓
+
+Before Each
+
+↓
+
+Multiply
+
+↓
+
+After Each
+
+↓
+
+After All
+```
+
+---
+
+# Memory Trick
+
+```
+BeforeAll
+
+↓
+
+BeforeEach
+
+↓
+
+Test
+
+↓
+
+AfterEach
+
+↓
+
+AfterAll
+```
+
+---
+
+# 10. @Disabled
+
+## 👨‍🏫 Teacher
+
+Suppose
+
+Ek Test abhi complete nahi hua.
+
+Ya
+
+Bug chal raha hai.
+
+Temporary run nahi karna.
+
+Tab?
+
+---
+
+Use
+
+```
+@Disabled
+```
+
+---
+
+Example
+
+```java
+@Test
+@Disabled
+void paymentTest(){
+
+}
+```
+
+Ye Test execute nahi hoga.
+
+---
+
+Real Project
+
+```
+Payment API
+
+↓
+
+Currently Down
+
+↓
+
+Disable Test
+```
+
+---
+
+Interview Question
+
+JUnit 4 me equivalent?
+
+```
+@Ignore
+```
+
+JUnit 5
+
+↓
+
+```
+@Disabled
+```
+
+---
+
+# 11. @DisplayName
+
+## 👨‍🏫 Teacher
+
+Default Test Name
+
+```
+addTest()
+```
+
+Agar readable banana ho?
+
+Use
+
+```
+@DisplayName
+```
+
+---
+
+Example
+
+```java
+@Test
+@DisplayName("Addition of Two Numbers")
+void addTest(){
+
+}
+```
+
+Output
+
+```
+Addition of Two Numbers
+```
+
+IDE me bhi yehi name dikhega.
+
+---
+
+Real Example
+
+Instead of
+
+```
+paymentTest()
+```
+
+Use
+
+```
+Validate Successful Payment
+```
+
+---
+
+Interview Question
+
+Why use DisplayName?
+
+Readable Test Reports.
+
+---
+
+# 12. @RepeatedTest
+
+Same Test
+
+Multiple Times run karna hai.
+
+---
+
+Example
+
+```java
+@RepeatedTest(5)
+void loginTest(){
+
+}
+```
+
+Output
+
+```
+Run 1
+
+Run 2
+
+Run 3
+
+Run 4
+
+Run 5
+```
+
+---
+
+Real Example
+
+Stress Testing
+
+Random Number Testing
+
+Retry Logic
+
+---
+
+# 13. @Nested
+
+Large Test Class ko organize karne ke liye.
+
+Example
+
+```java
+class UserServiceTest{
+
+    @Nested
+    class LoginTests{
+
+    }
+
+    @Nested
+    class RegistrationTests{
+
+    }
+
+}
+```
+
+---
+
+Output
+
+```
+UserServiceTest
+
+|
+
+|-- LoginTests
+
+|
+
+|-- RegistrationTests
+```
+
+Code clean ho jata hai.
+
+---
+
+# 14. Assertions in JUnit 5
+
+JUnit 5
+
+```java
+import static org.junit.jupiter.api.Assertions.*;
+```
+
+---
+
+Example
+
+```java
+assertEquals()
+
+assertTrue()
+
+assertFalse()
+
+assertNull()
+
+assertNotNull()
+
+assertThrows()
+```
+
+Almost same hain.
+
+---
+
+Example
+
+```java
+@Test
+void addTest(){
+
+    assertEquals(50,20+30);
+
+}
+```
+
+---
+
+# 15. assertThrows()
+
+## 👨‍🏫 Teacher
+
+Exception test karna ho.
+
+Example
+
+Division by Zero.
+
+---
+
+Service
+
+```java
+public int divide(int a,int b){
+
+     return a/b;
+
+}
+```
+
+---
+
+Test
+
+```java
+@Test
+void divideTest(){
+
+    CalculatorService service=new CalculatorService();
+
+    assertThrows(ArithmeticException.class,()->{
+
+        service.divide(10,0);
+
+    });
+
+}
+```
+
+---
+
+Output
+
+```
+PASS
+```
+
+---
+
+Interview Question
+
+Which Assertion checks Exceptions?
+
+Answer
+
+```
+assertThrows()
+```
+
+---
+
+# 16. Complete Example
+
+```java
+class CalculatorTest {
+
+    CalculatorService service;
+
+    @BeforeEach
+    void setup(){
+
+        service=new CalculatorService();
+
+    }
+
+    @Test
+    @DisplayName("Addition Test")
+    void addTest(){
+
+        assertEquals(30,service.add(10,20));
+
+    }
+
+    @Test
+    @Disabled
+    void oldTest(){
+
+    }
+
+    @AfterEach
+    void cleanup(){
+
+        System.out.println("Cleanup");
+
+    }
+
+}
+```
+
+---
+
+# 17. Real Spring Boot Example
+
+```
+UserServiceTest
+
+↓
+
+@BeforeEach
+
+Create Mock
+
+↓
+
+@Test
+
+Call Service
+
+↓
+
+assertEquals()
+
+↓
+
+verify()
+
+↓
+
+@AfterEach
+
+Cleanup
+```
+
+Exactly isi flow me company projects me Test Cases likhe jaate hain.
+
+---
+
+# 18. JUnit 4 vs JUnit 5 Comparison
+
+| Feature       | JUnit 4     | JUnit 5  |
+| ------------- | ----------- | -------- |
+| @Before       | @BeforeEach |          |
+| @After        | @AfterEach  |          |
+| @BeforeClass  | @BeforeAll  |          |
+| @AfterClass   | @AfterAll   |          |
+| @Ignore       | @Disabled   |          |
+| Display Name  | No          | Yes      |
+| Repeated Test | No          | Yes      |
+| Nested Tests  | No          | Yes      |
+| assertThrows  | Limited     | Built-in |
+
+---
+
+# 19. Common Mistakes
+
+### Mistake 1
+
+Forgetting
+
+```java
+static
+```
+
+with
+
+```
+@BeforeAll
+```
+
+and
+
+```
+@AfterAll
+```
+
+---
+
+### Mistake 2
+
+Using old imports.
+
+Wrong
+
+```java
+import org.junit.Test;
+```
+
+Correct
+
+```java
+import org.junit.jupiter.api.Test;
+```
+
+---
+
+### Mistake 3
+
+Using
+
+```
+@Ignore
+```
+
+instead of
+
+```
+@Disabled
+```
+
+---
+
+# ⭐ Interview Quick Revision
+
+### Q1. JUnit 5 me @Before ka replacement?
+
+`@BeforeEach`
+
+---
+
+### Q2. JUnit 5 me @After ka replacement?
+
+`@AfterEach`
+
+---
+
+### Q3. JUnit 5 me @BeforeClass ka replacement?
+
+`@BeforeAll`
+
+---
+
+### Q4. JUnit 5 me @AfterClass ka replacement?
+
+`@AfterAll`
+
+---
+
+### Q5. JUnit 5 me @Ignore ka replacement?
+
+`@Disabled`
+
+---
+
+### Q6. Which annotation gives a readable name to a test?
+
+`@DisplayName`
+
+---
+
+### Q7. Which annotation repeats a test multiple times?
+
+`@RepeatedTest`
+
+---
+
+### Q8. Which assertion verifies an exception?
+
+`assertThrows()`
+
+---
+
+### Q9. Why use @Nested?
+
+To organize related test cases into logical groups.
+
+---
+
+# 🎯 Memory Trick
+
+```
+JUnit 4
+
+↓
+
+@Before
+
+↓
+
+@After
+
+↓
+
+@Ignore
+
+↓
+
+Old
+```
+
+```
+JUnit 5
+
+↓
+
+@BeforeEach
+
+↓
+
+@AfterEach
+
+↓
+
+@Disabled
+
+↓
+
+Modern
+```
+
+---
+
+# 📝 Part 6 Summary
+
+✅ JUnit 5 setup and dependency
+
+✅ First JUnit 5 test case
+
+✅ `@BeforeEach`
+
+✅ `@AfterEach`
+
+✅ `@BeforeAll`
+
+✅ `@AfterAll`
+
+✅ `@Disabled`
+
+✅ `@DisplayName`
+
+✅ `@RepeatedTest`
+
+✅ `@Nested`
+
+✅ JUnit 5 assertions
+
+✅ `assertThrows()`
+
+✅ JUnit 4 vs JUnit 5 lifecycle mapping
+
+✅ Practical Spring Boot examples
+
+---
+
+## 🔜 Part 7 Preview
+
+In **Part 7**, we'll move to the topic that almost every Spring Boot interview asks:
+
+* **Mockito Introduction**
+* Why Mockito is needed
+* Mock Objects
+* `@Mock`
+* `@InjectMocks`
+* `@MockBean` (Spring Boot)
+* `when()`
+* `thenReturn()`
+* `verify()`
+* Unit testing Service Layer with Repository mocking
+* Real Spring Boot project examples
+* Common interview questions
+
+This is the most practical part because it shows how JUnit is used with Spring Boot services in real projects.
+
+=================================================================================================
+# JUnit Crash Course Notes (Part 7)
+
+# 📚 Topic 7 – Mockito (Mocking Framework) & Spring Boot Service Layer Testing
+
+> **Language:** Hindi Wali English (Easy to Remember)
+>
+> **Teaching Style:** Teacher 👨‍🏫 & Student 👨‍🎓 Conversation
+>
+> **Interview Importance:** ⭐⭐⭐⭐⭐
+>
+> **Real Project Importance:** ⭐⭐⭐⭐⭐
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak humne JUnit seekha.
+
+Lekin real project me sirf JUnit use nahi hota.
+
+Almost har Spring Boot project me
+
+## JUnit + Mockito
+
+dono use hote hain.
+
+Interview me agar tum bolo ki
+
+"I know JUnit"
+
+to agla question almost fix hota hai...
+
+> **Mockito use kiya hai?**
+
+Aaj hum ye complete topic seekhenge.
+
+---
+
+# 1. Why Mockito?
+
+## 👨‍🏫 Teacher
+
+Suppose tumhare paas ye Service hai.
+
+```text
+UserController
+
+      |
+
+UserService
+
+      |
+
+UserRepository
+
+      |
+
+Database
+```
+
+Ab tum
+
+**UserService**
+
+ko test karna chahte ho.
+
+Question...
+
+Kya Database bhi start karoge?
+
+---
+
+## 👨‍🎓 Student
+
+Sir nahi.
+
+Sirf Service test karni hai.
+
+---
+
+## 👨‍🏫 Teacher
+
+Exactly.
+
+Isi problem ko solve karta hai
+
+# Mockito
+
+---
+
+# Definition
+
+Mockito is a **Mocking Framework** used to create **fake objects** for testing.
+
+Simple language
+
+> Mockito fake objects banata hai jisse hume Database ya API ki zarurat nahi padti.
+
+---
+
+# Real Life Example
+
+Teacher
+
+Movie shooting me
+
+Real gun use karte hain?
+
+---
+
+Student
+
+No Sir.
+
+Fake gun use karte hain.
+
+---
+
+Teacher
+
+Exactly.
+
+Mockito bhi fake object banata hai.
+
+---
+
+# Visual
+
+```text
+Real Object
+
+↓
+
+Database
+
+↓
+
+Network
+
+↓
+
+API
+```
+
+Mockito
+
+↓
+
+```text
+Fake Object
+
+↓
+
+No Database
+
+↓
+
+No Network
+
+↓
+
+Fast Testing
+```
+
+---
+
+# 2. What is Mock Object?
+
+Suppose
+
+```java
+public interface UserRepository{
+
+     User findById(Long id);
+
+}
+```
+
+Real Repository
+
+↓
+
+Database call karegi.
+
+---
+
+Mockito
+
+↓
+
+Fake Repository banayega.
+
+```java
+UserRepository repository=mock(UserRepository.class);
+```
+
+Ye database nahi jayegi.
+
+---
+
+# Memory Trick
+
+```text
+Mock
+
+↓
+
+Duplicate
+
+↓
+
+Fake
+
+↓
+
+Copy
+```
+
+---
+
+# Interview Question
+
+### What is Mock Object?
+
+Answer
+
+A Mock Object is a fake implementation of a real dependency used during testing.
+
+---
+
+# 3. Why Mocking?
+
+Suppose
+
+Service
+
+```java
+public class UserService{
+
+     private UserRepository repository;
+
+}
+```
+
+Repository
+
+↓
+
+Database
+
+---
+
+Question
+
+Agar database band ho gaya?
+
+---
+
+Test
+
+↓
+
+FAIL
+
+Lekin
+
+Service Logic
+
+↓
+
+Sahi tha.
+
+Isliye
+
+Repository ko Mock karte hain.
+
+---
+
+# Real Project Flow
+
+Without Mockito
+
+```text
+Service
+
+↓
+
+Repository
+
+↓
+
+Database
+```
+
+With Mockito
+
+```text
+Service
+
+↓
+
+Mock Repository
+
+↓
+
+No Database
+```
+
+---
+
+# 4. Spring Boot Example
+
+Repository
+
+```java
+public interface UserRepository{
+
+    User save(User user);
+
+}
+```
+
+Service
+
+```java
+@Service
+public class UserService{
+
+    @Autowired
+    UserRepository repository;
+
+    public User save(User user){
+
+        return repository.save(user);
+
+    }
+
+}
+```
+
+Question
+
+Is Service ko kaise test karenge?
+
+Mockito.
+
+---
+
+# 5. @Mock
+
+## 👨‍🏫 Teacher
+
+Question...
+
+Fake Repository kaise banayenge?
+
+Answer
+
+```java
+@Mock
+private UserRepository repository;
+```
+
+---
+
+Mockito
+
+Automatically
+
+Fake Repository create karega.
+
+---
+
+Visual
+
+```text
+UserRepository
+
+↓
+
+@Mock
+
+↓
+
+Fake Repository
+```
+
+---
+
+# Interview Question
+
+### What is @Mock?
+
+Answer
+
+@Mock creates a fake implementation of a dependency.
+
+---
+
+# 6. @InjectMocks
+
+Question
+
+Fake Repository ko
+
+Service ke andar kaise inject kare?
+
+---
+
+Answer
+
+```java
+@InjectMocks
+private UserService service;
+```
+
+---
+
+Visual
+
+```text
+UserService
+
+↓
+
+Repository
+
+↓
+
+@Mock Repository
+
+↓
+
+Injected
+```
+
+---
+
+Real Meaning
+
+Mockito automatically
+
+Mock Object ko Service me inject kar dega.
+
+---
+
+# Interview Question
+
+Difference
+
+@Mock
+
+vs
+
+@InjectMocks
+
+Answer
+
+| @Mock               | @InjectMocks         |
+| ------------------- | -------------------- |
+| Creates Fake Object | Injects Fake Objects |
+| Dependency          | Main Class           |
+
+---
+
+# 7. Complete Example
+
+```java
+@Mock
+UserRepository repository;
+
+@InjectMocks
+UserService service;
+```
+
+Mockito
+
+Automatically
+
+```text
+Fake Repository
+
+↓
+
+Inject
+
+↓
+
+UserService
+```
+
+---
+
+# 8. Initializing Mockito
+
+JUnit 5
+
+```java
+@ExtendWith(MockitoExtension.class)
+class UserServiceTest{
+
+}
+```
+
+Ye Mockito ko initialize karega.
+
+---
+
+JUnit 4
+
+```java
+@RunWith(MockitoJUnitRunner.class)
+```
+
+---
+
+# Interview Question
+
+JUnit 5 me Mockito initialize kaise karte hain?
+
+Answer
+
+```java
+@ExtendWith(MockitoExtension.class)
+```
+
+---
+
+# 9. when()
+
+Ab sabse important method.
+
+Question
+
+Fake Repository
+
+Return kya karegi?
+
+Ye kaise batayenge?
+
+---
+
+Use
+
+```java
+when()
+```
+
+---
+
+Example
+
+```java
+when(repository.findById(1L))
+
+.thenReturn(user);
+```
+
+Meaning
+
+Agar
+
+```text
+findById(1)
+```
+
+call hoga
+
+↓
+
+User return karo.
+
+---
+
+Visual
+
+```text
+Repository
+
+↓
+
+findById(1)
+
+↓
+
+Return User
+```
+
+---
+
+# Interview Question
+
+What does when() do?
+
+Answer
+
+It defines the behavior of a mock object.
+
+---
+
+# 10. thenReturn()
+
+Ye batata hai
+
+Mock kya return karega.
+
+Example
+
+```java
+when(repository.save(user))
+
+.thenReturn(user);
+```
+
+Meaning
+
+Jab save() call hoga
+
+↓
+
+User return karo.
+
+---
+
+# Real Example
+
+Without Mockito
+
+```text
+Database
+
+↓
+
+User
+```
+
+Mockito
+
+↓
+
+```text
+Fake User
+```
+
+---
+
+# 11. Service Test Example
+
+```java
+@Test
+void saveUserTest(){
+
+     User user=new User(1,"Vishnu");
+
+     when(repository.save(user))
+
+           .thenReturn(user);
+
+     User saved=service.save(user);
+
+     assertEquals("Vishnu",saved.getName());
+
+}
+```
+
+---
+
+Execution
+
+```text
+Service
+
+↓
+
+Mock Repository
+
+↓
+
+Fake User
+
+↓
+
+Assertion
+
+↓
+
+PASS
+```
+
+---
+
+# 12. verify()
+
+Question
+
+Method call hua ya nahi?
+
+Mockito me check karte hain
+
+```java
+verify()
+```
+
+---
+
+Example
+
+```java
+verify(repository)
+
+.save(user);
+```
+
+Meaning
+
+Check karo
+
+save()
+
+call hua ya nahi.
+
+---
+
+# Interview Question
+
+What is verify()?
+
+Answer
+
+verify() checks whether a mocked method was invoked.
+
+---
+
+# 13. verify(times())
+
+Kitni baar call hua?
+
+Example
+
+```java
+verify(repository,
+
+times(1))
+
+.save(user);
+```
+
+---
+
+Example
+
+```java
+verify(repository,
+
+times(2))
+
+.save(user);
+```
+
+Agar
+
+Ek baar call hua
+
+↓
+
+FAIL
+
+---
+
+# 14. Complete Service Layer Test
+
+```java
+@ExtendWith(MockitoExtension.class)
+
+class UserServiceTest{
+
+    @Mock
+
+    UserRepository repository;
+
+    @InjectMocks
+
+    UserService service;
+
+    @Test
+
+    void saveUserTest(){
+
+        User user=new User(1,
+
+        "Vishnu");
+
+        when(repository.save(user))
+
+                .thenReturn(user);
+
+        User result=
+
+        service.save(user);
+
+        assertEquals("Vishnu",
+
+        result.getName());
+
+        verify(repository)
+
+                .save(user);
+
+    }
+
+}
+```
+
+---
+
+# Execution Flow
+
+```text
+Test
+
+↓
+
+Mock Repository
+
+↓
+
+when()
+
+↓
+
+Service Method
+
+↓
+
+Repository Called
+
+↓
+
+thenReturn()
+
+↓
+
+Assertion
+
+↓
+
+verify()
+
+↓
+
+PASS
+```
+
+---
+
+# 15. @Mock vs @MockBean
+
+Bahut Important
+
+Interview Favorite.
+
+---
+
+## @Mock
+
+Mockito Annotation
+
+Unit Testing
+
+Spring Context
+
+Start nahi hota.
+
+---
+
+## @MockBean
+
+Spring Boot Annotation
+
+Spring Context ke andar
+
+Real Bean ko
+
+Mock Bean se replace karta hai.
+
+---
+
+Comparison
+
+| @Mock               | @MockBean                     |
+| ------------------- | ----------------------------- |
+| Mockito             | Spring Boot                   |
+| Unit Test           | Integration Test              |
+| Fast                | Slow                          |
+| Spring Context nahi | Spring Context start hota hai |
+
+---
+
+# Interview Question
+
+Difference between @Mock and @MockBean?
+
+Answer
+
+@Mock creates a Mockito mock.
+
+@MockBean replaces a Spring Bean with a mock inside the Spring Application Context.
+
+---
+
+# 16. Common Mockito Methods
+
+| Method       | Purpose              |
+| ------------ | -------------------- |
+| mock()       | Create Mock          |
+| when()       | Define Behaviour     |
+| thenReturn() | Return Value         |
+| verify()     | Verify Method Call   |
+| times()      | Number of Calls      |
+| never()      | Should Never Execute |
+
+---
+
+# Example
+
+```java
+verify(repository,
+
+never())
+
+.deleteById(10L);
+```
+
+Meaning
+
+Delete method
+
+Kabhi call nahi hona chahiye.
+
+---
+
+# 17. Real Banking Example
+
+```text
+TransferService
+
+↓
+
+AccountRepository
+
+↓
+
+Database
+```
+
+Testing
+
+↓
+
+```text
+TransferService
+
+↓
+
+Mock Repository
+
+↓
+
+Fake Account
+
+↓
+
+No Database
+```
+
+---
+
+# 18. Real E-Commerce Example
+
+```text
+OrderService
+
+↓
+
+OrderRepository
+
+↓
+
+MySQL
+```
+
+Mockito
+
+↓
+
+```text
+OrderService
+
+↓
+
+Fake Repository
+
+↓
+
+Fake Order
+
+↓
+
+Assertion
+```
+
+---
+
+# 19. Common Interview Questions
+
+### Q1. Why Mockito?
+
+Mockito creates fake objects for testing.
+
+---
+
+### Q2. Why not use Database?
+
+Because Unit Testing should test only business logic.
+
+---
+
+### Q3. What is Mock?
+
+Fake implementation of dependency.
+
+---
+
+### Q4. What is @Mock?
+
+Creates Fake Object.
+
+---
+
+### Q5. What is @InjectMocks?
+
+Injects Mock Objects into the class under test.
+
+---
+
+### Q6. What is when()?
+
+Defines mock behavior.
+
+---
+
+### Q7. What is thenReturn()?
+
+Returns fake value.
+
+---
+
+### Q8. What is verify()?
+
+Checks whether method was called.
+
+---
+
+### Q9. Difference between @Mock and @MockBean?
+
+Mockito vs Spring Boot.
+
+---
+
+### Q10. Which layer generally gets mocked?
+
+Repository Layer.
+
+---
+
+# 🎯 Complete Flow (Very Important)
+
+```text
+Controller
+
+        |
+
+UserService
+
+        |
+
+UserRepository
+
+        |
+
+Database
+```
+
+### Unit Test
+
+```text
+Controller ❌
+
+Database ❌
+
+API ❌
+
+Only Service ✅
+```
+
+Flow
+
+```text
+UserService
+
+      |
+
+@Mock Repository
+
+      |
+
+when()
+
+      |
+
+thenReturn()
+
+      |
+
+assertEquals()
+
+      |
+
+verify()
+
+      |
+
+PASS
+```
+
+---
+
+# 🧠 Interview Memory Trick
+
+Remember this sentence:
+
+> **"JUnit tests the logic, Mockito fakes the dependencies."**
+
+Another trick:
+
+```text
+@Mock
+
+↓
+
+Fake Dependency
+
+↓
+
+@InjectMocks
+
+↓
+
+Inject Fake Dependency
+
+↓
+
+when()
+
+↓
+
+What should happen?
+
+↓
+
+thenReturn()
+
+↓
+
+Return fake value
+
+↓
+
+verify()
+
+↓
+
+Was it called?
+```
+
+---
+
+# 📝 Part 7 Summary
+
+✅ Why Mockito is needed
+
+✅ What is Mocking?
+
+✅ Mock Object
+
+✅ `@Mock`
+
+✅ `@InjectMocks`
+
+✅ `@ExtendWith(MockitoExtension.class)`
+
+✅ `when()`
+
+✅ `thenReturn()`
+
+✅ `verify()`
+
+✅ `times()`
+
+✅ `never()`
+
+✅ `@Mock` vs `@MockBean`
+
+✅ Real Spring Boot Service Layer testing
+
+✅ Banking and E-Commerce examples
+
+✅ 10+ interview questions
+
+---
+
+## 🔜 Part 8 Preview (Most Practical Part)
+
+In **Part 8**, we'll build a **complete Spring Boot Service Layer Unit Test** from scratch using:
+
+* `UserService`
+* `UserRepository`
+* `@Mock`
+* `@InjectMocks`
+* `when()`
+* `verify()`
+* `ArgumentMatchers (any(), eq())`
+* `doThrow()`
+* `doNothing()`
+* `doReturn()`
+* `BDDMockito (given(), willReturn())`
+* Real interview questions
+* Real project scenarios
+* Common mistakes and best practices
+
+This part will look almost exactly like the unit tests you'll write in a real Spring Boot project.
+
+=================================================================================================
+# JUnit Crash Course Notes (Part 8)
+
+# 📚 Topic 8 – Complete Spring Boot Service Layer Unit Testing (Real Project + Interview)
+
+> **Language:** Hindi Wali English (Easy to Remember)
+>
+> **Teaching Style:** Teacher 👨‍🏫 & Student 👨‍🎓 Conversation
+>
+> **Interview Importance:** ⭐⭐⭐⭐⭐
+>
+> **Real Project Importance:** ⭐⭐⭐⭐⭐
+
+---
+
+# 👨‍🏫 Teacher
+
+Vishnu,
+
+Ab tak tumne seekh liya hai
+
+* JUnit 5
+* Mockito
+* @Mock
+* @InjectMocks
+* when()
+* verify()
+
+Ab dekhte hain ki **company me actual unit test kaise likha jata hai.**
+
+Ye part sabse important hai.
+
+---
+
+# Real Spring Boot Project Structure
+
+```text
+src/main/java
+
+com.demo
+
+│
+
+├── controller
+
+│     └── UserController
+
+│
+
+├── service
+
+│     └── UserService
+
+│
+
+├── repository
+
+│     └── UserRepository
+
+│
+
+├── entity
+
+│     └── User
+```
+
+Testing
+
+```text
+src/test/java
+
+com.demo
+
+│
+
+└── service
+
+      └── UserServiceTest
+```
+
+---
+
+# 1. Entity
+
+```java
+@Entity
+public class User{
+
+    @Id
+    private Long id;
+
+    private String name;
+
+    private String email;
+
+}
+```
+
+---
+
+# 2. Repository
+
+```java
+@Repository
+public interface UserRepository
+        extends JpaRepository<User,Long>{
+
+}
+```
+
+---
+
+# 3. Service
+
+```java
+@Service
+public class UserService{
+
+    @Autowired
+    private UserRepository repository;
+
+    public User save(User user){
+
+        return repository.save(user);
+
+    }
+
+}
+```
+
+---
+
+# 👨‍🏫 Teacher
+
+Question...
+
+Ab hume Service test karni hai.
+
+Database use karenge?
+
+---
+
+## 👨‍🎓 Student
+
+No Sir.
+
+Mockito use karenge.
+
+---
+
+Exactly.
+
+---
+
+# 4. Test Class
+
+```java
+@ExtendWith(MockitoExtension.class)
+
+class UserServiceTest{
+
+}
+```
+
+---
+
+# 5. Create Mock
+
+```java
+@Mock
+private UserRepository repository;
+```
+
+Meaning
+
+Repository
+
+↓
+
+Fake ban gayi.
+
+---
+
+# 6. Inject Mock
+
+```java
+@InjectMocks
+private UserService service;
+```
+
+Meaning
+
+Fake Repository
+
+↓
+
+Service ke andar inject.
+
+---
+
+Visual
+
+```text
+UserService
+
+      |
+
+Repository
+
+      |
+
+@Mock Repository
+```
+
+---
+
+# 7. First Unit Test
+
+```java
+@Test
+void saveUserTest(){
+
+}
+```
+
+---
+
+# 8. Arrange – Act – Assert Pattern
+
+Real companies
+
+AAA Pattern follow karti hain.
+
+```text
+Arrange
+
+↓
+
+Act
+
+↓
+
+Assert
+```
+
+Ye interview me bhi poocha ja sakta hai.
+
+---
+
+# Arrange
+
+Data prepare karo.
+
+```java
+User user=
+new User(1L,
+"Vishnu",
+"v@test.com");
+```
+
+---
+
+# Mock Behaviour
+
+```java
+when(repository.save(user))
+
+.thenReturn(user);
+```
+
+Meaning
+
+Jab
+
+save()
+
+call hoga
+
+↓
+
+User return kar dena.
+
+---
+
+# Act
+
+Service call
+
+```java
+User saved=
+
+service.save(user);
+```
+
+---
+
+# Assert
+
+```java
+assertEquals("Vishnu",
+
+saved.getName());
+```
+
+---
+
+# Verify
+
+```java
+verify(repository)
+
+.save(user);
+```
+
+---
+
+# Complete Code
+
+```java
+@Test
+void saveUserTest(){
+
+    User user=
+      new User(1L,
+      "Vishnu",
+      "v@test.com");
+
+    when(repository.save(user))
+            .thenReturn(user);
+
+    User saved=
+      service.save(user);
+
+    assertEquals(
+      "Vishnu",
+      saved.getName());
+
+    verify(repository)
+      .save(user);
+
+}
+```
+
+---
+
+# Execution Flow
+
+```text
+Create User
+
+↓
+
+Mock save()
+
+↓
+
+Call Service
+
+↓
+
+Repository Called
+
+↓
+
+Return Fake User
+
+↓
+
+Assertion
+
+↓
+
+Verify
+
+↓
+
+PASS
+```
+
+---
+
+# 9. Testing findById()
+
+Service
+
+```java
+public User getUser(Long id){
+
+     return repository.findById(id)
+
+     .orElseThrow();
+}
+```
+
+---
+
+Test
+
+```java
+@Test
+void getUserTest(){
+
+    User user=
+      new User(1L,
+      "Vishnu",
+      "v@test.com");
+
+    when(repository.findById(1L))
+
+       .thenReturn(Optional.of(user));
+
+    User result=
+
+       service.getUser(1L);
+
+    assertEquals(
+        "Vishnu",
+        result.getName());
+
+}
+```
+
+---
+
+# Interview Question
+
+Why Optional.of()?
+
+Because
+
+findById()
+
+returns
+
+```java
+Optional<User>
+```
+
+---
+
+# 10. Testing Delete
+
+Service
+
+```java
+public void delete(Long id){
+
+      repository.deleteById(id);
+
+}
+```
+
+---
+
+Test
+
+```java
+@Test
+void deleteTest(){
+
+      service.delete(1L);
+
+      verify(repository)
+
+      .deleteById(1L);
+
+}
+```
+
+---
+
+No Assertion.
+
+Only Verify.
+
+---
+
+# Interview Question
+
+Why no Assertion?
+
+Because delete()
+
+returns void.
+
+---
+
+# 11. Testing Exception
+
+Suppose
+
+```java
+public User getUser(Long id){
+
+      return repository.findById(id)
+
+      .orElseThrow(
+
+      RuntimeException::new);
+
+}
+```
+
+---
+
+Test
+
+```java
+@Test
+void exceptionTest(){
+
+      when(repository.findById(1L))
+
+      .thenReturn(Optional.empty());
+
+      assertThrows(
+
+      RuntimeException.class,
+
+      ()->{
+
+           service.getUser(1L);
+
+      });
+
+}
+```
+
+PASS
+
+---
+
+# 12. any()
+
+Question
+
+Har baar
+
+User object banana zaruri hai?
+
+---
+
+Mockito
+
+Provides
+
+```java
+any()
+```
+
+---
+
+Example
+
+```java
+when(repository.save(any()))
+
+.thenReturn(user);
+```
+
+Meaning
+
+Koi bhi User aaye
+
+↓
+
+Ye User return karo.
+
+---
+
+# Interview Question
+
+What is any()?
+
+Answer
+
+Matcher
+
+that accepts any object.
+
+---
+
+# 13. eq()
+
+Specific value compare karna ho.
+
+```java
+when(repository.findById(
+
+eq(1L)))
+
+.thenReturn(Optional.of(user));
+```
+
+Meaning
+
+Exactly
+
+1L
+
+aana chahiye.
+
+---
+
+# Common Matchers
+
+| Matcher     | Meaning     |
+| ----------- | ----------- |
+| any()       | Any Object  |
+| anyString() | Any String  |
+| anyInt()    | Any int     |
+| anyLong()   | Any Long    |
+| eq()        | Exact Value |
+
+---
+
+# 14. doNothing()
+
+Void methods ke liye.
+
+Example
+
+```java
+doNothing()
+
+.when(repository)
+
+.deleteById(1L);
+```
+
+Mostly
+
+delete()
+
+ke liye.
+
+---
+
+# 15. doThrow()
+
+Exception throw karna ho.
+
+Example
+
+```java
+doThrow(
+
+RuntimeException.class)
+
+.when(repository)
+
+.deleteById(1L);
+```
+
+---
+
+Test
+
+```java
+assertThrows(
+
+RuntimeException.class,
+
+()->{
+
+service.delete(1L);
+
+});
+```
+
+---
+
+# 16. doReturn()
+
+Alternative
+
+```java
+doReturn(user)
+
+.when(repository)
+
+.save(any());
+```
+
+Same work.
+
+---
+
+# 17. BDDMockito
+
+Mockito ka BDD style.
+
+Instead of
+
+```java
+when()
+
+.thenReturn()
+```
+
+Use
+
+```java
+given()
+
+.willReturn()
+```
+
+---
+
+Example
+
+```java
+given(repository.save(user))
+
+.willReturn(user);
+```
+
+---
+
+Difference
+
+| Mockito      | BDDMockito   |
+| ------------ | ------------ |
+| when()       | given()      |
+| thenReturn() | willReturn() |
+
+---
+
+# 18. verify(times())
+
+```java
+verify(repository,
+
+times(1))
+
+.save(user);
+```
+
+Meaning
+
+Ek hi baar call hona chahiye.
+
+---
+
+# verify(never())
+
+```java
+verify(repository,
+
+never())
+
+.deleteById(1L);
+```
+
+Meaning
+
+Delete
+
+Kabhi call nahi hona chahiye.
+
+---
+
+# verifyNoInteractions()
+
+```java
+verifyNoInteractions(repository);
+```
+
+Meaning
+
+Repository ke kisi bhi method ko call nahi hona chahiye.
+
+---
+
+# 19. Complete Real Flow
+
+```text
+JUnit
+
+↓
+
+Create Mock
+
+↓
+
+Inject Mock
+
+↓
+
+Prepare Data
+
+↓
+
+Mock Behaviour
+
+↓
+
+Call Service
+
+↓
+
+Assertions
+
+↓
+
+Verify
+```
+
+---
+
+# 20. Real Banking Example
+
+```text
+TransferService
+
+↓
+
+AccountRepository
+
+↓
+
+Database
+```
+
+Testing
+
+↓
+
+```text
+TransferService
+
+↓
+
+Mock Repository
+
+↓
+
+Fake Account
+
+↓
+
+No Database
+```
+
+---
+
+# 21. Real E-Commerce Example
+
+```text
+OrderService
+
+↓
+
+OrderRepository
+
+↓
+
+MySQL
+```
+
+Mockito
+
+↓
+
+```text
+OrderService
+
+↓
+
+Mock Repository
+
+↓
+
+Fake Order
+
+↓
+
+Assertions
+```
+
+---
+
+# 22. Common Mistakes
+
+## Mistake 1
+
+Using real Repository.
+
+❌ Wrong
+
+```java
+new UserRepository()
+```
+
+---
+
+Always
+
+```java
+@Mock
+```
+
+---
+
+## Mistake 2
+
+Forgetting
+
+```java
+@ExtendWith(MockitoExtension.class)
+```
+
+Mock initialize hi nahi hoga.
+
+---
+
+## Mistake 3
+
+Forgetting
+
+```java
+@InjectMocks
+```
+
+Service me Repository inject nahi hogi.
+
+---
+
+## Mistake 4
+
+Using
+
+```java
+verify()
+
+before
+
+service call.
+```
+
+Wrong Order
+
+```text
+verify()
+
+↓
+
+Service Call
+```
+
+Correct
+
+```text
+Service Call
+
+↓
+
+verify()
+```
+
+---
+
+## Mistake 5
+
+Testing Database in Unit Test.
+
+Unit Test
+
+↓
+
+No Database
+
+No API
+
+No Kafka
+
+No Redis
+
+Only Business Logic.
+
+---
+
+# 23. Complete Interview Questions
+
+### Q1. What is Mockito?
+
+Mockito is a Java Mocking Framework.
+
+---
+
+### Q2. Why Mockito?
+
+To test business logic without using real dependencies.
+
+---
+
+### Q3. What is @Mock?
+
+Creates Fake Dependency.
+
+---
+
+### Q4. What is @InjectMocks?
+
+Injects Mock Objects into Class Under Test.
+
+---
+
+### Q5. What does when() do?
+
+Defines Mock Behaviour.
+
+---
+
+### Q6. What does thenReturn() do?
+
+Returns Fake Value.
+
+---
+
+### Q7. What is verify()?
+
+Checks whether mocked method was called.
+
+---
+
+### Q8. Difference between any() and eq()?
+
+* any() → accepts any value.
+* eq() → matches one specific value.
+
+---
+
+### Q9. What is doNothing()?
+
+Used for mocking void methods.
+
+---
+
+### Q10. What is doThrow()?
+
+Used to simulate exceptions.
+
+---
+
+### Q11. What is doReturn()?
+
+Alternative syntax to return mocked values.
+
+---
+
+### Q12. Difference between Mockito and BDDMockito?
+
+| Mockito      | BDDMockito   |
+| ------------ | ------------ |
+| when()       | given()      |
+| thenReturn() | willReturn() |
+
+---
+
+### Q13. Which layer is usually mocked?
+
+Repository Layer.
+
+---
+
+### Q14. Can we test Controller using Mockito?
+
+Yes, but usually Controller tests use `MockMvc`, while Service tests commonly use Mockito for repository mocking.
+
+---
+
+### Q15. What is the Arrange–Act–Assert (AAA) pattern?
+
+* **Arrange** – Prepare test data and mock behavior.
+* **Act** – Call the method under test.
+* **Assert** – Verify the result and interactions.
+
+---
+
+# 🎯 Complete Unit Testing Flow (Real Project)
+
+```text
+JUnit Test
+
+      |
+
+Create Mock Repository
+
+      |
+
+Inject into Service
+
+      |
+
+Mock Behaviour
+
+      |
+
+Call Service Method
+
+      |
+
+Business Logic Executes
+
+      |
+
+Assertions
+
+      |
+
+Verify Repository Calls
+
+      |
+
+PASS
+```
+
+---
+
+# 🚀 Interview Memory Trick
+
+Remember this sequence:
+
+```text
+@Mock
+
+↓
+
+@InjectMocks
+
+↓
+
+when()
+
+↓
+
+thenReturn()
+
+↓
+
+Service Method
+
+↓
+
+assertEquals()
+
+↓
+
+verify()
+```
+
+**One-line trick:**
+
+> **"Mock the dependency, inject it, define behavior, call the service, assert the result, verify the interaction."**
+
+---
+
+# 📝 Part 8 Summary
+
+✅ Complete Spring Boot Service Layer Unit Test
+
+✅ AAA (Arrange–Act–Assert) pattern
+
+✅ Testing `save()`, `findById()`, and `delete()`
+
+✅ `assertThrows()` for exception testing
+
+✅ Mockito Matchers:
+
+* `any()`
+* `anyString()`
+* `anyInt()`
+* `anyLong()`
+* `eq()`
+
+✅ `doNothing()`
+
+✅ `doThrow()`
+
+✅ `doReturn()`
+
+✅ `BDDMockito` (`given()` / `willReturn()`)
+
+✅ `verify()`, `times()`, `never()`, `verifyNoInteractions()`
+
+✅ Common mistakes
+
+✅ Banking and E-Commerce examples
+
+✅ 15+ interview questions
+
+---
+
+# 📌 Final Note
+
+These **8 parts** now cover the complete learning path from the video:
+
+1. **Testing Basics & Unit Testing**
+2. **Maven Setup & First JUnit Test**
+3. **Assertions**
+4. **JUnit 4 Lifecycle Annotations**
+5. **JUnit 5 Architecture (Platform, Jupiter, Vintage)**
+6. **JUnit 5 Practical Annotations**
+7. **Mockito Fundamentals**
+8. **Real Spring Boot Service Layer Unit Testing**
+
+Together, they provide a solid foundation for both **Spring Boot development** and **Java backend interviews**.
+
+=================================================================================================
+=================================================================================================
+=================================================================================================
+=================================================================================================
