@@ -5070,10 +5070,467 @@ Hikari Timeout
 
 **Next Part 8 – `@Transactional` Not Working:** production mein transaction rollback kyun nahi hota, self-invocation kya hai, checked exception ka behavior kya hai, aur Spring proxy ka role kya hai. PDF ka Page 7 isi issue par hai. 
 
+=============================================================================================================
+Bilkul. Isko **production issue + interview** dono angle se simple language me samjho.
 
+# Part 7 – `@Transactional` Not Working in Production
+
+### 1. `@Transactional` ka main kaam kya hai?
+
+Simple:
+
+> **Ek method ke andar multiple DB operations hain, to sab successful hone chahiye. Agar beech me error aaye, to previous DB changes rollback ho jayein.**
+
+Example:
+
+```java
+@Transactional
+public void placeOrder() {
+    saveOrder();       // DB operation 1
+    updatePayment();   // DB operation 2
+    updateStock();    // DB operation 3
+}
+```
+
+Agar `updateStock()` par exception aa gaya:
+
+```text
+saveOrder()       ✅
+updatePayment()   ✅
+updateStock()     ❌ Exception
+```
+
+To transaction rollback karega:
+
+```text
+saveOrder()       ↩ Rollback
+updatePayment()   ↩ Rollback
+updateStock()     ❌
+```
+
+Final result: **koi bhi change DB me nahi rahega.**
+
+---
+
+# 2. Production me problem kahan aati hai?
+
+Sabse common 3 reasons:
+
+### Problem 1 — Same class ke andar method call
+
+```java
+@Service
+public class OrderService {
+
+    public void createOrder() {
+        processOrder();   // ❌ internal call
+    }
+
+    @Transactional
+    public void processOrder() {
+        // DB operations
+    }
+}
+```
+
+Yahan `createOrder()` se `processOrder()` call hua.
+
+Spring ka **transaction proxy bypass** ho gaya.
+
+Isliye `@Transactional` expected tarike se work nahi karega.
+
+### Easy Interview Line:
+
+> **Spring `@Transactional` proxy-based hai. Same class ke andar internal method call proxy ko bypass kar deta hai.**
+
+---
+
+# 3. Private method par `@Transactional`
+
+```java
+@Transactional
+private void processOrder() {
+}
+```
+
+❌ Ye reliable nahi hai.
+
+Kyun?
+
+Spring proxy normally public method call ko intercept karta hai.
+
+### Fix:
+
+Method ko public rakho aur ideally **dusre Spring bean/service se call karo**.
+
+---
+
+# 4. Checked Exception wala important point
+
+Ye interview me bahut poocha jata hai.
+
+By default Spring rollback karta hai:
+
+```java
+RuntimeException
+```
+
+Example:
+
+```java
+@Transactional
+public void processOrder() {
+    saveOrder();
+
+    throw new RuntimeException("Something went wrong");
+}
+```
+
+➡️ **Rollback hoga.**
+
+But checked exception:
+
+```java
+throw new Exception("Something went wrong");
+```
+
+➡️ Default configuration me **rollback nahi bhi ho sakta**.
+
+### Fix:
+
+```java
+@Transactional(rollbackFor = Exception.class)
+public void processOrder() throws Exception {
+    saveOrder();
+
+    throw new Exception("Failed");
+}
+```
+
+Ab checked exception par bhi rollback hoga.
+
+---
+
+# 5. Production me debug kaise karoge?
+
+Interview me bolo:
+
+**Step 1:** Check karo method Spring Bean ke through call ho raha hai ya nahi.
+
+**Step 2:** Check karo method `public` hai ya nahi.
+
+**Step 3:** Exception ka type check karo:
+
+```text
+RuntimeException → rollback by default
+Checked Exception → rollbackFor required
+```
+
+**Step 4:** Transaction logging enable karke dekho transaction start/rollback ho raha hai ya nahi.
+
+---
+
+# Interview me direct answer
+
+**Interviewer:** `@Transactional` laga hua tha but exception ke baad data rollback nahi hua. Why?
+
+**Answer:**
+
+> "I would first check whether the transactional method is being called through the Spring proxy. Internal self-invocation can bypass the proxy. Then I would check whether the method is public and whether the exception is checked or unchecked. By default Spring rolls back on RuntimeException, while checked exceptions require `rollbackFor`. I would fix it by calling the method through another Spring bean and configuring `rollbackFor` when required."
+
+### 🧠 Bas ye 3 cheeze yaad rakho:
+
+```text
+@Transactional not working
+        ↓
+1. Internal call? → Proxy bypass
+2. Private method? → Proxy issue
+3. Checked Exception? → rollbackFor needed
+```
+
+**One-line memory trick:**
+
+> **Proxy + Public Method + Exception Type = `@Transactional` debugging**.
 
 =============================================================================================================
-=============================================================================================================
+Haan, **Part 8 – `ConcurrentModificationException`** ko bhi bilkul simple language me samjhte hain. Interview ke liye sirf important concept rakhenge.
+
+# Part 8 – ConcurrentModificationException
+
+## 1. Ye exception kab aata hai?
+
+Simple:
+
+> **Collection ko iterate karte time usi collection ko directly modify kar diya.**
+
+Example:
+
+```java
+List<String> list = new ArrayList<>();
+
+list.add("A");
+list.add("B");
+list.add("C");
+
+for (String s : list) {
+
+    if (s.equals("B")) {
+        list.remove(s);   // ❌ Problem
+    }
+}
+```
+
+Yahan hum kya kar rahe hain?
+
+```text
+List
+[A, B, C]
+
+       ↓
+for loop se read kar rahe hain
+
+       ↓
+B mila
+
+       ↓
+list.remove(B)
+
+       ↓
+Collection change ho gayi ❌
+```
+
+Iterator ko lagta hai:
+
+> "Bhai, main collection ko read kar raha tha, tumne beech me collection change kar di."
+
+Isliye:
+
+```text
+ConcurrentModificationException
+```
+
+---
+
+# 2. "Concurrent" ka matlab kya yahan?
+
+Naam dekh ke lagta hai ki **2 threads zaroor hone chahiye**.
+
+❌ Aisa nahi hai.
+
+Ye **same thread me bhi** ho sakta hai.
+
+Example:
+
+```java
+for (String s : list) {
+    list.remove(s);
+}
+```
+
+Yahan koi second thread nahi hai.
+
+Still CME aa sakta hai.
+
+---
+
+# 3. Actual problem kya hai?
+
+`ArrayList` ka iterator internally collection me changes ko track karta hai.
+
+Roughly:
+
+```text
+Iterator
+   ↓
+"Collection ki state mujhe pata hai"
+```
+
+Agar iteration ke beech:
+
+```java
+list.remove(...)
+```
+
+kar diya:
+
+```text
+Iterator ki expected state ≠ List ki current state
+```
+
+Iterator bolta hai:
+
+> **"Collection mere iterate karte waqt change ho gayi."**
+
+Then:
+
+```text
+ConcurrentModificationException ❌
+```
+
+---
+
+# 4. Correct way kya hai?
+
+Agar iteration ke time element remove karna hai, **Iterator ka `remove()` use karo.**
+
+```java
+Iterator<String> it = list.iterator();
+
+while (it.hasNext()) {
+
+    String s = it.next();
+
+    if (s.equals("B")) {
+        it.remove();   // ✅ Safe
+    }
+}
+```
+
+Flow:
+
+```text
+Iterator
+   ↓
+next()
+   ↓
+B mila
+   ↓
+iterator.remove()
+   ↓
+Iterator ko pata hai removal hua
+   ↓
+No CME ✅
+```
+
+### Interview line:
+
+> **"If I need to remove elements while iterating, I use `Iterator.remove()` instead of directly calling `List.remove()`."**
+
+---
+
+# 5. `ArrayList` vs `CopyOnWriteArrayList`
+
+Ye bhi interview me important hai.
+
+### ArrayList
+
+```text
+ArrayList
+   ↓
+Fail-fast
+   ↓
+Modification during iteration
+   ↓
+CME ❌
+```
+
+### CopyOnWriteArrayList
+
+```text
+CopyOnWriteArrayList
+   ↓
+Fail-safe style iteration
+   ↓
+Modification allowed
+   ↓
+No CME ✅
+```
+
+Example:
+
+```java
+List<String> list = new CopyOnWriteArrayList<>();
+
+for (String s : list) {
+    list.remove(s);
+}
+```
+
+Generally CME nahi aayega.
+
+But iska trade-off hai: **har modification par underlying array ki copy ban sakti hai**, so frequent writes ke liye ye expensive ho sakta hai.
+
+---
+
+# 6. Production me "sometimes" kyu aata hai?
+
+Agar interviewer bole:
+
+> "Production me CME sometimes aata hai, reproduce nahi ho raha."
+
+To check karo:
+
+### Case 1
+
+Kahin iteration ke andar:
+
+```java
+list.remove()
+list.add()
+list.clear()
+```
+
+to nahi ho raha?
+
+### Case 2
+
+Multiple threads same collection ko modify to nahi kar rahe?
+
+```text
+Thread 1 → list read kar raha hai
+Thread 2 → same list modify kar raha hai
+```
+
+Ye race condition create kar sakta hai.
+
+---
+
+# 7. Production debugging
+
+Agar production me issue hai:
+
+```text
+ConcurrentModificationException
+at java.util.ArrayList$Itr.checkForComodification
+```
+
+To ye strong hint hai:
+
+> **ArrayList ko iterator se iterate karte waqt collection modify hui hai.**
+
+Phir code me search karo:
+
+```text
+for-each + list.add/remove
+iterator + external modification
+shared ArrayList + multiple threads
+```
+
+Thread dump bhi useful ho sakta hai agar multiple threads involved hain.
+
+---
+
+# 🧠 Interview ke liye 4 lines yaad karo
+
+**Q: ConcurrentModificationException kya hai?**
+
+> "Collection ko iterate karte waqt agar collection structurally modify ho jaye, to `ConcurrentModificationException` aa sakta hai. Ye single thread me bhi ho sakta hai. Removal ke liye `Iterator.remove()` use kar sakte hain. Multiple threads ke case me thread-safe collection jaise `ConcurrentHashMap` ya suitable concurrent collection use karni chahiye."
+
+### Super short memory:
+
+```text
+Iterate + Direct Modification
+            ↓
+           CME
+
+Fix:
+Iterator.remove()
+        OR
+Concurrent collection
+```
+
+**Important:** `ConcurrentModificationException` ka matlab automatically **"multiple threads ka issue"** nahi hai. Ye point interview me bolna kaafi strong answer hai.
+
 =============================================================================================================
 =============================================================================================================
 =============================================================================================================
