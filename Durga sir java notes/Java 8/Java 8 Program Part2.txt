@@ -160,6 +160,96 @@ Tumhare existing notes bhi isi logic ko use karte hain: pehle group key identify
 
 **Main ise ek complete “COLLECT + COLLECTORS MASTER MODULE” banaunga**, jise tum baad me sirf revise karke almost saare Java 8 `collect()` interview/program questions solve kar sako.
 ===================================================================================================================
+Java 8 `Collectors` mein downstream collector koi separate fixed list nahi hai. `groupingBy()`, `partitioningBy()` jaise collectors ke andar hum doosre collectors ko use karte hain. Java 8 mein commonly 13 important downstream collector methods/patterns yaad rakho.
+
+## 1. Important downstream collectors
+
+| No. | Collector             | Use case                               | Return type               |
+| --- | --------------------- | -------------------------------------- | ------------------------- |
+| 1   | `toList()`            | Elements ki List                       | `List<T>`                 |
+| 2   | `toSet()`             | Unique elements                        | `Set<T>`                  |
+| 3   | `toCollection()`      | Specific collection, e.g. `TreeSet`    | Collection type           |
+| 4   | `counting()`          | Count                                  | `Long`                    |
+| 5   | `summingInt()`        | Integer values ka sum                  | `Integer`                 |
+| 6   | `summingLong()`       | Long values ka sum                     | `Long`                    |
+| 7   | `summingDouble()`     | Decimal values ka sum                  | `Double`                  |
+| 8   | `averagingInt()`      | Integer values ka average              | `Double`                  |
+| 9   | `averagingLong()`     | Long values ka average                 | `Double`                  |
+| 10  | `averagingDouble()`   | Decimal values ka average              | `Double`                  |
+| 11  | `summarizingInt()`    | Count, sum, min, avg, max              | `IntSummaryStatistics`    |
+| 12  | `summarizingLong()`   | Count, sum, min, avg, max              | `LongSummaryStatistics`   |
+| 13  | `summarizingDouble()` | Count, sum, min, avg, max              | `DoubleSummaryStatistics` |
+| 14  | `minBy()`             | Minimum element                        | `Optional<T>`             |
+| 15  | `maxBy()`             | Maximum element                        | `Optional<T>`             |
+| 16  | `mapping()`           | Element ka field transform karna       | Downstream par depend     |
+| 17  | `collectingAndThen()` | Collection ke baad finishing operation | Finisher par depend       |
+| 18  | `joining()`           | Strings ko join karna                  | `String`                  |
+| 19  | `reducing()`          | Custom reduction                       | Depends on overload       |
+
+Correction: Upar ke table mein 19 methods/patterns hain, 13 nahi. Ye commonly useful Java 8 collectors ki practical list hai; ise Java ke har possible downstream collector ki exhaustive list mat samajhna.
+
+## 2. Kaun-se collectors nesting ke liye use hote hain?
+
+Ye sabse important pattern hai:
+
+```
+Map<String, Long> result =
+    employees.stream()
+        .collect(Collectors.groupingBy(
+            Employee::getDepartment,
+            Collectors.counting()
+        ));
+```
+
+Yahan:
+
+- `groupingBy()` — outer collector
+- `counting()` — downstream collector
+
+Isi tarah:
+
+```
+groupingBy(Employee::getDepartment, toList())
+groupingBy(Employee::getDepartment, summingDouble(Employee::getSalary))
+groupingBy(Employee::getDepartment, averagingDouble(Employee::getSalary))
+groupingBy(Employee::getDepartment, maxBy(Comparator.comparing(Employee::getSalary)))
+```
+
+## 3. Advanced nesting ke liye
+
+Java 8 mein `mapping()`, `collectingAndThen()` aur `reducing()` jaise collectors ko doosre collectors ke saath combine kar sakte ho.
+
+Example:
+
+```
+Map<String, List<String>> result =
+    employees.stream()
+        .collect(Collectors.groupingBy(
+            Employee::getDepartment,
+            Collectors.mapping(
+                Employee::getName,
+                Collectors.toList()
+            )
+        ));
+```
+
+Isme nesting hai:
+
+```
+groupingBy()
+    └── mapping()
+            └── toList()
+```
+
+Java version yaad rakho: `filtering()`, `flatMapping()` Java 9 mein aaye, aur `teeing()` Java 12 mein. Ye Java 8 ke collectors nahi hain.
+
+### Interview ke liye pehle ye 10 pakke karo
+
+`toList()`, `toSet()`, `counting()`, `summingDouble()`, `averagingDouble()`, `summarizingDouble()`, `maxBy()`, `minBy()`, `mapping()`, `collectingAndThen()`.
+
+Inse tum bahut saare `groupingBy()` aur `partitioningBy()` interview programs solve kar sakte ho.
+
+===================================================================================================================
 # PART 1 — `collect()` Foundation
 
 ### Java 8 Stream API — Simple Hinglish + Interview + Program Logic
@@ -11582,6 +11672,251 @@ nested list → flatMapping()
 
 **Next Part 9** me hum `collectingAndThen()` ko deeply karenge — ye `Collectors` ka bahut important finishing collector hai, jisse `Optional` remove karna, result ko `unmodifiable` banana, `List → Set`, `List → custom result`, aur `groupingBy() + maxBy() + collectingAndThen()` jaise interview patterns solve kar sakte ho.
 
+===================================================================================================================
+`Collectors.collectingAndThen(collector, finisher)` mein finisher ki koi fixed list nahi hai. Tum koi bhi suitable Java `Function` ya method reference use kar sakte ho, bas uska input type `collector` ke output type se match hona chahiye.
+
+```
+Collectors.collectingAndThen(
+    collector,
+    finisher
+)
+```
+
+- Collector: pehle result banata hai.
+- Finisher: us result ko transform karke final output deta hai.
+
+## 1. Most useful finishers — Interview ke liye
+
+Neeche examples mein `employees` ka type `List<Employee>` maana hai.
+
+### 1. `List::size` — List se count nikalna
+
+```
+Integer count = employees.stream()
+    .collect(Collectors.collectingAndThen(
+        Collectors.toList(),
+        List::size
+    ));
+```
+
+Input → Output
+
+`List<Employee>` → `Integer`
+
+Use case: collection banane ke baad uska size chahiye. Sirf count chahiye to `Collectors.counting()` simpler hai.
+
+### 2. `Set::size` — Unique elements count
+
+```
+Integer count = employees.stream()
+    .map(Employee::getDepartment)
+    .collect(Collectors.collectingAndThen(
+        Collectors.toSet(),
+        Set::size
+    ));
+```
+
+`Set<String>` → `Integer`
+
+Use case: unique departments kitne hain.
+
+### 3. `Optional::get` — Optional se value nikalna
+
+```
+Employee highestPaid = employees.stream()
+    .collect(Collectors.collectingAndThen(
+        Collectors.maxBy(
+            Comparator.comparing(Employee::getSalary)
+        ),
+        Optional::get
+    ));
+```
+
+`Optional<Employee>` → `Employee`
+
+Warning: Stream empty hui to `Optional::get` exception dega. Safe version:
+
+```
+optional -> optional.orElse(null)
+```
+
+Ya requirement ke according `orElseThrow()` use karo.
+
+### 4. `String::toUpperCase` — String transform karna
+
+```
+String names = employees.stream()
+    .map(Employee::getName)
+    .collect(Collectors.collectingAndThen(
+        Collectors.joining(", "),
+        String::toUpperCase
+    ));
+```
+
+`String` → `String`
+
+Use case: pehle names join karna, phir final string uppercase karna.
+
+### 5. `Collections::unmodifiableList` — List ko unmodifiable banana
+
+```
+List<Employee> result = employees.stream()
+    .collect(Collectors.collectingAndThen(
+        Collectors.toList(),
+        Collections::unmodifiableList
+    ));
+```
+
+`List<Employee>` → `List<Employee>` (unmodifiable view)
+
+Use case: result mein `add()` / `remove()` jaise modifications prevent karna. Dhyan rahe, ye underlying list ki view hai; ye deep immutability guarantee nahi karta.
+
+## 2. Aur kaun-kaun se finishers use kar sakte ho?
+
+| Finisher                                  | Input → Output            | Use case                           |
+| ----------------------------------------- | ------------------------- | ---------------------------------- |
+| `List::size`                              | `List<T>` → `Integer`     | List ka count                      |
+| `Set::size`                               | `Set<T>` → `Integer`      | Unique count                       |
+| `Optional::get`                           | `Optional<T>` → `T`       | Optional unwrap; empty case unsafe |
+| `String::toUpperCase`                     | `String` → `String`       | Uppercase                          |
+| `String::toLowerCase`                     | `String` → `String`       | Lowercase                          |
+| `Collections::unmodifiableList`           | `List<T>` → `List<T>`     | Unmodifiable view                  |
+| `Collections::unmodifiableSet`            | `Set<T>` → `Set<T>`       | Unmodifiable view                  |
+| `DoubleSummaryStatistics::getMax`         | Statistics → `double`     | Maximum value                      |
+| `DoubleSummaryStatistics::getAverage`     | Statistics → `double`     | Average value                      |
+| `DoubleSummaryStatistics::getSum`         | Statistics → `double`     | Total value                        |
+| `list -> list.stream().findFirst()`       | `List<T>` → `Optional<T>` | First element                      |
+| `list -> list.stream().map(...).toList()` | `List<T>` → `List<R>`     | Final transformation, Java 16+     |
+
+Ye examples hain, exhaustive list nahi. Finisher ka return type collector ke intermediate result se different bhi ho sakta hai.
+
+## 3. Employee programs mein sabse useful combinations
+
+### A. Department-wise highest-paid employee
+
+```
+Map<String, Employee> result = employees.stream()
+    .collect(Collectors.groupingBy(
+        Employee::getDepartment,
+        Collectors.collectingAndThen(
+            Collectors.maxBy(
+                Comparator.comparing(Employee::getSalary)
+            ),
+            optional -> optional.orElse(null)
+        )
+    ));
+```
+
+Flow:
+
+```
+groupingBy(department)
+       ↓
+maxBy(salary)
+       ↓
+Optional<Employee>
+       ↓
+orElse(null)
+       ↓
+Employee
+```
+
+### B. Department-wise unique cities count
+
+```
+Map<String, Integer> result = employees.stream()
+    .collect(Collectors.groupingBy(
+        Employee::getDepartment,
+        Collectors.collectingAndThen(
+            Collectors.mapping(
+                Employee::getCity,
+                Collectors.toSet()
+            ),
+            Set::size
+        )
+    ));
+```
+
+Flow:
+
+```
+Employee
+   ↓
+mapping(getCity)
+   ↓
+Set<String>
+   ↓
+Set::size
+   ↓
+Integer
+```
+
+### C. Department-wise maximum salary value
+
+```
+Map<String, Double> result = employees.stream()
+    .collect(Collectors.groupingBy(
+        Employee::getDepartment,
+        Collectors.collectingAndThen(
+            Collectors.summarizingDouble(Employee::getSalary),
+            DoubleSummaryStatistics::getMax
+        )
+    ));
+```
+
+Yahan `summarizingDouble()` pehle statistics banata hai, aur finisher sirf maximum salary nikalta hai.
+
+Lekin agar sirf maximum salary chahiye, simpler collector bhi use kar sakte ho.
+
+## 4. Apna custom finisher bhi bana sakte ho
+
+Suppose salary ka total collect karne ke baad usko rounded integer banana hai:
+
+```
+Integer totalSalary = employees.stream()
+    .collect(Collectors.collectingAndThen(
+        Collectors.summingDouble(Employee::getSalary),
+        total -> (int) Math.round(total)
+    ));
+```
+
+Flow:
+
+```
+summingDouble()
+      ↓
+Double
+      ↓
+custom lambda
+      ↓
+Integer
+```
+
+Yahan lambda hi custom finisher hai.
+
+## 5. Sabse important rule
+
+```
+collectingAndThen(
+    collector,
+    finisher
+)
+```
+
+Finisher ka input hamesha collector ke result type se match hona chahiye.
+
+Examples:
+
+| Collector                | Intermediate result       | Valid finisher example              |
+| ------------------------ | ------------------------- | ----------------------------------- |
+| `toList()`               | `List<T>`                 | `List::size`                        |
+| `toSet()`                | `Set<T>`                  | `Set::size`                         |
+| `maxBy(...)`             | `Optional<T>`             | `optional -> optional.orElse(null)` |
+| `joining()`              | `String`                  | `String::toUpperCase`               |
+| `summarizingDouble(...)` | `DoubleSummaryStatistics` | `DoubleSummaryStatistics::getMax`   |
+| `counting()`             | `Long`                    | `count -> "Count: " + count`        |
+
+Interview ke liye priority: `List::size`, `Set::size`, safe `Optional` handling, `Collections.unmodifiableList`, aur `DoubleSummaryStatistics::getMax` pehle master karo. Ye tumhe `groupingBy()` ke andar `collectingAndThen()` wale kaafi programs solve karne mein help karenge.
 ===================================================================================================================
 # 🚀 PART 9 — `collectingAndThen()` Deep Dive
 
